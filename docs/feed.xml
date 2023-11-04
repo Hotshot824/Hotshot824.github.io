@@ -1,0 +1,3280 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-04T18:22:51+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
+</blockquote>
+
+<p>以下是本章的主要內容</p>
+
+<ul>
+  <li>Combinational logic
+    <ul>
+      <li>Decision tables</li>
+      <li>Constraint logic programming</li>
+    </ul>
+  </li>
+  <li>UML/OCL
+    <ul>
+      <li>Constraint logic graphs</li>
+      <li>Constraint logic programming</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="41-combinational-models">4.1 Combinational Models</h3>
+
+<p>Combinational logic 是一種有效組合各種不同輸入條件的方法，並使不同輸入條件的組合來選擇輸出動作變的可能</p>
+
+<ul>
+  <li>Many applications must select output actions by evaluating combinationsof input conditions (constraints on input variables).</li>
+  <li>Input variables can also be either parametersof the method, static variables of the class, or instance variables of the object.</li>
+  <li>Combinational logic provides an effective language for these kinds of condition-action relationships.</li>
+</ul>
+
+<blockquote>
+  <p>例如一個 Method 有多個參數，而這些參數可能會有不同的組合，這些組合可能會對應到不同的輸出，這時候我們可以使用 Combinational logic 來描述這些組合，並且對應到不同的輸出</p>
+</blockquote>
+
+<h5 id="411-equivalence-class-partitioning-decision-tables">4.1.1 Equivalence Class Partitioning Decision Tables</h5>
+
+<ul>
+  <li>A combinational model uses a decision tableto represent the condition-action relationships and partition equivalence classes.</li>
+  <li>A decision table has a condition sectionand an action section.</li>
+  <li>The condition section lists constraints on inputvariables.</li>
+  <li>The action section lists outputto be produced when corresponding constraints are true.</li>
+</ul>
+
+<blockquote>
+  <p>以 Decision table 來決定條件的組合，並且對應到輸出</p>
+</blockquote>
+
+<p><strong>Example: Class Triangle</strong>
+假如有一個 Triangle Java class 如下，Triangle constructor 只要滿足 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 就視為合法的 Tringle，否則拋出 Exception。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">classTriangle</span>
+<span class="o">{</span>
+    <span class="n">inta</span><span class="o">;</span><span class="c1">// lengths of sides</span>
+    <span class="n">intb</span><span class="o">;</span>
+    <span class="n">intc</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="n">intsa</span><span class="o">,</span> <span class="n">intsb</span><span class="o">,</span> <span class="n">intsc</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
+<span class="o">};</span>
+</code></pre></div></div>
+<p>以這三個條件我們能獲得以下的 Decision table，在去除不可能發生的條件後，得到最後可能產生的 Input data。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/1.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/2.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>這樣我們就能得到足夠測試 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 三個 Boundaries 的測試資料，並測試 Tringle constructor 是否能正確的拋出 Exception。</p>
+
+<p><strong>Constraint Logic Graph</strong></p>
+
+<p>可以透過 Constraint logic programming 來產生測資，以下是 Triangle constructor 的 Invalid Constraint logic graph，
+會產生三個 Invalid equivalence classes，加上 Valid equivalence classes 就能得到跟上面 Decision table 一樣的測試資料。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/3.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p><strong>Example: Method category</strong></p>
+
+<ul>
+  <li>The method category() returns the category of a Triangle object based on the lengths of its three sides: “Equilateral”, “Isosceles”, or “Scalene”.</li>
+  <li>A Triangle object is an “Equilateral” triangle if it satisfies the following threeconstraints: {a = b, a = c, b = c}.</li>
+  <li>A Triangle object is an “Isosceles” triangle if it satisfies one and only one of the following three constraints: {a = b, a = c, b = c}.</li>
+  <li>Otherwise, It is a “Scalene” triangle.</li>
+</ul>
+
+<p>關於 category 我們也可以透過 Decision table 來產生測試資料，以下是 category 的 Decision table</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/4.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/5.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>因為在 Triangle constructor 的測試中已經測試過 Valid equivalence classes，所以這裡只要使用 {a = b, a = c, b = c} 這三個條件約束就可以，
+並且也可以透過 CLP 來產生測試資料，這樣我們就能測試完所有 category 有可能的路徑。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">"Equilateral"</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">||</span> <span class="n">a</span> <span class="o">==</span> <span class="n">c</span> <span class="o">||</span> <span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">"Isosceles"</span><span class="o">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="s">"Scalene"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>拿上面的程式碼來做比對，實際上這個 Decision table 就是去走過所有在程式中可能發生的路徑。</p>
+
+<blockquote>
+  <p>因為篇幅的關係這裡不會介紹 CLP 如何撰寫，考慮在之後另外寫一篇文章說明 CLP 如何使用</p>
+</blockquote>
+
+<h3 id="42-unified-modeling-language">4.2 Unified Modeling Language</h3>
+
+<ul>
+  <li>Unified Modeling Language(UML) 是一種用於可視化、規範、建構和文件化軟體系統工程的圖形化語言</li>
+  <li>UML 提供一種標準化的方式來編寫系統的藍圖，包括概念性的事務，如業務流程和系統功能，以及具體的事務，如程式描述、Database 架構和可重用的軟體元件</li>
+</ul>
+
+<h5 id="421-uml-diagrams">4.2.1 UML Diagrams</h5>
+
+<p>在 Software testing 這門課中主要會用到的是 Class diagram、Sequence diagram、State machine diagram</p>
+
+<ul>
+  <li>UML 2 defines thirteenbasic diagram types, divided into two general sets:</li>
+  <li>Structural Modeling Diagrams: Structure diagrams define the staticarchitecture of a model. They are used to model the ‘things’ that make up a model.</li>
+  <li>Behavioral Modeling Diagrams: Behavior diagrams capture the varieties of dynamicinteraction and instantaneous state within a model as it executes over time.</li>
+</ul>
+
+<blockquote>
+  <p>在之前我有更詳細的關於 UML 的介紹，詳細可見 <a href="./2023-07-26-unified_modeling_language.html">Unified Modeling Language Concepts</a></p>
+</blockquote>
+
+<h5 id="422-class-diagrams">4.2.2 Class Diagrams</h5>
+
+<ul>
+  <li>Class Diagram 描述了一個 Class 有哪些 Attributes 和 Methods，而不是詳細的實作細節</li>
+  <li>Class Diagram 在說明 Class 或 Interface 之間的關係時最為有用</li>
+  <li>Association(關聯)和 Generalization(泛化)分別表示連接和繼承</li>
+</ul>
+
+<blockquote>
+  <p>關於類圖可以看之前的筆記，有更詳細的描述 <a href="./2023-07-28-UML_structure_diagrams.html#11-class-diagram">UML Structure Diagrams Introduction 1.1 Class diagram</a></p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/6.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/7.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Association 表示兩個 Class 之間有所關聯，例如: Course 和 Student 之間有一個關聯，關聯可以是多對多的關係<br />
+Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal 和 Dog 之間有一個繼承關係</p>
+</blockquote>
+
+<h3 id="43-object-constraint-language">4.3 Object Constraint Language</h3>
+
+<ul>
+  <li>通常只使用 UML 是不足以完全規範一個軟體系統</li>
+  <li>所以還需要 Constraint 來完全規範一個軟體系統</li>
+  <li>Constraint 是對軟體系統的一個或多個值的限制</li>
+  <li>Object Constraint Language(OCL) 是一種基於 Text 的語言，用於描述這些 Constraints</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>上圖展示了一個 Flight 的 Class invariant，如果 type == passenger，那麼 airplane.type 也必須為 passenger，同樣的 cargo 也只能對應 cargo
+這意思就如果是客運航班就要對應客機，貨運航班就要對應貨機。</p>
+
+<h5 id="431-kinds-of-constraints">4.3.1 Kinds of Constraints</h5>
+
+<ul>
+  <li>Class invariant(不變式): a constraint that must alwaysbe met by all instances of the class.</li>
+  <li>Precondition of an operation(操作前提): a constraint that must always be true beforethe execution of the operation.</li>
+  <li>Postcondition of an operation(操作後置): a constraint that must always be true afterthe execution of the operation.</li>
+</ul>
+
+<p>例如: 一個校園借書系統，那麼 Class invariant 必須為 Student，因為校外人士不能借閱，
+而還書時 Precondition 必須為至少要有那本要還的書，Postcondition 則必須沒有已經還回去的書。</p>
+
+<h5 id="432-constraint-context-and-self">4.3.2 Constraint Context and Self</h5>
+<ul>
+  <li>Every OCL expression is bound to a specific context.
+    <ul>
+      <li>The context is often the element (classor method) that the constraint is attached to.</li>
+    </ul>
+  </li>
+  <li>The context may be denoted within the expression using the keyword ‘self’.
+    <ul>
+      <li>‘self’ is implicit in all OCL expressions.</li>
+      <li>Similar to ‘this’ in Java.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如: 以下的 OCL，context Person 宣告了這個 Constraint 是屬於 Person 這個 Class，而 self.age &gt;= 0 則專指這個 Person attribute age &gt;= 0</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context Person
+inv: self.age &gt;= 0
+</code></pre></div></div>
+
+<h5 id="433-notation">4.3.3 Notation</h5>
+
+<p>OCL 可以單獨寫在一個文件中，也可以寫在 UML 的 Class diagram 裡面，這些表示方法都是相同的</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="434-elements-of-an-ocl-expression">4.3.4 Elements of an OCL Expression</h5>
+
+<ul>
+  <li>In an OCL expression these elements may be used:
+    <ul>
+      <li>basic types: String, Boolean, Integer, Real.</li>
+    </ul>
+  </li>
+  <li>classifiers from the UML model and their features
+    <ul>
+      <li>attributes, and class attributes</li>
+      <li>query operations, and class query operations (i.e., those operations that do not have side effects)</li>
+    </ul>
+  </li>
+  <li>associations from the UML model
+    <ul>
+      <li>Including Rolenames at either end of an association</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Basic types</strong></p>
+
+<p>以下表示了 OCL 的基本型別，可以使用在 OCL 的表達式</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Airline</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">name</span><span class="p">.</span><span class="n">toLower</span> <span class="o">=</span> <span class="s1">'klm'</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="p">((</span><span class="mi">9</span><span class="p">.</span><span class="mi">6</span> <span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nf">floor</span> <span class="o">implies</span> <span class="n">mature</span> <span class="o">=</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<p><strong>Attributes</strong></p>
+
+<p>OCL 中有專指 Object 實例的 Attribute，也有專指 Class 的 Attribute</p>
+<ul>
+  <li>Class attribute 會在所有 Object 實例中共享</li>
+  <li>Object attribute 則是每個 Object 實例都有自己的 Attribute</li>
+</ul>
+
+<p>以下是一個例子:</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Object attribute</span>
+<span class="k">context</span> <span class="n">Flight</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">maxNrPassengers</span><span class="o">&lt;=</span> <span class="mi">1000</span>
+<span class="c1">-- Class attribute</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="n">Passenger</span><span class="p">.</span><span class="n">minAge</span>
+</code></pre></div></div>
+
+<p><strong>The @Pre Keyword</strong></p>
+
+<ul>
+  <li>The @pre keyword indicates the value of an attribute at the start of the execution of the operation</li>
+  <li>The keyword must be postfixed to the name of the item concernedsize = size@pre + 1</li>
+</ul>
+
+<p>例如 size = size@pre + 1: 
+    -   size@pre 表示在執行這個 Operation 前的 size
+    -   size 表示在執行這個 Operation 後的 size</p>
+
+<h5 id="435-ocl-examples-with-clg">4.3.5 OCL Examples with CLG</h5>
+
+<p>假如我們有以下 Java class Triangle，我們分別針對他的 Constructor 和 Method category 以及 Class invariant(Triangle Objects) 來撰寫 OCL</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Triangle</span>
+<span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span> <span class="c1">// lengths of sides</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="kt">int</span> <span class="n">sa</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sb</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sc</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
+<span class="o">};</span>
+</code></pre></div></div>
+
+<p><strong>Example: Triangle Objects</strong></p>
+
+<p>一個 Triangle 應該永遠滿足三邊長的條件，所以使用 <strong>Class invariant</strong> 來限制所有 Triangle 的三邊長</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span>
+<span class="k">inv</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span> <span class="o">and</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">and</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<p><strong>Example: Constructor Triangle</strong></p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">Triangle</span><span class="p">(</span><span class="n">intsa</span><span class="p">,</span> <span class="n">intsb</span><span class="p">,</span> <span class="n">intsc</span><span class="p">)</span>
+<span class="k">pre</span> <span class="n">IllegealArgException</span><span class="p">:</span>
+    <span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">&gt;</span> <span class="n">sc</span> <span class="o">and</span> <span class="n">sa</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sa</span>
+<span class="k">post</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">c</span> <span class="o">=</span> <span class="n">sc</span>
+</code></pre></div></div>
+
+<p>以上的 OCL 表示 Triangle 這個 Constructor Triangle 的 Precondition 和 Postcondition</p>
+<ul>
+  <li>Precondition: 一個 Triangle constructor 的輸入必須滿足 <strong>sa + sb &gt; sc and sa + sc &gt; sb and sb + sc &gt; sa</strong></li>
+  <li>Postcondition: Triangle constructor 執行後應該滿足 <strong>a = sa and b = sb and c = sc</strong></li>
+</ul>
+
+<p><strong>Example: Method category</strong></p>
+
+<p>以下是一個 Method category 的 OCL，這個 OCL 會檢查 Triangle 的三邊長，並且回傳 Triangle 的類型</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">contextTriangle</span><span class="p">::</span><span class="n">category</span><span class="p">():</span> <span class="kd">String</span>
+<span class="k">post</span><span class="p">:</span> <span class="nb">result</span><span class="o">=</span>
+<span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span>
+    <span class="n">ifa</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Equilateral'</span>
+    <span class="k">else</span> <span class="s1">'Isosceles'</span> 
+    <span class="k">endif</span>
+<span class="k">else</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Isosceles'</span>
+    <span class="k">else</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span><span class="s1">'Isosceles'</span>
+        <span class="k">else</span> <span class="s1">'Scalene'</span> 
+        <span class="k">endif</span>
+    <span class="k">endif</span>
+<span class="k">endif</span>
+</code></pre></div></div>
+
+<p><strong>Constraint Logic Graph</strong></p>
+
+<p>我們依照上面的 Constructor Triangle 和 Method category 來建立 CLG，得到以下兩張圖，就可以以此來生成測試資料</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/11.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>例如我們想測試 category，能發現在 CLG 上一共有 5 條不同的路徑，我們把第一條路徑的條件放入 CLP 中求解，就能得到測試第一條路徑的測試資料。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/12.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/13.png?raw=true" width="50%" height="50%" />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constraint, Pre a@+b@&gt;c@, a@+c@&gt;b@, b@+c@&gt;a@</th>
+      <th>Input</th>
+      <th>Output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>a@=b@, a@=c@, result=’Equilateral’</td>
+      <td>1, 1, 1</td>
+      <td>Equilateral</td>
+    </tr>
+    <tr>
+      <td>a@=b@, a@!=c@, result=’Isosceles’</td>
+      <td>2, 2, 1</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@=c@, result=’Isosceles’</td>
+      <td>2, 1, 2</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@!=c@, b@=c@, result=’Isosceles’</td>
+      <td>1, 2, 2</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@!=c@, b@!=c@, result=’Scalene’</td>
+      <td>2, 3, 4</td>
+      <td>Scalene</td>
+    </tr>
+    <tr>
+      <td>Post a = a@, b = b@, c = c@</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>依照這個 Table 這樣就能夠產生五條全部路徑的測試案例</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-29-2023 15:56</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing]]></summary></entry><entry><title type="html">Compiler | Syntax Analysis Notes (Unfinished)</title><link href="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html" rel="alternate" type="text/html" title="Compiler | Syntax Analysis Notes (Unfinished)" /><published>2023-10-26T00:00:00+08:00</published><updated>2023-10-26T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/syntax_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
+Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回的 Token 是否符合語法規則，並且建立語法樹</p>
+</blockquote>
+
+<p>以下是這個章節的主要大綱，Bison 不會在這篇介紹如何使用，主要是介紹 Syntax analysis 的概念</p>
+
+<ul>
+  <li>Introduction to parsers</li>
+  <li>Context-free grammars</li>
+  <li>Push-down automata</li>
+  <li>Top-down parsing</li>
+  <li>Buttom-up parsing</li>
+  <li>Bison -a parser generator</li>
+</ul>
+
+<h3 id="41-introduction-to-parsers">4.1 Introduction to parsers</h3>
+
+<p>在編譯器模型中 Systax analysis 從 Lexical analysis 獲取由 Token 所組成的字串，我們期望語法分析器能夠以易於理解的方式回報語法錯誤。
+概念上語法分析需要建構一個 Parse tree 傳遞給 Compiler 的其餘部分進行進一步處理，但實際上 Parse tree 並不需要明確的建構，
+因為檢查與翻譯可以與 Parsing 交錯完成。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/1.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-26-2023 17:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回的 Token 是否符合語法規則，並且建立語法樹]]></summary></entry><entry><title type="html">OS | CPU Scheduler (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-19-cpu_scheduler.html" rel="alternate" type="text/html" title="OS | CPU Scheduler (Unfinished)" /><published>2023-10-19T00:00:00+08:00</published><updated>2023-10-19T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/cpu_scheduler</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-19-cpu_scheduler.html"><![CDATA[<blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>本章節會主要介紹 Linux Scheduler，Linux Scheduler 現在的的目標是: 如何從「好變為更好」</p>
+
+<ul>
+  <li>Noun, Concept definition</li>
+  <li>2.4 Scheduler</li>
+  <li>2.6 O(1) Scheduler</li>
+  <li>2.6 - 5.3 Complete fair scheduler(CFS)</li>
+</ul>
+
+<blockquote>
+  <p>Linux Kernel 2.4 是一個非常長壽的版本，持續了大約 10 年左右，但即便這樣一個這麼長壽、穩定的 Scheduler，
+Linux Kernel 設計者仍然在考慮如何讓她變得更好。</p>
+</blockquote>
+
+<h3 id="41-noun-concept-definition">4.1 Noun, Concept definition</h3>
+
+<h5 id="411-task">4.1.1 Task</h5>
+
+<ul>
+  <li>在 Linux 中，Process 和 Thread 都是 Task</li>
+  <li>Process 之間不會共用任何資源，<strong>尤其是 Memory</strong></li>
+  <li>Thread 則是幾乎共用所有資源，<strong>尤其是 Memory</strong></li>
+  <li>Task 的生命週期中分為兩種情況
+    <ul>
+      <li>Using CPU</li>
+      <li>Waiting，例如: Waiting mutex, I/O …</li>
+    </ul>
+  </li>
+  <li>Task 在使用 CPU 時分為: 執行於 User mode/Kernel mode</li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>在 Linux Task 可以執行在 User/Kernel mode，改變模式稱作 Mode change，而 Kernel Thread 專指只有 Kernel mode 的 Task，例如: Device Driver</p>
+</blockquote>
+
+<p><strong>Task &amp; Scheduling</strong></p>
+
+<p>以下是一個 Task 的生命週期，這裡從 Scheduler 角度來看的話主要影響的是兩個部分:</p>
+<ul>
+  <li>Waining(semaphore): 怎麼在 Waiting 時，讓 Task 的使用率最大化</li>
+  <li><strong><a href="https://en.wikipedia.org/wiki/Cooperative_multitasking">Cooperative multitasking</a></strong>(協同運作式多工), <strong><a href="https://en.wikipedia.org/wiki/Preemption_%28computing%29">Preemptable OS</a></strong>(搶占式多任務處理)</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/1.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<h5 id="412-scheduler-types">4.1.2 Scheduler Types</h5>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/2.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li><strong>Preemptive OS</strong>:
+    <ul>
+      <li>Task 會有一個 Time slice 執行，例如: 1/1000 Sec，執行結束就要做切換</li>
+      <li></li>
+    </ul>
+  </li>
+  <li><strong>Non-preemptive OS</strong>: 就是指只有 Task 自己放棄 CPU 使用權時，才會做 Context Switch
+    <ul>
+      <li>Task 執行結束，這樣當然就交出 CPU 使用權</li>
+      <li>Task 發出 Blocking I/O request 因為要等待 I/O 完成，因此也會交出 CPU 使用權
+        <ul>
+          <li>當然也有 Async I/O，Vectored I/O 等方法，這裡先不討論</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-18-2023 23:21</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.]]></summary></entry><entry><title type="html">OS | Process and Thread</title><link href="http://0.0.0.0:4000/jekyll/2023-10-18-process_thread.html" rel="alternate" type="text/html" title="OS | Process and Thread" /><published>2023-10-18T00:00:00+08:00</published><updated>2023-10-18T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/process_thread</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-18-process_thread.html"><![CDATA[<blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>這章節主要是介紹 Process 跟 Thread</p>
+
+<ul>
+  <li>Process model</li>
+  <li>Process Life Cycle</li>
+  <li>Communication model between Process &amp; Process</li>
+  <li>Communication method between Process &amp; Process</li>
+  <li>Producer-consumer problem</li>
+  <li>Context switch main overhead (使用 Thread 的動機)</li>
+  <li>Thread model</li>
+</ul>
+
+<h3 id="process-model">Process model</h3>
+
+<h5 id="31-process-concept">3.1 Process Concept</h5>
+
+<ul>
+  <li>An OS executes a variety of programs:
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Batch_processing">Batch system</a> – jobs</li>
+      <li>Time-shared systems – user programs or tasks</li>
+    </ul>
+  </li>
+  <li>Process ≈ Task ≈ Job</li>
+  <li>Process - a process is an instance of a program in execution
+    <ul>
+      <li>+Program code (text section)</li>
+      <li>+Program counter &amp; registers (CPU status)</li>
+      <li>+Stack</li>
+      <li>+Data section</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Batch system(批次系統): 是指被時間安排在 PC 上運行，不需要與使用者互動的工作</p>
+</blockquote>
+
+<h5 id="32-process-memory">3.2 Process Memory</h5>
+
+<ul>
+  <li>每個 Process 通常有自己完整的 <a href="https://en.wikipedia.org/wiki/Address_space">Address space</a></li>
+  <li>32bit 為例，每個 Process 有 4GB 的 Address(Memory) space</li>
+  <li>
+    <p>64bit 的 x64 CPU，因為成本的考量，通常只會使用 48bit 的 Address space，也就是 256TB (遠超 Disk 的容量)</p>
+  </li>
+  <li>Address space 表示一個 Process 最多能使用多少 Memory，實際上 RAM 通常遠小於 Process 的 Address space</li>
+  <li>通常將 Process 的 Address space 分為兩個部分，上半部分為 OS Kernel，下半部分為 Process 的 User space</li>
+  <li>以 64bit 為例，一個 Process 的 Memory address(User space) 為 0~128TB，Kernel 則為 256TB(2<sup>64</sup>) 往下 128 TB 的部分
+    <ul>
+      <li>User space: <code class="language-plaintext highlighter-rouge">00000000 00000000</code> ~ <code class="language-plaintext highlighter-rouge">00007FFF FFFFFFFF</code></li>
+      <li>Kernel: <code class="language-plaintext highlighter-rouge">FFFF8000 00000000</code> ~ <code class="language-plaintext highlighter-rouge">FFFFFFFF FFFFFFFF</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Why kernel/user space need half of the memory space</strong></p>
+
+<ul>
+  <li>每個 Process 的 Kernel Space 都是共用的，在 SMP Processor 上所有 Process 都共用同一個 Linux Kernel</li>
+  <li>DRAM 有很多用途，例如: 作為 I/O 加速的 Buffer/Cache
+    <ul>
+      <li>I/O Buffer: CPU 的資料可以先寫入 DRAM buffer，然後再由 DMA controller 將資料寫入 Disk</li>
+      <li>I/O Cache: Disk 的資料可以寫入 DRAM cache，因為 I/O request 會產生 overhead
+        <ul>
+          <li>讀取 4kb 和讀取 16kb 的速度是一樣的，那乾脆一次從 cache 讀取 16kb</li>
+          <li>OS 會把相關的資料放在 cache，這樣下次讀取就可以直接從 cache 讀取，而不用再次讀取 Disk</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/1.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>When Multi-Process running, what does the memory look like to users/programmers</strong></p>
+
+<p>這裡只討論 User space，一次只會執行一個 Process 這三個 Proces 各自有完整的 user space，當 Context switch 時除了 CPU 控制權會被交換外，
+也會重新進行 Memory mapping(修改 MMU 的 mapping table)</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/2.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Internal memory configuration method of the Process</strong></p>
+
+<p>一個 Process 是怎麼在 Memeory 中進行分配的狀態</p>
+<ul>
+  <li>Local variables: 在 Stack 中分配</li>
+  <li>Global variables
+    <ul>
+      <li>initialized value: 在 initialized data 分配</li>
+      <li>uninitialized value(BSS): 在 unitialized data 分配</li>
+    </ul>
+  </li>
+  <li>Dynamic memory allocation: 在 Heap 中分配</li>
+  <li>Program code: 在 Text section 分配，例如 Main, malloc function 的指令</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/3.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote class="block-tip">
+  <p>通常 OS 一次會給 4096(4K) 大小的 Memory，並且會清空，這樣就不會有安全性問題，但寫程式時最好只預設 BSS 段的值會是 0，例如 Stack 可能會因為因為 Call/Return 的關係，而有一些不可預期的值。
+但即使這樣也盡量要給予初始值，例如: int a = 0;，減少不可預期的錯誤發生</p>
+</blockquote>
+
+<p><strong>The position of variable in the Process</strong></p>
+
+<p>在一個程式執行時</p>
+<ul>
+  <li>Text/initilized section 幾乎就是直接從 Disk copy 到 Memory</li>
+  <li>Unitialized section 因為沒有資料儲存，所以可以透過一個資料結構來描述，並放在執行檔的 Header 中</li>
+  <li>Stack/Heap 會隨著程式執行而變大，所以放在最後面並且往下/上成長</li>
+</ul>
+
+<p>但是 Stack 通常會被限制在固定大小，例如: 一開始分配 16KB，當需要成長時就 OS 就再分配 4KB，但最多長到 8MB，這個可以透過 <code class="language-plaintext highlighter-rouge">ulimit</code> 查看或修改</p>
+
+<blockquote class="block-tip">
+  <p>如果一個 Memory 被寫入 DRAM 後，但長時間沒有被使用，那麼這個 Memory 就會被 swap out 到 Disk，這樣就可以釋放出 DRAM 給其他 Process 使用</p>
+</blockquote>
+
+<p><strong>Linux kernel uses Logical meaning to manage memory segments of processes</strong></p>
+
+<p>Linux Kernel 透過 task_struct, mm_struct, vm_area_struct 來管理 Process 的 Memory:</p>
+
+<ul>
+  <li>task_struct: 描述 Task 相關的所有資訊</li>
+  <li>mm_struct: 描述 Task 的記憶體相關的資訊，例如: 該 Task 的 Memory space 有哪些 area</li>
+  <li>vm_area_struct: 描述該 area 相關的資訊，例如: 該 area 的起始位置、大小、權限等等
+    <ul>
+      <li>例如除了 Text area 是可 Read, Execute(rx)，其他的 area 都是可 Read, Write(rw)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/4.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Example: Lab main.c</strong></p>
+
+<p>我們用一個簡單的程式 main.c 來做測試:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"pid = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"main = %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">main</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"printf = %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">printf</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"a=%p, b=%p, c=%p, d=%p, *e=%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
+    <span class="n">getchar</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/*
+benson@vm:~/OSDI$ ./main.exe
+pid = 190697
+main = 0x55d00a13218a
+printf = 0x7f94c1974cc0
+a=0x55d00a135010, b=0x55d00a135018, c=0x7ffe4cb7e4b8, d=0x7ffe4cb7e4bc, *e=0x55d00aca62a0
+*/</span>
+</code></pre></div></div>
+
+<p>然後在 /proc/<pid>/maps 中可以看到該 Process 的 Memory configuration:</pid></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/5.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Address space layout randomization</strong></p>
+
+<p>如果我們重新執行一次程式，會發現 Address 又不一樣了，這是為了避免被攻擊，就是 <strong><a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">Address space layout randomization</a></strong>(ASLR)</p>
+
+<ul>
+  <li>這樣可以避免攻擊者使用記憶體裡面的函數，例如: libc 裡面的 system()，如果可以執行 system()，那麼就可以執行任意的指令</li>
+  <li>OS 會隨機產生每個 Section 的 Address</li>
+  <li>幾乎所有的 OS 都支援 ASLR，例如: Linux, BSD, Windows, MacOS</li>
+  <li>但是 ASLR 也有缺點，如果不使用 ASLR 那就可以把常用的 Function 放在固定的位置，這樣就可以加速程式的執行
+    <ul>
+      <li>目前大部分硬體都使用 phy.cache 可以降低這部分的影響</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>現在的 Linux Kernel 都會使用 ASLR，即是 KASLR</p>
+</blockquote>
+
+<p><strong>Program in Memory</strong></p>
+
+<ul>
+  <li>目前大部分的作業系統設計中，執行檔與在 Memory 中的結構幾乎一樣，OS 只需要 Copy(mapping) 就可以執行了
+    <ul>
+      <li>例如: Linux 的 ELF(Executable and Linkable Format), Microsoft 的 PE(Portable Executable)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://lh3.googleusercontent.com/blogger_img_proxy/ALY8t1u7XXZ7qZJoQ-wv-kB4apjLJpVS9E4fp8HKIjXVRgwFkMMPeWRSHAoUwWSBHCGG_IEFq4tcAfGYF_juOuKEMqBwApXNKRPWONR53P-UxuNR7KOlR142ePVMs9Xq80uohsQ=s0-d" alt="" height="100%" width="100%" /></p>
+
+<p>將執行檔 Mapping 1:1 映射到 Memory，這樣讓 OS 的工作能變得很簡單</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://learnlinuxconcepts.blogspot.com/2014/03/memory-layout-of-userspace-c-program.html">Memory Layout of Kernel and UserSpace in Linux.</a></p>
+</blockquote>
+
+<h3 id="process-life-cycle">Process Life Cycle</h3>
+
+<h5 id="33-process-life-cycle">3.3 Process Life Cycle</h5>
+
+<p>下面是一個 Unix Process Life Cycle，但在這裡加入了一些 Linux 的觀念</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/6.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Parent Process</strong> 通常是 Shell，透過 fork() 產生 Child Process</p>
+<ol>
+  <li><strong>Ready queue</strong>: 當一個新的 Process 產生會進入 Ready Queue，等待 CPU 資源</li>
+  <li><strong>Running</strong>: 如果 Scheduler 選擇到該 Process，那麼就會進入 Running 狀態</li>
+  <li><strong>Waiting</strong>: 在 Linux 中 Waiting 分為兩種
+    <ul>
+      <li>Interruptible: 可以被 Signal 打斷</li>
+      <li>Uninterruptible: 不能被 Signal 打斷，但是少數例外下例如 Kill -9 還是能夠 Interruptible</li>
+    </ul>
+  </li>
+  <li><strong>Terminate</strong>: 這裡需要由 OS 去回收分配給 Process 的資源，例如: Memory, Kernel 中儲存的 Process 相關資訊
+    <ul>
+      <li><em>Zombie</em>: Linux 中會剩下一個大約 4KB ~ 8KB 的 Task struct，稱作 Zombie</li>
+      <li>保留這個 Zombie 是為了讓 Parent Process 可以透過 wait() 取得 Child Process 的資訊，
+這裡如果 Parent 沒有正確的回收 Child Process，但還是持續運行，這樣 Zombie 就會越來越多。
+但如果 Parent 也結束了，那麼 Zombie 就會被 init process 回收，這樣就不會有 Zombie Process</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">pid_t</span> <span class="n">child_pid</span><span class="p">;</span>
+
+    <span class="cm">/* Create a child process */</span>
+    <span class="n">child_pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">child_pid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* Parent sleep */</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="cm">/* This is clild process will end immediately */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Child pid %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>這個程式會印出 <code class="language-plaintext highlighter-rouge">child_pid</code>，此時去 top -p <code class="language-plaintext highlighter-rouge">child_pid</code> 就可以看到 child 變成 zombie 狀態。</p>
+
+<blockquote>
+  <p>fork() 會返回 child pid，但在 child process 中 child_pid 會是 0</p>
+</blockquote>
+
+<h5 id="34-tack-contol-blocktcb-pcb">3.4 Tack Contol Block(TCB, PCB)</h5>
+
+<blockquote>
+  <p>Process control block ≈ Task control block</p>
+</blockquote>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/Process_control_block">Process control block</a></strong>(PCB) 就是 OS 用來管理 Process 的資料結構，通常會包含以下資訊:</p>
+<ul>
+  <li><strong>Process state</strong>: 執行的狀態，例如: Running, Waiting, Ready</li>
+  <li><strong>CPU information</strong>: Process 的狀態，例如: PC, Register</li>
+  <li><strong>Memory information</strong>: Memory 狀態，例如: Text, Data section</li>
+  <li><strong>Schedule information</strong>: 排程資訊，例如: Priority</li>
+  <li><strong>I/O status information</strong>: I/O 狀態，例如: File descriptor</li>
+  <li><strong>Using resource</strong>: Process 使用的資源，例如: File, I/O device<br />
+…</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://0uyangsheng.github.io/2018/05/17/Linux-process/task_struct.jpg" width="53%" height="53%" />
+    <img src="https://mohammednv.files.wordpress.com/2013/06/process-structure.png" width="47%" height="47%" />
+</div>
+
+<h5 id="35-three-scheduler-model">3.5 Three Scheduler Model</h5>
+
+<p>Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Scheduler:</p>
+<ul>
+  <li><strong>Long-term Scheduler</strong>(Job scheduler):
+    <ul>
+      <li>決定哪些 Process 要進入 Ready Queue，通常在很大型的主機上，例如: 台灣杉</li>
+      <li>Linux 中並沒有 Long-term Scheduler，Task 產生後就會進入 Ready Queue</li>
+    </ul>
+  </li>
+  <li><strong>Mid-term Scheduler</strong>(Swapper):
+    <ul>
+      <li>當 Degree of Multiprogramming 過高時可能造成(thrashing)，將一些 Task swap out 到 Disk，等到資源足夠時再 swap in</li>
+      <li>Linux Kernel 目前也沒有 Mid-term Scheduler，但 Linux 依照 Task 記憶體的使用情況，在 Memory 不足時會將不活躍的 Task swap out 到 Disk</li>
+    </ul>
+  </li>
+  <li><strong>Short-term Scheduler</strong>: CPU Scheduler
+    <ul>
+      <li>大部分的 OS 只有 CPU Scheduler，針對各種事件有專屬的 Waiting Queue，例如: 例如 I/O, Semaphore</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/7.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-tip">
+  <p>thrashing(輾轉現象) 指的是當虛擬記憶體被使用過度，導致大部分的工作在處理 Page fault 所造成的 Page Replacement，這樣就會造成 CPU 效能下降</p>
+</blockquote>
+
+<h5 id="36-context-switchctx-sw">3.6 Context Switch(ctx-sw)</h5>
+
+<ul>
+  <li>目前主流的 OS 都是只有 Task 執行在 Kernel Space 時才能進行 Context switch</li>
+  <li>Context switch 主要是切換 Register 與 Memory 的內容</li>
+  <li>Context switch 的 overhead 主要是發生在 Cache memory 的更新</li>
+</ul>
+
+<ol>
+  <li>首先 TaskA Mode change 到 Kernel mode</li>
+  <li>然後將 TaskA 的資訊(TCB) 儲存起來</li>
+  <li>載入 TaskB 的資訊</li>
+  <li>最後 TaskB Mode change 到 User mode</li>
+</ol>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-tip">
+  <p>Scheduler 也就是策略的部分主要是用 C 寫的，但切換的部分是用 Assembly 寫的，因為要直接操作 Register</p>
+</blockquote>
+
+<h5 id="37-processes-are-divided-into-io-and-cpu">3.7 Processes are divided into I/O and CPU</h5>
+
+<ul>
+  <li>I/O Bound process - I/O time » CPU time
+    <ul>
+      <li>例如: ftp server</li>
+    </ul>
+  </li>
+  <li>CPU Bound process - CPU time » I/O time
+    <ul>
+      <li>例如: image processing</li>
+    </ul>
+  </li>
+  <li>如果可以選擇的話，讓系統中同時存在 I/O Bound process 與 CPU Bound process，可以讓系統的效率最大化</li>
+  <li>通常 I/O Bound 的優先權比較高，因為趕快讓 CPU 發出命令給 I/O device，然後就可以去執行其他的 Task</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/9.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<blockquote>
+  <p>I/O Bound 通常只需要一小部分的 CPU 資源，如果設定成 CPU Bound 優先權較高，反而會造成 I/O Bound 的 Task 在結束一段 I/O 後還要等待 CPU Bound 的 Task 結束
+造成 CPU 使用率下降</p>
+</blockquote>
+
+<h5 id="38-process-creation">3.8 Process Creation</h5>
+
+<ul>
+  <li>Linux 中可以透過 fork, vfork, clone 來產生 Process
+    <ul>
+      <li>實際上這三個在 Kernel 中都是呼叫 do_fork() 來完成</li>
+    </ul>
+  </li>
+  <li>Linux 中 pid 0 是 idle process，優先權最低，只負責讓 CPU 進入睡眠狀態
+    <ul>
+      <li>通常也叫做 swapper，每顆 core 有一個自己的 idle task</li>
+    </ul>
+  </li>
+  <li>pid 1 是系統中第一個 user space 的行程，負責作業系統的初始化
+    <ul>
+      <li>例如: 當電腦啟動時的 Daemon Process</li>
+    </ul>
+  </li>
+  <li>fork 出的 Process 其程式碼與父 Process 完全相同，如果要載入新的程式碼到該 process 中，使用 execve 系統呼叫
+    <ul>
+      <li>如果需要大量的執行 execve，那使用 vfork 會比較好，因為 vfork 會 Block parent process</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>pid 0 Process(idle process) 也是唯一沒有使用 fork() 產生的 Process，因為 pid 0 是系統啟動時就產生的 Process</p>
+</blockquote>
+
+<blockquote>
+  <p>使用 pstree -p 就能看到，所有的 Process 都是由 systemd(pid 1) 產生的</p>
+</blockquote>
+
+<p>例如: 從 bash 去執行 ls 會有以下的流程</p>
+<ol>
+  <li>bash fork 出一個 child process，然後 parent process wait()</li>
+  <li>child process 透過 execve() 去執行 ls</li>
+  <li>ls 執行完後，透過 exit() 結束，回到 parent process</li>
+</ol>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/10.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<h5 id="39-process-termination">3.9 Process Termination</h5>
+
+<ul>
+  <li>在 UNIX-Like OS 中，如果一個 Process Terminate，會變成 Zombie 狀態，Zombie Process 是無法被 kill 的，只能透過 Parent Process 使用 wait() 來回收
+    <ul>
+      <li>透過 wait() Parent Process 可以取得 Child Process 的結束狀態，例如: 使用了多少系統資源</li>
+    </ul>
+  </li>
+  <li>基於特定的需求，也可以直接將 Process kill 掉
+    <ul>
+      <li>kill -9 pid 會直接發送 SIGKILL(signal 9) 給該 Process，讓該 Process 立即結束</li>
+      <li>kill pid 則是發送 SIGTERM(signal 15) 給該 Process，讓該 Process 優雅的結束自己</li>
+    </ul>
+  </li>
+  <li>有些 OS 設計 Parent process kill 掉後，Child process 也會被 kill 掉
+    <ul>
+      <li>UNIX-Like OS 中，如果 Parent process 被 kill 掉，Child process 會被 init process(pid 1) 接管</li>
+      <li>init 內部有一個無窮迴圈，會不斷的執行 wait()，這樣就可以回收所有的 Zombie Process</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>例如我們可以透過 nohup 或 screen 來讓 Process 在背景執行，這樣就不會因為 Terminal 被關閉而被 kill 掉</p>
+</blockquote>
+
+<h3 id="communication-model-between-process--process">Communication model between Process &amp; Process</h3>
+
+<p>OS 保證每個 Process 之間都可以獨立的運行</p>
+<ul>
+  <li>但如果真的 Process 都完全獨立運行，那系統就會變得很難使用
+    <ul>
+      <li>例如: copy-paste</li>
+    </ul>
+  </li>
+  <li>所以 OS 會提供一些方法讓 Process communication</li>
+</ul>
+
+<h5 id="310-interprocess-communicationipc">3.10 Interprocess Communication(IPC)</h5>
+
+<p>IPC 是指可以讓兩個獨立的 Process 互相傳遞訊息，傳遞訊息的目的多半是</p>
+<ul>
+  <li>傳遞資訊，例如: copy-paste、information sharing</li>
+  <li>同步，例如: Parallel computing</li>
+  <li>模組化設計，例如: 將 Request 與 Worker 分開</li>
+</ul>
+
+<p><strong>IPC Model</strong></p>
+
+<p>這裡談的主要是 IPC 的分類，而不是 IPC 的實作</p>
+
+<ul>
+  <li>如何在 Process 之間建立 IPC</li>
+  <li>可以建立多少條 IPC 在 Process 之間</li>
+  <li>可否多個 Process 同時使用同一個 IPC</li>
+  <li>IPC 有沒有容量限制</li>
+  <li>IPC 中每一個 Message 的大小是否是固定的</li>
+  <li>
+    <p>IPC 是單向的還是雙向的</p>
+  </li>
+  <li>Direct communication(直接傳遞): 每個需要通訊必須明確的指定接收者或發送者
+    <ul>
+      <li>可以是單向也可以是雙向的</li>
+      <li>例如: Pipe</li>
+    </ul>
+  </li>
+  <li>Indirect communication(間接傳遞): Message 是發送到 Mailbox 中然後由 Receiver 自行取出
+    <ul>
+      <li>是雙向的，並且可以建立多條 IPC 或讓多個 Process 一起接收</li>
+      <li>因為有 Mailbox 所以就要考慮 Buffer 的問題
+        <ul>
+          <li>沒有 Buffer: 那就必須等到 Recv 結束，發送者才能繼續執行
+            <ul>
+              <li>優點是速度通常比較快，透過 Scheduler 或許某些資訊可以放在 Register 中直接傳遞</li>
+            </ul>
+          </li>
+          <li>固定 Buffer: 發送者將資料 Send 到 Buffer 中就可以繼續執行</li>
+          <li>多個 Buffer: 發送者可以一直送資料，但通常會限制發送的數量避免惡意程式</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Direct communication</strong></p>
+
+<p>通常使用 Process id 來將訊息丟給對方:</p>
+<ul>
+  <li>send(P, message)</li>
+  <li>receive(Q, message), receive(&amp;Q, message)</li>
+  <li>Receiver 可以指定是要從哪裡收，或者收任何訊息，由 OS 來告知是誰送的</li>
+</ul>
+
+<p>Feature</p>
+<ul>
+  <li>不需要特別的建立連接</li>
+  <li>由於使用 Process id 來傳遞訊息，因此只能是任兩個 Process 之間傳遞訊息
+    <ul>
+      <li>由 P 和 Q 兩個單項傳遞來組合成一個雙向傳遞</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Indirect communication</strong></p>
+
+<p>需要由使用者來建立傳輸通道</p>
+<ul>
+  <li>例如: Linux 的 mkfifo, pipe</li>
+  <li>例如: TCP/IP (如果在同一台機器上傳輸資料，不會經過 Network card)</li>
+</ul>
+
+<p>Feature</p>
+<ul>
+  <li>溝通的行程可以建立多個通道，可以簡化設計複雜度</li>
+  <li>可以「多個傳輸行程」對「多個接收行程」，常見於 Server 的設計</li>
+  <li>雙向，例如: Shared memory</li>
+  <li>單向，例如: pipe</li>
+</ul>
+
+<p><strong>Problems by many-to-many</strong></p>
+
+<p>如果有「多個傳輸行程」對「多個接收行程」</p>
+<ul>
+  <li>由誰接收
+    <ul>
+      <li>是否由「通道管理程式」決定?</li>
+      <li>誰先發起，就由誰收</li>
+    </ul>
+  </li>
+  <li>收了訊息之後怎麼處理
+    <ul>
+      <li>移除訊息，通常用於 Server 將 Task 交給一個 Sub-Server</li>
+      <li>一直存在，類似於廣播</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Blocking &amp; Non-Blocking</strong></p>
+
+<ul>
+  <li>如果有足夠多的 Buffer 的話，Process 間的通訊可以是 Non-blocking
+    <ul>
+      <li>送出 Message 後 Process 繼續下一個工作</li>
+      <li>例如: signal</li>
+    </ul>
+  </li>
+  <li>如果 Buffer 不足，或者根本沒有 Buffer 的話，就只能是 Blocking
+    <ul>
+      <li>送出 Message 後必須等待 Receiver 接收完畢，才能繼續工作</li>
+      <li>這個的好處是可以確認對方已經收到 Message</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="311-communication-method-direct-or-indirect">3.11 Communication method Direct or Indirect</h5>
+
+<p><strong>Shared Memory</strong></p>
+
+<p>在 Physical memory 上 Process A 和 Process B 是使用不同的區段，但是 Shared memory 就使用同一區段</p>
+<ul>
+  <li>要注意這裡是 Physical memory，但在 Process 中是不同的 Logical address</li>
+  <li>在 Linux 上可以透過 mmap() 來建立 Shared memory</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/11.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p><strong>Message Passing</strong></p>
+
+<ul>
+  <li>在 Process A 時呼叫 Kernel copy 資料到 Kernel space</li>
+  <li>Context switch 到 Process B 時，Kernel 再將資料 copy 到 Process B 的 Memory</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/12.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<h3 id="producer-consumer-problem">Producer-Consumer problem</h3>
+
+<p>這裡先簡單討論 <a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">Producer-Consumer Problem</a> 的概念，後面會再討論如何解決</p>
+
+<ul>
+  <li>假如有兩個 Process 共享一個固定大小的 Buffer，Producer 會不斷的產生資料，然後放到 Buffer 中由 Consumer 來取出
+    <ul>
+      <li>如果 Buffer 滿了，Producer 就必須等待 Consumer 取出資料</li>
+      <li>如果 Buffer 空了，Consumer 就必須等待 Producer 產生資料</li>
+      <li>這樣如果沒有設計好就容易造成 <a href="https://en.wikipedia.org/wiki/Deadlock">Deadlock</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果是單對單的 Producer-Consumer，可以透過一個環狀 Linked list 解決，詳情請看 <a href="https://www.youtube.com/watch?v=0XQAfLYfQkg&amp;list=PLMWkAn-aOA0bRR7n_A86Hs51B2WrAQA9i&amp;index=53">OS-CH03-重要的生產消費問題</a></p>
+
+<hr />
+
+<h3 id="thread-concept">Thread concept</h3>
+
+<h5 id="312-context-switch-main-overhead">3.12 Context switch main overhead</h5>
+
+<p>The overhead of context-switch</p>
+<ul>
+  <li>Store/restore the register file (~1KB)</li>
+  <li>TLB miss (~1KB)</li>
+  <li>CPU cache miss (~1MB)</li>
+</ul>
+
+<p>在 Context 中最主要的消耗就是 Cache miss，這取決於硬體的支援</p>
+<ul>
+  <li><strong>Virtual cache</strong>: 就需要把 Flush Cache，透過 MMU 將 Virtual address 對應到 Physical address</li>
+  <li><strong>Physical cache</strong>: 不需要 Flush cache
+    <ul>
+      <li>需要 MMU 轉換 Virtual address 成 Physical address，才能放入 Cache，轉換的過程就會有 Latency</li>
+      <li>例如: CPU Cache miss 在等待 L2 Cache 抓到資料，或是 L1 miss 之後需要 MMU 轉換 L2 之後才能做存取</li>
+      <li>例如: Process A/B，進行了一個 A -&gt; B -&gt; A 的切換，它們各自執行的時候都會把資料放入 Cache，A 只能期望 B 沒有覆蓋掉需要的資料</li>
+    </ul>
+  </li>
+  <li>Cache 是否支援 <strong>ASID</strong> (Address Space Identifier)
+    <ul>
+      <li>在 TLB 中加入一個 Process ID，只有當 ASID 與 Page number 都相同時，才會 Hit</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/13.png?raw=true" alt="" height="40%" width="40%" /></p>
+
+<h5 id="313-thread-memory">3.13 Thread memory</h5>
+
+<ul>
+  <li>Thread 在同一塊 Virtual memory 中執行，但是有各自的 Stack</li>
+  <li>因為在同一塊 Virtual memory 中執行，所以 Thread1 可以存取 Thread2 的 Stack
+    <ul>
+      <li>要做這樣的存取要慎重，因為 Stack 會隨著 Function call 而變動</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Thread Local Storage</strong></p>
+
+<p>同樣的 Thread 之間也會有各自的 Local variable，這些 Local variable 會放在 Thread Local Storage 中，
+這是由 Compiler 來設計的，讓每個 TLS 偏移量都不一樣，這樣就能讓 Thread 存取自己的 Local variable。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="314-thread-history">3.14 Thread history</h5>
+
+<ul>
+  <li>Many to One</li>
+  <li>One to One</li>
+  <li>Many to Many</li>
+</ul>
+
+<p><strong>Many to One</strong></p>
+
+<p>多對一就是兩個 Thread 共用一個 PCB，這樣的話如果其中一個 Thread 跑去做 I/O 的話，那整個 Process 就會被 Block，這樣就會造成整個 Process 都被 Block。
+同時由於 OS 不會知道 PCB 上的是兩個 Thread，所以無法再多核心上執行，這樣就會造成效能的下降。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/15.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p><strong>Green thread</strong>
+Green thread 是為了在底層的 OS 不支援 Thread 的情況下，透過 Library 來模擬 Thread 的行為，但這樣就只能使用 Many to One 的模型，例如: Java 的 Thread</p>
+</blockquote>
+
+<p>通常只有在 OS Kernel 不支援 Multi-thread 的情況下，才會使用 Many to One，由於所有的 User thread 在 Kernel 都只有一個 PCB，
+所以如果 Thread 跑去做 Block 的操作會導致其他 Thread 也被 Block。並且就算有很多 Processor 通常也只有一個 Thread 在執行，其他 Thread 都在等待。</p>
+
+<p><strong>One to One</strong></p>
+
+<p>通常是最多 OS 使用的 Model，每個 Thread 都有自己的 PCB，要透過 Memory control block 來判斷是 Thread 還是 Process，
+如果共用 Memory control block 的話，那就判定他是一個 Thread。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/16.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>由於每個 Thread 都有自己的 PCB，所以可以在多核心上執行</li>
+  <li>大部分都是 Non-blocking，所以在處理 Block 的任務上會很有彈性</li>
+</ul>
+
+<p><strong>Many to Many</strong></p>
+
+<p>上面的稱作 User thread，下面稱作 Kernel thread，對應的方式有很多種，例如下圖代表上面的 User thread 可以同時發出同等 Kernel thread 數量的 System call，
+但缺點是非常複雜並寫不好寫，並且不易理解，讓程式設計者很難進行優化。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/17.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>看起來是最有彈性的 Thread</li>
+  <li>Sun Solaris 9 之前支援 Many to Many Model</li>
+  <li>Sun Solaris 10 之後改為主要支援 One to One Model</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-21-2023 18:52</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.]]></summary></entry><entry><title type="html">Note | Linux Kernel Macro container_of &amp;amp; offsetof</title><link href="http://0.0.0.0:4000/jekyll/2023-10-17-container_of.html" rel="alternate" type="text/html" title="Note | Linux Kernel Macro container_of &amp;amp; offsetof" /><published>2023-10-17T00:00:00+08:00</published><updated>2023-10-17T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/container_of</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-17-container_of.html"><![CDATA[<blockquote class="block-tip">
+  <p>container_of 這個 Macro 在 Linux kernel 會經常被用到，因此先理解 container_of 絕對非常重要</p>
+</blockquote>
+
+<h3 id="container_of">container_of</h3>
+
+<p>container_of 的定義在 [&lt;include/linux/container_of.h&gt;]，並且需要使用 Marco offsetof，container_of 可以透過一個 struct 中的某個成員來獲得該 struct 的起始位置，
+這樣的做法會在 Linux kernel 中被頻繁的使用到。</p>
+
+<p>例如 Linux kernel 中的 <a href="https://github.com/torvalds/linux/blob/master/lib/rbtree.c">&lt;lib/rbtree.c&gt;</a>, <a href="https://github.com/torvalds/linux/blob/master/include/linux/list.h">&lt;include/linux/list.h&gt;</a>，在 list.h 中 container_of 被用來找尋 list_last_entry, list_first_entry，
+而在 rbtree.c 中則可以用來找尋父節點。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * container_of - cast a member of a structure out to the containing structure
+ * @ptr:        the pointer to the member.
+ * @type:       the type of the container struct this is embedded in.
+ * @member:     the name of the member within the struct.
+ * */</span>
+<span class="cp">#define container_of(ptr, type, member) ({              \
+const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr);    \
+(type *)( (char *)__mptr - offsetof(type,member) );})
+</span></code></pre></div></div>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">typeof( ((type *)0 -&gt; member) )</code>: 先宣告一個 <code class="language-plaintext highlighter-rouge">(type *)0</code> (struct 的 Null 指標)，然後指向 struct 中的該 member，然後透過 <code class="language-plaintext highlighter-rouge">typeof()</code> 獲得 member 的 type</li>
+  <li><code class="language-plaintext highlighter-rouge">const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr)</code>: 宣告該 member type 的 pointer <code class="language-plaintext highlighter-rouge">*__mptr</code> 就能指向 <code class="language-plaintext highlighter-rouge">ptr</code> 所指向的位置</li>
+  <li><code class="language-plaintext highlighter-rouge">(char *)__mptr</code> 將 __mptr 轉換為 char<em>，因為 char</em> 長度為 1 byte，這樣才能正確做之後運算</li>
+  <li><code class="language-plaintext highlighter-rouge">offsetof(type,member)</code> 會返回從 struct 起始位置到 member 的偏移量(byte)</li>
+  <li><code class="language-plaintext highlighter-rouge">(type *)( (char *)__mptr - offsetof(type,member) )</code> 最後將 __mptr - offset = struct 的起始位置，然後轉回 type*</li>
+</ol>
+
+<p>下圖是如何透過 Offset 找到 Struct 起始位址的說明:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-17-container_of/1.jpg?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-warning">
+  <p>延伸閱讀: <a href="https://stackoverflow.com/questions/6083734/rationale-behind-the-container-of-macro-in-linux-list-h">Rationale behind the container_of macro in linux/list.h</a>, <a href="https://stackoverflow.com/questions/72074089/what-is-the-purpose-of-mptr-in-latest-container-of-macro">What is the purpose of __mptr in latest container_of macro?</a></p>
+</blockquote>
+
+<p>延伸閱讀解釋了為什麼要另外去宣告 __mptr，我也好奇如果已經拿到 ptr 為什麼還要特別去使用 (type *)0 -&gt; member，這樣的方式來獲取 member type，如果將其改為以下程式碼，
+一樣可以進行使用:</p>
+<ol>
+  <li>Type 的檢查，這樣可以增加安全性，確保 ptr 真的與 member 型別相同</li>
+  <li>Kernel 使用的 C standard 有可能對這種寫法跳出 Warning</li>
+</ol>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define container_of(ptr, type, member) ({                      \
+     (type *)( (char *)ptr - offsetof(type,member) );})
+</span></code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-18-2023 23:55</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[container_of 這個 Macro 在 Linux kernel 會經常被用到，因此先理解 container_of 絕對非常重要]]></summary></entry><entry><title type="html">Testing | Test Case Generation</title><link href="http://0.0.0.0:4000/jekyll/2023-10-10-test_case_generation.html" rel="alternate" type="text/html" title="Testing | Test Case Generation" /><published>2023-10-10T00:00:00+08:00</published><updated>2023-10-10T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/test_case_generation</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-10-test_case_generation.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+Test case 的產生方式可能是無窮無盡的，因此也需要一些策略來幫助產生 Test case</p>
+</blockquote>
+
+<p>以下是本章節主要介紹的目標，這個章節最後的基於限制式的測試會使用 ECLiPSeclp 來進行實作，不會在這裡介紹，
+會另外開一篇講述如何使用 Constraint Logic Programming 來生成測試案例。</p>
+
+<ul>
+  <li>Test case generation</li>
+  <li>Equivalence class partitioning</li>
+  <li>Boundary value analysis</li>
+  <li>Domain specific information</li>
+  <li>
+    <p>Constraint-based testing</p>
+  </li>
+  <li>Test case generation 的目標是從可能無窮(possibly infinite) Collection of candidate test cases，
+選出<strong>盡可能少(Few)</strong>並且<strong>有效(Effective)</strong>的 Test case</li>
+  <li>Domain knowledge 在測試特定領域的應用時能起到非常關鍵的作用</li>
+</ul>
+
+<h5 id="two-main-issues">Two Main Issues</h5>
+
+<p>這就涉及兩個主要的問題，可以透過一些原則來解決:</p>
+<ul>
+  <li><strong>Few(少):</strong> 對 Input domains 所有的 Value 進行測試是不可能的，我們只能挑選一部分的 Subset 來測試
+    <ul>
+      <li><strong><a href="https://en.m.wikipedia.org/wiki/Equivalence_partitioning">Equivalence class partitioning</a></strong>(等價類別劃分)</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Code_coverage">Test coverage criteria</a></strong>(測試覆蓋標準)</li>
+    </ul>
+  </li>
+  <li><strong>Effective(有效):</strong> 我們希望選擇一個 Subset，能夠找到最多的 Errors
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Boundary-value_analysis">Boundary value analysis</a></strong>(邊界值分析)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>拿一元二次方程式為例，公式解為:</strong></p>
+
+<p>$ax^2 + bx + c = 0$, $r = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</p>
+
+<p><em>將每個 Input variable 以 float(32 bit) 表示，所有可能的輸入值數量將會是:</em></p>
+
+<p>$2^{32} + 2^{32} + 2^{32} = 2^{96}$</p>
+
+<h3 id="31-equivalence-class-partitioning">3.1 Equivalence Class Partitioning</h3>
+
+<ul>
+  <li>一組精心選擇的輸入值應該能夠覆蓋許多其他輸入值</li>
+  <li>這代表我們應該把 Input domains(輸入域) 劃分為有限數量的 <strong>Equivalence classes(等價類別)</strong></li>
+  <li>而測試每個 Equivalence class 中的 <strong>Representative value(代表值)</strong> 就等於測試了 Equivalence class 中的所有其他值</li>
+</ul>
+
+<h5 id="311-valid-and-invalid-equivalence-classes">3.1.1 Valid and Invalid Equivalence Classes</h5>
+
+<ul>
+  <li>Equivalence classes 通常透過 Input constratint(輸入限制) 來劃分 Input domain(輸入域)</li>
+  <li>這裡會有兩種 Equivalence classes，Valid 和 Invalid
+    <ul>
+      <li>Valid: 代表程式的有效輸入</li>
+      <li>Invalid: 代表所有其他可能的狀態</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>An Example:</strong></p>
+<ul>
+  <li>If an input constraint specifies a range of values (e.g., the count can be from 1 to 999), 
+it identifies one valid equivalence class (1 ≤ count ≤ 999) and two invalid equivalence classes (count &lt; 1 and count &gt; 999)</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/1.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="312-partitioning-equivalence-classes">3.1.2 Partitioning Equivalence Classes</h5>
+
+<ul>
+  <li>如果程式中的 Valid/Invalid Equivalence classes 並不被程式以相同方式處理，則需要劃分更多的 Equivalence classes</li>
+  <li>如果我們有一個輸入年齡 <code class="language-plaintext highlighter-rouge">Y</code> 的程式:
+    <ul>
+      <li>Invalid: 的輸入可能會被劃分為 <code class="language-plaintext highlighter-rouge">Y &lt; 0</code> 和 <code class="language-plaintext highlighter-rouge">Y &gt; 1000</code> (因為根本不會有人活到 1000 歲)</li>
+      <li>Valid: 我們也可以把 <code class="language-plaintext highlighter-rouge">Y &gt; 65</code> 跟 <code class="language-plaintext highlighter-rouge">Y &lt;= 65</code> 區分開來，因為大於 65 歲的退休人士可能有不同的行為</li>
+      <li>這樣我們就在 Invalid/Valid 中另外劃分了 2 個 Equivalence classes</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/2.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>An Example:</strong>
+<em>回到一元二次方程式為例，方程式的解取決於:</em></p>
+
+<p>$d = b^2 - 4ac$<br />
+$The\;equation\;has\;two\;different\;real\;roots\;if\;d&gt;0$<br />
+$The\;equation\;has\;two\;identical\;real\;roots\;if\;d=0.$<br />
+$The\;equation\;has\;no\;real\;root\;if\;d&lt;0.$</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/3.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p>將一元二次方程式依照 Root 的情況劃分為三種 Equivalence class，這樣就能在這三種情況下挑選 <code class="language-plaintext highlighter-rouge">a, b, c</code> 的代表值</p>
+
+<h5 id="313-input-space-vectors-points">3.1.3 Input Space, Vectors, Points</h5>
+
+<ul>
+  <li><strong>Input Space</strong>: Let x1, x2, …, xn denote the input variables. Then these nvariables form an n-dimensional space that we call input space.</li>
+  <li><strong>Input Vector</strong>: The input space can be represented by a vector X, we call input vector, where X = [x1, x2, …, xn].</li>
+  <li><strong>Test Point</strong>: When the input vector X takes a specific value, we call it a test pointor a test case, which corresponds to a point in the input space.</li>
+</ul>
+
+<p>假如有一個 Function，接受兩個 Variable x, y，所有的可能輸入值就會是一個 <strong>Input Space</strong>，
+那麼我們的 <strong>Input Vector</strong> 就是這個 2D 平面上的所有點，而 <strong>Test Point</strong> 就是這個我們選擇進行測試的點</p>
+
+<h5 id="314-input-domain-and-sub-domain">3.1.4 Input Domain and Sub-Domain</h5>
+
+<ul>
+  <li>Domain: The input domainconsists of all the points representing all the allowable input combinations specified for the program in the product specification.</li>
+  <li>Sub-Domain: An input sub-domainis a subset of the input domain. In general, a sun-domain can be defined by a set of inequalitiesin the form off(x1, x2, …, xn) &lt; K,
+where “&lt;” can also be replaced by other relational operators.</li>
+</ul>
+
+<blockquote>
+  <p>Domain 就是在程式規格允許下的所有輸入值，而這些輸入值可以被程式中的不等式所劃分為 Sub-Domain</p>
+</blockquote>
+
+<p><strong>Input Domain Partitioning</strong></p>
+
+<ul>
+  <li>An input domain partitioningis a partition of the input domain into a number of sub-domains.</li>
+  <li>These partitioned sub-domains are mutually exclusive, and collectively exhaustive.</li>
+</ul>
+
+<blockquote>
+  <p>例如: 整數輸入可以被劃分為三個 Sub-Domain，n &lt; 0, n = 0, n &gt; 0，這三個 Sub-Domain 互斥且完全涵蓋了整個整數 Domain</p>
+</blockquote>
+
+<hr />
+
+<h3 id="32-test-coverage-criteria">3.2 Test Coverage Criteria</h3>
+
+<blockquote class="block-danger">
+  <p>如果 Equivalence classes 的數量還是太多，那我們就需要 <strong><a href="https://en.wikipedia.org/wiki/Code_coverage">Test coverage criteria</a></strong>(測試覆蓋標準)來限制 Test Case 的數量， 
+在這裡我們還不會詳細談有哪幾種 Test coverage criteria。</p>
+</blockquote>
+
+<p><strong>Test Case Candidates Reduction:</strong> 下圖是一個減少 Test Case 的流程</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/4.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<hr />
+
+<h3 id="33-boundary-value-analysis">3.3 Boundary Value Analysis</h3>
+
+<blockquote class="block-tip">
+  <p>邊界上的測試案例通常是最有效的，因為邊界是最容易找到錯誤的地方</p>
+</blockquote>
+
+<ul>
+  <li>A <strong>boundaryis</strong> where two sub-domains meet.</li>
+  <li>A <strong>point</strong> on a boundary is called a boundary point.</li>
+  <li><strong>Boundary points</strong> are input values with the highest probability of finding the most errors.</li>
+</ul>
+
+<h5 id="331-definition-of-boundaries">3.3.1 Definition of boundaries</h5>
+
+<p><strong>Linear Boundaries and Sub-Domains</strong></p>
+
+<ul>
+  <li>A boundary is a linear boundaryif it is defined by: $a_1x_1+ a_2x_2+ … + a_nx_n = K$
+Otherwise, it is called a nonlinear boundary.</li>
+  <li>A sub-domain is called a linear sub-domainif its boundaries are all linear ones.</li>
+</ul>
+
+<p><strong>Open and Closed Boundaries</strong></p>
+
+<ul>
+  <li>A boundary is a closedone with respect to a specific sub-domain if all the boundary points belong to the sub-domain <strong>(&lt;=, &gt;=, =)</strong>.</li>
+  <li>A boundary is an openone with respect to a specific sub-domain if none of the boundary points belong to the sub-domain <strong>(&gt;, &lt;, !=)</strong>.</li>
+  <li>A sub-domain with all open boundaries is called an open sub-domain; One with all closed boundaries is called a closed sub-domain; otherwise it is a mixed sub-domain</li>
+</ul>
+
+<p>如果一個邊界的 Point 在 Domain 中，那麼這個邊界就是 Close 的，否則就是 Open 的，例如:</p>
+<ul>
+  <li>Domain 1 &lt; x &lt;= 100
+    <ul>
+      <li>邊界 1 並不屬於 Domain，因此這個邊界是 Open 的</li>
+      <li>邊界 100 屬於 Domain，因此這個邊界是 Close 的</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Interior and Exterior Points</strong></p>
+
+<ul>
+  <li>屬於 Sub-domain 但不在邊界上的點稱作 <strong>Interior point</strong></li>
+  <li>不屬於 Sub-domain 並且不在邊界上的點稱作 <strong>Exterior point</strong></li>
+  <li>而兩條以上的邊界相交的點稱作 <strong>Vertex point</strong></li>
+</ul>
+
+<p><strong>General Problems with Input Values</strong></p>
+
+<ul>
+  <li>Some input values cannot be handled by the program. These input values are under-defined.</li>
+  <li>Some input values result in different output. These input values are over-defined.</li>
+  <li>
+    <p>These problems are most likely to happen at boundaries.</p>
+  </li>
+  <li><strong>Under-defined input values</strong>(未定義的輸入值): 也就是程式無法處理的 Input value，例如: 除以零</li>
+  <li><strong>Over-defined inpyt values</strong>(過度定義的輸入值): 也就是程式可以處理但是可能有不同輸出的 Input value，例如: 一個投票系統，可能會因為地方的法律而有不同的投票年齡限制</li>
+</ul>
+
+<h5 id="332-boundary-problems">3.3.2 Boundary Problems</h5>
+
+<p>這裡列出 5 個主要的 Boundary Problems:</p>
+
+<ul>
+  <li><strong>Closure Problem</strong>(閉合問題): whether the boundary points belong to the sub-domain.</li>
+  <li><strong>Boundary shift/tilt Problem</strong>:  where exactly a boundary is between the intended and the actual boundary.
+    <ul>
+      <li>Boundary shift Problem: f(x1, x2, …, xn) = K, where a small change in K.</li>
+      <li>Boundary tilt Problem: f(x1, x2, …, xn) = K, where a small change in some parameters.</li>
+    </ul>
+  </li>
+  <li><strong>Missing/Extra boundary Problem</strong>:
+    <ul>
+      <li>Missing: a boundary missing means that two neighboring sub-domains collapse into one sub-domain.</li>
+      <li>Extra: An extra boundary further partitions a sub-domain into two smaller sub-domains.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="34-test-case-generation-strategy">3.4 Test Case Generation Strategy</h3>
+
+<p>Weak N x 1 / 1 x 1 Strategy 都是一種用於邊界測試的策略，這裡會介紹這兩種策略的差異與優缺點</p>
+
+<p><a href="./2023-10-10-test_case_generation.html#341-weak-N-x-1-strategy">3.4.1 Weak N x 1 Strategy</a><br />
+<a href="./2023-10-10-test_case_generation.html#343-weak-1-x-1-strategy">3.4.3 Weak 1 x 1 Strategy</a></p>
+
+<h5 id="341-weak-n-x-1-strategy">3.4.1 Weak N x 1 Strategy</h5>
+
+<ul>
+  <li>In an n-dimensional space, a boundary defined by a linear equationin the form off (x1, x2, …, xn) = K would need nlinearly independent pointsto define it.</li>
+  <li>We can select nsuch boundary points, called <strong>ON points</strong>, to precisely define the boundary.</li>
+  <li>We can also select a point, called an <strong>OFF point</strong>, that receives different processing.</li>
+</ul>
+
+<p><strong>The OFF Points</strong></p>
+
+<ul>
+  <li><strong>閉合的邊界</strong>: 那麼它的 Off point 會位邊界的外部</li>
+  <li><strong>開放的邊界</strong>: 那麼他的 On point 會位邊界的內部</li>
+  <li><code class="language-plaintext highlighter-rouge">0 &lt;= N &lt; 21</code> 在這個例子上有兩個邊界，<em>其中 0 是 Close boundary、21 是 Open boundary</em>
+    <ul>
+      <li><strong>ON Points</strong> 是 0, 21 這兩個位於邊界上的點</li>
+      <li>0 是 <strong>Close boundary</strong>, Off point -1 位於外側</li>
+      <li>20 是 <strong>Open boundary</strong>, Off point 20 位於內側</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/5.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Distance of the OFF Points</strong></p>
+
+<ul>
+  <li>需要 Off point 的理由是，他與邊界非常的接近，以至於邊界的細微變化都將影響 Off point 的處理</li>
+  <li>實際應用上，使用 distance ε 作為 Off point 與邊界的偏移距離
+    <ul>
+      <li><strong>For integers, ε = 1.</strong></li>
+      <li><strong>For numbers with nbinary digits after the decimal point, ε = 1/2<sup>n</sup>.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>例如: 有一個 0.001 作為邊界值，那麼 ε 就是 1/2<sup>3</sup> = 1/8</p>
+</blockquote>
+
+<p><strong>Position of the OFF Points</strong></p>
+
+<ul>
+  <li>Off point 應該要位於所有 On point 的中央</li>
+  <li>對於一個 2D 的空間來說，他應該選擇的方式如下:
+    <ul>
+      <li>選擇位於兩個 On point 的中點</li>
+      <li>根據這個邊界是 Closed 或 Opend 向外或向內移動 ε 的距離</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Total Test Points</strong></p>
+
+<p>除了 ON/OFF Points 我們也會再選擇一個 Interior Point(內部點)做為該 Equivalence Class(Sub-Domain) 的代表，
+因此一個 N Dimensional domain 將會有 <code class="language-plaintext highlighter-rouge">(n + 1)*b + 1</code> 個 Test Points。</p>
+
+<p>Example:<br />
+假設有一個稅收級距如下，注意其中 Close 與 Open 的條件，這裡都是 Integers 這樣的話旁邊的 Sub-Domain OFF Points 剛好會重疊在一起可以省略掉，
+並且 Open domain 也可以省略一個邊界的值，因此原本應該要有 <code class="language-plaintext highlighter-rouge">3 * 2 + 5 * 3 = 21</code> 個點，但是有 4 個邊是重疊的因此 <code class="language-plaintext highlighter-rouge">21 - 4 * 2 = 13</code>，
+最終僅用上 13 個 Test Points。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tax Rate:
+0%:  0 &lt;= x &lt; 10000 (0~9999)
+10%: 10000 &lt;= x &lt; 1000000 (10000~999999)
+20%: 1000000 &lt;= x &lt; 100000000 (1000000~99999999)
+30%: x &lt;= 100000000 (100000000~)
+</code></pre></div></div>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/6.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-danger">
+  <p>那如果假設一個 2D Sub-domain，並且四個邊都是封閉的，將會是 (2 + 1) * 4 + 1 = 13 個 Test Points，這裡忽略了與旁邊的 Sub-domain 重疊的點</p>
+</blockquote>
+
+<h5 id="342-boundary-problem-detection-of-werk-n--1-strategy">3.4.2 Boundary Problem Detection of Werk N * 1 Strategy</h5>
+
+<p>這裡說明 Weak N x 1 Strategy 在處理 Boundary Problem 時能做到什麼，不能做到什麼</p>
+
+<ul>
+  <li>Closure problem
+    <ul>
+      <li>定義邊界是是否所有可能的邊界都被包含在內</li>
+    </ul>
+  </li>
+  <li>Boundary shift problem
+    <ul>
+      <li>邊界是否有正確設置在應該的位置</li>
+    </ul>
+  </li>
+  <li>Boundary tilt problem
+    <ul>
+      <li>邊界是否有正確的對齊或平行</li>
+    </ul>
+  </li>
+  <li>Missing boundary problem
+    <ul>
+      <li>是否所有的邊界都有被定義</li>
+    </ul>
+  </li>
+  <li>Extra boundary problem
+    <ul>
+      <li>是否有多餘的邊界</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/7.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/8.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/9.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/10.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/12.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Weak N x 1 Strategy 可以很好的處理其他 Boundary problem 但無法完全偵測到 Extra boundary problem</p>
+</blockquote>
+
+<h5 id="343-weak-1-x-1-strategy">3.4.3 Weak 1 x 1 Strategy</h5>
+
+<p>Weak 1 x 1 Strategy 在每個邊界上只放置一個 On point 與一個 Off point，減少 Test Points 數量，但是也會有缺點</p>
+
+<ul>
+  <li>One of the major drawbacks of weak N x 1 strategy is the number of test points used, <strong>(n+1)xb+1</strong> for ninput variables and boundaries.</li>
+  <li>Weak 1 x 1 strategy uses just one ON point for each boundary, thus reducing the total number of test points to <strong>2xb+1</strong>.</li>
+  <li>The OFF point is just <strong>ε distance</strong> from the ON point and perpendicular to the boundary.</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/13.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/14.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/17.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Weak 1 x 1 Strategy 也可以處理 Boundary Problem，但是在傾斜上的表現不如 Weak N x 1 Strategy，並且跟 Weak N x 1 Strategy 一樣無法完全偵測到 Extra boundary problem</p>
+</blockquote>
+
+<p>在 2D 平面上比較能表示出兩種策略的差異，可以看到 Weak N x 1 Strategy 在同個 Domain 的邊界上會有 3 個 Points，而 Weak 1 x 1 Strategy 則只有 2 個 Points，
+下圖左右分別是 Weak N x 1 Strategy 和 Weak 1 x 1 Strategy:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/20.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/21.png?raw=true" width="50%" height="50%" />
+</div>
+
+<hr />
+
+<h3 id="35-looking-for-equivalence-classes">3.5 Looking for Equivalence Classes</h3>
+
+<p>找尋 Equivalence Classes(等價類別)的方法與需要注意的點</p>
+
+<ul>
+  <li>Don’t forget equivalence classes for invalid inputs.</li>
+  <li>Organize your classifications into a table or an outline.</li>
+  <li>Look for ranges of numbers.</li>
+  <li>Look for membership in a group.</li>
+  <li>Analyze responses to lists and menus.</li>
+  <li>Look for variables that must be equal.</li>
+  <li>Create time-determined equivalence classes.</li>
+  <li>Look for variable groups that must calculate to a certain value or range.</li>
+  <li>Look for equivalent output events.</li>
+  <li>Look for equivalent operating environments.</li>
+</ul>
+
+<p><strong>Don’t Forget Equivalence Classes for Invalid Inputs</strong></p>
+
+<ul>
+  <li>通常 Invalid Inputs 是最容易產生 Bugs 的來源</li>
+  <li>例如一個能接受 1 到 99 之間任何數字的程式，那就至少有四個 Equivalence Classes
+    <ul>
+      <li>1 &gt;= x &lt;= 99</li>
+      <li>x &lt; 1</li>
+      <li>x &gt; 99</li>
+      <li>Not a number(Is this true for all non-numbers?)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Organize Your Classifications into a Table or an Outline</strong></p>
+
+<p>把分類整理成表格或者大綱</p>
+<ul>
+  <li>會發現有這麼多的 Input/Output constraints，跟相關的 Equivalence Classes，需要一種組織方法</li>
+  <li>最常用的方法就是 <strong>Table</strong>(表格)或者 <strong>OutLine</strong>(大綱)</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/18.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/19.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>Look for Ranges of Numbers</strong></p>
+
+<ul>
+  <li>如果找到一個數字的範圍，例如: 1 到 99，這些範圍就是 Equivalence Classes</li>
+  <li>通常會有三個 Invalid Equivalence Classes，小於 1、大於 99、以及不是數字的情況</li>
+  <li>當然也會有多個範圍的情況，例如: Tax</li>
+</ul>
+
+<p><strong>Look for Membership in a Group</strong></p>
+
+<ul>
+  <li>如果一個 Input 必須屬於某個 Group，那麼一個 Equivalence Class 則包含該 Group 的所有成員</li>
+  <li>而另一個 Equivalence Class 則包含所有不屬於該 Group 的成員</li>
+  <li>例如: 要求輸入一個國家的名稱，Valid Equivalence Class 就是所有國家的名稱，Invalid Equivalence Class 就是所有不是國家的名稱</li>
+  <li>但是，abbreviations(縮寫)、almost correct spellings(幾乎正確的拼寫)、native language spellings(母語拼寫)、name that are now out of date but were country names(曾經存在過的名稱)又該如何處理?
+    <ul>
+      <li>應該分別測試這些情況嗎?</li>
+      <li>通常 Specification 不會提到這些情況，但是在測試中可能會發現這些錯誤</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Analyze Responses to Lists and Menus</strong></p>
+
+<ul>
+  <li>對於必須從 List 或 Menu 中選擇的 Input，每個選項都是一個 Equivalence Class</li>
+  <li>每個 Input 都是其自身的 Equivalence Class</li>
+  <li>Invaild Equivalence Class 則是所有不在 List 或 Menu 中的選項</li>
+  <li>例如: “Are you sure? (Y/N)”，一個 Equivalence Class 就是 Y，另一個 Equivalence Class 就是 N，Invalid Equivalence Class 就是其他所有選項</li>
+</ul>
+
+<p><strong>Look for Variables That Must Be Equal</strong></p>
+
+<ul>
+  <li>例如一個可以輸入任何顏色的程式，但必須是黑色，那麼所有的顏色都是 Invalid Equivalence Class，而黑色就是 Valid Equivalence Class</li>
+  <li>有時這種限制在實際應用中可能會出現意外情況: 例如黑色已售罄，只剩下其他顏色</li>
+  <li>這種曾經有效但現在不再有效的選擇，應該為它們建立一個 Equivalence Class</li>
+</ul>
+
+<blockquote>
+  <p>例如: 在閏年時 February 有 29 天，但是在非閏年時 February 只有 28 天，這樣就會有兩個 Equivalence Classes</p>
+</blockquote>
+
+<p><strong>Create Time-Determined Equivalence Classes</strong></p>
+
+<ul>
+  <li>例如一個程式還沒有從 Disk 完成讀取，在進行中與結束上按下空格鍵是不同的 Equivalence Classes</li>
+  <li>這種情況通常會有三個 Equivalence Classes，一個是還沒開始讀取的情況，一個是讀取中的情況，一個是讀取完畢的情況</li>
+</ul>
+
+<p><strong>Look for Variable Groups That Must Calculate to a Certain Value or Range</strong></p>
+
+<ul>
+  <li>例如輸入 Triangle 的三個邊長</li>
+  <li>在 Valid Equivalence Class 中，它們的總和應該等於 180°</li>
+  <li>而 Invalid Equivalence Class 則會有兩個分別是大於 180° 與小於 180°</li>
+</ul>
+
+<p><strong>Look for Equivalent Output Events</strong></p>
+
+<p>在此之前我們強調的都是 Input 與 Invalid Input，這是因為 Output 通常更複雜，因為通過程式處理後的 Output 會有很多種可能的情況</p>
+
+<ul>
+  <li>例如我們有一個由程式控制的繪圖機，他最多可以一次畫 4 公尺的線條</li>
+  <li>怎麼判斷一個線條是 Valid Equivalence Class 還是 Invalid Equivalence Class?
+    <ul>
+      <li>有可能繪製了超過 4 公尺的線條</li>
+      <li>可能根本沒有繪製線條</li>
+      <li>也有可能繪製了根本不是線條的東西，例如: 圓形</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在測試中不只要關注輸出的情況，也要關注輸出並找到 Equivalence Classes Of Output</p>
+</blockquote>
+
+<p><strong>Look for Equivalent Operating Environments</strong></p>
+
+<p>同時對於環境的變化也要找到 Equivalence Classes</p>
+
+<ul>
+  <li>例如: 一個程式要求至少要 64K - 256K 的可用 Memory
+    <ul>
+      <li>這樣就會有三個 Equivalence Classes，符合規範與小於 64K、大於 256K的情況</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-28-2023 16:46<br />
+剩下的部分是 Constraint-based testing，會另外講述如何使用 CLP 來生成測試案例</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. Test case 的產生方式可能是無窮無盡的，因此也需要一些策略來幫助產生 Test case]]></summary></entry><entry><title type="html">OS | Operating System Structure</title><link href="http://0.0.0.0:4000/jekyll/2023-10-09-operating_system_structure.html" rel="alternate" type="text/html" title="OS | Operating System Structure" /><published>2023-10-09T00:00:00+08:00</published><updated>2023-10-09T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/operating_system_structure</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-09-operating_system_structure.html"><![CDATA[<blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>在這個章節有以下主要大綱</p>
+
+<ul>
+  <li>OS Service</li>
+  <li>Graphical User Interface &amp; Text-based User Interface</li>
+  <li>System calls</li>
+  <li>OS Structure</li>
+  <li>Profiling/Debugging an OS Kernel</li>
+</ul>
+
+<h3 id="os-service">OS Service</h3>
+
+<h5 id="21-purpose-of-os">2.1 Purpose of OS</h5>
+
+<p>一台作業系統的主要服務是使對於 User 而言 Hardware 變的更好使用，對 Designer 而言能提高系統使用率</p>
+
+<p><strong>Simple to use</strong></p>
+
+<ul>
+  <li>Communications
+    <ul>
+      <li>同一台電腦內部 Process 之間的 Communications(IPC)，例如: copy and paste</li>
+      <li>跨電腦之間的通訊，例如: Network neighborhood, Network file system(NFS)</li>
+    </ul>
+  </li>
+  <li>Error detection
+    <ul>
+      <li>當軟體發生錯誤時，OS 能採取適當的措施「處理」這個錯誤，例如: 使用者光碟機沒有「收合」，提示使用者</li>
+      <li>提供一般程式的除錯機制，例如: <a href="https://en.wikipedia.org/wiki/Ptrace">ptrace</a>, <a href="https://en.m.wikipedia.org/wiki/Core_dump">core dump</a> …</li>
+      <li>OS Kernel 的除錯機制，例如: kgdb, kdb</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Ptrace">ptrace</a> 是一種 System call，允許一個 Process 觀察另一個 Process，gdb 的底層就使用 ptrace 實現</p>
+</blockquote>
+
+<ul>
+  <li>提供使用者操作介面，例如: Gnome, KDE …</li>
+  <li>載入應用程式的能力，例如: execve()
+    <ul>
+      <li>多功能的作業系統，最少要能識別「執行檔」的檔案格式</li>
+      <li>部分嵌入式系統 Kernel 與 User application 編譯在同一個 mage，task 即為這個 mage 中的一個 Function，
+這時候就不需要「執行檔」</li>
+    </ul>
+  </li>
+  <li>處理 I/O 的能力，例如: 各種 Driver</li>
+  <li>檔案系統，例如: OS 將 Disk 上的一個 Block 抽象為 File，再將 File 抽象為 Folder，Folder 中可以放入 File</li>
+</ul>
+
+<p><strong>Increase efficiency</strong></p>
+
+<ul>
+  <li>分配各種資源，例如: Memory 僅有 4GB，A 程式需要 3.2GB，B 程式需要 1.4GB，如何分配「有限」的 Memory
+    <ul>
+      <li>Debian 上可以透過 <code class="language-plaintext highlighter-rouge">free -h</code>，<code class="language-plaintext highlighter-rouge">cat /proc/swaps</code> 查看 swap 使用狀況</li>
+    </ul>
+  </li>
+  <li>統計資源的使用率，例如: 可以使用 <a href="https://en.m.wikipedia.org/wiki/Htop">htop</a> 監視 CPU、DRAM、I/O 等效能，使用率</li>
+  <li>Protection，確保 Process 只能擁有 OS 所分配的資源，Process 各自獨立，不會受到非法的干擾·</li>
+  <li>Security，確保 User Login 後只能存取自己的資源，例如: 存取他人的家目錄</li>
+</ul>
+
+<h5 id="22-user-interface">2.2 User interface</h5>
+
+<p><strong>GUI</strong>:</p>
+<ul>
+  <li>GUI 將許多命令以 Icon 的形式表示，並且大部分可以 Drag and drop(拖動)的方式</li>
+  <li>再輸入方式包含:
+    <ul>
+      <li>滑鼠、觸控面板、觸控螢幕、多點觸控的直覺化控制</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>CLI</strong>:</p>
+<ul>
+  <li>Text-mode 雖然需要時間學習，但能很準確的下達命令
+    <ul>
+      <li>也可以將命令組合成 Batch program，例如: shell script</li>
+    </ul>
+  </li>
+  <li>Text-mode 比 GUI 更穩定</li>
+  <li>可以使用輕量級的 Remote connection，例如: ssh</li>
+  <li>Text-mode 也可以結合指標裝置(例如: 滑鼠)，也可以使用 Library(例如: ncurses) 模擬 GUI 介面(例如: Linux kernel memuconfig)</li>
+</ul>
+
+<h3 id="system-call">System Call</h3>
+
+<h5 id="23-system-call">2.3 System call</h5>
+
+<p>System call 是 <strong>OS Kernel</strong> 對外開放的 API</p>
+<ul>
+  <li>注意恐龍書將 System call 定義為 OS 對外開放的 API</li>
+  <li>但 OS 涵蓋非常廣泛，因此 System call 應該限定於 Kernel 提供的 API</li>
+</ul>
+
+<p><strong>Linux system call</strong></p>
+
+<p>Linux 所有的 System call 可以到這個路徑去尋找 <a href="https://github.com/torvalds/linux/blob/master/arch/x86/entry/syscalls/syscall_64.tbl">/arch/x86/entry/syscalls/syscall_64.tbl</a>，或是到 Linux 的 <a href="https://man7.org/linux/man-pages/man2/syscalls.2.html">syscalls(2) — Linux manual page</a>，
+前四個 System call 為: 1. read, 2. write, 3. open, 4. close</p>
+
+<p><strong>Call System call</strong></p>
+
+<ul>
+  <li>可以透過 libc(<a href="https://en.wikipedia.org/wiki/C_standard_library">C standard library</a>) 呼叫 System call
+    <ul>
+      <li>例如: read, write, open, close</li>
+    </ul>
+  </li>
+  <li>Linux 的 Man page 中，volume 2 即為 System call 的說明
+    <ul>
+      <li>例如: <code class="language-plaintext highlighter-rouge">man 2 read</code>，這裡要注意是否有安裝 <code class="language-plaintext highlighter-rouge">sudo apt-get install manpages-dev</code></li>
+    </ul>
+  </li>
+  <li>少數 System call 並未包含在 Linux 的 libc 內，這時候需要自已寫出來</li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define_GNU_SOURCE </span><span class="cm">/* See feature_test_macros(7) */</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/syscall.h&gt;</span><span class="c1"> /* For SYS_xxx definitions */</span><span class="cp">
+</span><span class="kt">long</span> <span class="nf">syscall</span><span class="p">(</span><span class="kt">long</span> <span class="n">number</span><span class="p">,</span> <span class="p">...);</span>
+</code></pre></div></div>
+
+<p><strong>gettid() - libc 未實現的 System call</strong></p>
+
+<p>在 Linux 中:</p>
+<ul>
+  <li>Process 都有一個 pit_t 可以透過 getpid() 獲得</li>
+  <li>POSIX Thread(pthread) 也有 pthread_t 可以透過 pthread_self() 獲得，</li>
+  <li>但是如果我想要 P1 的 thread2 與 P2 的 thread1 通訊，我們就需要一個真實的 Thread ID(TID)，這時候就要透過 System call 來獲得 tid，使用 <code class="language-plaintext highlighter-rouge">syscall(SYS_gettid)</code></li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#define_GNU_SOURCE
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/syscall.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;signal.h&gt;</span><span class="cp">
+</span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">pid_t</span> <span class="n">tid</span><span class="p">;</span>
+    <span class="cm">/* gettid() returns ths caller's thread ID(TID). 
+     There is no glibc wrapper for this system call. */</span>
+    <span class="n">tid</span> <span class="o">=</span> <span class="n">syscall</span><span class="p">(</span><span class="n">SYS_gettid</span><span class="p">);</span>
+    <span class="cm">/* int tgkill(int tgid, int tid, int sig); send a signal to a thread. */</span>
+    <span class="n">syscall</span><span class="p">(</span><span class="n">SYS_tgkill</span><span class="p">,</span> <span class="n">getpid</span><span class="p">(),</span> <span class="n">tid</span><span class="p">,</span> <span class="n">SIGHUP</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Call System Call Method(From assembly language)</strong></p>
+
+<p>Call System call 的方式如下(Calling convention):</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>arch/ABI</th>
+      <th>syscall#</th>
+      <th>arg1</th>
+      <th>arg2</th>
+      <th>arg3</th>
+      <th>arg4</th>
+      <th>arg5</th>
+      <th>arg6</th>
+      <th>ret. val.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>arm64</td>
+      <td>x8</td>
+      <td>x0</td>
+      <td>x1</td>
+      <td>x2</td>
+      <td>x3</td>
+      <td>x4</td>
+      <td>x5</td>
+      <td>x0</td>
+    </tr>
+    <tr>
+      <td>x86-64</td>
+      <td>rax</td>
+      <td>rdi</td>
+      <td>rsi</td>
+      <td>rdx</td>
+      <td>r10</td>
+      <td>r8</td>
+      <td>r9</td>
+      <td>rax</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>syscall# System call 編號<br />
+ret. val. System call return value</p>
+</blockquote>
+
+<p>Call System call 的組合語言如下:
+ARM: svc #0, x86-64: syscall</p>
+
+<pre><code class="language-assembly">movq $60, %rax; // Call NO.60 System call, exit()
+movq $2, %rdi;  // arg1 = 2, means exit(2)
+syscall;        // Change to kernel mode, call System call
+</code></pre>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://sysprog21.github.io/lkmpg/#system-calls">The Linux Kernel Module Programming Guide: System call</a></p>
+</blockquote>
+
+<h5 id="24-special-cases-of-system-calls">2.4 Special cases of system calls</h5>
+
+<p>首先要討論 System call overhead 這是為什麼把某些 Module 放在 Kernel 的速度會提升許多的原因</p>
+
+<p>System call 主要的 Overhead 來自於:</p>
+<ol>
+  <li>CPU 進行 Mode change 的時候，此時 CPU 有同時數個指令在執行，切換時<strong>或許需要 flush 所有執行到一半的指令</strong></li>
+  <li>Kernel 需要將 User space 的所有暫存器存在 Kernel stack（每一個 Task，於 Kernel 中有自己的 Stack，注意，不是 User mode stack）</li>
+  <li>檢查權限，在 System call 之前還要檢查 Task 是否有權限執行該 System call</li>
+  <li>依照 Kernel 內部的 Calling convention，呼叫實現該 System call 的 Function，例如：sys_read() =&gt; do_read()</li>
+</ol>
+
+<blockquote>
+  <p>因為這些 Overhead 使得在 User space 執行的程式，速度會比在 Kernel space 執行的程式慢許多</p>
+</blockquote>
+
+<p><strong>vDSO</strong></p>
+
+<p>因此 Linux 的設計者會希望盡可能地降低 Overhead，vDSO(Virtual Dynamic Shared Object) 是可以將 Kernel space 的資訊，直接映射到 User space</p>
+
+<ul>
+  <li>如果該 System call 並沒有牽涉「安全性」，那就直接把 Kernel space 中的資訊寫入 User space，讓程式可以透過 Function call 的方式取得該資料</li>
+  <li>會時常變動，但又沒有機密性的資訊:
+    <ol>
+      <li>__vdso_clock_gettime</li>
+      <li>__vdso_getcpu</li>
+      <li>__vdso_gettimeofday</li>
+      <li>__vdso_time</li>
+    </ol>
+  </li>
+  <li>不會變動，但也沒有機密性的資訊:
+    <ol>
+      <li>第一次呼叫時，真的產生 System call，libc 記錄下該 Function 的值</li>
+      <li>第二次呼叫時，由 libc 直接回傳，例如：getpid()</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>/proc/pid/maps</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*...*/
+7ffe6b98e000-7ffe6b9af000 rw-p 00000000 00:00 0          	[stack]
+7ffe6b9fa000-7ffe6b9fd000 r--p 00000000 00:00 0      		[vvar]
+7ffe6b9fd000-7ffe6b9ff000 r-xp 00000000 00:00 0        	    [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0	    [vsyscall]
+</code></pre></div></div>
+<p>這裡每行都由以下內容組成: address、perms、offset、dev、inode、pathname</p>
+
+<ul>
+  <li>vsyscall: 功能等同於 vdso，但是較為古老，並有安全性問題(No support ASLR)</li>
+  <li>vdso: 存放可呼叫的 vDSO Function，例如: clock_gettime()</li>
+  <li>vvar: 存放 Kernel space mapping 到 User space 的資料，例如: clock_gettime() 的 cur_time</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://stackoverflow.com/questions/1401359/understanding-linux-proc-pid-maps-or-proc-self-maps">Understanding Linux /proc/pid/maps</a>，<a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">ASLR</a></p>
+</blockquote>
+
+<p><strong>If not using vDSO</strong></p>
+
+<p>下圖左是沒有 vDSO clock_gettime() 想要取得時間的流程，要去呼叫 timekeeping_update() 更新 cur_time，因此需要 Mode change 進入 Kernel mode。
+而圖右就將這個資料結構直接映射到 User space，clock_gettime() 呼叫 timekeeping_update() 一樣會去更新 cur_time，但直接去讀 vDSO 中的資料，這樣的話速度就跟 Function call 一樣快了。</p>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/1.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/2.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>vDSO Problem</strong></p>
+
+<ul>
+  <li>資料存放在 vvar 不一定就是 User 要的資料格式，例如:
+    <ul>
+      <li>vvar 中放的是從開機到現在經過多少個 Machine cycles，但是 gettimeofday() 的回傳值是自 1970/1/1 至今經過多少秒，所以這裡是有座資料轉換的</li>
+      <li>vDSO 內部的程式碼會做適當的資料轉換</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="os-structure">OS Structure</h3>
+
+<h5 id="25-monolithic-system">2.5 Monolithic system</h5>
+
+<ul>
+  <li>許多著名的 OS 都是 Monolithic system，例如: Linux, FreeBSD, Solaris</li>
+  <li>目前這些作業系統都支援動態載入 Kernel module 的功能
+    <ul>
+      <li>Linux 的 lsmod 可以列出目前已經載入到 Kernel 的 module</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡列出 Linux Kernel 中與 File system 相關的 module</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>lsmod | <span class="nb">grep </span>fs
+autofs4                45056  2
+btrfs                1294336  2
+xor                    24576  1 btrfs
+raid6_pq              114688  1 btrfs
+libcrc32c              16384  1 btrfs
+</code></pre></div></div>
+
+<h5 id="26-in-linux-object">2.6 In Linux Object</h5>
+
+<p>Linux 雖然是使用 C 撰寫的，但是在 Kernel 中充滿了 Object-oriented(OO) 的概念，<strong><a href="https://en.wikipedia.org/wiki/Object-oriented_analysis_and_design">Object-oriented analysis and design</a></strong>(OOAD)物件導向分析與設計</p>
+
+<p>下面是一個 Linux Kernel 中常見的 OO 概念，並且使用 container_of 來取得這個 Linked list 的起始 address(Linked list head)</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">parport_driver</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>   <span class="cm">/*property*/</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">attach</span><span class="p">)</span> <span class="p">(</span><span class="k">struct</span> <span class="n">parport</span> <span class="o">*</span><span class="p">);</span>  <span class="cm">/*method*/</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">detach</span><span class="p">)</span> <span class="p">(</span><span class="k">struct</span> <span class="n">parport</span> <span class="o">*</span><span class="p">);</span>  <span class="cm">/*method*/</span>
+    <span class="k">struct</span> <span class="n">list_head</span> <span class="n">list</span><span class="p">;</span>  <span class="cm">/*inherit list_head*/</span>
+<span class="p">};</span>
+<span class="k">struct</span> <span class="n">list_head</span> <span class="p">{</span>
+    <span class="k">struct</span> <span class="n">list_head</span> <span class="o">*</span><span class="n">next</span><span class="p">,</span> <span class="o">*</span><span class="n">prev</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="cp">#define list_entry(ptr, type, member)
+</span>        <span class="n">container_of</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">member</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>container_of</strong></p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * container_of - cast a member of a structure out to the containing structure
+ * @ptr:        the pointer to the member.
+ * @type:       the type of the container struct this is embedded in.
+ * @member:     the name of the member within the struct.
+ * */</span>
+<span class="cp">#define container_of(ptr, type, member) ({              \
+const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr);    \
+(type *)( (char *)__mptr - offsetof(type,member) );})
+</span></code></pre></div></div>
+
+<p>container_of 主要是透過成員來獲取該 struct 的起始位置，詳細可以看 <a href="./2023-10-17-container_of.html">Linux Kernel Macro container_of</a> 跟延伸閱讀</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://hackmd.io/@sysprog/linux-macro-containerof">Linux 核心原始程式碼巨集: container_of</a></p>
+</blockquote>
+
+<blockquote>
+  <p>Linux kernel 雖然是使用 C 語言寫的，但在裡面充斥著 OO 的概念，當然有部分要跟底層溝通所有沒有完全 OO</p>
+</blockquote>
+
+<h5 id="27-layered-approach">2.7 Layered approach</h5>
+
+<p>Layered approach 在 OS 的缺點是，並不一定能切出 Layer，跟 Network 不太一樣</p>
+
+<ul>
+  <li>將系統分成 N 層</li>
+  <li>第 N 層可以使用第 N-1 層的功能，不可以使用 N+1 層的功能</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/3.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>例如 I/O memagement 需要 Buffer 因此需要 Memory management，Memory management 有時也需要將 Memory 寫到 Disk，因此需要 I/O management，這樣就很難分層</p>
+</blockquote>
+
+<h5 id="28-hardware-abstraction-layer">2.8 Hardware Abstraction Layer</h5>
+
+<p>常見的 Andriod OS 與 Windows 架構如下:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Android-System-Architecture.svg/2525px-Android-System-Architecture.svg.png" width="50%" height="50%" />
+    <img src="http://www.tamos.net/ieee/nt.gif" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+
+<p><strong>Andriod:</strong></p>
+<ul>
+  <li>可以看到 Libraries 被放置在中間層，是因為為了能給各家廠商商業化，而最上方是 Apach License 就是隨意給人更改的部分，
+可以看到 <strong><a href="https://en.wikipedia.org/wiki/Hardware_abstraction">Hardware Abstraction Layer</a></strong>(HAL) 被放置在中間層，照常理來說應該放在 Hardware 與 Software 之間，放在這裡或許是想要把 Kernel 有替換的的彈性。</li>
+</ul>
+
+<p><strong>Windows:</strong></p>
+<ul>
+  <li>Windows 的 HAL 就被放置在 Kernel 與 Hardware 之間，抽象層的目標是，例如: 希望 Kernel 中沒有 Assembly，不要太跟 Device 相關。</li>
+  <li>Kernel 之上包含著 Virtual Memory Manager(把硬體相關的部分抽出，另外一個目錄)</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-10-2023 23:21</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.]]></summary></entry><entry><title type="html">Testing | Software Testing Introduction</title><link href="http://0.0.0.0:4000/jekyll/2023-09-23-software_testing_introduction.html" rel="alternate" type="text/html" title="Testing | Software Testing Introduction" /><published>2023-09-23T00:00:00+08:00</published><updated>2023-09-23T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/software_testing_introduction</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-09-23-software_testing_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+軟體測試是確保軟體品質的重要過程，這個過程確保軟體產品符合預期的需求，並確保軟體產品無缺陷，這裡介紹軟測的基礎概論。</p>
+</blockquote>
+
+<h3 id="11-what-is-software-testing">1.1 What Is Software Testing</h3>
+
+<p>測試是確表品質的方法之一，Software quality assurance(軟體品質保證)涉及 <strong>Validation(確效)/Verification(驗證)</strong>軟體</p>
+<ul>
+  <li><strong>Validation</strong>: 確效客戶的 Requirements 與設計出的 Specification 一致
+    <ul>
+      <li>Do we build the right software?</li>
+    </ul>
+  </li>
+  <li><strong>Verification</strong>: 驗證開發的 Implementation 與設計出的 Specification 一致
+    <ul>
+      <li>Do we build the software right?</li>
+    </ul>
+  </li>
+</ul>
+
+<p>而軟體測試主要著重在 Verification 這部分，Validation 是設計端要處理的問題</p>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://en.wikipedia.org/wiki/Verification_and_validation">Wiki: Verification and validation</a></p>
+</blockquote>
+
+<h5 id="111-software-verification">1.1.1 Software Verification</h5>
+
+<p>Verification 也分為 Statically(靜態)與 Dynamically(動態)</p>
+<ul>
+  <li><strong>Statically</strong>: 靜態驗證並不執行軟體下進行，它包含 review, inspection, walkthrough, analysis 等技術。
+    <ul>
+      <li>靜態驗證主要關注預防缺陷，通常需要有一定的開發經驗的測試人員來進行</li>
+    </ul>
+  </li>
+  <li><strong>Dynamically</strong>: 動態驗證會執行軟體，它包含各種測試技術
+    <ul>
+      <li>動態驗證主要關注找出和修復缺陷，動態測試系統的功能行為，Memory/CPU 使用情況以及系統的整體性能</li>
+    </ul>
+  </li>
+</ul>
+
+<p>而在 Software testing 這門課中大部分關注的是 Dynamically 這部分的實作</p>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://www.javatpoint.com/static-testing-vs-dynamic-testing">Static Testing vs. Dynamic Testing</a></p>
+</blockquote>
+
+<h5 id="112-software-testing">1.1.2 Software testing</h5>
+
+<p>要注意的是軟體測試並不能證明軟體是完全正確的，軟體測試僅能從體中找到盡可能多的錯誤。因為軟體測試只是識別軟體中潛在的錯誤，而不是證明軟體是正確的。</p>
+
+<p><strong>Error, Fault, Failure, and Incident</strong></p>
+
+<ul>
+  <li>Error(錯誤): 是人為所犯的錯誤</li>
+  <li>Fault(故障): 是文件或程序中的 <strong>Error</strong> 的結果</li>
+  <li>Failure(失敗): 當 <strong>Fault</strong> 被執行時就會發生 <strong>Failure</strong>，Fault 的執行導致程式無法執行預期的功能或結果</li>
+  <li>Incident(事件): 當 <strong>Failure</strong> 發生時，用戶可能不會馬上發現，一個 <strong>Incident</strong> 提醒用戶 Failure 的發生</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://www.geeksforgeeks.org/software-testing-bug-vs-defect-vs-error-vs-fault-vs-failure/">Software Testing – Bug vs Defect vs Error vs Fault vs Failure</a></p>
+</blockquote>
+
+<p><strong>Test Case</strong></p>
+
+<p>Software testing 是執行一組測試案例(Test Case) 的行為，以便能夠找出程式中的 Fault。</p>
+<ul>
+  <li>一組 Test case 包含一個測試輸入列表和一個相應的預期輸出列表</li>
+  <li>每個 Test case 都設計來檢查程序的某種特定功能或行為</li>
+</ul>
+
+<div align="center">
+  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/1.png?raw=true" width="75%" height="75%" />
+</div>
+
+<blockquote>
+  <p>軟體測試的生命週期，代表了各個步驟所產生的錯誤與錯誤追蹤</p>
+</blockquote>
+
+<p><strong>Why Do We Need Software Testing</strong></p>
+
+<ul>
+  <li>Software prevails in our living environment. Quality of software significantly influences our quality of life.</li>
+  <li>Software faults in critical software systems may cause dramatic damages on our lives and finance.</li>
+</ul>
+
+<p>Carefully made programs have 5 faults per 1000 lines of code (LOC). Windows XP has 45M LOC, so it may have <strong>225000</strong> faults.</p>
+
+<hr />
+
+<h3 id="12-how-do-we-do-software-testing">1.2 How Do We Do Software Testing</h3>
+
+<p>但是在進行 Testing 前應該要先了解 Testing 到底在測試什麼? Test case 理想的狀況下應該是 Specification ∪ Implementation 的範圍，這樣就能找出所有不合規範的 Fault。</p>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/2.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/3.png?raw=true" width="50%" height="50%" />
+</div>
+
+<ul>
+  <li><strong>Faults of comission</strong>(錯誤的委任): 實際的軟體開發往往都會有超出規格的部分，可能是需求變更或者是在實現功能時遇到了未預見的挑戰。</li>
+  <li><strong>Faults of omission</strong>(錯誤的遺漏): 同樣的開發中也有可能會有規格被遺漏的情況，可能是規格上的錯誤、技術挑戰、時間壓力等原因造成。</li>
+</ul>
+
+<h5 id="121-test-case">1.2.1 Test case</h5>
+
+<p><strong>Test Case</strong> 涉及兩個主要問題，如何 Test case generation(產生測試案例)、如何 Test case execution(執行測試案例)</p>
+
+<p><strong>Test case execution</strong>: 輸入 Input 至 Software 後得到 Expected output 與 Output 進行比對來決定是 Incident/Correct</p>
+
+<div align="center">
+  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/4.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Excution 目前幾乎都依賴於測試框架來幫助執行，這點之後會再介紹</p>
+</blockquote>
+
+<p><strong>Test case generation</strong>: 要確認測試案例有兩種方式</p>
+<ul>
+  <li><em><a href="https://en.wikipedia.org/wiki/Black-box_testing">Black-box testing</a></em>(Function testing): 軟體被視為一個黑盒子，從規格中描述的功能確定測試案例</li>
+  <li><em><a href="https://en.wikipedia.org/wiki/White-box_testing">White-box testing</a></em>(Stucture testing): 軟體被視為一個白盒子，從實施的程式的結構確定測試案例</li>
+</ul>
+
+<p><strong>Fuctional Testing vs Structure Testing</strong></p>
+<ul>
+  <li>Black-box 從 Specification 的角度來設計 Test case 因而較難覆蓋到未被規定的行為(Faults of comission)</li>
+  <li>White-box 從 Implementation 的角度來設計 Test case 因而較難覆蓋到未被實現的行為(Faults of omission)</li>
+  <li>因此兩種方法都不足夠，只有兩種方法都使用才能盡可能的覆蓋 Specification ∪ Implementation</li>
+</ul>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/5.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/6.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>試想在未學習軟體測試前是怎麼去寫 Testing? 我幾乎都是從結構去出發，已現有的程式去開發測試案例，因為壓根就沒設計完整的規格。</p>
+</blockquote>
+
+<h5 id="122-tracking-of-incidents">1.2.2 Tracking of incidents</h5>
+
+<p><strong>Incident tracking system</strong>(事件追蹤系統)負責追蹤所有需要修復的 Incidents(事件)，確保所有事件都得到妥善解決</p>
+
+<ul>
+  <li>需要知道事件的相關人員，應在事件報告後不久得知
+    <ul>
+      <li>這意味著系統應該能夠迅速地通知相關人員有關新的事件，確保所有相關人員都能及時獲得最新的信息，並可以立即開始處理事件</li>
+    </ul>
+  </li>
+  <li>不會有事件因為被遺忘而未修復
+    <ul>
+      <li>系統會持續追蹤每一個事件，直到它被修復，防止任何事件被忽視或遺忘</li>
+    </ul>
+  </li>
+  <li>不會因單一程序員的一時興起而未修復某個事件
+    <ul>
+      <li>修復事件的決定不應該只取決於一個人的主觀意願，而應該基於對事件的客觀評估和團隊的共識</li>
+    </ul>
+  </li>
+  <li>減少因為溝通不良而未修復的事件
+    <ul>
+      <li>這表示系統應該促進良好的溝通，以防止因為溝通問題導致事件未能被修復</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="123-regression-testing">1.2.3 Regression testing</h5>
+
+<p><strong>Regression testing</strong>(回歸測試) 重複使用測試案例來測試更改後的軟體，確保之前正常運行的部分沒有被影響造成新的錯誤，既有功能應繼續如常運行。
+回歸測試可以在不同的測試階段應用，例如整合測試或系統測試，具體取決於測試案例的細分程度和需求。通常它們被放置在整合測試和系統測試中。</p>
+
+<p>Regression testing 有以下特性，使其在軟體測試中有重要地位:</p>
+
+<ol>
+  <li>確保穩定性: 回歸測試確保新的軟體變更不會對現有的功能造成負面影響，確保軟體的整體穩定性和品質</li>
+  <li>節省時間和成本: 自動化回歸測試可以節省大量的測試時間，特別是對於長期的軟體開發專案或需要頻繁進行版本更新的情況。因為不需要手動執行重複性的測試案例，有助於降低測試成本</li>
+  <li>快速反饋: 回歸測試可以在每次軟體變更之後迅速運行，提供關於變更對軟體的影響的即時反饋，有助於快速識別並解決問題，從而提高開發效率</li>
+</ol>
+
+<p>Regression testing 也具有一些挑戰:</p>
+
+<ol>
+  <li>初期自動化成本: 為了實現自動化回歸測試，需要將測試案例轉化為自動化程式，會造成相當大的工作量和成本</li>
+  <li>維護成本高: 維護回歸測試套件需要時間和資源。當軟體變更頻繁時，測試套件更新會產生相當的維護成本</li>
+  <li>執行時間: 如果回歸測試的測試案例變得過多，可能需要較長的時間才能完全執行，可能會對開發流程產生延遲，需要仔細計劃和管理回歸測試的執行時間</li>
+</ol>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://ithelp.ithome.com.tw/articles/10326252">【D13】測試類型介紹:回歸測試</a></p>
+</blockquote>
+
+<h5 id="124-levels-of-testing">1.2.4 Levels of testing</h5>
+
+<p><strong>Levels of testing</strong>(測試的各個階段)主要包括以下幾個:</p>
+
+<ol>
+  <li><strong>Unit Test</strong>(單元測試): 這是最基本的測試階段，主要針對最小單元進行測試，確保每個獨立的部分都能正常運作</li>
+  <li><strong>Integration Testing</strong>(整合測試): 此階段針對跨物件或模組進行測試，以確保各個模組之間的交互作用能夠正常運作</li>
+  <li><strong>System Testing</strong>(系統測試):系統測試是一種風險測試，目的是確定整個系統是否滿足特定的功能性和非功能性需求，測試環境需盡可能和正式上線的環境一致</li>
+  <li><strong>Acceptance Testing</strong>(驗收測試): 也被稱為 UAT(使用者接受度測試)，這是最後一個測試階段，會模擬真實使用者情境來驗證軟體是否符合使用者的需求和期望</li>
+</ol>
+
+<p>每一個階段都有其特定的目標和重點，且需要根據具體情況來選擇最適合的策略和方法2。</p>
+
+<div align="center">
+  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/7.png?raw=true" width="75%" height="75%" />
+</div>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://ithelp.ithome.com.tw/articles/10324641">【D11】 實例簡述:測試四階段與測試方法</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-costs-of-software-quality">1.3 Costs of Software Quality</h3>
+
+<p>軟體測試的成本可以分為兩種，Control Costs(控制成本)，Failure of Control Costs(失敗控制成本)</p>
+
+<ul>
+  <li><strong>Control Costs</strong>:
+    <ul>
+      <li>Prevention costs(預防成本): 包括投資於品質基礎設施和品質活動的費用，這些投資並未針對特定的項目或系統，而是對整個組織通用</li>
+      <li>Appraisal costs(評估成本): 包括為特定項目或系統執行的活動的費用，目的是為了檢測軟體錯誤</li>
+    </ul>
+  </li>
+  <li><strong>Failure of Control Costs</strong>:
+    <ul>
+      <li>Internal failure costs(內部失敗成本): 包括修正設計審查、軟體測試和驗收測試中檢測到的錯誤的成本，在軟體安裝到客戶端之前完成</li>
+      <li>External failure costs(外部失敗成本): 包括修正客戶或維護團隊在軟體系統安裝後檢測到的所有失敗的成本</li>
+    </ul>
+  </li>
+</ul>
+
+<div align="center">
+  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-23-software_testing_introduction/8.png?raw=true" width="75%" height="75%" />
+</div>
+
+<blockquote>
+  <p>應該保持在 Optimal software quality level 這個標準之上，Control costs 減少不會讓軟體品質的總成本下降</p>
+</blockquote>
+
+<ul>
+  <li><strong>Test coverage criteria</strong>(測試覆蓋率標準)，這是一種衡量軟體測試深度的指標，用於確定已經測試了軟體的哪些部分，以及還有哪些部分尚未進行測試，它可以幫助我們確定何時可以停止軟體測試</li>
+  <li>軟體品質成本影響軟體品質水平，投入確保軟體品質的資源會直接影響軟體的最終品質
+    <ul>
+      <li>例如: 如果我們投入更多的資源進行測試，那麼可能會發現更多的錯誤，從而提高軟體的質量</li>
+    </ul>
+  </li>
+  <li>根據可用的軟體品質資源來確定何時停止軟體測試，
+    <ul>
+      <li>例如: 如果我們的資源有限，那麼我們可能需要在達到一定的測試覆蓋率後就停止測試</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="note">NOTE</h5>
+  <p>本篇只是講述軟體測試的概論，後續會再討論各個章節的細節<br />
+Last edit 09-24-2023 15:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 軟體測試是確保軟體品質的重要過程，這個過程確保軟體產品符合預期的需求，並確保軟體產品無缺陷，這裡介紹軟測的基礎概論。]]></summary></entry><entry><title type="html">Compiler | Lexical Analysis Notes</title><link href="http://0.0.0.0:4000/jekylls/2023-09-21-lexical_analysis.html" rel="alternate" type="text/html" title="Compiler | Lexical Analysis Notes" /><published>2023-09-21T00:00:00+08:00</published><updated>2023-09-21T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/lexical_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-09-21-lexical_analysis.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
+Lexical analysis(語彙分析) 將文本轉換為有意義的語彙標記(Token)，這通常是 Compiler 步驟的第一步。</p>
+</blockquote>
+
+<p>Compilers: Principles, Techniques, and Tools 介紹使用 <strong>Regular Expression</strong>(RE, 正規表達式)描述 Lexemes 的方法，並透過一個 <strong>Lexical-analyzer generator</strong>(語彙分析器生成工具)來進行代碼生成，
+使我們可以專注在如何描述 Lexemes。</p>
+
+<p>因此會先學習 RE 的使用方法，RE 能被轉換為 <strong>Nondeterministic Finite Automata</strong>(NFA, 非確定有限狀態自動機)問題在轉換為 <strong>Deterministic Finite Automata</strong>(DFA, 確定有限狀態自動機)問題，
+之後就能用程式碼模擬自動機運作。</p>
+
+<h3 id="31-the-role-of-the-lexical-analyzer">3.1 The Role of the Lexical Analyzer</h3>
+
+<p>Lexical analyzer(語彙分析器)主要任務就是讀取 Source code 的輸入字符(characters)，並將其組成為 Lexeme，並輸出一個 Token 序列，並在識別到 Identifier 時要將其添加到 Symbol table 中。</p>
+
+<p>下圖顯示一個 Syntax analyzer(語法分析器)與 Lexical analyzer 互動的過程，呼叫 getNextToken 來使語彙分析器不斷讀取字符，直到識別出下一個 Token 將其返回給語法分析器。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/1.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<ul>
+  <li>語彙分析器可以被劃分為兩個骨牌效應的過程:
+    <ul>
+      <li>掃描不需要轉變為 Token 的部分的過程
+        <ul>
+          <li>例如: 過濾 Comments, Whitespace (blank, newline, tab …)</li>
+        </ul>
+      </li>
+      <li>實際的 Lexical analysis，從掃描的輸入中產生 Token</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <ul>
+    <li>語彙分析器還可以將 Compiler 的錯誤訊息與 Source code 的發生位置聯繫起來，例如:
+      <ul>
+        <li>紀錄換行符號的行數，以便在出錯時給予一個行數</li>
+        <li>某些編譯器中會將 Source code 複製一份，並將錯誤訊息插入該位置</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<h5 id="311-lexical-analysis-versus-parsing">3.1.1 Lexical Analysis Versus Parsing</h5>
+
+<p>把 Lexical analysis(Scanning) 與 Syntax analysis(Parsing) 分開有三個原因:</p>
+<ol>
+  <li>簡化編譯器設計，分離可以更好的專注在不同任務上
+    <ul>
+      <li>如果我們正在設計一種新的語言，將詞法和語法問題分開也可以使整體語言設計更加清晰</li>
+    </ul>
+  </li>
+  <li>提高編譯器的效率
+    <ul>
+      <li>Lexical analyzer 獨立後我們就可以去更方便的優化 I/O 的處理</li>
+    </ul>
+  </li>
+  <li>提高編譯器的可移植性，輸入設備特定的特性可以限制在詞法分析器中
+    <ul>
+      <li>例如: Windows 的換行符是 <code class="language-plaintext highlighter-rouge">\r\n</code>，Linux 上的是 <code class="language-plaintext highlighter-rouge">\n</code></li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://www.codingninjas.com/studio/library/input-buffering-in-compiler-design">Input Buffering in Compiler Design</a></p>
+</blockquote>
+
+<h5 id="312-tokens-patterns-and-lexemes">3.1.2 Tokens, Patterns, and Lexemes</h5>
+
+<p>在討論 Lexical analyzer，這裡有三個需要了解的術語:</p>
+<ul>
+  <li>token(language): a set of strings
+    <ul>
+      <li>if, identifier, relop</li>
+    </ul>
+  </li>
+  <li>Pattern(grammar): a rule defining a token
+    <ul>
+      <li>if: if</li>
+      <li>identifier: letter followed by letters and digits</li>
+      <li>relop: &lt; or &lt;= or = or &lt;&gt; or &gt;= or &gt;</li>
+    </ul>
+  </li>
+  <li>Lexemes(sentence): a string matched by the parrern of a token
+    <ul>
+      <li>if, Pi, count, &lt;, &lt;=</li>
+    </ul>
+  </li>
+</ul>
+
+<p>假設有以下 Clang code，依照 Figure 3.2 <code class="language-plaintext highlighter-rouge">print</code> 與 <code class="language-plaintext highlighter-rouge">score</code> 是 Token <em>id</em> 所匹配的 Lexeme，<code class="language-plaintext highlighter-rouge">"Total = %d\n"</code> 則是與 <em>literal</em> 匹配的 Lexeme。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Total = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">score</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/2.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<p>在很多程式語言設計中，大部分 Token 被分成以下幾類:</p>
+
+<ol>
+  <li>Reserved words(保留字)都有一個 Token，保留字的 Pattern 與保留字相同</li>
+  <li>Operators 的 Token，可以表示單個運算符，也有像 comparison 有多個同類別的運算符</li>
+  <li>Identifier 只用一種 Token 表示</li>
+  <li>Constants 有一個或多個 Token，例如 number、literal</li>
+  <li>Punctuation symbol 都有各自的 Token，例如 <code class="language-plaintext highlighter-rouge">(</code>, <code class="language-plaintext highlighter-rouge">)</code>, <code class="language-plaintext highlighter-rouge">,</code>, <code class="language-plaintext highlighter-rouge">;</code></li>
+</ol>
+
+<h5 id="313-attributes-for-tokens">3.1.3 Attributes for Tokens</h5>
+
+<p>Attributes 是用來區分 Token 中的不同 Lexeme，例如 0, 1 都能跟 Token <code class="language-plaintext highlighter-rouge">number</code> 匹配，因為 Lexcial analyzer 很多時候不能僅返回給 Syntax analyzer 一個 Token name，
+Token name 影響 Syntax analyzer，而 Attributes 會影響 Parsing 之後的 Semantic analyzer。</p>
+
+<ul>
+  <li>&lt; if, &gt;</li>
+  <li>&lt; identifier, <code class="language-plaintext highlighter-rouge">pointer to symbol table entry</code> &gt;</li>
+  <li>&lt; relop, <code class="language-plaintext highlighter-rouge">=</code> &gt;</li>
+  <li>&lt; number, <code class="language-plaintext highlighter-rouge">value</code> &gt;</li>
+</ul>
+
+<hr />
+
+<h3 id="33-specification-of-tokens">3.3 Specification of Tokens</h3>
+
+<p>Token 的一種重要的表示方式(規格)就是 Regular expression，RE 可以高效的描述處理 Token 時要用到的 Pattern。</p>
+
+<h5 id="333-regular-expression">3.3.3 Regular Expression</h5>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/Regular_expression#">Regular Expression</a></strong>(RE, 正規表達式)是由較小的 RE 按照以下規則遞迴建構，下面的規則定義了某個 Alphabet ∑ 的 RE:</p>
+
+<ol>
+  <li>ε 是一個 RE，<strong>L(ε) = {ε}</strong>，也就是該語言只包含空字串</li>
+  <li>如果 a 是 ∑ 中的符號，那麼 a 也是一個 RE 代表 L(a) = {a}，也就是說這個語言僅包含長度為 1 的字串 a。</li>
+</ol>
+
+<ul>
+  <li>Suppose r and s are RE denoting L(r) and L(s)</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>(r)</td>
+          <td>(s) is a RE denoting L(r) ∪ L(s)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>(r)(s) is a RE denoting L(r)L(s)</li>
+  <li>(r)* is a RE denoting (L(r))*</li>
+  <li>(r) is a RE denoting L(r)</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<pre><code class="language-re">a | b               {a, b}
+(a | b)(a | b)      {aa, ab, ba, bb}
+a*                  {ε, a, aa, aaa, ...}
+(a | b)*            the set of all strings of a's and b's
+a | a*b             the set containing the string a and all strings consisting of zero or more a's followed by a b
+</code></pre>
+
+<p><strong>Order of operations:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Priority</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Highest</td>
+      <td>\</td>
+    </tr>
+    <tr>
+      <td>High</td>
+      <td>(), (?:), (?=), []</td>
+    </tr>
+    <tr>
+      <td>Middle</td>
+      <td>*, +, ?, {n}, {n,}, {n,m}</td>
+    </tr>
+    <tr>
+      <td>Low</td>
+      <td>^, $</td>
+    </tr>
+    <tr>
+      <td>Second lowest</td>
+      <td>concatenation</td>
+    </tr>
+    <tr>
+      <td>Lowest</td>
+      <td>|</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Algebraic laws:</strong></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/3.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<h5 id="334-regular-definitions">3.3.4 Regular Definitions</h5>
+
+<p>為了方便表示，我們可能會給某些 RE 別名，並在之後的 RE 中使用符號一樣使用這些別名，例如:</p>
+<ul>
+  <li>Name for regular expression<br />
+$d_1 \rightarrow r_1$<br />
+$d_2 \rightarrow r_2$<br />
+$…$<br />
+$d_n \rightarrow r_n$<br />
+$where\;r_i\;over\;alphabet\cup ( d_1, d_2, …, d_{i-1} )$</li>
+  <li>Examples:<br />
+$letter \rightarrow A | B | … | Z | a | b | … | z$<br />
+$digit \rightarrow 0 | 1 | … | 9$<br />
+$identifier \rightarrow letter(letter | digit)*$</li>
+</ul>
+
+<blockquote>
+  <p>上面的 Examples 定義了一個僅能由 letter 開頭但的 identifier</p>
+</blockquote>
+
+<h5 id="335-extensions-of-regular-expressions">3.3.5 Extensions of Regular Expressions</h5>
+
+<p>RE 後續有其他的擴展，用來增強 RE 表達字串的能力，這裡會介紹最常被使用的幾種擴展</p>
+
+<ul>
+  <li><strong><em>One or more instances</em></strong><br />
+(r)<sup>+</sup> denoting (L(r))<sup>+</sup><br />
+r* = r<sup>+</sup> | ε<br />
+r<sup>+</sup> = rr*</li>
+  <li><strong><em>Zero or one instance</em></strong><br />
+r? = r | ε</li>
+  <li>
+    <p><strong><em>Character classes</em></strong><br />
+[abc] = a | b | c<br />
+[a-z] = a | b | … | z<br />
+[^a-z] = any character except [a-z]</p>
+  </li>
+  <li><strong>Examples</strong>:<br />
+$digit \rightarrow 0 | 1 | … | 9$<br />
+$digits \rightarrow digit^+$
+$number \rightarrow digits(.digits)?(E[+-]?digits)?$</li>
+</ul>
+
+<blockquote>
+  <p>上面的 Examples 定義了從 digit 到 digits 最後到 number 的過程</p>
+</blockquote>
+
+<hr />
+
+<h3 id="36-finite-automata">3.6 Finite Automata</h3>
+
+<blockquote class="block-danger">
+  <p>這裡 3.6/3.7 章不會依照課本順序，而是依照課程進度。<br />
+NFA 的 Transition function 可以指向多個 State，DFA 的 Transition function 只能指向一個 State<br />
+會先介紹相對簡單的 DFA 再介紹 NFA，這樣可以更容易理解 NFA 的運作</p>
+</blockquote>
+
+<p>要注意自動機的幾個特性:</p>
+<ol>
+  <li>自動機是 Recongnizer(識別器)，他們只能對輸入的字串進行判斷 “Yes” or “No”</li>
+  <li>Finite automata 分為兩類
+    <ul>
+      <li><strong>Nondeterministic finite automata</strong> (NFA, 非確定有限狀態自動機)
+        <ul>
+          <li>A symbol can label <strong>several edges</strong> out of the same state, the <strong>empty string(ε)</strong> is a possible label.</li>
+        </ul>
+      </li>
+      <li><strong>Deterministic finite automata</strong> (DFA, 確定有限狀態自動機)
+        <ul>
+          <li>For each state, and for each symbol of its input <strong>exactly one edge</strong> with that symbol leaving that state.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="361-nondeterministic-finite-automata">3.6.1 Nondeterministic Finite Automata</h5>
+
+<p>An NFA consists of:</p>
+<ol>
+  <li>A finite set of states</li>
+  <li>A finite set of input symbols, default empty string is not in the set.</li>
+  <li>A transition function (or transition table ) that maps (state, symbol) pairs to sets of states</li>
+  <li>A state distinguished as start state</li>
+  <li>A set of states distinguished as final states</li>
+</ol>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/4.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/5.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左是 NFA’s transition graph 在狀態 0 有 a, b 兩種狀態轉移，圖右是他對應的範例</p>
+</blockquote>
+
+<h5 id="362-transition-tables">3.6.2 Transition Tables</h5>
+
+<p>NFA 可以表示為一張 Transition table(轉換表)，例如:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/6.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<blockquote>
+  <p>轉換表可以更容易看出 NFA 的狀態轉移，缺點是當 NFA 狀態(Alphabet)很多時，轉換表會變得很大佔用空間</p>
+</blockquote>
+
+<h5 id="363-acceptance-of-input-strings-by-automata">3.6.3 Acceptance of Input Strings by Automata</h5>
+
+<ul>
+  <li>NFA accept 輸入字串 s，如果從 Start state 開始，有一條路徑可以走到 <strong>Final state</strong>，這條路徑的轉移符合這個 Automata 所定義的語言</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/7.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/8.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="364-deterministic-finite-automata">3.6.4 Deterministic Finite Automata</h5>
+
+<p>這裡會先談一個 DFA 怎麼用程式碼模擬，因為相較於 DFA 簡單許多</p>
+
+<ul>
+  <li>Deterministic finite automata (DFA, 確定有限狀態自動機) 是 NFA 中的一種特例，其中:
+    <ul>
+      <li>There are no moves on input ε</li>
+      <li>For each state s and input symbol a, there is exactly one edge out of s labeled a.</li>
+    </ul>
+  </li>
+  <li><strong>Algorithm 3.18 : Simulating a DFA.</strong> from Compiler: Principles, Techniques, and Tools p.150
+    <ul>
+      <li><strong>Input</strong>: An input string ended with eof and a DFA with start state s 0 and final states F.</li>
+      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+s := s0;
+c := nextchar;
+    while (c != EOF) do begin
+        s := move(s, c);
+        c := nextchar;
+    end;
+    if (s ∈ F) then return "yes";
+    else return "no";
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/13.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/14.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="365-simulation-of-an-nfa">3.6.5 Simulation of an NFA</h5>
+
+<p>NFA 與 DFA 在模擬上的演算法幾乎一樣，最大的區別在於 ε-closure() 的建構，因為 NFA 在給定輸入的狀況下可以存在多個 State，
+因此在模擬上需要處理 State set。課本中會在 3.6.4 提前介紹 <strong>Algorithm 3.18 : Simulating a DFA. - p.151</strong></p>
+
+<ul>
+  <li><strong>Algorithm 3.22 : Simulating a NFA.</strong> from Compiler: Principles, Techniques, and Tools p.156
+    <ul>
+      <li><strong>Input</strong>: An input string ended with eof and an NFA with start state s 0 and final states F</li>
+      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+S := ε-closure({S0});
+c := nextchar();
+    while (c != EOF) do begin
+        S := ε-closure(move(S, c));
+        c := nextchar();
+    end;
+    if (S ∩ F != ∅) then return "yes";
+    else return "no";
+end;
+</code></pre>
+
+<ul>
+  <li>上面的 Pseudocode 模擬 NFA 的運作，其中:
+    <ul>
+      <li>move(s, c): 從 <strong>state s</strong> 輸入 c 可以到達的 NFA state set</li>
+      <li>move(<em>S</em>, c): 從 <strong>state s set S</strong> 輸入 c 可以到達的 NFA state set</li>
+      <li>ε-closure(s): 沒有輸入字元，從 <strong>state s</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
+      <li>ε-closure(<em>S</em>): 沒有輸入字元，從 <strong>state s set S</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
+      <li>nextchar(): 回傳下一個輸入字元</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>注意上面的 S 是 NFA state set，而 s 是 NFA state</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/9.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/10.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左邊的最後的 S 與 Final state {3} 有交集，因此回傳 “yes”，右邊的則沒有交集，回傳 “no”</p>
+</blockquote>
+
+<blockquote>
+  <p>注意上圖的 NFA 並沒有加入 ε-closure() 因為沒有任何 ε State，因此可以只透過 move() 來模擬 NFA 運作</p>
+</blockquote>
+
+<h5 id="366-computation-of-ε-closure">3.6.6 Computation of ε-closure</h5>
+
+<p>從上面的例子可以說明 move() 是如何運作，接下來這裡會講解 ε-closure() 是如何運作，用一個 DFS 來找出所有可以到達的 ε-State，返回一個 T set</p>
+
+<p><strong>Computing ε-closure(T)</strong></p>
+<ul>
+  <li><strong>Input</strong>: An NFA and a set of NFA states S.</li>
+  <li><strong>Output</strong>: T = ε-closure(S).</li>
+</ul>
+
+<pre><code class="language-pseudocode">begin 
+    push all states in S onto stack;
+    T := S;
+    while stack is not empty do begin
+        pop t, the top element, off stack;
+        for each state u with an edge from t to u labeled ε do begin
+            if u is not in T then begin
+                add u to T;
+                push u onto stack;
+            end;
+        end;
+        return T;
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/12.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上面的例子看似複雜，其實只是組合了 move() 和 ε-closure() 的運作</p>
+</blockquote>
+
+<hr />
+
+<h3 id="37-from-regular-expressions-to-automata">3.7 From Regular Expressions to Automata</h3>
+
+<p>從 RE 轉換為 NFA，再從 NFA 轉換為 DFA，這裡會用這樣的順序來介紹</p>
+
+<h5 id="371-construction-of-an-nfa-from-a-regular-expression">3.7.1 Construction of an NFA from a Regular Expression</h5>
+
+<p>使用 <a href="https://en.wikipedia.org/wiki/Thompson%27s_construction">McNaughton-Yamada-Thompson construction algorithm</a>，可以將 RE 轉換為 NFA。</p>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/17.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/21.jpg?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote class="block-warning">
+  <p>以上說明了 (ε), (a), (s|t), (st), (s<em>), 的轉換過程，跟使用 (a|b)</em>abb 作為例子來一步步轉換</p>
+</blockquote>
+
+<blockquote>
+  <p>在 Compilers: Principles, Techniques, and Tools p.161 - Example 3.24 有類似的轉換過程</p>
+</blockquote>
+
+<h5 id="372-conversion-of-an-nfa-to-a-dfa">3.7.2 Conversion of an NFA to a DFA</h5>
+
+<p>使用 <a href="https://en.wikipedia.org/wiki/Powerset_construction">Subset construction algorithm</a>，可以將 NFA 轉換為 DFA。</p>
+
+<p>Subset construction 的概念是 DFA 的每個 State 都對應 NFA 的一組 State，也就是 DFA 的每個 State 都代表 NFA 在讀取相同輸入後可能存在的所有狀態。
+但是這樣的話 DFA 的 State 數量會變得非常多，因此 Subset construction 會將相同的 NFA State set 合併成一個 DFA State。</p>
+
+<ul>
+  <li>a DFA state ≡ a set of NFA states
+    <ul>
+      <li>Find the inital state in the DFA</li>
+      <li>Find all the states in the DFA</li>
+      <li>Construct the transition table</li>
+      <li>Find the final state of the DFA</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>例如一個 NFA 有 3 個 State，那麼他的 DFA 最多會有 2<sup>3</sup> = 8 個 State 才能表示所有的 NFA State set，<br />
+但是在實際的語言處理中通常不會看到這種指數增長，並非所有的 NFA State 組合都會出現在實際的輸入序列中。</p>
+</blockquote>
+
+<ul>
+  <li><strong>Algorithm 3.20 : The subset construction of a DFA from an NFA.</strong> from Compiler: Principles, Techniques, and Tools p.153
+    <ul>
+      <li><strong>Input</strong>: An NFA N.</li>
+      <li><strong>Output</strong>: A DFA D with states Dstates and trasition table Dtran</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+add ε-closure(s0) as an unmarked state to Dstates;
+while there is an unmarked state T in Dstates do begin
+    mark T;
+    for each input symbol a do begin
+        U := ε-closure(move(T, a));
+        if U is not in Dstates then
+            add U as an unmarked state to Dstates;
+        Dtran[T, a] := U;
+    end;
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/18.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/19.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/20.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>上面是一個將 NFA 轉換為 DFA 的例子</p>
+<ol>
+  <li>透過 ε-closure(), move($state, $symbols) 找出所有的 NFA State set</li>
+  <li>將相同的 NFA State set 合併成一個 DFA State</li>
+  <li>這樣就能透過 DFA State 來繪製出一張 DFA</li>
+</ol>
+
+<h5 id="373-tiem-space-tradeoffs">3.7.3 Tiem Space Tradeoffs</h5>
+
+<ul>
+  <li>RE to NFA, simulate NFA
+    <ul>
+      <li>time: O(|r| * |x|), space O(|r|)</li>
+    </ul>
+  </li>
+  <li>RE to NFA, NFA to DFA, simula
+    <ul>
+      <li>time: O(|x|), space: O(2<sup>|r|</sup>)</li>
+    </ul>
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Lazy_evaluation">Lazy transition evaluation</a>
+    <ul>
+      <li>transitions are computed as needed at run time; 
+computed transitions are stored in cache for later use.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Lazy evaluation(惰性求值)，目的是要最小化計算機要做的工作。可以在空間複雜度上得到極大的優化，從而可以輕易構造一個無限大的數據類型。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-02-2023 17:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Lexical analysis(語彙分析) 將文本轉換為有意義的語彙標記(Token)，這通常是 Compiler 步驟的第一步。]]></summary></entry><entry><title type="html">Compiler | Compilers Introduction</title><link href="http://0.0.0.0:4000/jekyll/2023-09-20-compiler_introduction.html" rel="alternate" type="text/html" title="Compiler | Compilers Introduction" /><published>2023-09-20T00:00:00+08:00</published><updated>2023-09-20T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/compiler_introduction</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-09-20-compiler_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
+編譯器這門課可以讓人更深入的了解 Programming language，如果能知道編譯器如何將 High level language 轉換為 Machine code 與背後的工作原理，
+就能更有效的去編寫程式。在修 OS 的時候更有感覺，有些是針對編譯器與平台的優化去更改寫法，有些小小的改動就能減少數行的指令去提升效能。</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>linux/lib/rbtree.c 在 6.4 版做了一個非常簡單的 <a href="https://github.com/torvalds/linux/commit/b0687c1119b4e8c88a651b6e876b7eae28d076e3">commit</a>，將 bitwise | 換成 +，這個替換使 x86 平台上可以使用 <strong>lea</strong> Assemble，
+將兩道指令變成一道指令。正是了解 Compiler Optimization 才能知道這樣修改有什麼用。</p>
+</blockquote>
+
+<div align="center">
+  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/1.png?raw=true" />
+</div>
+
+<ul>
+  <li>Human use <strong>nature languages</strong> to communicate with <strong>each other</strong></li>
+  <li>Human use <strong>programming language</strong> to communicate with <strong>computers</strong></li>
+</ul>
+
+<h3 id="11-language-processors">1.1 Language Processors</h3>
+
+<p>廣義的說 Compiler 就是一個可以將一個 Language 翻譯成另一個 Language 的工具，同時 Compiler 的另一個重要功能是發現翻譯過程中 Original language 的錯誤。</p>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/2.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/3.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖展示了一個 Compiler 與 Interpreter 的差異，另外 Java language process 結合了兩者的過程，既有 Target code 也有用於執行程序的 Interpreter。</p>
+</blockquote>
+
+<p>但是一個程式語言從 Compile 到 Execute 除了 Compiler 還有很多其他的處理程序，如: Preprocessor、Assembler、Linker、Loader。但這裡專注於 Compiler 的部分，
+在 1.2 再詳細說明 Compiler 的結構。</p>
+
+<h3 id="12-the-structure-of-a-compiler">1.2 The Structure of a Compiler</h3>
+
+<p>首先我們可以把 Compiler 分為 Frontend/Backend 兩個部分:</p>
+<ul>
+  <li>Analysis(Front-End):  將 Source code 分解成多個組成要素，並在這些要素之上加入語法結構。使用這個結構來建立 Intermediate code，並且可以檢查原始程式是否符合正確的語法與語意，並且提供資訊給使用者修改。
+並且把 Source code 的資訊收集為 Symbol table，之後將 Intermediate code 與 Symbol table 一起送給後端。</li>
+  <li>Synthesis(Back-End):  根據 Intermediate code 與 Symbol table 來建立目標程式</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/4.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/5.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖都是 Compiler 的結構，右圖表述了每個步驟之間的更多細節</p>
+</blockquote>
+
+<p>有些編譯器在前端與後端之間會有 Machine-independent optimization(機器無關的最佳化)步驟，這個最佳化的目的是在 Intermediate code 之間進行轉換。</p>
+
+<h5 id="121-lexical-analysis">1.2.1 Lexical analysis</h5>
+
+<p>Lexical analysis(語彙分析)也被稱做 Scanning(掃描)，是編譯器的第一個步驟，進行讀取原始程式的字元串流，並依據 Lexeme(詞素)來產生 Token(詞彙單位)作為輸出。</p>
+<ul>
+  <li><em>Lexeme</em>:	是 Source code 中具有相同意義的字符序列，如 <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">return</code>, <code class="language-plaintext highlighter-rouge">=</code> 都是 Lexeme。</li>
+  <li><em>Token</em>:	是 Lexical analysis 後的結果，它的形式可能像 <strong>&lt;token-name, attribute-value&gt;</strong>
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">Position = initial + rate * 60</code> 在經過 Lexical Analysis 後會變成: <code class="language-plaintext highlighter-rouge">&lt;id, 1&gt; &lt;=&gt; &lt;id, 2&gt; &lt;+&gt; &lt;id, 3&gt; &lt;*&gt; &lt;60&gt;</code> 這樣的 Token</li>
+      <li>其中 Position 對應 &lt;id, 1&gt;，id 代表 <strong>identifier</strong>，而 1 指向 Symbol table 中所對應的條目</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="122-syntax-analysis">1.2.2 Syntax analysis</h5>
+
+<p>Syntax analysis(語法分析)也被稱做 Parsing(解析)，使用 Lexical analysis 產生的 Token 來建立 Syntax tree。之後會介紹 Context free grammar 來描述程式語言的語法結構，
+並自動為某些類型的語法建構高效率語法分析器的演算法。</p>
+
+<h5 id="123-semantic-analysis">1.2.3 Semantic analysis</h5>
+
+<p>Semantic analysis(語意分析) 使用 Syntax tree 和 Symbol table 中的資訊來檢查原始程式是否符合程式語言的規則，並且在這裡收集型別的資訊。</p>
+<ul>
+  <li><em>Type checking</em>: 這是 Semantic analysis 的重要部分，檢查每個運算子是否具有一致的運算元。例如: Array 的 Index 應該要為 int，若有 float 就應該回報錯誤。</li>
+  <li><em>Coercion</em>: 程式語言也可以做型別轉換，例如 <code class="language-plaintext highlighter-rouge">Position = initial + rate * 60</code>，而所有變數都已經宣告為 float，此時就能將 60 轉換為 60.0。</li>
+</ul>
+
+<h5 id="124-intermediate-code-generation">1.2.4 Intermediate code generation</h5>
+
+<p>在 Source code 變成 Target code 的過程中可能會產生一個到多個的 Intermediate representation(IR, 中間表述)也可以稱作為 Intermediate code(中間碼)，
+Syntax tree 也可以算做是一種 IR，這些中間表述應該要有兩個重要的性質: <strong>Easy to produce</strong>(易於生產), <strong>Easy to translate</strong>(易於轉譯為 Machine language)</p>
+
+<p>例如使用類似 Assembly language 的一種三位址碼作為 Intermediate code:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t1 = inttofloat(60)
+t2 = id3 * t1
+t3 = id2 + t2
+id1 = t3
+</code></pre></div></div>
+
+<ul>
+  <li>使用 Intermediate code 還能使我們更好的分離前端與後端，並且也增加了移植性與優化的可能性</li>
+  <li>使用多層的 IR 可以使每層都專注在不同的目標上，這樣可以使編譯過程分隔後更易於模塊化</li>
+</ul>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/6.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/7.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>如果不使用 Intermediate code，我們可能要去應對多種對應不同平台的轉換</p>
+</blockquote>
+
+<h5 id="125-code-optimization">1.2.5 Code optimization</h5>
+
+<p>Code optimization 的目的在於將程式碼變得更「好」，這裡指的並不只是效能上的提升，例如更短或者占用資源更少的目的碼。
+分為 Machine-independent(機器無關) 和 Machine-dependent(機器相關)的最佳化:</p>
+<ul>
+  <li><em>Machine-independent</em>:  發生在 Compiler 的中間階段，也就是生成 Intermediate code 的時候可以進行優化。這種優化並不依賴於特定的平台，因此可以在不同的硬體平台上重用。</li>
+  <li><em>Machine-dependent</em>: 發生在 Compiler 的最後階段，也就是將 Intermediate code 轉化為 Target code 的時候進行優化，此時就要考慮不同的機器有不同的 CPU 架構與指令集，
+此時就能利用平台的特性來幫助優化。</li>
+</ul>
+
+<p>例如 1.2.4 展示的三位址碼，我們可以對其進行平台無關的優化，直接將 60 轉為 60.0 替代整數就可以消除 inttofloat 運算，並可以少去 <code class="language-plaintext highlighter-rouge">t3 = id2 + t2</code> 的運算，
+把值直接傳給 <code class="language-plaintext highlighter-rouge">id1</code>，這樣就能得到一個更短的 Intermediate code。</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t1 = id3 * 60.0
+id1 = id2 + t1
+</code></pre></div></div>
+<blockquote>
+  <p>Compiler Optimization 通常會另外開一門課特別講述，目前越來越強大的現代編譯器所做的程式碼最佳化已超出許多人預料。延伸閱讀: <a href="https://hackmd.io/@sysprog/c-compiler-optimization">你所不知道的 C 語言：編譯器和最佳化原理篇</a></p>
+</blockquote>
+
+<h5 id="126-code-generation">1.2.6 Code generation</h5>
+
+<p>Code generator(代碼生成器)將會以 Intermediate code 作為輸入，並將其映射至 Target code，例如 Assembly language。</p>
+<ul>
+  <li>Target code 若是 Assembly language，就必須為 Intermediate code 的變數分配 Memory address 或 Register</li>
+  <li>A crucial aspect of code generation is the judicious assignment of registers to hold variables</li>
+</ul>
+
+<p>例如 1.2.5 的優化過後的中間碼，這裡進行翻譯成組合語言</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LDF R2, id3		// id3 的內容載入 R3 Regiester
+MULF R2, R2, #60.0	// R2 與 60.0 進行乘法運算
+LDF R1, id2		// id2 的內容載入 R2 Regiester
+ADDF R1, R1, R2		// R1 與 R2 的值相加存到 R1
+STF id1, R1		// R1 的內容存入 id1 中
+</code></pre></div></div>
+
+<blockquote>
+  <p>這裡忽略了對於 Identifiers 儲存分配的問題，在後面會討論到</p>
+</blockquote>
+
+<h5 id="129-compiler-construction-tools">1.2.9 Compiler-construction tools</h5>
+
+<p>跟其他軟體開發一樣，開發 Compiler 也可以利用許多現代開發工具，除了通用的軟體開發工具之外也有一些更加針對 Compiler 的工具。</p>
+
+<ol>
+  <li><em>Scanner generators</em>: 可以根據一個語言的 Lexemes 的正規表達式(<strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a></strong>)描述來生成語彙分析器</li>
+  <li><em>Parser generators</em>: 可以根據一個程式語言的語法(<strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>)描述自動生成語法分析器</li>
+  <li><em>Syntax-directed translation engines</em>: 用於 Traversal syntax tree 並使用 <strong>Attribute grammars</strong> 生成中間代碼</li>
+  <li><em>Code-generator generators</em>: 根據中間語言翻譯成目標機器的機器語言的規則(<strong>Tree grammars</strong>) 來生成代碼生成器</li>
+  <li><em>Data-flow analysis engines</em>: 可以幫助收集 <strong>Data-flow</strong>(程式中的資料傳遞)，是 Compiler 優化的重要部分</li>
+  <li><em>Compiler-construction toolkits</em>: 可用於構造編譯器不同階段的工具</li>
+</ol>
+
+<h3 id="13-formal-language-theory">1.3 Formal Language Theory</h3>
+
+<blockquote>
+  <p>Compilers: Principles, Techniques and Tools 書中 1.3 談論的是程式語言歷史，這裡改為討論語言的定義與自動機。</p>
+</blockquote>
+
+<h5 id="131-language-definition">1.3.1 Language definition</h5>
+
+<p>在談論 <strong><a href="https://en.wikipedia.org/wiki/Formal_language">Formal Language</a></strong>(形式語言)前首先要談的是 Alphabet, String, Language 的不同定義:</p>
+
+<ol>
+  <li><strong>Alphabet</strong>: a finite set of symbols.
+    <ul>
+      <li>{0, 1}: binary alphabet</li>
+    </ul>
+  </li>
+  <li><strong>String</strong>: a finite sequence of symbols from the alphabet.
+    <ul>
+      <li>1011: a string of length 4</li>
+      <li>ε: the empty string</li>
+    </ul>
+  </li>
+  <li><strong>Language</strong>: a set of strings on the alphabet.
+    <ul>
+      <li>{00, 01, 10, 11}: the set of strings of length 2</li>
+      <li>∅: the empty set</li>
+    </ul>
+  </li>
+</ol>
+
+<p>對於 String 與 Language 有以下的基本運算:</p>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/8.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/9.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="132-grammars--metalanguage">1.3.2 Grammars &amp; Metalanguage</h5>
+
+<ul>
+  <li><strong>Grammars</strong>: The sentences in a language may be defined by a set of rules called a grammar.
+    <ul>
+      <li>例如有語法規則 G: the set of binary strings of length 2</li>
+      <li>那麼 L : {00, 01, 10, 11} 就是符合該語法規則的句子</li>
+    </ul>
+  </li>
+  <li><strong>Metalanguage</strong> : a language used to define another language</li>
+</ul>
+
+<blockquote>
+  <p>如果透過一種語言來定義另一種語言，那麼該語言(Metalanguage) 必須是有明確的規則才能清楚作出清楚的定義，這樣才有可能實作下個階段的 Automata</p>
+</blockquote>
+
+<h5 id="133-automata">1.3.3 Automata</h5>
+
+<p>我們能在 Compiler 中需要實作的就是 <a href="自動機">Automata</a>，Automata 往往與 Formal language 密切關聯，自動機被用作可能是無限的形式語言的有限表示。
+因此可以在實作上透過 Automata 使語言輸入並通過(Accept) 與 (Transform)轉換。</p>
+
+<ul>
+  <li><strong>Acceptor</strong>(接受器): 一種自動機，用 Grammar 確定輸入的字符串是否為該語言的句子</li>
+  <li><strong>Transducer</strong>(轉換器): 一種自動機，依照 Grammar 的定義來轉換輸入的字符串成為另一種語言。</li>
+</ul>
+
+<p><img src="https://cs.lmu.edu/~ray/images/fa-three-consecutive-as.png" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>狀態機透過 State, Event, Output, Input 來達成如何精確地描述和處理可能無窮大的信息集合。</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/11.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="134-compiler-compiler">1.3.4 Compiler-Compiler</h5>
+
+<ul>
+  <li>既然 Compiler 是透過 Grammars 來進行對一種語言的通過(Accept) 與 (Transform)轉換，這個 Grammars 必定是一種精確的規格(Specification)，
+這就讓我們可以透過 Specification 來撰寫 Automata，使我們可以透過 Grammars 來自動生成(<strong>Generate automatically</strong>) Automata</li>
+  <li>那麼定義 Grammars 的元語言(Metalanguage) 必然也是有精確的規則存在，那我們當然也可以透過 Matelanguage 來進行 Compiler 的自動生成，
+這就是 <strong>Compiler-Compiler</strong>(編譯器的編譯器) 或 <strong>Compiler-Generator</strong>(編譯器生成器)
+    <ul>
+      <li>使用不同的 Matelanguage 來定義 Compiler 不同階段的元件，我們就能以此來自動生成這些元件</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這是我們在各個階段可以使用的 Matelanguage，以及透過這些 Matelanguage 我們可以怎麼去實作 Automata</p>
+
+<ul>
+  <li>Lexical syntax:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular expression</a></strong>: finite automata, lexical analyzer</li>
+    </ul>
+  </li>
+  <li>Syntax:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>: pushdown automata, parser</li>
+    </ul>
+  </li>
+  <li>Semantics:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Attribute_grammar">Attribute grammars</a></strong>: attribute evaluators, type checker</li>
+    </ul>
+  </li>
+  <li>Intermediate code generation:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Attribute_grammar">Attribute grammars</a></strong>: intermediate code generator</li>
+    </ul>
+  </li>
+  <li>Code generation:
+    <ul>
+      <li><strong><a href="https://inria.hal.science/hal-03367725/document">Tree grammars</a></strong>: finite tree automata, code generator</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="display: flex; flex-direction: row;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/12.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/13.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote class="block-warning">
+  <h5 id="note">NOTE</h5>
+  <p>這篇是 Compiler 的第一篇筆記，透過本篇快速了解 Compiler 架構後再深入討論各部分的細節。<br />
+Last edit 09-23-2023 13:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="Compiler" /><category term="OS" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. 編譯器這門課可以讓人更深入的了解 Programming language，如果能知道編譯器如何將 High level language 轉換為 Machine code 與背後的工作原理， 就能更有效的去編寫程式。在修 OS 的時候更有感覺，有些是針對編譯器與平台的優化去更改寫法，有些小小的改動就能減少數行的指令去提升效能。]]></summary></entry></feed>

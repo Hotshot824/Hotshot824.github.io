@@ -1,0 +1,1270 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Compiler | Lexical Analysis Notes · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/github.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-09-20-compiler_introduction.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2023-09-23-software_testing_introduction.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html">
+                                Compiler | Syntax Analysis Notes (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html">
+                                OS | CPU Scheduler (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#31-the-role-of-the-lexical-analyzer">3.1 The Role of the Lexical Analyzer</a></li><li><a href="#33-specification-of-tokens">3.3 Specification of Tokens</a></li><li><a href="#36-finite-automata">3.6 Finite Automata</a></li><li><a href="#37-from-regular-expressions-to-automata">3.7 From Regular Expressions to Automata</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                                Paper | Test Case Generation Based on Constraint Logic Graph (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/0000-01-01-virtual_machine_tool.html">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/0000-01-01-linux_config.html">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/0000-01-01-leetcode_guide.html">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/0000-01-01-editor_envirmnment.html">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+
+            <!-- <li>
+                <a href="https://github.com/sighingnow/jekyll-gitbook/fork" target="blank" class="gitbook-link">
+                    Fork it Now!
+                </a>
+            </li> -->
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Compiler | Lexical Analysis Notes</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">September 21, 2023</section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                    <h1 id="/jekylls/lexical_analysis">Compiler | Lexical Analysis Notes</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
+Lexical analysis(語彙分析) 將文本轉換為有意義的語彙標記(Token)，這通常是 Compiler 步驟的第一步。</p>
+</blockquote>
+
+<p>Compilers: Principles, Techniques, and Tools 介紹使用 <strong>Regular Expression</strong>(RE, 正規表達式)描述 Lexemes 的方法，並透過一個 <strong>Lexical-analyzer generator</strong>(語彙分析器生成工具)來進行代碼生成，
+使我們可以專注在如何描述 Lexemes。</p>
+
+<p>因此會先學習 RE 的使用方法，RE 能被轉換為 <strong>Nondeterministic Finite Automata</strong>(NFA, 非確定有限狀態自動機)問題在轉換為 <strong>Deterministic Finite Automata</strong>(DFA, 確定有限狀態自動機)問題，
+之後就能用程式碼模擬自動機運作。</p>
+
+<h3 id="31-the-role-of-the-lexical-analyzer">3.1 The Role of the Lexical Analyzer</h3>
+
+<p>Lexical analyzer(語彙分析器)主要任務就是讀取 Source code 的輸入字符(characters)，並將其組成為 Lexeme，並輸出一個 Token 序列，並在識別到 Identifier 時要將其添加到 Symbol table 中。</p>
+
+<p>下圖顯示一個 Syntax analyzer(語法分析器)與 Lexical analyzer 互動的過程，呼叫 getNextToken 來使語彙分析器不斷讀取字符，直到識別出下一個 Token 將其返回給語法分析器。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/1.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<ul>
+  <li>語彙分析器可以被劃分為兩個骨牌效應的過程:
+    <ul>
+      <li>掃描不需要轉變為 Token 的部分的過程
+        <ul>
+          <li>例如: 過濾 Comments, Whitespace (blank, newline, tab …)</li>
+        </ul>
+      </li>
+      <li>實際的 Lexical analysis，從掃描的輸入中產生 Token</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <ul>
+    <li>語彙分析器還可以將 Compiler 的錯誤訊息與 Source code 的發生位置聯繫起來，例如:
+      <ul>
+        <li>紀錄換行符號的行數，以便在出錯時給予一個行數</li>
+        <li>某些編譯器中會將 Source code 複製一份，並將錯誤訊息插入該位置</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<h5 id="311-lexical-analysis-versus-parsing">3.1.1 Lexical Analysis Versus Parsing</h5>
+
+<p>把 Lexical analysis(Scanning) 與 Syntax analysis(Parsing) 分開有三個原因:</p>
+<ol>
+  <li>簡化編譯器設計，分離可以更好的專注在不同任務上
+    <ul>
+      <li>如果我們正在設計一種新的語言，將詞法和語法問題分開也可以使整體語言設計更加清晰</li>
+    </ul>
+  </li>
+  <li>提高編譯器的效率
+    <ul>
+      <li>Lexical analyzer 獨立後我們就可以去更方便的優化 I/O 的處理</li>
+    </ul>
+  </li>
+  <li>提高編譯器的可移植性，輸入設備特定的特性可以限制在詞法分析器中
+    <ul>
+      <li>例如: Windows 的換行符是 <code class="language-plaintext highlighter-rouge">\r\n</code>，Linux 上的是 <code class="language-plaintext highlighter-rouge">\n</code></li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>延伸閱讀 <a href="https://www.codingninjas.com/studio/library/input-buffering-in-compiler-design">Input Buffering in Compiler Design</a></p>
+</blockquote>
+
+<h5 id="312-tokens-patterns-and-lexemes">3.1.2 Tokens, Patterns, and Lexemes</h5>
+
+<p>在討論 Lexical analyzer，這裡有三個需要了解的術語:</p>
+<ul>
+  <li>token(language): a set of strings
+    <ul>
+      <li>if, identifier, relop</li>
+    </ul>
+  </li>
+  <li>Pattern(grammar): a rule defining a token
+    <ul>
+      <li>if: if</li>
+      <li>identifier: letter followed by letters and digits</li>
+      <li>relop: &lt; or &lt;= or = or &lt;&gt; or &gt;= or &gt;</li>
+    </ul>
+  </li>
+  <li>Lexemes(sentence): a string matched by the parrern of a token
+    <ul>
+      <li>if, Pi, count, &lt;, &lt;=</li>
+    </ul>
+  </li>
+</ul>
+
+<p>假設有以下 Clang code，依照 Figure 3.2 <code class="language-plaintext highlighter-rouge">print</code> 與 <code class="language-plaintext highlighter-rouge">score</code> 是 Token <em>id</em> 所匹配的 Lexeme，<code class="language-plaintext highlighter-rouge">"Total = %d\n"</code> 則是與 <em>literal</em> 匹配的 Lexeme。</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Total = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">score</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/2.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<p>在很多程式語言設計中，大部分 Token 被分成以下幾類:</p>
+
+<ol>
+  <li>Reserved words(保留字)都有一個 Token，保留字的 Pattern 與保留字相同</li>
+  <li>Operators 的 Token，可以表示單個運算符，也有像 comparison 有多個同類別的運算符</li>
+  <li>Identifier 只用一種 Token 表示</li>
+  <li>Constants 有一個或多個 Token，例如 number、literal</li>
+  <li>Punctuation symbol 都有各自的 Token，例如 <code class="language-plaintext highlighter-rouge">(</code>, <code class="language-plaintext highlighter-rouge">)</code>, <code class="language-plaintext highlighter-rouge">,</code>, <code class="language-plaintext highlighter-rouge">;</code></li>
+</ol>
+
+<h5 id="313-attributes-for-tokens">3.1.3 Attributes for Tokens</h5>
+
+<p>Attributes 是用來區分 Token 中的不同 Lexeme，例如 0, 1 都能跟 Token <code class="language-plaintext highlighter-rouge">number</code> 匹配，因為 Lexcial analyzer 很多時候不能僅返回給 Syntax analyzer 一個 Token name，
+Token name 影響 Syntax analyzer，而 Attributes 會影響 Parsing 之後的 Semantic analyzer。</p>
+
+<ul>
+  <li>&lt; if, &gt;</li>
+  <li>&lt; identifier, <code class="language-plaintext highlighter-rouge">pointer to symbol table entry</code> &gt;</li>
+  <li>&lt; relop, <code class="language-plaintext highlighter-rouge">=</code> &gt;</li>
+  <li>&lt; number, <code class="language-plaintext highlighter-rouge">value</code> &gt;</li>
+</ul>
+
+<hr />
+
+<h3 id="33-specification-of-tokens">3.3 Specification of Tokens</h3>
+
+<p>Token 的一種重要的表示方式(規格)就是 Regular expression，RE 可以高效的描述處理 Token 時要用到的 Pattern。</p>
+
+<h5 id="333-regular-expression">3.3.3 Regular Expression</h5>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/Regular_expression#">Regular Expression</a></strong>(RE, 正規表達式)是由較小的 RE 按照以下規則遞迴建構，下面的規則定義了某個 Alphabet ∑ 的 RE:</p>
+
+<ol>
+  <li>ε 是一個 RE，<strong>L(ε) = {ε}</strong>，也就是該語言只包含空字串</li>
+  <li>如果 a 是 ∑ 中的符號，那麼 a 也是一個 RE 代表 L(a) = {a}，也就是說這個語言僅包含長度為 1 的字串 a。</li>
+</ol>
+
+<ul>
+  <li>Suppose r and s are RE denoting L(r) and L(s)</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>(r)</td>
+          <td>(s) is a RE denoting L(r) ∪ L(s)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>(r)(s) is a RE denoting L(r)L(s)</li>
+  <li>(r)* is a RE denoting (L(r))*</li>
+  <li>(r) is a RE denoting L(r)</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<pre><code class="language-re">a | b               {a, b}
+(a | b)(a | b)      {aa, ab, ba, bb}
+a*                  {ε, a, aa, aaa, ...}
+(a | b)*            the set of all strings of a's and b's
+a | a*b             the set containing the string a and all strings consisting of zero or more a's followed by a b
+</code></pre>
+
+<p><strong>Order of operations:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Priority</th>
+      <th>Symbol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Highest</td>
+      <td>\</td>
+    </tr>
+    <tr>
+      <td>High</td>
+      <td>(), (?:), (?=), []</td>
+    </tr>
+    <tr>
+      <td>Middle</td>
+      <td>*, +, ?, {n}, {n,}, {n,m}</td>
+    </tr>
+    <tr>
+      <td>Low</td>
+      <td>^, $</td>
+    </tr>
+    <tr>
+      <td>Second lowest</td>
+      <td>concatenation</td>
+    </tr>
+    <tr>
+      <td>Lowest</td>
+      <td>|</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Algebraic laws:</strong></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/3.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<h5 id="334-regular-definitions">3.3.4 Regular Definitions</h5>
+
+<p>為了方便表示，我們可能會給某些 RE 別名，並在之後的 RE 中使用符號一樣使用這些別名，例如:</p>
+<ul>
+  <li>Name for regular expression<br />
+$d_1 \rightarrow r_1$<br />
+$d_2 \rightarrow r_2$<br />
+$…$<br />
+$d_n \rightarrow r_n$<br />
+$where\;r_i\;over\;alphabet\cup ( d_1, d_2, …, d_{i-1} )$</li>
+  <li>Examples:<br />
+$letter \rightarrow A | B | … | Z | a | b | … | z$<br />
+$digit \rightarrow 0 | 1 | … | 9$<br />
+$identifier \rightarrow letter(letter | digit)*$</li>
+</ul>
+
+<blockquote>
+  <p>上面的 Examples 定義了一個僅能由 letter 開頭但的 identifier</p>
+</blockquote>
+
+<h5 id="335-extensions-of-regular-expressions">3.3.5 Extensions of Regular Expressions</h5>
+
+<p>RE 後續有其他的擴展，用來增強 RE 表達字串的能力，這裡會介紹最常被使用的幾種擴展</p>
+
+<ul>
+  <li><strong><em>One or more instances</em></strong><br />
+(r)<sup>+</sup> denoting (L(r))<sup>+</sup><br />
+r* = r<sup>+</sup> | ε<br />
+r<sup>+</sup> = rr*</li>
+  <li><strong><em>Zero or one instance</em></strong><br />
+r? = r | ε</li>
+  <li>
+    <p><strong><em>Character classes</em></strong><br />
+[abc] = a | b | c<br />
+[a-z] = a | b | … | z<br />
+[^a-z] = any character except [a-z]</p>
+  </li>
+  <li><strong>Examples</strong>:<br />
+$digit \rightarrow 0 | 1 | … | 9$<br />
+$digits \rightarrow digit^+$
+$number \rightarrow digits(.digits)?(E[+-]?digits)?$</li>
+</ul>
+
+<blockquote>
+  <p>上面的 Examples 定義了從 digit 到 digits 最後到 number 的過程</p>
+</blockquote>
+
+<hr />
+
+<h3 id="36-finite-automata">3.6 Finite Automata</h3>
+
+<blockquote class="block-danger">
+  <p>這裡 3.6/3.7 章不會依照課本順序，而是依照課程進度。<br />
+NFA 的 Transition function 可以指向多個 State，DFA 的 Transition function 只能指向一個 State<br />
+會先介紹相對簡單的 DFA 再介紹 NFA，這樣可以更容易理解 NFA 的運作</p>
+</blockquote>
+
+<p>要注意自動機的幾個特性:</p>
+<ol>
+  <li>自動機是 Recongnizer(識別器)，他們只能對輸入的字串進行判斷 “Yes” or “No”</li>
+  <li>Finite automata 分為兩類
+    <ul>
+      <li><strong>Nondeterministic finite automata</strong> (NFA, 非確定有限狀態自動機)
+        <ul>
+          <li>A symbol can label <strong>several edges</strong> out of the same state, the <strong>empty string(ε)</strong> is a possible label.</li>
+        </ul>
+      </li>
+      <li><strong>Deterministic finite automata</strong> (DFA, 確定有限狀態自動機)
+        <ul>
+          <li>For each state, and for each symbol of its input <strong>exactly one edge</strong> with that symbol leaving that state.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="361-nondeterministic-finite-automata">3.6.1 Nondeterministic Finite Automata</h5>
+
+<p>An NFA consists of:</p>
+<ol>
+  <li>A finite set of states</li>
+  <li>A finite set of input symbols, default empty string is not in the set.</li>
+  <li>A transition function (or transition table ) that maps (state, symbol) pairs to sets of states</li>
+  <li>A state distinguished as start state</li>
+  <li>A set of states distinguished as final states</li>
+</ol>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/4.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/5.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左是 NFA’s transition graph 在狀態 0 有 a, b 兩種狀態轉移，圖右是他對應的範例</p>
+</blockquote>
+
+<h5 id="362-transition-tables">3.6.2 Transition Tables</h5>
+
+<p>NFA 可以表示為一張 Transition table(轉換表)，例如:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/6.png?raw=true" alt="" height="60%" width="60%" /></p>
+
+<blockquote>
+  <p>轉換表可以更容易看出 NFA 的狀態轉移，缺點是當 NFA 狀態(Alphabet)很多時，轉換表會變得很大佔用空間</p>
+</blockquote>
+
+<h5 id="363-acceptance-of-input-strings-by-automata">3.6.3 Acceptance of Input Strings by Automata</h5>
+
+<ul>
+  <li>NFA accept 輸入字串 s，如果從 Start state 開始，有一條路徑可以走到 <strong>Final state</strong>，這條路徑的轉移符合這個 Automata 所定義的語言</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/7.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/8.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="364-deterministic-finite-automata">3.6.4 Deterministic Finite Automata</h5>
+
+<p>這裡會先談一個 DFA 怎麼用程式碼模擬，因為相較於 DFA 簡單許多</p>
+
+<ul>
+  <li>Deterministic finite automata (DFA, 確定有限狀態自動機) 是 NFA 中的一種特例，其中:
+    <ul>
+      <li>There are no moves on input ε</li>
+      <li>For each state s and input symbol a, there is exactly one edge out of s labeled a.</li>
+    </ul>
+  </li>
+  <li><strong>Algorithm 3.18 : Simulating a DFA.</strong> from Compiler: Principles, Techniques, and Tools p.150
+    <ul>
+      <li><strong>Input</strong>: An input string ended with eof and a DFA with start state s 0 and final states F.</li>
+      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+s := s0;
+c := nextchar;
+    while (c != EOF) do begin
+        s := move(s, c);
+        c := nextchar;
+    end;
+    if (s ∈ F) then return "yes";
+    else return "no";
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/13.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/14.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h5 id="365-simulation-of-an-nfa">3.6.5 Simulation of an NFA</h5>
+
+<p>NFA 與 DFA 在模擬上的演算法幾乎一樣，最大的區別在於 ε-closure() 的建構，因為 NFA 在給定輸入的狀況下可以存在多個 State，
+因此在模擬上需要處理 State set。課本中會在 3.6.4 提前介紹 <strong>Algorithm 3.18 : Simulating a DFA. - p.151</strong></p>
+
+<ul>
+  <li><strong>Algorithm 3.22 : Simulating a NFA.</strong> from Compiler: Principles, Techniques, and Tools p.156
+    <ul>
+      <li><strong>Input</strong>: An input string ended with eof and an NFA with start state s 0 and final states F</li>
+      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+S := ε-closure({S0});
+c := nextchar();
+    while (c != EOF) do begin
+        S := ε-closure(move(S, c));
+        c := nextchar();
+    end;
+    if (S ∩ F != ∅) then return "yes";
+    else return "no";
+end;
+</code></pre>
+
+<ul>
+  <li>上面的 Pseudocode 模擬 NFA 的運作，其中:
+    <ul>
+      <li>move(s, c): 從 <strong>state s</strong> 輸入 c 可以到達的 NFA state set</li>
+      <li>move(<em>S</em>, c): 從 <strong>state s set S</strong> 輸入 c 可以到達的 NFA state set</li>
+      <li>ε-closure(s): 沒有輸入字元，從 <strong>state s</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
+      <li>ε-closure(<em>S</em>): 沒有輸入字元，從 <strong>state s set S</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
+      <li>nextchar(): 回傳下一個輸入字元</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>注意上面的 S 是 NFA state set，而 s 是 NFA state</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/9.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/10.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左邊的最後的 S 與 Final state {3} 有交集，因此回傳 “yes”，右邊的則沒有交集，回傳 “no”</p>
+</blockquote>
+
+<blockquote>
+  <p>注意上圖的 NFA 並沒有加入 ε-closure() 因為沒有任何 ε State，因此可以只透過 move() 來模擬 NFA 運作</p>
+</blockquote>
+
+<h5 id="366-computation-of-ε-closure">3.6.6 Computation of ε-closure</h5>
+
+<p>從上面的例子可以說明 move() 是如何運作，接下來這裡會講解 ε-closure() 是如何運作，用一個 DFS 來找出所有可以到達的 ε-State，返回一個 T set</p>
+
+<p><strong>Computing ε-closure(T)</strong></p>
+<ul>
+  <li><strong>Input</strong>: An NFA and a set of NFA states S.</li>
+  <li><strong>Output</strong>: T = ε-closure(S).</li>
+</ul>
+
+<pre><code class="language-pseudocode">begin 
+    push all states in S onto stack;
+    T := S;
+    while stack is not empty do begin
+        pop t, the top element, off stack;
+        for each state u with an edge from t to u labeled ε do begin
+            if u is not in T then begin
+                add u to T;
+                push u onto stack;
+            end;
+        end;
+        return T;
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/12.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上面的例子看似複雜，其實只是組合了 move() 和 ε-closure() 的運作</p>
+</blockquote>
+
+<hr />
+
+<h3 id="37-from-regular-expressions-to-automata">3.7 From Regular Expressions to Automata</h3>
+
+<p>從 RE 轉換為 NFA，再從 NFA 轉換為 DFA，這裡會用這樣的順序來介紹</p>
+
+<h5 id="371-construction-of-an-nfa-from-a-regular-expression">3.7.1 Construction of an NFA from a Regular Expression</h5>
+
+<p>使用 <a href="https://en.wikipedia.org/wiki/Thompson%27s_construction">McNaughton-Yamada-Thompson construction algorithm</a>，可以將 RE 轉換為 NFA。</p>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/17.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/21.jpg?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote class="block-warning">
+  <p>以上說明了 (ε), (a), (s|t), (st), (s<em>), 的轉換過程，跟使用 (a|b)</em>abb 作為例子來一步步轉換</p>
+</blockquote>
+
+<blockquote>
+  <p>在 Compilers: Principles, Techniques, and Tools p.161 - Example 3.24 有類似的轉換過程</p>
+</blockquote>
+
+<h5 id="372-conversion-of-an-nfa-to-a-dfa">3.7.2 Conversion of an NFA to a DFA</h5>
+
+<p>使用 <a href="https://en.wikipedia.org/wiki/Powerset_construction">Subset construction algorithm</a>，可以將 NFA 轉換為 DFA。</p>
+
+<p>Subset construction 的概念是 DFA 的每個 State 都對應 NFA 的一組 State，也就是 DFA 的每個 State 都代表 NFA 在讀取相同輸入後可能存在的所有狀態。
+但是這樣的話 DFA 的 State 數量會變得非常多，因此 Subset construction 會將相同的 NFA State set 合併成一個 DFA State。</p>
+
+<ul>
+  <li>a DFA state ≡ a set of NFA states
+    <ul>
+      <li>Find the inital state in the DFA</li>
+      <li>Find all the states in the DFA</li>
+      <li>Construct the transition table</li>
+      <li>Find the final state of the DFA</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>例如一個 NFA 有 3 個 State，那麼他的 DFA 最多會有 2<sup>3</sup> = 8 個 State 才能表示所有的 NFA State set，<br />
+但是在實際的語言處理中通常不會看到這種指數增長，並非所有的 NFA State 組合都會出現在實際的輸入序列中。</p>
+</blockquote>
+
+<ul>
+  <li><strong>Algorithm 3.20 : The subset construction of a DFA from an NFA.</strong> from Compiler: Principles, Techniques, and Tools p.153
+    <ul>
+      <li><strong>Input</strong>: An NFA N.</li>
+      <li><strong>Output</strong>: A DFA D with states Dstates and trasition table Dtran</li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-pseudocode">begin
+add ε-closure(s0) as an unmarked state to Dstates;
+while there is an unmarked state T in Dstates do begin
+    mark T;
+    for each input symbol a do begin
+        U := ε-closure(move(T, a));
+        if U is not in Dstates then
+            add U as an unmarked state to Dstates;
+        Dtran[T, a] := U;
+    end;
+end;
+</code></pre>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/18.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/19.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: flex-end;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/20.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>上面是一個將 NFA 轉換為 DFA 的例子</p>
+<ol>
+  <li>透過 ε-closure(), move($state, $symbols) 找出所有的 NFA State set</li>
+  <li>將相同的 NFA State set 合併成一個 DFA State</li>
+  <li>這樣就能透過 DFA State 來繪製出一張 DFA</li>
+</ol>
+
+<h5 id="373-tiem-space-tradeoffs">3.7.3 Tiem Space Tradeoffs</h5>
+
+<ul>
+  <li>RE to NFA, simulate NFA
+    <ul>
+      <li>time: O(|r| * |x|), space O(|r|)</li>
+    </ul>
+  </li>
+  <li>RE to NFA, NFA to DFA, simula
+    <ul>
+      <li>time: O(|x|), space: O(2<sup>|r|</sup>)</li>
+    </ul>
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Lazy_evaluation">Lazy transition evaluation</a>
+    <ul>
+      <li>transitions are computed as needed at run time; 
+computed transitions are stored in cache for later use.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Lazy evaluation(惰性求值)，目的是要最小化計算機要做的工作。可以在空間複雜度上得到極大的優化，從而可以輕易構造一個無限大的數據類型。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-02-2023 17:50</p>
+</blockquote>
+
+
+                </section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-tags"></i>
+                
+                Compiler
+                
+                
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script><!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2023-09-23-software_testing_introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Compiler | Compilers Introduction">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-09-20-compiler_introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Testing | Software Testing Introduction">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Testing | Software Testing Introduction",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023-09-23-software_testing_introduction.md",
+            "ref": "_posts/2023-09-23-software_testing_introduction.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"],
+                "facebook": false,
+                "google": false,
+                "github": true,
+                "github_link": "https://github.com/Hotshot824",
+                "telegram": false,
+                "telegram_link": "https://t.me",
+                "instapaper": false,
+                "twitter": false,
+                "vk": false,
+                "weibo": false
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            }
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023-09-21-lexical_analysis.md",
+        "mtime": "2023-09-21 00:00:00 +0800",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2023-11-04 18:22:51 +0800"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+
+<!-- <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script> -->
+
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1251 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Testing | Test Case Generation · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/github.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-10-09-operating_system_structure.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2023-10-17-container_of.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html">
+                                Compiler | Syntax Analysis Notes (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html">
+                                OS | CPU Scheduler (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#31-equivalence-class-partitioning">3.1 Equivalence Class Partitioning</a></li><li><a href="#32-test-coverage-criteria">3.2 Test Coverage Criteria</a></li><li><a href="#33-boundary-value-analysis">3.3 Boundary Value Analysis</a></li><li><a href="#34-test-case-generation-strategy">3.4 Test Case Generation Strategy</a></li><li><a href="#35-looking-for-equivalence-classes">3.5 Looking for Equivalence Classes</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                                Paper | Test Case Generation Based on Constraint Logic Graph (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/0000-01-01-virtual_machine_tool.html">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/0000-01-01-linux_config.html">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/0000-01-01-leetcode_guide.html">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/0000-01-01-editor_envirmnment.html">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+
+            <!-- <li>
+                <a href="https://github.com/sighingnow/jekyll-gitbook/fork" target="blank" class="gitbook-link">
+                    Fork it Now!
+                </a>
+            </li> -->
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Testing | Test Case Generation</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">October 10, 2023</section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                    <h1 id="/jekyll/test_case_generation">Testing | Test Case Generation</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+Test case 的產生方式可能是無窮無盡的，因此也需要一些策略來幫助產生 Test case</p>
+</blockquote>
+
+<p>以下是本章節主要介紹的目標，這個章節最後的基於限制式的測試會使用 ECLiPSeclp 來進行實作，不會在這裡介紹，
+會另外開一篇講述如何使用 Constraint Logic Programming 來生成測試案例。</p>
+
+<ul>
+  <li>Test case generation</li>
+  <li>Equivalence class partitioning</li>
+  <li>Boundary value analysis</li>
+  <li>Domain specific information</li>
+  <li>
+    <p>Constraint-based testing</p>
+  </li>
+  <li>Test case generation 的目標是從可能無窮(possibly infinite) Collection of candidate test cases，
+選出<strong>盡可能少(Few)</strong>並且<strong>有效(Effective)</strong>的 Test case</li>
+  <li>Domain knowledge 在測試特定領域的應用時能起到非常關鍵的作用</li>
+</ul>
+
+<h5 id="two-main-issues">Two Main Issues</h5>
+
+<p>這就涉及兩個主要的問題，可以透過一些原則來解決:</p>
+<ul>
+  <li><strong>Few(少):</strong> 對 Input domains 所有的 Value 進行測試是不可能的，我們只能挑選一部分的 Subset 來測試
+    <ul>
+      <li><strong><a href="https://en.m.wikipedia.org/wiki/Equivalence_partitioning">Equivalence class partitioning</a></strong>(等價類別劃分)</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Code_coverage">Test coverage criteria</a></strong>(測試覆蓋標準)</li>
+    </ul>
+  </li>
+  <li><strong>Effective(有效):</strong> 我們希望選擇一個 Subset，能夠找到最多的 Errors
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Boundary-value_analysis">Boundary value analysis</a></strong>(邊界值分析)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>拿一元二次方程式為例，公式解為:</strong></p>
+
+<p>$ax^2 + bx + c = 0$, $r = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</p>
+
+<p><em>將每個 Input variable 以 float(32 bit) 表示，所有可能的輸入值數量將會是:</em></p>
+
+<p>$2^{32} + 2^{32} + 2^{32} = 2^{96}$</p>
+
+<h3 id="31-equivalence-class-partitioning">3.1 Equivalence Class Partitioning</h3>
+
+<ul>
+  <li>一組精心選擇的輸入值應該能夠覆蓋許多其他輸入值</li>
+  <li>這代表我們應該把 Input domains(輸入域) 劃分為有限數量的 <strong>Equivalence classes(等價類別)</strong></li>
+  <li>而測試每個 Equivalence class 中的 <strong>Representative value(代表值)</strong> 就等於測試了 Equivalence class 中的所有其他值</li>
+</ul>
+
+<h5 id="311-valid-and-invalid-equivalence-classes">3.1.1 Valid and Invalid Equivalence Classes</h5>
+
+<ul>
+  <li>Equivalence classes 通常透過 Input constratint(輸入限制) 來劃分 Input domain(輸入域)</li>
+  <li>這裡會有兩種 Equivalence classes，Valid 和 Invalid
+    <ul>
+      <li>Valid: 代表程式的有效輸入</li>
+      <li>Invalid: 代表所有其他可能的狀態</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>An Example:</strong></p>
+<ul>
+  <li>If an input constraint specifies a range of values (e.g., the count can be from 1 to 999), 
+it identifies one valid equivalence class (1 ≤ count ≤ 999) and two invalid equivalence classes (count &lt; 1 and count &gt; 999)</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/1.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="312-partitioning-equivalence-classes">3.1.2 Partitioning Equivalence Classes</h5>
+
+<ul>
+  <li>如果程式中的 Valid/Invalid Equivalence classes 並不被程式以相同方式處理，則需要劃分更多的 Equivalence classes</li>
+  <li>如果我們有一個輸入年齡 <code class="language-plaintext highlighter-rouge">Y</code> 的程式:
+    <ul>
+      <li>Invalid: 的輸入可能會被劃分為 <code class="language-plaintext highlighter-rouge">Y &lt; 0</code> 和 <code class="language-plaintext highlighter-rouge">Y &gt; 1000</code> (因為根本不會有人活到 1000 歲)</li>
+      <li>Valid: 我們也可以把 <code class="language-plaintext highlighter-rouge">Y &gt; 65</code> 跟 <code class="language-plaintext highlighter-rouge">Y &lt;= 65</code> 區分開來，因為大於 65 歲的退休人士可能有不同的行為</li>
+      <li>這樣我們就在 Invalid/Valid 中另外劃分了 2 個 Equivalence classes</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/2.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>An Example:</strong>
+<em>回到一元二次方程式為例，方程式的解取決於:</em></p>
+
+<p>$d = b^2 - 4ac$<br />
+$The\;equation\;has\;two\;different\;real\;roots\;if\;d&gt;0$<br />
+$The\;equation\;has\;two\;identical\;real\;roots\;if\;d=0.$<br />
+$The\;equation\;has\;no\;real\;root\;if\;d&lt;0.$</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/3.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p>將一元二次方程式依照 Root 的情況劃分為三種 Equivalence class，這樣就能在這三種情況下挑選 <code class="language-plaintext highlighter-rouge">a, b, c</code> 的代表值</p>
+
+<h5 id="313-input-space-vectors-points">3.1.3 Input Space, Vectors, Points</h5>
+
+<ul>
+  <li><strong>Input Space</strong>: Let x1, x2, …, xn denote the input variables. Then these nvariables form an n-dimensional space that we call input space.</li>
+  <li><strong>Input Vector</strong>: The input space can be represented by a vector X, we call input vector, where X = [x1, x2, …, xn].</li>
+  <li><strong>Test Point</strong>: When the input vector X takes a specific value, we call it a test pointor a test case, which corresponds to a point in the input space.</li>
+</ul>
+
+<p>假如有一個 Function，接受兩個 Variable x, y，所有的可能輸入值就會是一個 <strong>Input Space</strong>，
+那麼我們的 <strong>Input Vector</strong> 就是這個 2D 平面上的所有點，而 <strong>Test Point</strong> 就是這個我們選擇進行測試的點</p>
+
+<h5 id="314-input-domain-and-sub-domain">3.1.4 Input Domain and Sub-Domain</h5>
+
+<ul>
+  <li>Domain: The input domainconsists of all the points representing all the allowable input combinations specified for the program in the product specification.</li>
+  <li>Sub-Domain: An input sub-domainis a subset of the input domain. In general, a sun-domain can be defined by a set of inequalitiesin the form off(x1, x2, …, xn) &lt; K,
+where “&lt;” can also be replaced by other relational operators.</li>
+</ul>
+
+<blockquote>
+  <p>Domain 就是在程式規格允許下的所有輸入值，而這些輸入值可以被程式中的不等式所劃分為 Sub-Domain</p>
+</blockquote>
+
+<p><strong>Input Domain Partitioning</strong></p>
+
+<ul>
+  <li>An input domain partitioningis a partition of the input domain into a number of sub-domains.</li>
+  <li>These partitioned sub-domains are mutually exclusive, and collectively exhaustive.</li>
+</ul>
+
+<blockquote>
+  <p>例如: 整數輸入可以被劃分為三個 Sub-Domain，n &lt; 0, n = 0, n &gt; 0，這三個 Sub-Domain 互斥且完全涵蓋了整個整數 Domain</p>
+</blockquote>
+
+<hr />
+
+<h3 id="32-test-coverage-criteria">3.2 Test Coverage Criteria</h3>
+
+<blockquote class="block-danger">
+  <p>如果 Equivalence classes 的數量還是太多，那我們就需要 <strong><a href="https://en.wikipedia.org/wiki/Code_coverage">Test coverage criteria</a></strong>(測試覆蓋標準)來限制 Test Case 的數量， 
+在這裡我們還不會詳細談有哪幾種 Test coverage criteria。</p>
+</blockquote>
+
+<p><strong>Test Case Candidates Reduction:</strong> 下圖是一個減少 Test Case 的流程</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/4.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<hr />
+
+<h3 id="33-boundary-value-analysis">3.3 Boundary Value Analysis</h3>
+
+<blockquote class="block-tip">
+  <p>邊界上的測試案例通常是最有效的，因為邊界是最容易找到錯誤的地方</p>
+</blockquote>
+
+<ul>
+  <li>A <strong>boundaryis</strong> where two sub-domains meet.</li>
+  <li>A <strong>point</strong> on a boundary is called a boundary point.</li>
+  <li><strong>Boundary points</strong> are input values with the highest probability of finding the most errors.</li>
+</ul>
+
+<h5 id="331-definition-of-boundaries">3.3.1 Definition of boundaries</h5>
+
+<p><strong>Linear Boundaries and Sub-Domains</strong></p>
+
+<ul>
+  <li>A boundary is a linear boundaryif it is defined by: $a_1x_1+ a_2x_2+ … + a_nx_n = K$
+Otherwise, it is called a nonlinear boundary.</li>
+  <li>A sub-domain is called a linear sub-domainif its boundaries are all linear ones.</li>
+</ul>
+
+<p><strong>Open and Closed Boundaries</strong></p>
+
+<ul>
+  <li>A boundary is a closedone with respect to a specific sub-domain if all the boundary points belong to the sub-domain <strong>(&lt;=, &gt;=, =)</strong>.</li>
+  <li>A boundary is an openone with respect to a specific sub-domain if none of the boundary points belong to the sub-domain <strong>(&gt;, &lt;, !=)</strong>.</li>
+  <li>A sub-domain with all open boundaries is called an open sub-domain; One with all closed boundaries is called a closed sub-domain; otherwise it is a mixed sub-domain</li>
+</ul>
+
+<p>如果一個邊界的 Point 在 Domain 中，那麼這個邊界就是 Close 的，否則就是 Open 的，例如:</p>
+<ul>
+  <li>Domain 1 &lt; x &lt;= 100
+    <ul>
+      <li>邊界 1 並不屬於 Domain，因此這個邊界是 Open 的</li>
+      <li>邊界 100 屬於 Domain，因此這個邊界是 Close 的</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Interior and Exterior Points</strong></p>
+
+<ul>
+  <li>屬於 Sub-domain 但不在邊界上的點稱作 <strong>Interior point</strong></li>
+  <li>不屬於 Sub-domain 並且不在邊界上的點稱作 <strong>Exterior point</strong></li>
+  <li>而兩條以上的邊界相交的點稱作 <strong>Vertex point</strong></li>
+</ul>
+
+<p><strong>General Problems with Input Values</strong></p>
+
+<ul>
+  <li>Some input values cannot be handled by the program. These input values are under-defined.</li>
+  <li>Some input values result in different output. These input values are over-defined.</li>
+  <li>
+    <p>These problems are most likely to happen at boundaries.</p>
+  </li>
+  <li><strong>Under-defined input values</strong>(未定義的輸入值): 也就是程式無法處理的 Input value，例如: 除以零</li>
+  <li><strong>Over-defined inpyt values</strong>(過度定義的輸入值): 也就是程式可以處理但是可能有不同輸出的 Input value，例如: 一個投票系統，可能會因為地方的法律而有不同的投票年齡限制</li>
+</ul>
+
+<h5 id="332-boundary-problems">3.3.2 Boundary Problems</h5>
+
+<p>這裡列出 5 個主要的 Boundary Problems:</p>
+
+<ul>
+  <li><strong>Closure Problem</strong>(閉合問題): whether the boundary points belong to the sub-domain.</li>
+  <li><strong>Boundary shift/tilt Problem</strong>:  where exactly a boundary is between the intended and the actual boundary.
+    <ul>
+      <li>Boundary shift Problem: f(x1, x2, …, xn) = K, where a small change in K.</li>
+      <li>Boundary tilt Problem: f(x1, x2, …, xn) = K, where a small change in some parameters.</li>
+    </ul>
+  </li>
+  <li><strong>Missing/Extra boundary Problem</strong>:
+    <ul>
+      <li>Missing: a boundary missing means that two neighboring sub-domains collapse into one sub-domain.</li>
+      <li>Extra: An extra boundary further partitions a sub-domain into two smaller sub-domains.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="34-test-case-generation-strategy">3.4 Test Case Generation Strategy</h3>
+
+<p>Weak N x 1 / 1 x 1 Strategy 都是一種用於邊界測試的策略，這裡會介紹這兩種策略的差異與優缺點</p>
+
+<p><a href="./2023-10-10-test_case_generation.html#341-weak-N-x-1-strategy">3.4.1 Weak N x 1 Strategy</a><br />
+<a href="./2023-10-10-test_case_generation.html#343-weak-1-x-1-strategy">3.4.3 Weak 1 x 1 Strategy</a></p>
+
+<h5 id="341-weak-n-x-1-strategy">3.4.1 Weak N x 1 Strategy</h5>
+
+<ul>
+  <li>In an n-dimensional space, a boundary defined by a linear equationin the form off (x1, x2, …, xn) = K would need nlinearly independent pointsto define it.</li>
+  <li>We can select nsuch boundary points, called <strong>ON points</strong>, to precisely define the boundary.</li>
+  <li>We can also select a point, called an <strong>OFF point</strong>, that receives different processing.</li>
+</ul>
+
+<p><strong>The OFF Points</strong></p>
+
+<ul>
+  <li><strong>閉合的邊界</strong>: 那麼它的 Off point 會位邊界的外部</li>
+  <li><strong>開放的邊界</strong>: 那麼他的 On point 會位邊界的內部</li>
+  <li><code class="language-plaintext highlighter-rouge">0 &lt;= N &lt; 21</code> 在這個例子上有兩個邊界，<em>其中 0 是 Close boundary、21 是 Open boundary</em>
+    <ul>
+      <li><strong>ON Points</strong> 是 0, 21 這兩個位於邊界上的點</li>
+      <li>0 是 <strong>Close boundary</strong>, Off point -1 位於外側</li>
+      <li>20 是 <strong>Open boundary</strong>, Off point 20 位於內側</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/5.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Distance of the OFF Points</strong></p>
+
+<ul>
+  <li>需要 Off point 的理由是，他與邊界非常的接近，以至於邊界的細微變化都將影響 Off point 的處理</li>
+  <li>實際應用上，使用 distance ε 作為 Off point 與邊界的偏移距離
+    <ul>
+      <li><strong>For integers, ε = 1.</strong></li>
+      <li><strong>For numbers with nbinary digits after the decimal point, ε = 1/2<sup>n</sup>.</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>例如: 有一個 0.001 作為邊界值，那麼 ε 就是 1/2<sup>3</sup> = 1/8</p>
+</blockquote>
+
+<p><strong>Position of the OFF Points</strong></p>
+
+<ul>
+  <li>Off point 應該要位於所有 On point 的中央</li>
+  <li>對於一個 2D 的空間來說，他應該選擇的方式如下:
+    <ul>
+      <li>選擇位於兩個 On point 的中點</li>
+      <li>根據這個邊界是 Closed 或 Opend 向外或向內移動 ε 的距離</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Total Test Points</strong></p>
+
+<p>除了 ON/OFF Points 我們也會再選擇一個 Interior Point(內部點)做為該 Equivalence Class(Sub-Domain) 的代表，
+因此一個 N Dimensional domain 將會有 <code class="language-plaintext highlighter-rouge">(n + 1)*b + 1</code> 個 Test Points。</p>
+
+<p>Example:<br />
+假設有一個稅收級距如下，注意其中 Close 與 Open 的條件，這裡都是 Integers 這樣的話旁邊的 Sub-Domain OFF Points 剛好會重疊在一起可以省略掉，
+並且 Open domain 也可以省略一個邊界的值，因此原本應該要有 <code class="language-plaintext highlighter-rouge">3 * 2 + 5 * 3 = 21</code> 個點，但是有 4 個邊是重疊的因此 <code class="language-plaintext highlighter-rouge">21 - 4 * 2 = 13</code>，
+最終僅用上 13 個 Test Points。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tax Rate:
+0%:  0 &lt;= x &lt; 10000 (0~9999)
+10%: 10000 &lt;= x &lt; 1000000 (10000~999999)
+20%: 1000000 &lt;= x &lt; 100000000 (1000000~99999999)
+30%: x &lt;= 100000000 (100000000~)
+</code></pre></div></div>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/6.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-danger">
+  <p>那如果假設一個 2D Sub-domain，並且四個邊都是封閉的，將會是 (2 + 1) * 4 + 1 = 13 個 Test Points，這裡忽略了與旁邊的 Sub-domain 重疊的點</p>
+</blockquote>
+
+<h5 id="342-boundary-problem-detection-of-werk-n--1-strategy">3.4.2 Boundary Problem Detection of Werk N * 1 Strategy</h5>
+
+<p>這裡說明 Weak N x 1 Strategy 在處理 Boundary Problem 時能做到什麼，不能做到什麼</p>
+
+<ul>
+  <li>Closure problem
+    <ul>
+      <li>定義邊界是是否所有可能的邊界都被包含在內</li>
+    </ul>
+  </li>
+  <li>Boundary shift problem
+    <ul>
+      <li>邊界是否有正確設置在應該的位置</li>
+    </ul>
+  </li>
+  <li>Boundary tilt problem
+    <ul>
+      <li>邊界是否有正確的對齊或平行</li>
+    </ul>
+  </li>
+  <li>Missing boundary problem
+    <ul>
+      <li>是否所有的邊界都有被定義</li>
+    </ul>
+  </li>
+  <li>Extra boundary problem
+    <ul>
+      <li>是否有多餘的邊界</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/7.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/8.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/9.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/10.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/11.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/12.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Weak N x 1 Strategy 可以很好的處理其他 Boundary problem 但無法完全偵測到 Extra boundary problem</p>
+</blockquote>
+
+<h5 id="343-weak-1-x-1-strategy">3.4.3 Weak 1 x 1 Strategy</h5>
+
+<p>Weak 1 x 1 Strategy 在每個邊界上只放置一個 On point 與一個 Off point，減少 Test Points 數量，但是也會有缺點</p>
+
+<ul>
+  <li>One of the major drawbacks of weak N x 1 strategy is the number of test points used, <strong>(n+1)xb+1</strong> for ninput variables and boundaries.</li>
+  <li>Weak 1 x 1 strategy uses just one ON point for each boundary, thus reducing the total number of test points to <strong>2xb+1</strong>.</li>
+  <li>The OFF point is just <strong>ε distance</strong> from the ON point and perpendicular to the boundary.</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/13.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/14.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/17.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Weak 1 x 1 Strategy 也可以處理 Boundary Problem，但是在傾斜上的表現不如 Weak N x 1 Strategy，並且跟 Weak N x 1 Strategy 一樣無法完全偵測到 Extra boundary problem</p>
+</blockquote>
+
+<p>在 2D 平面上比較能表示出兩種策略的差異，可以看到 Weak N x 1 Strategy 在同個 Domain 的邊界上會有 3 個 Points，而 Weak 1 x 1 Strategy 則只有 2 個 Points，
+下圖左右分別是 Weak N x 1 Strategy 和 Weak 1 x 1 Strategy:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/20.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/21.png?raw=true" width="50%" height="50%" />
+</div>
+
+<hr />
+
+<h3 id="35-looking-for-equivalence-classes">3.5 Looking for Equivalence Classes</h3>
+
+<p>找尋 Equivalence Classes(等價類別)的方法與需要注意的點</p>
+
+<ul>
+  <li>Don’t forget equivalence classes for invalid inputs.</li>
+  <li>Organize your classifications into a table or an outline.</li>
+  <li>Look for ranges of numbers.</li>
+  <li>Look for membership in a group.</li>
+  <li>Analyze responses to lists and menus.</li>
+  <li>Look for variables that must be equal.</li>
+  <li>Create time-determined equivalence classes.</li>
+  <li>Look for variable groups that must calculate to a certain value or range.</li>
+  <li>Look for equivalent output events.</li>
+  <li>Look for equivalent operating environments.</li>
+</ul>
+
+<p><strong>Don’t Forget Equivalence Classes for Invalid Inputs</strong></p>
+
+<ul>
+  <li>通常 Invalid Inputs 是最容易產生 Bugs 的來源</li>
+  <li>例如一個能接受 1 到 99 之間任何數字的程式，那就至少有四個 Equivalence Classes
+    <ul>
+      <li>1 &gt;= x &lt;= 99</li>
+      <li>x &lt; 1</li>
+      <li>x &gt; 99</li>
+      <li>Not a number(Is this true for all non-numbers?)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Organize Your Classifications into a Table or an Outline</strong></p>
+
+<p>把分類整理成表格或者大綱</p>
+<ul>
+  <li>會發現有這麼多的 Input/Output constraints，跟相關的 Equivalence Classes，需要一種組織方法</li>
+  <li>最常用的方法就是 <strong>Table</strong>(表格)或者 <strong>OutLine</strong>(大綱)</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/18.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-10-test_case_generation/19.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>Look for Ranges of Numbers</strong></p>
+
+<ul>
+  <li>如果找到一個數字的範圍，例如: 1 到 99，這些範圍就是 Equivalence Classes</li>
+  <li>通常會有三個 Invalid Equivalence Classes，小於 1、大於 99、以及不是數字的情況</li>
+  <li>當然也會有多個範圍的情況，例如: Tax</li>
+</ul>
+
+<p><strong>Look for Membership in a Group</strong></p>
+
+<ul>
+  <li>如果一個 Input 必須屬於某個 Group，那麼一個 Equivalence Class 則包含該 Group 的所有成員</li>
+  <li>而另一個 Equivalence Class 則包含所有不屬於該 Group 的成員</li>
+  <li>例如: 要求輸入一個國家的名稱，Valid Equivalence Class 就是所有國家的名稱，Invalid Equivalence Class 就是所有不是國家的名稱</li>
+  <li>但是，abbreviations(縮寫)、almost correct spellings(幾乎正確的拼寫)、native language spellings(母語拼寫)、name that are now out of date but were country names(曾經存在過的名稱)又該如何處理?
+    <ul>
+      <li>應該分別測試這些情況嗎?</li>
+      <li>通常 Specification 不會提到這些情況，但是在測試中可能會發現這些錯誤</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Analyze Responses to Lists and Menus</strong></p>
+
+<ul>
+  <li>對於必須從 List 或 Menu 中選擇的 Input，每個選項都是一個 Equivalence Class</li>
+  <li>每個 Input 都是其自身的 Equivalence Class</li>
+  <li>Invaild Equivalence Class 則是所有不在 List 或 Menu 中的選項</li>
+  <li>例如: “Are you sure? (Y/N)”，一個 Equivalence Class 就是 Y，另一個 Equivalence Class 就是 N，Invalid Equivalence Class 就是其他所有選項</li>
+</ul>
+
+<p><strong>Look for Variables That Must Be Equal</strong></p>
+
+<ul>
+  <li>例如一個可以輸入任何顏色的程式，但必須是黑色，那麼所有的顏色都是 Invalid Equivalence Class，而黑色就是 Valid Equivalence Class</li>
+  <li>有時這種限制在實際應用中可能會出現意外情況: 例如黑色已售罄，只剩下其他顏色</li>
+  <li>這種曾經有效但現在不再有效的選擇，應該為它們建立一個 Equivalence Class</li>
+</ul>
+
+<blockquote>
+  <p>例如: 在閏年時 February 有 29 天，但是在非閏年時 February 只有 28 天，這樣就會有兩個 Equivalence Classes</p>
+</blockquote>
+
+<p><strong>Create Time-Determined Equivalence Classes</strong></p>
+
+<ul>
+  <li>例如一個程式還沒有從 Disk 完成讀取，在進行中與結束上按下空格鍵是不同的 Equivalence Classes</li>
+  <li>這種情況通常會有三個 Equivalence Classes，一個是還沒開始讀取的情況，一個是讀取中的情況，一個是讀取完畢的情況</li>
+</ul>
+
+<p><strong>Look for Variable Groups That Must Calculate to a Certain Value or Range</strong></p>
+
+<ul>
+  <li>例如輸入 Triangle 的三個邊長</li>
+  <li>在 Valid Equivalence Class 中，它們的總和應該等於 180°</li>
+  <li>而 Invalid Equivalence Class 則會有兩個分別是大於 180° 與小於 180°</li>
+</ul>
+
+<p><strong>Look for Equivalent Output Events</strong></p>
+
+<p>在此之前我們強調的都是 Input 與 Invalid Input，這是因為 Output 通常更複雜，因為通過程式處理後的 Output 會有很多種可能的情況</p>
+
+<ul>
+  <li>例如我們有一個由程式控制的繪圖機，他最多可以一次畫 4 公尺的線條</li>
+  <li>怎麼判斷一個線條是 Valid Equivalence Class 還是 Invalid Equivalence Class?
+    <ul>
+      <li>有可能繪製了超過 4 公尺的線條</li>
+      <li>可能根本沒有繪製線條</li>
+      <li>也有可能繪製了根本不是線條的東西，例如: 圓形</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在測試中不只要關注輸出的情況，也要關注輸出並找到 Equivalence Classes Of Output</p>
+</blockquote>
+
+<p><strong>Look for Equivalent Operating Environments</strong></p>
+
+<p>同時對於環境的變化也要找到 Equivalence Classes</p>
+
+<ul>
+  <li>例如: 一個程式要求至少要 64K - 256K 的可用 Memory
+    <ul>
+      <li>這樣就會有三個 Equivalence Classes，符合規範與小於 64K、大於 256K的情況</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-28-2023 16:46<br />
+剩下的部分是 Constraint-based testing，會另外講述如何使用 CLP 來生成測試案例</p>
+</blockquote>
+
+
+                </section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-tags"></i>
+                
+                software,
+                
+                software_qualitiy
+                
+                
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script><!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2023-10-17-container_of.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: OS | Operating System Structure">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-10-09-operating_system_structure.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Note | Linux Kernel Macro container_of & offsetof">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Note | Linux Kernel Macro container_of & offsetof",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023-10-17-container_of.md",
+            "ref": "_posts/2023-10-17-container_of.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"],
+                "facebook": false,
+                "google": false,
+                "github": true,
+                "github_link": "https://github.com/Hotshot824",
+                "telegram": false,
+                "telegram_link": "https://t.me",
+                "instapaper": false,
+                "twitter": false,
+                "vk": false,
+                "weibo": false
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            }
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023-10-10-test_case_generation.md",
+        "mtime": "2023-10-10 00:00:00 +0800",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2023-11-04 18:22:51 +0800"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+
+<!-- <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script> -->
+
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+
+</body>
+</html>

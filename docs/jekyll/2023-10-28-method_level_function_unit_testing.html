@@ -1,0 +1,1088 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Testing | Method-Level Functional Unit Testing (Unfinished) · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/github.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekylls/2023-10-26-syntax_analysis.html" />
+        
+
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#41-combinational-models">4.1 Combinational Models</a></li><li><a href="#42-unified-modeling-language">4.2 Unified Modeling Language</a></li><li><a href="#43-object-constraint-language">4.3 Object Constraint Language</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html">
+                                Compiler | Syntax Analysis Notes (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html">
+                                OS | CPU Scheduler (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                                Paper | Test Case Generation Based on Constraint Logic Graph (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/0000-01-01-virtual_machine_tool.html">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/0000-01-01-linux_config.html">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/0000-01-01-leetcode_guide.html">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/0000-01-01-editor_envirmnment.html">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+
+            <!-- <li>
+                <a href="https://github.com/sighingnow/jekyll-gitbook/fork" target="blank" class="gitbook-link">
+                    Fork it Now!
+                </a>
+            </li> -->
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Testing | Method-Level Functional Unit Testing (Unfinished)</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">October 28, 2023</section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                    <h1 id="/jekyll/method_level_function_unit_testing">Testing | Method-Level Functional Unit Testing (Unfinished)</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
+</blockquote>
+
+<p>以下是本章的主要內容</p>
+
+<ul>
+  <li>Combinational logic
+    <ul>
+      <li>Decision tables</li>
+      <li>Constraint logic programming</li>
+    </ul>
+  </li>
+  <li>UML/OCL
+    <ul>
+      <li>Constraint logic graphs</li>
+      <li>Constraint logic programming</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="41-combinational-models">4.1 Combinational Models</h3>
+
+<p>Combinational logic 是一種有效組合各種不同輸入條件的方法，並使不同輸入條件的組合來選擇輸出動作變的可能</p>
+
+<ul>
+  <li>Many applications must select output actions by evaluating combinationsof input conditions (constraints on input variables).</li>
+  <li>Input variables can also be either parametersof the method, static variables of the class, or instance variables of the object.</li>
+  <li>Combinational logic provides an effective language for these kinds of condition-action relationships.</li>
+</ul>
+
+<blockquote>
+  <p>例如一個 Method 有多個參數，而這些參數可能會有不同的組合，這些組合可能會對應到不同的輸出，這時候我們可以使用 Combinational logic 來描述這些組合，並且對應到不同的輸出</p>
+</blockquote>
+
+<h5 id="411-equivalence-class-partitioning-decision-tables">4.1.1 Equivalence Class Partitioning Decision Tables</h5>
+
+<ul>
+  <li>A combinational model uses a decision tableto represent the condition-action relationships and partition equivalence classes.</li>
+  <li>A decision table has a condition sectionand an action section.</li>
+  <li>The condition section lists constraints on inputvariables.</li>
+  <li>The action section lists outputto be produced when corresponding constraints are true.</li>
+</ul>
+
+<blockquote>
+  <p>以 Decision table 來決定條件的組合，並且對應到輸出</p>
+</blockquote>
+
+<p><strong>Example: Class Triangle</strong>
+假如有一個 Triangle Java class 如下，Triangle constructor 只要滿足 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 就視為合法的 Tringle，否則拋出 Exception。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">classTriangle</span>
+<span class="o">{</span>
+    <span class="n">inta</span><span class="o">;</span><span class="c1">// lengths of sides</span>
+    <span class="n">intb</span><span class="o">;</span>
+    <span class="n">intc</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="n">intsa</span><span class="o">,</span> <span class="n">intsb</span><span class="o">,</span> <span class="n">intsc</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
+<span class="o">};</span>
+</code></pre></div></div>
+<p>以這三個條件我們能獲得以下的 Decision table，在去除不可能發生的條件後，得到最後可能產生的 Input data。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/1.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/2.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>這樣我們就能得到足夠測試 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 三個 Boundaries 的測試資料，並測試 Tringle constructor 是否能正確的拋出 Exception。</p>
+
+<p><strong>Constraint Logic Graph</strong></p>
+
+<p>可以透過 Constraint logic programming 來產生測資，以下是 Triangle constructor 的 Invalid Constraint logic graph，
+會產生三個 Invalid equivalence classes，加上 Valid equivalence classes 就能得到跟上面 Decision table 一樣的測試資料。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/3.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p><strong>Example: Method category</strong></p>
+
+<ul>
+  <li>The method category() returns the category of a Triangle object based on the lengths of its three sides: “Equilateral”, “Isosceles”, or “Scalene”.</li>
+  <li>A Triangle object is an “Equilateral” triangle if it satisfies the following threeconstraints: {a = b, a = c, b = c}.</li>
+  <li>A Triangle object is an “Isosceles” triangle if it satisfies one and only one of the following three constraints: {a = b, a = c, b = c}.</li>
+  <li>Otherwise, It is a “Scalene” triangle.</li>
+</ul>
+
+<p>關於 category 我們也可以透過 Decision table 來產生測試資料，以下是 category 的 Decision table</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/4.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/5.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>因為在 Triangle constructor 的測試中已經測試過 Valid equivalence classes，所以這裡只要使用 {a = b, a = c, b = c} 這三個條件約束就可以，
+並且也可以透過 CLP 來產生測試資料，這樣我們就能測試完所有 category 有可能的路徑。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">"Equilateral"</span><span class="o">;</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">||</span> <span class="n">a</span> <span class="o">==</span> <span class="n">c</span> <span class="o">||</span> <span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">"Isosceles"</span><span class="o">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="s">"Scalene"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>拿上面的程式碼來做比對，實際上這個 Decision table 就是去走過所有在程式中可能發生的路徑。</p>
+
+<blockquote>
+  <p>因為篇幅的關係這裡不會介紹 CLP 如何撰寫，考慮在之後另外寫一篇文章說明 CLP 如何使用</p>
+</blockquote>
+
+<h3 id="42-unified-modeling-language">4.2 Unified Modeling Language</h3>
+
+<ul>
+  <li>Unified Modeling Language(UML) 是一種用於可視化、規範、建構和文件化軟體系統工程的圖形化語言</li>
+  <li>UML 提供一種標準化的方式來編寫系統的藍圖，包括概念性的事務，如業務流程和系統功能，以及具體的事務，如程式描述、Database 架構和可重用的軟體元件</li>
+</ul>
+
+<h5 id="421-uml-diagrams">4.2.1 UML Diagrams</h5>
+
+<p>在 Software testing 這門課中主要會用到的是 Class diagram、Sequence diagram、State machine diagram</p>
+
+<ul>
+  <li>UML 2 defines thirteenbasic diagram types, divided into two general sets:</li>
+  <li>Structural Modeling Diagrams: Structure diagrams define the staticarchitecture of a model. They are used to model the ‘things’ that make up a model.</li>
+  <li>Behavioral Modeling Diagrams: Behavior diagrams capture the varieties of dynamicinteraction and instantaneous state within a model as it executes over time.</li>
+</ul>
+
+<blockquote>
+  <p>在之前我有更詳細的關於 UML 的介紹，詳細可見 <a href="./2023-07-26-unified_modeling_language.html">Unified Modeling Language Concepts</a></p>
+</blockquote>
+
+<h5 id="422-class-diagrams">4.2.2 Class Diagrams</h5>
+
+<ul>
+  <li>Class Diagram 描述了一個 Class 有哪些 Attributes 和 Methods，而不是詳細的實作細節</li>
+  <li>Class Diagram 在說明 Class 或 Interface 之間的關係時最為有用</li>
+  <li>Association(關聯)和 Generalization(泛化)分別表示連接和繼承</li>
+</ul>
+
+<blockquote>
+  <p>關於類圖可以看之前的筆記，有更詳細的描述 <a href="./2023-07-28-UML_structure_diagrams.html#11-class-diagram">UML Structure Diagrams Introduction 1.1 Class diagram</a></p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/6.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/7.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>Association 表示兩個 Class 之間有所關聯，例如: Course 和 Student 之間有一個關聯，關聯可以是多對多的關係<br />
+Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal 和 Dog 之間有一個繼承關係</p>
+</blockquote>
+
+<h3 id="43-object-constraint-language">4.3 Object Constraint Language</h3>
+
+<ul>
+  <li>通常只使用 UML 是不足以完全規範一個軟體系統</li>
+  <li>所以還需要 Constraint 來完全規範一個軟體系統</li>
+  <li>Constraint 是對軟體系統的一個或多個值的限制</li>
+  <li>Object Constraint Language(OCL) 是一種基於 Text 的語言，用於描述這些 Constraints</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>上圖展示了一個 Flight 的 Class invariant，如果 type == passenger，那麼 airplane.type 也必須為 passenger，同樣的 cargo 也只能對應 cargo
+這意思就如果是客運航班就要對應客機，貨運航班就要對應貨機。</p>
+
+<h5 id="431-kinds-of-constraints">4.3.1 Kinds of Constraints</h5>
+
+<ul>
+  <li>Class invariant(不變式): a constraint that must alwaysbe met by all instances of the class.</li>
+  <li>Precondition of an operation(操作前提): a constraint that must always be true beforethe execution of the operation.</li>
+  <li>Postcondition of an operation(操作後置): a constraint that must always be true afterthe execution of the operation.</li>
+</ul>
+
+<p>例如: 一個校園借書系統，那麼 Class invariant 必須為 Student，因為校外人士不能借閱，
+而還書時 Precondition 必須為至少要有那本要還的書，Postcondition 則必須沒有已經還回去的書。</p>
+
+<h5 id="432-constraint-context-and-self">4.3.2 Constraint Context and Self</h5>
+<ul>
+  <li>Every OCL expression is bound to a specific context.
+    <ul>
+      <li>The context is often the element (classor method) that the constraint is attached to.</li>
+    </ul>
+  </li>
+  <li>The context may be denoted within the expression using the keyword ‘self’.
+    <ul>
+      <li>‘self’ is implicit in all OCL expressions.</li>
+      <li>Similar to ‘this’ in Java.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如: 以下的 OCL，context Person 宣告了這個 Constraint 是屬於 Person 這個 Class，而 self.age &gt;= 0 則專指這個 Person attribute age &gt;= 0</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context Person
+inv: self.age &gt;= 0
+</code></pre></div></div>
+
+<h5 id="433-notation">4.3.3 Notation</h5>
+
+<p>OCL 可以單獨寫在一個文件中，也可以寫在 UML 的 Class diagram 裡面，這些表示方法都是相同的</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="434-elements-of-an-ocl-expression">4.3.4 Elements of an OCL Expression</h5>
+
+<ul>
+  <li>In an OCL expression these elements may be used:
+    <ul>
+      <li>basic types: String, Boolean, Integer, Real.</li>
+    </ul>
+  </li>
+  <li>classifiers from the UML model and their features
+    <ul>
+      <li>attributes, and class attributes</li>
+      <li>query operations, and class query operations (i.e., those operations that do not have side effects)</li>
+    </ul>
+  </li>
+  <li>associations from the UML model
+    <ul>
+      <li>Including Rolenames at either end of an association</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Basic types</strong></p>
+
+<p>以下表示了 OCL 的基本型別，可以使用在 OCL 的表達式</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Airline</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">name</span><span class="p">.</span><span class="n">toLower</span> <span class="o">=</span> <span class="s1">'klm'</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="p">((</span><span class="mi">9</span><span class="p">.</span><span class="mi">6</span> <span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nf">floor</span> <span class="o">implies</span> <span class="n">mature</span> <span class="o">=</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<p><strong>Attributes</strong></p>
+
+<p>OCL 中有專指 Object 實例的 Attribute，也有專指 Class 的 Attribute</p>
+<ul>
+  <li>Class attribute 會在所有 Object 實例中共享</li>
+  <li>Object attribute 則是每個 Object 實例都有自己的 Attribute</li>
+</ul>
+
+<p>以下是一個例子:</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Object attribute</span>
+<span class="k">context</span> <span class="n">Flight</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">maxNrPassengers</span><span class="o">&lt;=</span> <span class="mi">1000</span>
+<span class="c1">-- Class attribute</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="n">Passenger</span><span class="p">.</span><span class="n">minAge</span>
+</code></pre></div></div>
+
+<p><strong>The @Pre Keyword</strong></p>
+
+<ul>
+  <li>The @pre keyword indicates the value of an attribute at the start of the execution of the operation</li>
+  <li>The keyword must be postfixed to the name of the item concernedsize = size@pre + 1</li>
+</ul>
+
+<p>例如 size = size@pre + 1: 
+    -   size@pre 表示在執行這個 Operation 前的 size
+    -   size 表示在執行這個 Operation 後的 size</p>
+
+<h5 id="435-ocl-examples-with-clg">4.3.5 OCL Examples with CLG</h5>
+
+<p>假如我們有以下 Java class Triangle，我們分別針對他的 Constructor 和 Method category 以及 Class invariant(Triangle Objects) 來撰寫 OCL</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Triangle</span>
+<span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span> <span class="c1">// lengths of sides</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="kt">int</span> <span class="n">sa</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sb</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sc</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
+<span class="o">};</span>
+</code></pre></div></div>
+
+<p><strong>Example: Triangle Objects</strong></p>
+
+<p>一個 Triangle 應該永遠滿足三邊長的條件，所以使用 <strong>Class invariant</strong> 來限制所有 Triangle 的三邊長</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span>
+<span class="k">inv</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span> <span class="o">and</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">and</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<p><strong>Example: Constructor Triangle</strong></p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">Triangle</span><span class="p">(</span><span class="n">intsa</span><span class="p">,</span> <span class="n">intsb</span><span class="p">,</span> <span class="n">intsc</span><span class="p">)</span>
+<span class="k">pre</span> <span class="n">IllegealArgException</span><span class="p">:</span>
+    <span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">&gt;</span> <span class="n">sc</span> <span class="o">and</span> <span class="n">sa</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sa</span>
+<span class="k">post</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">c</span> <span class="o">=</span> <span class="n">sc</span>
+</code></pre></div></div>
+
+<p>以上的 OCL 表示 Triangle 這個 Constructor Triangle 的 Precondition 和 Postcondition</p>
+<ul>
+  <li>Precondition: 一個 Triangle constructor 的輸入必須滿足 <strong>sa + sb &gt; sc and sa + sc &gt; sb and sb + sc &gt; sa</strong></li>
+  <li>Postcondition: Triangle constructor 執行後應該滿足 <strong>a = sa and b = sb and c = sc</strong></li>
+</ul>
+
+<p><strong>Example: Method category</strong></p>
+
+<p>以下是一個 Method category 的 OCL，這個 OCL 會檢查 Triangle 的三邊長，並且回傳 Triangle 的類型</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">contextTriangle</span><span class="p">::</span><span class="n">category</span><span class="p">():</span> <span class="kd">String</span>
+<span class="k">post</span><span class="p">:</span> <span class="nb">result</span><span class="o">=</span>
+<span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span>
+    <span class="n">ifa</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Equilateral'</span>
+    <span class="k">else</span> <span class="s1">'Isosceles'</span> 
+    <span class="k">endif</span>
+<span class="k">else</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Isosceles'</span>
+    <span class="k">else</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span><span class="s1">'Isosceles'</span>
+        <span class="k">else</span> <span class="s1">'Scalene'</span> 
+        <span class="k">endif</span>
+    <span class="k">endif</span>
+<span class="k">endif</span>
+</code></pre></div></div>
+
+<p><strong>Constraint Logic Graph</strong></p>
+
+<p>我們依照上面的 Constructor Triangle 和 Method category 來建立 CLG，得到以下兩張圖，就可以以此來生成測試資料</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/11.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>例如我們想測試 category，能發現在 CLG 上一共有 5 條不同的路徑，我們把第一條路徑的條件放入 CLP 中求解，就能得到測試第一條路徑的測試資料。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/12.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/13.png?raw=true" width="50%" height="50%" />
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Constraint, Pre a@+b@&gt;c@, a@+c@&gt;b@, b@+c@&gt;a@</th>
+      <th>Input</th>
+      <th>Output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>a@=b@, a@=c@, result=’Equilateral’</td>
+      <td>1, 1, 1</td>
+      <td>Equilateral</td>
+    </tr>
+    <tr>
+      <td>a@=b@, a@!=c@, result=’Isosceles’</td>
+      <td>2, 2, 1</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@=c@, result=’Isosceles’</td>
+      <td>2, 1, 2</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@!=c@, b@=c@, result=’Isosceles’</td>
+      <td>1, 2, 2</td>
+      <td>Isosceles</td>
+    </tr>
+    <tr>
+      <td>a@!=b@, a@!=c@, b@!=c@, result=’Scalene’</td>
+      <td>2, 3, 4</td>
+      <td>Scalene</td>
+    </tr>
+    <tr>
+      <td>Post a = a@, b = b@, c = c@</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>依照這個 Table 這樣就能夠產生五條全部路徑的測試案例</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-29-2023 15:56</p>
+</blockquote>
+
+
+                </section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-tags"></i>
+                
+                software,
+                
+                software_qualitiy
+                
+                
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script><!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Home">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekylls/2023-10-26-syntax_analysis.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"],
+                "facebook": false,
+                "google": false,
+                "github": true,
+                "github_link": "https://github.com/Hotshot824",
+                "telegram": false,
+                "telegram_link": "https://t.me",
+                "instapaper": false,
+                "twitter": false,
+                "vk": false,
+                "weibo": false
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            }
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023-10-28-method_level_function_unit_testing.md",
+        "mtime": "2023-10-28 00:00:00 +0800",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2023-11-04 18:22:51 +0800"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+
+<!-- <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script> -->
+
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+
+</body>
+</html>

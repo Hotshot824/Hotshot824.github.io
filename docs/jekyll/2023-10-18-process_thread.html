@@ -1,0 +1,1398 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>OS | Process and Thread · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/github.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-10-17-container_of.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2023-10-19-cpu_scheduler.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html">
+                                Compiler | Syntax Analysis Notes (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html">
+                                OS | CPU Scheduler (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#process-model">Process model</a></li><li><a href="#process-life-cycle">Process Life Cycle</a></li><li><a href="#communication-model-between-process--process">Communication model between Process &amp; Process</a></li><li><a href="#producer-consumer-problem">Producer-Consumer problem</a></li><li><a href="#thread-concept">Thread concept</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                                Paper | Test Case Generation Based on Constraint Logic Graph (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/0000-01-01-virtual_machine_tool.html">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/0000-01-01-linux_config.html">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/0000-01-01-leetcode_guide.html">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/0000-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/0000-01-01-editor_envirmnment.html">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+
+            <!-- <li>
+                <a href="https://github.com/sighingnow/jekyll-gitbook/fork" target="blank" class="gitbook-link">
+                    Fork it Now!
+                </a>
+            </li> -->
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >OS | Process and Thread</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">October 18, 2023</section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                    <h1 id="/jekyll/process_thread">OS | Process and Thread</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>這章節主要是介紹 Process 跟 Thread</p>
+
+<ul>
+  <li>Process model</li>
+  <li>Process Life Cycle</li>
+  <li>Communication model between Process &amp; Process</li>
+  <li>Communication method between Process &amp; Process</li>
+  <li>Producer-consumer problem</li>
+  <li>Context switch main overhead (使用 Thread 的動機)</li>
+  <li>Thread model</li>
+</ul>
+
+<h3 id="process-model">Process model</h3>
+
+<h5 id="31-process-concept">3.1 Process Concept</h5>
+
+<ul>
+  <li>An OS executes a variety of programs:
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Batch_processing">Batch system</a> – jobs</li>
+      <li>Time-shared systems – user programs or tasks</li>
+    </ul>
+  </li>
+  <li>Process ≈ Task ≈ Job</li>
+  <li>Process - a process is an instance of a program in execution
+    <ul>
+      <li>+Program code (text section)</li>
+      <li>+Program counter &amp; registers (CPU status)</li>
+      <li>+Stack</li>
+      <li>+Data section</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Batch system(批次系統): 是指被時間安排在 PC 上運行，不需要與使用者互動的工作</p>
+</blockquote>
+
+<h5 id="32-process-memory">3.2 Process Memory</h5>
+
+<ul>
+  <li>每個 Process 通常有自己完整的 <a href="https://en.wikipedia.org/wiki/Address_space">Address space</a></li>
+  <li>32bit 為例，每個 Process 有 4GB 的 Address(Memory) space</li>
+  <li>
+    <p>64bit 的 x64 CPU，因為成本的考量，通常只會使用 48bit 的 Address space，也就是 256TB (遠超 Disk 的容量)</p>
+  </li>
+  <li>Address space 表示一個 Process 最多能使用多少 Memory，實際上 RAM 通常遠小於 Process 的 Address space</li>
+  <li>通常將 Process 的 Address space 分為兩個部分，上半部分為 OS Kernel，下半部分為 Process 的 User space</li>
+  <li>以 64bit 為例，一個 Process 的 Memory address(User space) 為 0~128TB，Kernel 則為 256TB(2<sup>64</sup>) 往下 128 TB 的部分
+    <ul>
+      <li>User space: <code class="language-plaintext highlighter-rouge">00000000 00000000</code> ~ <code class="language-plaintext highlighter-rouge">00007FFF FFFFFFFF</code></li>
+      <li>Kernel: <code class="language-plaintext highlighter-rouge">FFFF8000 00000000</code> ~ <code class="language-plaintext highlighter-rouge">FFFFFFFF FFFFFFFF</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Why kernel/user space need half of the memory space</strong></p>
+
+<ul>
+  <li>每個 Process 的 Kernel Space 都是共用的，在 SMP Processor 上所有 Process 都共用同一個 Linux Kernel</li>
+  <li>DRAM 有很多用途，例如: 作為 I/O 加速的 Buffer/Cache
+    <ul>
+      <li>I/O Buffer: CPU 的資料可以先寫入 DRAM buffer，然後再由 DMA controller 將資料寫入 Disk</li>
+      <li>I/O Cache: Disk 的資料可以寫入 DRAM cache，因為 I/O request 會產生 overhead
+        <ul>
+          <li>讀取 4kb 和讀取 16kb 的速度是一樣的，那乾脆一次從 cache 讀取 16kb</li>
+          <li>OS 會把相關的資料放在 cache，這樣下次讀取就可以直接從 cache 讀取，而不用再次讀取 Disk</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/1.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>When Multi-Process running, what does the memory look like to users/programmers</strong></p>
+
+<p>這裡只討論 User space，一次只會執行一個 Process 這三個 Proces 各自有完整的 user space，當 Context switch 時除了 CPU 控制權會被交換外，
+也會重新進行 Memory mapping(修改 MMU 的 mapping table)</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/2.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Internal memory configuration method of the Process</strong></p>
+
+<p>一個 Process 是怎麼在 Memeory 中進行分配的狀態</p>
+<ul>
+  <li>Local variables: 在 Stack 中分配</li>
+  <li>Global variables
+    <ul>
+      <li>initialized value: 在 initialized data 分配</li>
+      <li>uninitialized value(BSS): 在 unitialized data 分配</li>
+    </ul>
+  </li>
+  <li>Dynamic memory allocation: 在 Heap 中分配</li>
+  <li>Program code: 在 Text section 分配，例如 Main, malloc function 的指令</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/3.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote class="block-tip">
+  <p>通常 OS 一次會給 4096(4K) 大小的 Memory，並且會清空，這樣就不會有安全性問題，但寫程式時最好只預設 BSS 段的值會是 0，例如 Stack 可能會因為因為 Call/Return 的關係，而有一些不可預期的值。
+但即使這樣也盡量要給予初始值，例如: int a = 0;，減少不可預期的錯誤發生</p>
+</blockquote>
+
+<p><strong>The position of variable in the Process</strong></p>
+
+<p>在一個程式執行時</p>
+<ul>
+  <li>Text/initilized section 幾乎就是直接從 Disk copy 到 Memory</li>
+  <li>Unitialized section 因為沒有資料儲存，所以可以透過一個資料結構來描述，並放在執行檔的 Header 中</li>
+  <li>Stack/Heap 會隨著程式執行而變大，所以放在最後面並且往下/上成長</li>
+</ul>
+
+<p>但是 Stack 通常會被限制在固定大小，例如: 一開始分配 16KB，當需要成長時就 OS 就再分配 4KB，但最多長到 8MB，這個可以透過 <code class="language-plaintext highlighter-rouge">ulimit</code> 查看或修改</p>
+
+<blockquote class="block-tip">
+  <p>如果一個 Memory 被寫入 DRAM 後，但長時間沒有被使用，那麼這個 Memory 就會被 swap out 到 Disk，這樣就可以釋放出 DRAM 給其他 Process 使用</p>
+</blockquote>
+
+<p><strong>Linux kernel uses Logical meaning to manage memory segments of processes</strong></p>
+
+<p>Linux Kernel 透過 task_struct, mm_struct, vm_area_struct 來管理 Process 的 Memory:</p>
+
+<ul>
+  <li>task_struct: 描述 Task 相關的所有資訊</li>
+  <li>mm_struct: 描述 Task 的記憶體相關的資訊，例如: 該 Task 的 Memory space 有哪些 area</li>
+  <li>vm_area_struct: 描述該 area 相關的資訊，例如: 該 area 的起始位置、大小、權限等等
+    <ul>
+      <li>例如除了 Text area 是可 Read, Execute(rx)，其他的 area 都是可 Read, Write(rw)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/4.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Example: Lab main.c</strong></p>
+
+<p>我們用一個簡單的程式 main.c 來做測試:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">b</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">e</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="mi">1024</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"pid = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"main = %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">main</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"printf = %p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">printf</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"a=%p, b=%p, c=%p, d=%p, *e=%p</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
+    <span class="n">getchar</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cm">/*
+benson@vm:~/OSDI$ ./main.exe
+pid = 190697
+main = 0x55d00a13218a
+printf = 0x7f94c1974cc0
+a=0x55d00a135010, b=0x55d00a135018, c=0x7ffe4cb7e4b8, d=0x7ffe4cb7e4bc, *e=0x55d00aca62a0
+*/</span>
+</code></pre></div></div>
+
+<p>然後在 /proc/<pid>/maps 中可以看到該 Process 的 Memory configuration:</pid></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/5.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Address space layout randomization</strong></p>
+
+<p>如果我們重新執行一次程式，會發現 Address 又不一樣了，這是為了避免被攻擊，就是 <strong><a href="https://en.wikipedia.org/wiki/Address_space_layout_randomization">Address space layout randomization</a></strong>(ASLR)</p>
+
+<ul>
+  <li>這樣可以避免攻擊者使用記憶體裡面的函數，例如: libc 裡面的 system()，如果可以執行 system()，那麼就可以執行任意的指令</li>
+  <li>OS 會隨機產生每個 Section 的 Address</li>
+  <li>幾乎所有的 OS 都支援 ASLR，例如: Linux, BSD, Windows, MacOS</li>
+  <li>但是 ASLR 也有缺點，如果不使用 ASLR 那就可以把常用的 Function 放在固定的位置，這樣就可以加速程式的執行
+    <ul>
+      <li>目前大部分硬體都使用 phy.cache 可以降低這部分的影響</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>現在的 Linux Kernel 都會使用 ASLR，即是 KASLR</p>
+</blockquote>
+
+<p><strong>Program in Memory</strong></p>
+
+<ul>
+  <li>目前大部分的作業系統設計中，執行檔與在 Memory 中的結構幾乎一樣，OS 只需要 Copy(mapping) 就可以執行了
+    <ul>
+      <li>例如: Linux 的 ELF(Executable and Linkable Format), Microsoft 的 PE(Portable Executable)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://lh3.googleusercontent.com/blogger_img_proxy/ALY8t1u7XXZ7qZJoQ-wv-kB4apjLJpVS9E4fp8HKIjXVRgwFkMMPeWRSHAoUwWSBHCGG_IEFq4tcAfGYF_juOuKEMqBwApXNKRPWONR53P-UxuNR7KOlR142ePVMs9Xq80uohsQ=s0-d" alt="" height="100%" width="100%" /></p>
+
+<p>將執行檔 Mapping 1:1 映射到 Memory，這樣讓 OS 的工作能變得很簡單</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://learnlinuxconcepts.blogspot.com/2014/03/memory-layout-of-userspace-c-program.html">Memory Layout of Kernel and UserSpace in Linux.</a></p>
+</blockquote>
+
+<h3 id="process-life-cycle">Process Life Cycle</h3>
+
+<h5 id="33-process-life-cycle">3.3 Process Life Cycle</h5>
+
+<p>下面是一個 Unix Process Life Cycle，但在這裡加入了一些 Linux 的觀念</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/6.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Parent Process</strong> 通常是 Shell，透過 fork() 產生 Child Process</p>
+<ol>
+  <li><strong>Ready queue</strong>: 當一個新的 Process 產生會進入 Ready Queue，等待 CPU 資源</li>
+  <li><strong>Running</strong>: 如果 Scheduler 選擇到該 Process，那麼就會進入 Running 狀態</li>
+  <li><strong>Waiting</strong>: 在 Linux 中 Waiting 分為兩種
+    <ul>
+      <li>Interruptible: 可以被 Signal 打斷</li>
+      <li>Uninterruptible: 不能被 Signal 打斷，但是少數例外下例如 Kill -9 還是能夠 Interruptible</li>
+    </ul>
+  </li>
+  <li><strong>Terminate</strong>: 這裡需要由 OS 去回收分配給 Process 的資源，例如: Memory, Kernel 中儲存的 Process 相關資訊
+    <ul>
+      <li><em>Zombie</em>: Linux 中會剩下一個大約 4KB ~ 8KB 的 Task struct，稱作 Zombie</li>
+      <li>保留這個 Zombie 是為了讓 Parent Process 可以透過 wait() 取得 Child Process 的資訊，
+這裡如果 Parent 沒有正確的回收 Child Process，但還是持續運行，這樣 Zombie 就會越來越多。
+但如果 Parent 也結束了，那麼 Zombie 就會被 init process 回收，這樣就不會有 Zombie Process</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">pid_t</span> <span class="n">child_pid</span><span class="p">;</span>
+
+    <span class="cm">/* Create a child process */</span>
+    <span class="n">child_pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">child_pid</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="cm">/* Parent sleep */</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="cm">/* This is clild process will end immediately */</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">"Child pid %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">getpid</span><span class="p">());</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>這個程式會印出 <code class="language-plaintext highlighter-rouge">child_pid</code>，此時去 top -p <code class="language-plaintext highlighter-rouge">child_pid</code> 就可以看到 child 變成 zombie 狀態。</p>
+
+<blockquote>
+  <p>fork() 會返回 child pid，但在 child process 中 child_pid 會是 0</p>
+</blockquote>
+
+<h5 id="34-tack-contol-blocktcb-pcb">3.4 Tack Contol Block(TCB, PCB)</h5>
+
+<blockquote>
+  <p>Process control block ≈ Task control block</p>
+</blockquote>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/Process_control_block">Process control block</a></strong>(PCB) 就是 OS 用來管理 Process 的資料結構，通常會包含以下資訊:</p>
+<ul>
+  <li><strong>Process state</strong>: 執行的狀態，例如: Running, Waiting, Ready</li>
+  <li><strong>CPU information</strong>: Process 的狀態，例如: PC, Register</li>
+  <li><strong>Memory information</strong>: Memory 狀態，例如: Text, Data section</li>
+  <li><strong>Schedule information</strong>: 排程資訊，例如: Priority</li>
+  <li><strong>I/O status information</strong>: I/O 狀態，例如: File descriptor</li>
+  <li><strong>Using resource</strong>: Process 使用的資源，例如: File, I/O device<br />
+…</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://0uyangsheng.github.io/2018/05/17/Linux-process/task_struct.jpg" width="53%" height="53%" />
+    <img src="https://mohammednv.files.wordpress.com/2013/06/process-structure.png" width="47%" height="47%" />
+</div>
+
+<h5 id="35-three-scheduler-model">3.5 Three Scheduler Model</h5>
+
+<p>Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Scheduler:</p>
+<ul>
+  <li><strong>Long-term Scheduler</strong>(Job scheduler):
+    <ul>
+      <li>決定哪些 Process 要進入 Ready Queue，通常在很大型的主機上，例如: 台灣杉</li>
+      <li>Linux 中並沒有 Long-term Scheduler，Task 產生後就會進入 Ready Queue</li>
+    </ul>
+  </li>
+  <li><strong>Mid-term Scheduler</strong>(Swapper):
+    <ul>
+      <li>當 Degree of Multiprogramming 過高時可能造成(thrashing)，將一些 Task swap out 到 Disk，等到資源足夠時再 swap in</li>
+      <li>Linux Kernel 目前也沒有 Mid-term Scheduler，但 Linux 依照 Task 記憶體的使用情況，在 Memory 不足時會將不活躍的 Task swap out 到 Disk</li>
+    </ul>
+  </li>
+  <li><strong>Short-term Scheduler</strong>: CPU Scheduler
+    <ul>
+      <li>大部分的 OS 只有 CPU Scheduler，針對各種事件有專屬的 Waiting Queue，例如: 例如 I/O, Semaphore</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/7.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-tip">
+  <p>thrashing(輾轉現象) 指的是當虛擬記憶體被使用過度，導致大部分的工作在處理 Page fault 所造成的 Page Replacement，這樣就會造成 CPU 效能下降</p>
+</blockquote>
+
+<h5 id="36-context-switchctx-sw">3.6 Context Switch(ctx-sw)</h5>
+
+<ul>
+  <li>目前主流的 OS 都是只有 Task 執行在 Kernel Space 時才能進行 Context switch</li>
+  <li>Context switch 主要是切換 Register 與 Memory 的內容</li>
+  <li>Context switch 的 overhead 主要是發生在 Cache memory 的更新</li>
+</ul>
+
+<ol>
+  <li>首先 TaskA Mode change 到 Kernel mode</li>
+  <li>然後將 TaskA 的資訊(TCB) 儲存起來</li>
+  <li>載入 TaskB 的資訊</li>
+  <li>最後 TaskB Mode change 到 User mode</li>
+</ol>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-tip">
+  <p>Scheduler 也就是策略的部分主要是用 C 寫的，但切換的部分是用 Assembly 寫的，因為要直接操作 Register</p>
+</blockquote>
+
+<h5 id="37-processes-are-divided-into-io-and-cpu">3.7 Processes are divided into I/O and CPU</h5>
+
+<ul>
+  <li>I/O Bound process - I/O time » CPU time
+    <ul>
+      <li>例如: ftp server</li>
+    </ul>
+  </li>
+  <li>CPU Bound process - CPU time » I/O time
+    <ul>
+      <li>例如: image processing</li>
+    </ul>
+  </li>
+  <li>如果可以選擇的話，讓系統中同時存在 I/O Bound process 與 CPU Bound process，可以讓系統的效率最大化</li>
+  <li>通常 I/O Bound 的優先權比較高，因為趕快讓 CPU 發出命令給 I/O device，然後就可以去執行其他的 Task</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/9.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<blockquote>
+  <p>I/O Bound 通常只需要一小部分的 CPU 資源，如果設定成 CPU Bound 優先權較高，反而會造成 I/O Bound 的 Task 在結束一段 I/O 後還要等待 CPU Bound 的 Task 結束
+造成 CPU 使用率下降</p>
+</blockquote>
+
+<h5 id="38-process-creation">3.8 Process Creation</h5>
+
+<ul>
+  <li>Linux 中可以透過 fork, vfork, clone 來產生 Process
+    <ul>
+      <li>實際上這三個在 Kernel 中都是呼叫 do_fork() 來完成</li>
+    </ul>
+  </li>
+  <li>Linux 中 pid 0 是 idle process，優先權最低，只負責讓 CPU 進入睡眠狀態
+    <ul>
+      <li>通常也叫做 swapper，每顆 core 有一個自己的 idle task</li>
+    </ul>
+  </li>
+  <li>pid 1 是系統中第一個 user space 的行程，負責作業系統的初始化
+    <ul>
+      <li>例如: 當電腦啟動時的 Daemon Process</li>
+    </ul>
+  </li>
+  <li>fork 出的 Process 其程式碼與父 Process 完全相同，如果要載入新的程式碼到該 process 中，使用 execve 系統呼叫
+    <ul>
+      <li>如果需要大量的執行 execve，那使用 vfork 會比較好，因為 vfork 會 Block parent process</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>pid 0 Process(idle process) 也是唯一沒有使用 fork() 產生的 Process，因為 pid 0 是系統啟動時就產生的 Process</p>
+</blockquote>
+
+<blockquote>
+  <p>使用 pstree -p 就能看到，所有的 Process 都是由 systemd(pid 1) 產生的</p>
+</blockquote>
+
+<p>例如: 從 bash 去執行 ls 會有以下的流程</p>
+<ol>
+  <li>bash fork 出一個 child process，然後 parent process wait()</li>
+  <li>child process 透過 execve() 去執行 ls</li>
+  <li>ls 執行完後，透過 exit() 結束，回到 parent process</li>
+</ol>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/10.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<h5 id="39-process-termination">3.9 Process Termination</h5>
+
+<ul>
+  <li>在 UNIX-Like OS 中，如果一個 Process Terminate，會變成 Zombie 狀態，Zombie Process 是無法被 kill 的，只能透過 Parent Process 使用 wait() 來回收
+    <ul>
+      <li>透過 wait() Parent Process 可以取得 Child Process 的結束狀態，例如: 使用了多少系統資源</li>
+    </ul>
+  </li>
+  <li>基於特定的需求，也可以直接將 Process kill 掉
+    <ul>
+      <li>kill -9 pid 會直接發送 SIGKILL(signal 9) 給該 Process，讓該 Process 立即結束</li>
+      <li>kill pid 則是發送 SIGTERM(signal 15) 給該 Process，讓該 Process 優雅的結束自己</li>
+    </ul>
+  </li>
+  <li>有些 OS 設計 Parent process kill 掉後，Child process 也會被 kill 掉
+    <ul>
+      <li>UNIX-Like OS 中，如果 Parent process 被 kill 掉，Child process 會被 init process(pid 1) 接管</li>
+      <li>init 內部有一個無窮迴圈，會不斷的執行 wait()，這樣就可以回收所有的 Zombie Process</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>例如我們可以透過 nohup 或 screen 來讓 Process 在背景執行，這樣就不會因為 Terminal 被關閉而被 kill 掉</p>
+</blockquote>
+
+<h3 id="communication-model-between-process--process">Communication model between Process &amp; Process</h3>
+
+<p>OS 保證每個 Process 之間都可以獨立的運行</p>
+<ul>
+  <li>但如果真的 Process 都完全獨立運行，那系統就會變得很難使用
+    <ul>
+      <li>例如: copy-paste</li>
+    </ul>
+  </li>
+  <li>所以 OS 會提供一些方法讓 Process communication</li>
+</ul>
+
+<h5 id="310-interprocess-communicationipc">3.10 Interprocess Communication(IPC)</h5>
+
+<p>IPC 是指可以讓兩個獨立的 Process 互相傳遞訊息，傳遞訊息的目的多半是</p>
+<ul>
+  <li>傳遞資訊，例如: copy-paste、information sharing</li>
+  <li>同步，例如: Parallel computing</li>
+  <li>模組化設計，例如: 將 Request 與 Worker 分開</li>
+</ul>
+
+<p><strong>IPC Model</strong></p>
+
+<p>這裡談的主要是 IPC 的分類，而不是 IPC 的實作</p>
+
+<ul>
+  <li>如何在 Process 之間建立 IPC</li>
+  <li>可以建立多少條 IPC 在 Process 之間</li>
+  <li>可否多個 Process 同時使用同一個 IPC</li>
+  <li>IPC 有沒有容量限制</li>
+  <li>IPC 中每一個 Message 的大小是否是固定的</li>
+  <li>
+    <p>IPC 是單向的還是雙向的</p>
+  </li>
+  <li>Direct communication(直接傳遞): 每個需要通訊必須明確的指定接收者或發送者
+    <ul>
+      <li>可以是單向也可以是雙向的</li>
+      <li>例如: Pipe</li>
+    </ul>
+  </li>
+  <li>Indirect communication(間接傳遞): Message 是發送到 Mailbox 中然後由 Receiver 自行取出
+    <ul>
+      <li>是雙向的，並且可以建立多條 IPC 或讓多個 Process 一起接收</li>
+      <li>因為有 Mailbox 所以就要考慮 Buffer 的問題
+        <ul>
+          <li>沒有 Buffer: 那就必須等到 Recv 結束，發送者才能繼續執行
+            <ul>
+              <li>優點是速度通常比較快，透過 Scheduler 或許某些資訊可以放在 Register 中直接傳遞</li>
+            </ul>
+          </li>
+          <li>固定 Buffer: 發送者將資料 Send 到 Buffer 中就可以繼續執行</li>
+          <li>多個 Buffer: 發送者可以一直送資料，但通常會限制發送的數量避免惡意程式</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Direct communication</strong></p>
+
+<p>通常使用 Process id 來將訊息丟給對方:</p>
+<ul>
+  <li>send(P, message)</li>
+  <li>receive(Q, message), receive(&amp;Q, message)</li>
+  <li>Receiver 可以指定是要從哪裡收，或者收任何訊息，由 OS 來告知是誰送的</li>
+</ul>
+
+<p>Feature</p>
+<ul>
+  <li>不需要特別的建立連接</li>
+  <li>由於使用 Process id 來傳遞訊息，因此只能是任兩個 Process 之間傳遞訊息
+    <ul>
+      <li>由 P 和 Q 兩個單項傳遞來組合成一個雙向傳遞</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Indirect communication</strong></p>
+
+<p>需要由使用者來建立傳輸通道</p>
+<ul>
+  <li>例如: Linux 的 mkfifo, pipe</li>
+  <li>例如: TCP/IP (如果在同一台機器上傳輸資料，不會經過 Network card)</li>
+</ul>
+
+<p>Feature</p>
+<ul>
+  <li>溝通的行程可以建立多個通道，可以簡化設計複雜度</li>
+  <li>可以「多個傳輸行程」對「多個接收行程」，常見於 Server 的設計</li>
+  <li>雙向，例如: Shared memory</li>
+  <li>單向，例如: pipe</li>
+</ul>
+
+<p><strong>Problems by many-to-many</strong></p>
+
+<p>如果有「多個傳輸行程」對「多個接收行程」</p>
+<ul>
+  <li>由誰接收
+    <ul>
+      <li>是否由「通道管理程式」決定?</li>
+      <li>誰先發起，就由誰收</li>
+    </ul>
+  </li>
+  <li>收了訊息之後怎麼處理
+    <ul>
+      <li>移除訊息，通常用於 Server 將 Task 交給一個 Sub-Server</li>
+      <li>一直存在，類似於廣播</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Blocking &amp; Non-Blocking</strong></p>
+
+<ul>
+  <li>如果有足夠多的 Buffer 的話，Process 間的通訊可以是 Non-blocking
+    <ul>
+      <li>送出 Message 後 Process 繼續下一個工作</li>
+      <li>例如: signal</li>
+    </ul>
+  </li>
+  <li>如果 Buffer 不足，或者根本沒有 Buffer 的話，就只能是 Blocking
+    <ul>
+      <li>送出 Message 後必須等待 Receiver 接收完畢，才能繼續工作</li>
+      <li>這個的好處是可以確認對方已經收到 Message</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="311-communication-method-direct-or-indirect">3.11 Communication method Direct or Indirect</h5>
+
+<p><strong>Shared Memory</strong></p>
+
+<p>在 Physical memory 上 Process A 和 Process B 是使用不同的區段，但是 Shared memory 就使用同一區段</p>
+<ul>
+  <li>要注意這裡是 Physical memory，但在 Process 中是不同的 Logical address</li>
+  <li>在 Linux 上可以透過 mmap() 來建立 Shared memory</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/11.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p><strong>Message Passing</strong></p>
+
+<ul>
+  <li>在 Process A 時呼叫 Kernel copy 資料到 Kernel space</li>
+  <li>Context switch 到 Process B 時，Kernel 再將資料 copy 到 Process B 的 Memory</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/12.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<h3 id="producer-consumer-problem">Producer-Consumer problem</h3>
+
+<p>這裡先簡單討論 <a href="https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem">Producer-Consumer Problem</a> 的概念，後面會再討論如何解決</p>
+
+<ul>
+  <li>假如有兩個 Process 共享一個固定大小的 Buffer，Producer 會不斷的產生資料，然後放到 Buffer 中由 Consumer 來取出
+    <ul>
+      <li>如果 Buffer 滿了，Producer 就必須等待 Consumer 取出資料</li>
+      <li>如果 Buffer 空了，Consumer 就必須等待 Producer 產生資料</li>
+      <li>這樣如果沒有設計好就容易造成 <a href="https://en.wikipedia.org/wiki/Deadlock">Deadlock</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果是單對單的 Producer-Consumer，可以透過一個環狀 Linked list 解決，詳情請看 <a href="https://www.youtube.com/watch?v=0XQAfLYfQkg&amp;list=PLMWkAn-aOA0bRR7n_A86Hs51B2WrAQA9i&amp;index=53">OS-CH03-重要的生產消費問題</a></p>
+
+<hr />
+
+<h3 id="thread-concept">Thread concept</h3>
+
+<h5 id="312-context-switch-main-overhead">3.12 Context switch main overhead</h5>
+
+<p>The overhead of context-switch</p>
+<ul>
+  <li>Store/restore the register file (~1KB)</li>
+  <li>TLB miss (~1KB)</li>
+  <li>CPU cache miss (~1MB)</li>
+</ul>
+
+<p>在 Context 中最主要的消耗就是 Cache miss，這取決於硬體的支援</p>
+<ul>
+  <li><strong>Virtual cache</strong>: 就需要把 Flush Cache，透過 MMU 將 Virtual address 對應到 Physical address</li>
+  <li><strong>Physical cache</strong>: 不需要 Flush cache
+    <ul>
+      <li>需要 MMU 轉換 Virtual address 成 Physical address，才能放入 Cache，轉換的過程就會有 Latency</li>
+      <li>例如: CPU Cache miss 在等待 L2 Cache 抓到資料，或是 L1 miss 之後需要 MMU 轉換 L2 之後才能做存取</li>
+      <li>例如: Process A/B，進行了一個 A -&gt; B -&gt; A 的切換，它們各自執行的時候都會把資料放入 Cache，A 只能期望 B 沒有覆蓋掉需要的資料</li>
+    </ul>
+  </li>
+  <li>Cache 是否支援 <strong>ASID</strong> (Address Space Identifier)
+    <ul>
+      <li>在 TLB 中加入一個 Process ID，只有當 ASID 與 Page number 都相同時，才會 Hit</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/13.png?raw=true" alt="" height="40%" width="40%" /></p>
+
+<h5 id="313-thread-memory">3.13 Thread memory</h5>
+
+<ul>
+  <li>Thread 在同一塊 Virtual memory 中執行，但是有各自的 Stack</li>
+  <li>因為在同一塊 Virtual memory 中執行，所以 Thread1 可以存取 Thread2 的 Stack
+    <ul>
+      <li>要做這樣的存取要慎重，因為 Stack 會隨著 Function call 而變動</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Thread Local Storage</strong></p>
+
+<p>同樣的 Thread 之間也會有各自的 Local variable，這些 Local variable 會放在 Thread Local Storage 中，
+這是由 Compiler 來設計的，讓每個 TLS 偏移量都不一樣，這樣就能讓 Thread 存取自己的 Local variable。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="314-thread-history">3.14 Thread history</h5>
+
+<ul>
+  <li>Many to One</li>
+  <li>One to One</li>
+  <li>Many to Many</li>
+</ul>
+
+<p><strong>Many to One</strong></p>
+
+<p>多對一就是兩個 Thread 共用一個 PCB，這樣的話如果其中一個 Thread 跑去做 I/O 的話，那整個 Process 就會被 Block，這樣就會造成整個 Process 都被 Block。
+同時由於 OS 不會知道 PCB 上的是兩個 Thread，所以無法再多核心上執行，這樣就會造成效能的下降。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/15.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p><strong>Green thread</strong>
+Green thread 是為了在底層的 OS 不支援 Thread 的情況下，透過 Library 來模擬 Thread 的行為，但這樣就只能使用 Many to One 的模型，例如: Java 的 Thread</p>
+</blockquote>
+
+<p>通常只有在 OS Kernel 不支援 Multi-thread 的情況下，才會使用 Many to One，由於所有的 User thread 在 Kernel 都只有一個 PCB，
+所以如果 Thread 跑去做 Block 的操作會導致其他 Thread 也被 Block。並且就算有很多 Processor 通常也只有一個 Thread 在執行，其他 Thread 都在等待。</p>
+
+<p><strong>One to One</strong></p>
+
+<p>通常是最多 OS 使用的 Model，每個 Thread 都有自己的 PCB，要透過 Memory control block 來判斷是 Thread 還是 Process，
+如果共用 Memory control block 的話，那就判定他是一個 Thread。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/16.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>由於每個 Thread 都有自己的 PCB，所以可以在多核心上執行</li>
+  <li>大部分都是 Non-blocking，所以在處理 Block 的任務上會很有彈性</li>
+</ul>
+
+<p><strong>Many to Many</strong></p>
+
+<p>上面的稱作 User thread，下面稱作 Kernel thread，對應的方式有很多種，例如下圖代表上面的 User thread 可以同時發出同等 Kernel thread 數量的 System call，
+但缺點是非常複雜並寫不好寫，並且不易理解，讓程式設計者很難進行優化。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-18-process_thread/17.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>看起來是最有彈性的 Thread</li>
+  <li>Sun Solaris 9 之前支援 Many to Many Model</li>
+  <li>Sun Solaris 10 之後改為主要支援 One to One Model</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-21-2023 18:52</p>
+</blockquote>
+
+
+                </section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-tags"></i>
+                
+                OS
+                
+                
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script><!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2023-10-19-cpu_scheduler.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Note | Linux Kernel Macro container_of & offsetof">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-10-17-container_of.html" class="navigation navigation-next navigation-unique" aria-label="Next page: OS | CPU Scheduler (Unfinished)">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "OS | CPU Scheduler (Unfinished)",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023-10-19-cpu_scheduler.md",
+            "ref": "_posts/2023-10-19-cpu_scheduler.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"],
+                "facebook": false,
+                "google": false,
+                "github": true,
+                "github_link": "https://github.com/Hotshot824",
+                "telegram": false,
+                "telegram_link": "https://t.me",
+                "instapaper": false,
+                "twitter": false,
+                "vk": false,
+                "weibo": false
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            }
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023-10-18-process_thread.md",
+        "mtime": "2023-10-18 00:00:00 +0800",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2023-11-04 18:22:51 +0800"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+
+<!-- <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script> -->
+
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+
+</body>
+</html>
