@@ -79,9 +79,19 @@ tags: [software, software_qualitiy, generate_test_case]
 -   **測試腳本產生器**
     -   這裡的測試資料是與平台無關的，需要透過測試腳本產生器使測試資料實體化成為測試案例，這裡使用 JUnit。
 
+---
+
 ### 2. Related Technology Research
 
-2.1 - 2.7 為使用的工具與技術介紹，2.8 介紹了相關的研究。
+> 2.1 - 2.7 為使用的工具與技術介紹，2.8 介紹了相關的研究，  
+> 2.3 Constraint Logic Programming(CLP), 2.6 JUnit, 2.7 GraphViz 介紹請參考原論文
+{: .block-warning  }
+
+[2.1 Unified Modeling Language(UML)](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#21-unified-modeling-languageuml)  
+[2.2 Object constraint language(OCL)](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#22-object-constraint-languageocl)  
+[2.4 Coverage Criteria](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#24-coverage-criteria)  
+[2.5 Test quality assessment](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#25-test-quality-assessment)  
+[2.8 Related research](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#28-related-research)  
 
 ##### 2.1 Unified Modeling Language(UML)
 
@@ -98,15 +108,27 @@ OCL 可以更嚴謹的描述 UML 中有關系統規格的所有資訊，是 UML 
 3.  **Method post-condition**
     -   Method 執行後應該滿足的條件
 
+##### 2.4 Coverage Criteria
+
+Coverage Criteria(測試覆蓋標準)是用來衡量測試嚴謹的程度，測試覆蓋標準越嚴謹代表所需開發成本提高但軟體品質也提高:
+
+1.  **Decision coverage(DC, 決策覆蓋)**  
+    -   程式的控制流程圖中每一個決策結構點的真與假值都必須執行過，因此每個 Edge(邊界)都會被執行過
+2.  Condition coverage(CC, 條件覆蓋)  
+    -   一個決策有可能包含一個以上的條件，所有的條件都必須執行過，但不需要特別包含 DC 標準
+3.  **Decision condition coverage(DCC, 條件決策覆蓋)**
+    -   條件與決策覆蓋都需要滿足，代表所有條件與決策的真與假值都必須執行過一次，但不用包含所有的條件組合
+4.  **Multiple condition coverage(MCC, 多重條件覆蓋)**
+    -   每個條件的真與假值都必須執行過一次，且每個條件組合都必須執行過一次，如果條件為 n 個，需要執行 2<sup>n</sup> 次
+
+> 粗體是本論文會使用到的測試覆蓋標準
+
 ##### 2.5 Test quality assessment
 
 這裡使用 **Mutation testing** 來評估測試案例的品質，Mutation testing 是一種測試案例的品質評估方法，
 將待測程式改變幾個 Operation 來測試 Test case 能否找出這些改變。
 
 > 延伸閱讀: [Paper An Analysis and Survey of the Development of Mutation Testing].
-
-> 2.3 Constraint Logic Programming(CLP), 2.4 Coverage Criteria, 2.6 JUnit, 2.7 GraphViz 介紹請參考原論文
-{: .block-warning  }
 
 ##### 2.8 Related research
 
@@ -159,16 +181,31 @@ OCL 可以更嚴謹的描述 UML 中有關系統規格的所有資訊，是 UML 
 > [25] J . Dick and A. Faivre, "Automating The Generation and Sequencing of Test Cases from Model-Based Specifications," 
 > in Proceedings of the 1st International Symposium on Formal Methods Eurpoe, 1993.
 
+---
+
 ### 3. Constraint Logic Graph Generator
+
+[3.1 OCL Syntactic analysis](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#31-ocl-syntactic-analysis)  
+[3.2 AST Post-Processor](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#32-ast-post-processor)  
+[3.3 Constraint Logic Graph Generator Architeture](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#33-constraint-logic-graph-generator-architeture)  
+[3.4 Definition of Constraint logic graph](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#34-definition-of-constraint-logic-graph)  
+[3.5 Generation of Constraint logic graph](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#35-generation-of-constraint-logic-graph)  
 
 這裡介紹如何將 Method 的 OCL 轉為 CLG，架構圖如下:
 
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/2.png?raw=true){:height="60%" width="60%"}
 
+> MUT means Method unit testing
+
 主要流程如下: 
-1.  使用 DresdenOCL Parse OCL 轉為抽象語法樹(AST)
-2.  AST 經過 Preprocessing(AST 重構器)
-3.  依照不同的 Coverage criteria 來產生測試案例
+1.  使用 DresdenOCL(OCL 分析器)讀取 OCL 的規格
+2.  AST 透過 OCL 分析器結果來建立
+2.  AST 經過 Post-Processing(AST 重構器)
+    -   因為 OCL 可能因為 User 的習慣造成轉換 GLC 的困難，因此需做重構
+3.  根據不同的 Coverage Criteria 將 AST 轉換為 CLG
+    -   每個限制式產生一個 CLG subgraph，再根據各個 Function 將 CLG subgraph 結合成一個 Complete CLG
+
+一個 Complete CLG 可以分成兩種，符合/不符合 Pre-condition 的 Complete CLG
 
 ##### 3.1 OCL Syntactic analysis
 
@@ -179,14 +216,14 @@ OCL 有三種限制式(invariant, pre, post) 這樣每種情境就要建立一�
 
 AST 的每一個 Node 都代表一個 OCL 的運算式，以下是作者所設計的 Node:
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/3.png?raw=true){:height="100%" width="100%"}
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/3.png?raw=true){:height="75%" width="75%"}
 
 IfExp 的抽象語法樹如圖，根節點為IfExp
 -   conditionExp：ASTNode 第一個子樹，為condition 的運算式
 -   thenExp：ASTNode 第二個子樹，為then 的運算式
 -   elseExp：ASTNode 第三個子樹，為else 的運算式
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/4.png?raw=true){:height="50%" width="50%"}
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/4.png?raw=true){:height="65%" width="65%"}
 
 > 這裡只舉 IfExp 為例子，全部的 Node 請參考論文
 
@@ -204,7 +241,7 @@ post:
 
 context Triangle::category() : String
 post:
-    result =if sideA@pre = sideB@pre then
+    result = if sideA@pre = sideB@pre then
         if sideB@pre = sideC@pre then
             'Equilateral'
         else 'Isosceles'
@@ -223,6 +260,298 @@ post:
 
 > 上圖是 Triangle 的 Post 被轉化為 AST 的結果，其他的轉換可以參考論文
 
+##### 3.2 AST Post-Processor
+
+因為 User 在描寫物件時會有一些口語上的習慣，因此會將 AST 再重構成結構簡單的 AST，他的條件如下:
+1.  不符合前置條件的重構
+2.  Flat IfExp(扁平化 IfExp)
+3.  Flat Logic Operator(扁平化 Logic Operator)
+4.  iterate Operator simplify，只能出現
+    -   variable = set of variables -> iterate(...)
+
+##### 3.2.1 AST reconstruction
+
+> 以下說明 AST 重構中每個條件的方法
+{: .block-warning }
+
+-   **不符合前置條件的重構**  
+作者認為如果 Function 本身沒有錯誤但跳出 Expection 時，代表 Function 的 Pre-condition 不符合才會造成 Expection 的發生，
+所以就將 Pre-condition 轉換為 **(not, 非前置條件)**，來產生不符合前置條件的 CLG。
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/7.png?raw=true){:height="100%" width="100%"}
+
+> 上圖是一個不符合 Pre-condition 的 Triangle，可以看到所有的條件判斷都是相反的
+
+-   **Flat IfExp**  
+如果在不產生分支的運算式底下有 IfExp，則必須將 AST 扁平化，使 IfExp 拉到運算式 1 的上層，例如下面的範例:
+
+```
+context Class::method() : return_type
+pre:
+    exp1 op (if exp2 then exp3 else exp4)
+```
+> 這個例子可以用三元運算式來理解，`A = (B ? C : D)`，在某些語言中沒有 `?` 就會使用 `if` 取代
+
+扁平化後將 if 拉到最上層，如下:
+
+```
+context Class::method() : return_type
+pre:
+    if exp2
+        then exp1 op exp3
+        else exp1 op exp4
+```
+
+-   **Flat Logic Operator**  
+邏輯運算的扁平化主要有兩種狀況: `Binary operation(2元運算)`, `not operation(not運算)`
+
+**Binary operation** 的狀況跟 IfExp 類似，如在不產生分支的 Operator 下有邏輯運算式，就將 IfExp 拉到最上層:
+
+```
+context Class::method() : return_type
+pre:
+    exp1 op (exp2 or exp3)
+
+<!-- Flat -->
+context Class::method() : return_type
+pre:
+    if exp2 or exp3
+        then exp1 op true
+        else exp1 op true
+```
+
+**not operation** 則透過 [De Morgan's laws] 來拆解，下表是針對 Operation 而定義出的 DeOperation:
+
+<div align="center">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/11.png?raw=true" 
+    width="55%" height="55%">
+</div>
+
+如果有 `exp1 and exp2` 做 not 運算，則會變成 `(not (exp1)) or (not (exp2))`，上表的可靠性可以透過真值表來做驗證:
+
+<div align="center">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/12.png?raw=true" 
+    width="62%" height="62%">
+</div>
+
+-   **Iterate Operator 的格式簡單化**
+由於 iterate 的圖較為複雜，為了讓限制邏輯圖中的限制式簡單化，我們只接受如重構條件 4 的格式。
+若使用者提供的物件限制語言中的運算式不符以上的格式，在我們的系統中會強制重構。
+
+> variable = set of variables -> iterate(...)
+
+##### 3.3 Constraint Logic Graph Generator Architeture
+
+##### 3.3.1 不符合前置條件的完整限制邏輯圖
+
+不符合前置條件的限制邏輯圖在 AST Post-prossing 就將前置條件重構，因此不需要在 CLG 產生器架構中做額外動作，
+但是一個 Funciton 可能有多個不同的 Execption 跳出，這時就需要寫多個前置條件，這樣就會有兩個獨立的 CLG。
+
+```
+context Class::Method(Parameter : Type) pre Constraint_Name_1 :
+    Constraint_1
+pre Constraint_Name_2 :
+    Constraint_2
+```
+
+> 多個前置條件來實現多個例外描述，並且以限制式的名稱來做為 Exception 的名稱
+
+##### 3.3.2 符合前置條件的完整限制邏輯圖
+
+根據 OCL 設計的三種限制式，把所有前置與後置條件結合 Function 的 CLG 就是該 Function 的所有可能的限制邏輯圖，
+而在解析中一個前置條件就是一個限制式，所以這裡需要把所有前置條件與後置條件銜接起來。
+
+CLG 的做法就是找出待測 Function 的 Pre/Post-Condition 的集合。
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/8.png?raw=true){:height="90%" width="90%"}
+
+##### 3.4 Definition of Constraint logic graph
+
+-   限制節點(Constraint Node): 以方框表示
+    -   唯一含有限制式的 AST 的 Node，在限制節點中的一定都是布林運算式，並只有以下可能:
+        1.  Relational Operator(關係運算式)
+        2.  True/False Symbol
+        3.  Boolen Operator(布林運算式)
+        4.  Not Operator(否運算式)
+-   連接節點(Connection Node): 以菱形表示
+    -   作為連接用，CLG 中唯一會連接到分支的圖形
+-   起始節點(Start Node): 黑色圓形
+    -   CLG 的起點，所有 CLG 都需要由此 Node 開始 
+-   結束節點(End Node): 黑色圓形帶外框
+    -   CLG 的結束點，所有 CLG 都需要由此 Node 結束
+
+##### 3.5 Generation of Constraint logic graph
+
+每一顆 Abstract syntax tree(AST) 都是一個運算式，所以每個運算式都可以透過 Call toCLG(criterion) 來透過走訪產生限制邏輯子圖。
+如果這顆樹沒有分支就代表該樹下的所有節點都產生在同一個 CLG 限制節點內，如下圖:
+
+<div align="center">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/9.png?raw=true" 
+    width="35%" height="35%">
+</div>
+
+在這之後的討論會以三種不同的 Covaerage criteria 與會產生分支的運算式來做討論，下表說明什麼運算式會產生分支:
+
+<div align="center">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/6.png?raw=true" 
+    width="53%" height="53%">
+</div>
+
+##### 3.5.1 Decision Coverage
+
+**IfExp**
+
+IfExp 與原始定義相同，如果 If 內為 True 就執行 Then 運算式，否則執行 Else 運算式，因為使用 DC 標準所以不會再展開 IfExp，但需要一個 False 的分支。
+
+```
+toCLG(Criterion criterion) 
+{
+    ASTNode astNotNode = new OperationCallExp(node.conditionExp, "not");
+    return ifCLG(
+        node.conditionExp.toCLG(criterion),
+        node.thenExp.toCLG(criterion), 
+        astNotNode.toCLG(criterion),
+        node.elseExp.toCLG(criterion)
+        );
+}
+
+ifCLG(
+    (CLGNode condNode, CLGNode condEnd),
+    (CLGNode thenNode, CLGNode thenEnd),
+    (CLGNode notCondNode, CLGNode notCondEnd),
+    (CLGNode elseNode, CLGNode elseEnd)):(CLGNode, CLGNode) 
+{
+    ConnectionNode beginConnecting = new ConnectionNode();
+    ConnectionNode endConnecting = new ConnectionNode();
+
+    beginConnecting.connect(condNode);
+    beginConnecting.connect(notCondNode);
+    condEnd.connect(thenNode);
+    notCondEnd.connect(elseNode);
+    thenEnd.connect(endConnecting);
+    elseEnd.connect(endConnecting);
+    return (beginConnecting, endConnecting);
+}
+```
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/10.png?raw=true){:height="100%" width="100%"}
+
+> 上圖是 IfExp AST & CLG 的轉換對照圖
+
+**IterateExp**
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/13.png?raw=true){:height="100%" width="100%"}
+
+> 上圖是 IterateExp AST & CLG 的轉換對照圖
+
+**DC Example of Triangle:**
+
+> DC 只需要展開 Decision 的真假值
+{: .block-warning }
+
+以下是一個 Triangle 的前置條件 AST 符合 Pre-Condition CLG 的結果，並且之後的測試覆蓋標準都會以 Triangle 為例:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/14.png?raw=true){:height="100%" width="100%"}
+
+以下是符合/不符合 Pre-condition 的兩種 CLG:
+
+DC 中不符合 Pre-condition 的 CLG 會將所有的運算式做 DeOperation，並且在 DC 中不會展開 Boolean(or) 運算式，因此只會有一條路徑:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/15.png?raw=true){:height="100%" width="100%"}
+
+而符合 Pre-condition 的 CLG 中 Boolean(and) 在 DC 標準中也不會展開因此只會有 Pre-condition 的限制式與 Post-condition 的限制式:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/16.png?raw=true){:height="100%" width="100%"}
+
+Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/17.png?raw=true){:height="100%" width="100%"}
+
+##### 3.5.2 Decision condition coverage
+
+> DCC 與 DC 的不同在於需要展開有分支的限制邏輯子圖，所有條件與決策的真與假值都必須執行過一次，但不用包含所有的條件組合
+{: .block-warning }
+
+**and & or**
+
+-   and 運算式來說 Exp1 and Exp2，兩者為真才為真，因此在 CLG 的角度來看就是兩個節點連在一起
+-   or 運算式則是 Exp1 or Exp2，其中之一為真即為真，故從 CLG 的角度來看 Exp1/2 可以視作兩條路徑上的節點，
+並且根據 DCC 的定義，每個條件的結果都至少有一次的 True 與 False，因此會如下圖所示:
+
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/18.png?raw=true" 
+    width="35%" height="35%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/19.png?raw=true" 
+    width="35%" height="35%">
+</div>
+
+**xor & implies**
+
+-   xor 運算式為 Exp1 xor Exp2，兩者不同才為真，因此在 CLG 的轉換圖如下，其中 not(Exp1) 代表取 Exp1 的反值
+-   implies 運算式為 Exp1 implies Exp2，視作 (not exp1) or exp2
+
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/20.png?raw=true" 
+    width="35%" height="35%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/21.png?raw=true" 
+    width="35%" height="35%">
+</div>
+
+**DCC Example of Triangle:**
+
+以下是一個 Triangle 的前置條件 AST 不符合 Pre-Condition CLG 的結果，因為 DCC 需要展開 Boolean(or) 運算式，因此不符合 Pre-condition 的 CLG 需要展開:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/7.png?raw=true){:height="100%" width="100%"}
+
+每遇到一次 or 產生一個條件為假其餘為真的路徑，而 AST 共有六個 or 運算式，因此 CLG 會有六條路徑，如下圖:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/22.png?raw=true){:height="100%" width="100%"}
+
+而在使用 DCC 時產生的符合 Pre-condition 的 CLG，因為前置條件皆為 and 故只有一條明顯路徑:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/23.png?raw=true){:height="100%" width="100%"}
+
+##### 3.5.3 Multiple condition coverage
+
+> MCC 與 DCC 不同的是，MCC 需要展開所有的條件組合，因此會有 2<sup>n</sup> 條路徑，其中 n 為條件的數量
+{: .block-warning }
+
+**or**
+
+-   因此在真值表中可以發現 Exp1 or Exp2 一共會有三種可能讓此運算式為真，因此 CLG 會如下圖:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/24.png?raw=true){:height="85%" width="85%"}
+
+**DCC Example of Triangle:**
+
+因為這樣產生的 CLG 非常複雜所以這裡就不放上，但這個 CLG 因為有六個 or 因此會有 2<sup>6</sup> = 64 條路徑。
+
+### 4. Equivalence Class CLG Path Generator
+
+### 5. Test Case Generator
+
+##### 5.2 Performance of Coverage Criteria
+
+由於 Coverage Criteria 會產生不同的 CLG，產生路徑的時間與涵蓋到的內容也不一樣，我們將範例資訊顯示在下表，
+Class info 分別代表: Class Num, Association Num, Function Num, Can be excption function Num:
+
+| Example | Class info | AST Node | Iteration |
+| :---: | :---: | :---: | :---: |
+| IntegerRange | 1/0/2/0 | 38 | Yes |
+| RecursionExample | 1/0/2/2 | 49 | No |
+| Triangle | 1/0/2/1 | 213 | No |
+| Date | 1/0/8/1 | 816 | No |
+| Laboratory | 3/3/8/1 | 124 | No |
+
+然後分別展示三種 Coverage Criteria 的產生結果，主要分別討論符合/不符合 Pre-condition 的產生結果:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/25.png?raw=true){:height="100%" width="100%"}
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/26.png?raw=true){:height="100%" width="100%"}
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/27.png?raw=true){:height="100%" width="100%"}
+
+
 > ##### NOTE
 > Last edit 11-2-2023 16:36  
 {: .block-warning }
@@ -235,3 +564,5 @@ post:
 
 [Paper An Analysis and Survey of the Development of Mutation Testing]: 2023-05-20-analysis_mutation_testing.html
 [HOL-TestGen]: https://brucker.ch/projects/hol-testgen/
+
+[De Morgan's laws]: https://en.wikipedia.org/wiki/De_Morgan%27s_laws

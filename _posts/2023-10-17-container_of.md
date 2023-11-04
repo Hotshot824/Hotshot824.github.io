@@ -57,7 +57,7 @@ const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
 > 10-18-2023 23:55
 {: .block-warning }
 
-[<linux/container_of.h>]: https://github.com/torvalds/linux/blob/master/include/linux/container_of.h
+[<include/linux/container_of.h>]: https://github.com/torvalds/linux/blob/master/include/linux/container_of.h
 [<lib/rbtree.c>]: https://github.com/torvalds/linux/blob/master/lib/rbtree.c
 [<include/linux/list.h>]: https://github.com/torvalds/linux/blob/master/include/linux/list.h
 

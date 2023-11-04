@@ -88,6 +88,10 @@ the UART interface does not use a clock signal to synchronize the Tx and Rx devi
 > [Reference] Back to Basics: The Universal Asynchronous Receiver/Transmitter (UART)  
 > **[Practice]** One-Line-Communication
 
+> ##### Last Edit
+> 11-17-2022 12:07
+{: .block-warning }
+
 [Reference]: https://www.allaboutcircuits.com/technical-articles/back-to-basics-the-universal-asynchronous-receiver-transmitter-uart/
 [Practice]: https://github.com/ghliaw/One-Line-Communication
 

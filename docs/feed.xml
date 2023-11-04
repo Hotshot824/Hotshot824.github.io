@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-04T18:22:51+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-13T21:01:36+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
 這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
@@ -405,15 +405,416 @@ Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回�
 
 <h3 id="41-introduction-to-parsers">4.1 Introduction to parsers</h3>
 
-<p>在編譯器模型中 Systax analysis 從 Lexical analysis 獲取由 Token 所組成的字串，我們期望語法分析器能夠以易於理解的方式回報語法錯誤。
-概念上語法分析需要建構一個 Parse tree 傳遞給 Compiler 的其餘部分進行進一步處理，但實際上 Parse tree 並不需要明確的建構，
-因為檢查與翻譯可以與 Parsing 交錯完成。</p>
+<p>本章會先介紹 Parser 在 Compiler 中的作用，然後介紹 Context free grammar。</p>
+
+<h5 id="411-the-role-of-the-parser">4.1.1 The Role of the Parser</h5>
+
+<p>在編譯器模型中 Systax analysis 從 Lexical analysis 獲取由 Token 所組成的字串，概念上語法分析需要建構一個 Parse tree 傳遞給 Compiler 的其餘部分進行進一步處理，
+但實際上不一定要真的用一個 Data structure 來建構 Parse tree，而是在 Parsing 的過程中進行 Semantic analysis，並將資訊傳遞給 Compiler 的其餘部分。</p>
 
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/1.png?raw=true" alt="" height="75%" width="75%" /></p>
 
+<blockquote>
+  <p>不真正建構一個 Parse tree 通常是為了節省記憶體，但缺點就是他使 Debug 變得困難，因為無法查看 Parse tree</p>
+</blockquote>
+
+<h3 id="42-context-free-grammars">4.2 Context-free grammars</h3>
+
+<p>Context-free grammars 可以系統的描述程式語言構造，例如使用 stmt 描述 statements，expr 描述 expressions，那麼:</p>
+
+<ul>
+  <li>production: <code class="language-plaintext highlighter-rouge">stmt -&gt; if (expr) stmt else stmt</code></li>
+</ul>
+
+<p>我們就能透過其他 production 來描述 stmt, expr 會是什麼，還可以是什麼?</p>
+
+<h5 id="421-the-formal-definition-of-a-context-free-grammar">4.2.1 The Formal Definition of a Context-free Grammar</h5>
+
+<ul>
+  <li>A set of terminals: basic symbols from which sentences are formed
+    <ul>
+      <li>例如: <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">else</code>, <code class="language-plaintext highlighter-rouge">(</code>, <code class="language-plaintext highlighter-rouge">)</code>, <code class="language-plaintext highlighter-rouge">id</code></li>
+    </ul>
+  </li>
+  <li>A set of nonterminals: syntactic categories denoting sets of sentences
+    <ul>
+      <li>任何非 terminal 都可以是一個 nonterminal，例如: <code class="language-plaintext highlighter-rouge">stmt</code>, <code class="language-plaintext highlighter-rouge">expr</code></li>
+    </ul>
+  </li>
+  <li>A set of productions: rules specifying how the terminals and nonterminals can be combined to form sentences
+    <ul>
+      <li>例如: <code class="language-plaintext highlighter-rouge">stmt -&gt; if (expr) stmt else stmt</code></li>
+    </ul>
+  </li>
+  <li>The start symbol: a distinguished nonterminal denoting the language
+    <ul>
+      <li>通常是最上層的 Production</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Terminals: <code class="language-plaintext highlighter-rouge">id</code> <code class="language-plaintext highlighter-rouge">+</code> <code class="language-plaintext highlighter-rouge">-</code> <code class="language-plaintext highlighter-rouge">*</code> <code class="language-plaintext highlighter-rouge">/</code> <code class="language-plaintext highlighter-rouge">(</code> <code class="language-plaintext highlighter-rouge">)</code></li>
+  <li>Nonterminals: <code class="language-plaintext highlighter-rouge">expr</code> <code class="language-plaintext highlighter-rouge">op</code></li>
+  <li>Productions:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expr -&gt; expr op expr  
+expr -&gt; '(' expr ')'  
+expr -&gt; '-' expr  
+expr -&gt; id  
+op -&gt; '+' | '-' | '*' | '/'  
+The start symbol: expr  
+</code></pre></div></div>
+
+<h5 id="422-notation-conventions">4.2.2 Notation Conventions</h5>
+
+<p>通常為了避免陳述 <code class="language-plaintext highlighter-rouge">these are the terminals, these are thenonterminals</code> 會使用一些約定來規範符號:</p>
+
+<ul>
+  <li>Terminals:
+    <ul>
+      <li>小寫字母，例如: <code class="language-plaintext highlighter-rouge">a</code> <code class="language-plaintext highlighter-rouge">b</code> <code class="language-plaintext highlighter-rouge">c</code></li>
+      <li>運算符號，標點符號，例如: <code class="language-plaintext highlighter-rouge">+</code> <code class="language-plaintext highlighter-rouge">-</code> <code class="language-plaintext highlighter-rouge">,</code> <code class="language-plaintext highlighter-rouge">(</code> <code class="language-plaintext highlighter-rouge">)</code></li>
+      <li>數字，例如: <code class="language-plaintext highlighter-rouge">0</code> <code class="language-plaintext highlighter-rouge">1</code> <code class="language-plaintext highlighter-rouge">2</code></li>
+      <li>粗體字符串，例如: <strong>if</strong> <strong>else</strong> <strong>then</strong></li>
+      <li>小寫希臘字母，例如: α β γ</li>
+    </ul>
+  </li>
+  <li>Non-Terminals:
+    <ul>
+      <li>大寫字母，例如: <code class="language-plaintext highlighter-rouge">A</code> <code class="language-plaintext highlighter-rouge">B</code> <code class="language-plaintext highlighter-rouge">C</code>
+        <ul>
+          <li>在討論構造時，例如 expression、terms、factors，使用: <code class="language-plaintext highlighter-rouge">E</code> <code class="language-plaintext highlighter-rouge">T</code> <code class="language-plaintext highlighter-rouge">F</code></li>
+        </ul>
+      </li>
+      <li>通常使用 S 來表示 Start symbol</li>
+      <li>斜體字符串，例如: <em>expr</em> <em>stmt</em></li>
+    </ul>
+  </li>
+  <li>具有相同標題的 Production 可以使用 <code class="language-plaintext highlighter-rouge">|</code> 來分隔，例如: <code class="language-plaintext highlighter-rouge">A -&gt; a</code>、<code class="language-plaintext highlighter-rouge">A -&gt; b</code>、<code class="language-plaintext highlighter-rouge">A -&gt; c</code> 可以寫成 <code class="language-plaintext highlighter-rouge">A -&gt; a | b | c</code></li>
+  <li>除非特殊說明，第一個 Production 會是 Start symbol</li>
+</ul>
+
+<h5 id="423-parse-trees-and-derivations">4.2.3 Parse Trees and Derivations</h5>
+
+<ul>
+  <li>推導(derivation) 步驟是將一個 Production 的替換過程寫出，例如 E =&gt; - E</li>
+  <li>一系列的推導步驟可以將 E =&gt; -E =&gt; -(E) =&gt; -(id)</li>
+  <li>如果使用 =&gt;<sup>*</sup> 表示在零步或多步中推導，=&gt;<sup>+</sup> 表示在一步或多步中推導
+    <ul>
+      <li>例如上面的步驟可以簡化為 E =&gt;<sup>*</sup> -(id)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Context free grammar</strong></p>
+
+<ul>
+  <li>Context free grammar(CFG) 定義的語言 L(G)，是由 CFG G 所定義的語言</li>
+  <li>一個 Terminal 字串 ω 在 L(G) 中，並且當 S =&gt;<sup>+</sup> ω，那我們稱 ω 是 G 的一個句子(sentence)</li>
+  <li>如果 S =&gt;<sup>*</sup> α，而 α 可以包含 Non-terminal，那麼 α 是 G 的一個句型(sentence form)</li>
+  <li>如果 L(G1) = L(G2)，那麼 G1 和 G2 是等價的(equivalent)</li>
+</ul>
+
+<p><strong>Left &amp; Right-most Derivations</strong></p>
+
+<p>每個 Derivation step 都需要兩個步驟:</p>
+<ul>
+  <li>選擇替換哪個 Terminal</li>
+  <li>替換後選擇一個以此 Terninal 作為開頭的 Production</li>
+</ul>
+
+<p>這樣就可以有 Left &amp; Right 兩種推導方式:</p>
+<ol>
+  <li>Left-most derivation: 每次都選擇最左邊的 Terminal 來替換
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">E</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-E</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(E)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(E+E)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(id+E)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(id+id)</code></li>
+    </ul>
+  </li>
+  <li>Right-most derivation: 每次都選擇最右邊的 Terminal 來替換
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">E</code> =&gt;<sub>rm</sub> <code class="language-plaintext highlighter-rouge">-E</code> =&gt;<sub>rm</sub> <code class="language-plaintext highlighter-rouge">-(E)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(E+E)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(E+id)</code> =&gt;<sub>lm</sub> <code class="language-plaintext highlighter-rouge">-(id+id)</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Exercise 4.2.1:</strong></p>
+<ul>
+  <li>Consider the following grammar:<br />
+S -&gt; SS+ | SS* | a<br />
+and the string aa+a*</li>
+</ul>
+
+<p>(a), Giver a leftmost derivation for the string.<br />
+(b), Giver a rightmost derivation for the string.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(a) S =&gt;lm SS* =&gt; SS+S* =&gt; aS+S* =&gt; aa+S* =&gt; aa+a*
+(b) S =&gt;rm SS* =&gt; Sa* =&gt; SS+a* =&gt; Sa+a* =&gt; aa+a*
+</code></pre></div></div>
+
+<h5 id="424-parse-trees-and-derivations">4.2.4 Parse Trees and Derivations</h5>
+
+<ul>
+  <li>Parse Tree 是推導的圖形表示，顯示了從 Start symbol 到衍生 Sentence 的過程，這種方式過濾了選擇 Terminal 進行重寫的順序</li>
+  <li>因此不管是 Left/Right-most 都應該推導出相同的 Parse tree</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/2.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="425-ambiguous-grammar">4.2.5 Ambiguous Grammar</h5>
+
+<p>如果一個 Grammar 可以對同一個 Sentence 產生不同的 Parse tree 那就是 Ambiguous</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/3.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/4.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>Resolving Ambiguity</strong></p>
+
+<p>大部分的 Syntax analysis 都希望 Grammar 不是 Ambiguous，可以透過以下來消除</p>
+
+<ul>
+  <li>Use <strong>disambiguiting rules</strong> to throw away undesirable parse trees</li>
+  <li>Rewrite grammarsby incorporating disambiguiting rules into grammars</li>
+</ul>
+
+<p><strong>Example</strong></p>
+<ul>
+  <li>The dangling-else grammar</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stmt -&gt; if expr then stmt
+    | if expr then stmt else stmt
+    | other
+</code></pre></div></div>
+
+<p>如果用以上的 Grammar 來分析:</p>
+<ul>
+  <li>if E<sub>1</sub> then if E<sub>2</sub> then S<sub>1</sub> else S<sub>2</sub></li>
+</ul>
+
+<p>我們無法確定 else 是對應哪個 then，因此會產生兩個 Parse tree</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/5.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>這樣就產生了兩個 Parse tree，因為在語法規則中沒有說明清楚 else 要對應哪個 if，所以可以透過以下方式來消除</p>
+
+<p>Disambiguiting rules:</p>
+<ul>
+  <li>Rule: match each else with the closest previous unmatched then</li>
+  <li>Remove undesired state transitions in the pushdown automaton</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stmt -&gt; m_stmt | unm_stmt
+m_stmt -&gt; if expr then m_stmt else m_stmt
+    | other
+unm_stmt -&gt; if expr then stmt | if expr then m_stmt else unm_stmt
+</code></pre></div></div>
+
+<p>透過這種方式，我們強制一個 then 和 else 之間只能是一個 m_stmt，這樣就可以消除 Ambiguous</p>
+
+<h3 id="43-writing-a-grammar">4.3 Writing a Grammar</h3>
+
+<h5 id="431-lexical-versus-syntactic-analysis">4.3.1 Lexical Versus Syntactic Analysis</h5>
+
+<ul>
+  <li>由 RE 描述的每種語言也可以由 CFG 描述，例如 <code class="language-plaintext highlighter-rouge">(a|b)*abb</code> 也可以用 CFG 來描述:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A0 -&gt; aA0 | bA0 | aA1
+A1 -&gt; bA2
+A2 -&gt; bA3
+A3 -&gt; ε
+</code></pre></div></div>
+<ul>
+  <li>那為什麼不在 Lexical analysis 使用 CFG?
+    <ul>
+      <li>首先 Lexical analysis 不需要與 CFG 一樣強大的表示法</li>
+      <li>RE 比 CFG 更簡潔更容易理解</li>
+      <li>RE 建構的 Lexical analysis 比 CFG 建構的 Lexical analysis 更有效率</li>
+      <li>這樣提供了將前端模塊化為兩個易於管理的部分的方法</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Nonregular Constructs</strong></p>
+<ul>
+  <li>REs can denote only a fixed number of repetitions or an unspecified number of repetitions of onegiven construct: an, a*</li>
+  <li>A nonregular construct:
+    <ul>
+      <li>L = {a<sup>n</sup>b<sup>n</sup>| n ≥ 0}</li>
+      <li>這個語言包含相同數量的 a 和 b，RE 沒辦法描述固定數量的 a 和 b</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Non-Context-Free Constructs</strong></p>
+<ul>
+  <li>CFGs can denote only a fixed number of repetitions or an unspecified number of repetitions of oneor twogiven constructs</li>
+  <li>Some non-context-free constructs:
+    <ul>
+      <li>L1 = {wcw | w is in (a|b)*}</li>
+      <li>L2 = {a<sup>n</sup>b<sup>m</sup>c<sup>n</sup>d<sup>m</sup> | n ≥ 1 and m ≥ 1}</li>
+      <li>L3 = {a<sup>n</sup>b<sup>n</sup>c<sup>n</sup> | n ≥ 0}</li>
+    </ul>
+  </li>
+</ul>
+
+<p>CFG 只能處理一個重複的結構，這也涉及到 CFG 的 Automata，但是可以描述以下語言:</p>
+
+<ul>
+  <li>L1 = {<sup>n</sup>c<sup>n</sup> | n ≥ 0}</li>
+  <li>L2 = {a<sup>n</sup>b<sup>m</sup>c<sup>m</sup>d<sup>n</sup> | n ≥ 0, m ≥ 0}</li>
+</ul>
+
+<h3 id="44-top-down-parsing">4.4 Top-down Parsing</h3>
+
+<blockquote class="block-warning">
+  <p>這裡不會詳細介紹 Top-down Parsing，因為 Top-down 要處理的問題比較多</p>
+</blockquote>
+
+<ul>
+  <li>Top-down Parsing 是從上層的 Root 開始，使用 Leftmost derivation 建構一顆到 Leaf 的 Parse tree</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/10.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Predictive Parsing</strong></p>
+
+<ul>
+  <li>A top-down parsing without backtracking
+–   there is only one alternative production to choose at each derivation step</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stmt -&gt; if expr then stmt else stmt
+    |  while expr do stmt
+    |  begin stmt_list end
+</code></pre></div></div>
+
+<h5 id="442-first-and-follow-sets">4.4.2 FIRST and FOLLOW Sets</h5>
+
+<p><strong>First set</strong></p>
+
+<ul>
+  <li>
+    <p>The first setof a string α is the set of terminals that begin the strings derived from α. If α =&gt;* ε, then ε is also in the first set of ε.</p>
+  </li>
+  <li>如果 X 是一個 Terminal，那麼 FIRST(X) = {X}</li>
+  <li>如果 X 是一個 Nonterminal，並且存在 X -&gt; ε，那麼 FIRST(X) = {ε}</li>
+  <li>如果 X 是一個 Nonterminal，並且存在 X -&gt; Y<sub>1</sub> Y<sub>2</sub> … Y<sub>n</sub>
+    <ol>
+      <li>首先加入 FIRST(Y<sub>i</sub>) 如果 Y<sub>i</sub> 存在 ε，那就加入 FIRST(Y<sub>i</sub>) - {ε}</li>
+      <li>然後 i + 1 重複以上步驟直到 Y<sub>i</sub> 不存在 ε</li>
+    </ol>
+  </li>
+</ul>
+
+<blockquote>
+  <p>簡單來說 FIRST 就是找出一個 Nonterminal 所有可能的開頭 Terminal</p>
+</blockquote>
+
+<p>Example:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>E  -&gt; TE'
+E' -&gt; +TE' | ε
+T  -&gt; FT'
+T' -&gt; *FT' | ε
+F  -&gt; (E) | id
+
+FIRST(E)  = { ( , id }
+FIRST(E’) = { +, ε }
+FIRST(T)  = { ( , id }
+FIRST(T’) = { *, ε }
+FIRST(F)  = { ( , id }
+</code></pre></div></div>
+
+<p><strong>Follow set</strong></p>
+
+<ul>
+  <li>
+    <p>The follow setof a nonterminal A is the set of terminals that can appear immediately to the right of Ain some sentential form, 
+namely, S =&gt;* αA<strong>a</strong>β, a is in the follow set of A.</p>
+  </li>
+  <li>如果對 Start symbol 尋找 FOLLOW(S) 要先加入 { $ }</li>
+  <li>如果存在 Production A -&gt; αB
+    <ul>
+      <li>FOLLOW(B) 包含 FOLLOW(A)</li>
+    </ul>
+  </li>
+  <li>如果存在 Production A -&gt; αBβ
+    <ul>
+      <li>FOLLOW(B) 包含 FIRST(β) - {ε}</li>
+    </ul>
+  </li>
+  <li>如果存在 Production A -&gt; αBβ，並且 FIRST(β) 包含 ε
+    <ul>
+      <li>FOLLOW(B) 包含 { FIRST(β) - {ε} } U FOLLOW(A)</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>簡單來說 FOLLOW 就是找出一個 Nonterminal 所有可能的結尾 Terminal</p>
+</blockquote>
+
+<p>Example, Using previous grammar:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FOLLOW(E)  = { $ } U FIRST( ')' )
+           = { $, ) }
+FOLLOW(E') = FOLLOW(E)
+           = {  $, ) }
+FOLLOW(T)  = { FIRST(E') – ε } U FOLLOW(E') U FOLLOW(E)
+           = { +, $, ) }
+FOLLOW(T') = FOLLOW(T)
+           = { +, $ , ) }
+FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
+           = { *, +, $, ) }
+</code></pre></div></div>
+
+<h3 id="45-bottom-up-parsing">4.5 Bottom-up Parsing</h3>
+
+<ul>
+  <li>Bottom Up Parsing 是從底層的 Leaf 開始，使用 Rightmost derivation 建構一顆到 Root 的 Parse tree</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/6.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Handles</strong></p>
+
+<ul>
+  <li>A handle β of a right-sentential form γ consists of
+    <ul>
+      <li>a production A -&gt; β</li>
+      <li>a position of γ where β can be replaced by A to produce the previous right-sentential form in a rightmost derivation of γ</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>非正式的講 handle 就是和某個 Production 能匹配的 Substring，對他化簡就代表反向的 Rightmost derivation</p>
+</blockquote>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/7.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<ul>
+  <li>The string ω to the right of the handle contains only terminals</li>
+  <li>Ais the bottommost leftmostinterior node with all its children in the tree</li>
+</ul>
+
+<p>如果有 S =&gt;<sup>*</sup> αAω =&gt; aβω，那麼緊跟在 a 之後的 Production A -&gt; β 就是 aβω 的一個 Handle，要注意 ω 一定只包含 Terminals，
+如果 grammmr 是 Non-amibiguous，那麼 aβω 只會有一個 rightmost derivation，否則可能會有多個。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/9.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Handle pruning:</strong> 就是一個 Parse tree 識別 Handles 並將他們替換為 Nonterminal，到最後的過程</p>
+
+<h5 id="453-shift-reduce-parsing">4.5.3 Shift-Reduce Parsing</h5>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
-  <p>10-26-2023 17:50</p>
+  <p>11-06-2023 17:12</p>
 </blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回的 Token 是否符合語法規則，並且建立語法樹]]></summary></entry><entry><title type="html">OS | CPU Scheduler (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-19-cpu_scheduler.html" rel="alternate" type="text/html" title="OS | CPU Scheduler (Unfinished)" /><published>2023-10-19T00:00:00+08:00</published><updated>2023-10-19T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/cpu_scheduler</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-19-cpu_scheduler.html"><![CDATA[<blockquote class="block-tip">
   <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
 </blockquote>
@@ -1184,7 +1585,7 @@ Green thread 是為了在底層的 OS 不支援 Thread 的情況下，透過 Lib
 
 <h3 id="container_of">container_of</h3>
 
-<p>container_of 的定義在 [&lt;include/linux/container_of.h&gt;]，並且需要使用 Marco offsetof，container_of 可以透過一個 struct 中的某個成員來獲得該 struct 的起始位置，
+<p>container_of 的定義在 <a href="https://github.com/torvalds/linux/blob/master/include/linux/container_of.h">&lt;include/linux/container_of.h&gt;</a>，並且需要使用 Marco offsetof，container_of 可以透過一個 struct 中的某個成員來獲得該 struct 的起始位置，
 這樣的做法會在 Linux kernel 中被頻繁的使用到。</p>
 
 <p>例如 Linux kernel 中的 <a href="https://github.com/torvalds/linux/blob/master/lib/rbtree.c">&lt;lib/rbtree.c&gt;</a>, <a href="https://github.com/torvalds/linux/blob/master/include/linux/list.h">&lt;include/linux/list.h&gt;</a>，在 list.h 中 container_of 被用來找尋 list_last_entry, list_first_entry，
@@ -3143,8 +3544,16 @@ STF id1, R1		// R1 的內容存入 id1 中
 <p>跟其他軟體開發一樣，開發 Compiler 也可以利用許多現代開發工具，除了通用的軟體開發工具之外也有一些更加針對 Compiler 的工具。</p>
 
 <ol>
-  <li><em>Scanner generators</em>: 可以根據一個語言的 Lexemes 的正規表達式(<strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a></strong>)描述來生成語彙分析器</li>
-  <li><em>Parser generators</em>: 可以根據一個程式語言的語法(<strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>)描述自動生成語法分析器</li>
+  <li><em>Scanner generators</em>: 可以根據一個語言的 Lexemes 的正規表達式(<strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a></strong>)描述來生成語彙分析器
+    <ul>
+      <li>Lex, Flex</li>
+    </ul>
+  </li>
+  <li><em>Parser generators</em>: 可以根據一個程式語言的語法(<strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>)描述自動生成語法分析器
+    <ul>
+      <li>Yacc, Bison</li>
+    </ul>
+  </li>
   <li><em>Syntax-directed translation engines</em>: 用於 Traversal syntax tree 並使用 <strong>Attribute grammars</strong> 生成中間代碼</li>
   <li><em>Code-generator generators</em>: 根據中間語言翻譯成目標機器的機器語言的規則(<strong>Tree grammars</strong>) 來生成代碼生成器</li>
   <li><em>Data-flow analysis engines</em>: 可以幫助收集 <strong>Data-flow</strong>(程式中的資料傳遞)，是 Compiler 優化的重要部分</li>
@@ -3275,6 +3684,6 @@ STF id1, R1		// R1 的內容存入 id1 中
 
 <blockquote class="block-warning">
   <h5 id="note">NOTE</h5>
-  <p>這篇是 Compiler 的第一篇筆記，透過本篇快速了解 Compiler 架構後再深入討論各部分的細節。<br />
+  <p>This is first note of compilers, focus on the introduction of compilers.<br />
 Last edit 09-23-2023 13:32</p>
 </blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="Compiler" /><category term="OS" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. 編譯器這門課可以讓人更深入的了解 Programming language，如果能知道編譯器如何將 High level language 轉換為 Machine code 與背後的工作原理， 就能更有效的去編寫程式。在修 OS 的時候更有感覺，有些是針對編譯器與平台的優化去更改寫法，有些小小的改動就能減少數行的指令去提升效能。]]></summary></entry></feed>

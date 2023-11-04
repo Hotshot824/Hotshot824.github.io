@@ -139,7 +139,9 @@ STF id1, R1		// R1 的內容存入 id1 中
 跟其他軟體開發一樣，開發 Compiler 也可以利用許多現代開發工具，除了通用的軟體開發工具之外也有一些更加針對 Compiler 的工具。
 
 1.	*Scanner generators*: 可以根據一個語言的 Lexemes 的正規表達式(**[Regular Expression]**)描述來生成語彙分析器
+    -   Lex, Flex
 2.	*Parser generators*: 可以根據一個程式語言的語法(**[Context free grammars]**)描述自動生成語法分析器
+    -   Yacc, Bison
 3.	*Syntax-directed translation engines*: 用於 Traversal syntax tree 並使用 **Attribute grammars** 生成中間代碼
 4.	*Code-generator generators*: 根據中間語言翻譯成目標機器的機器語言的規則(**Tree grammars**) 來生成代碼生成器
 5.	*Data-flow analysis engines*: 可以幫助收集 **Data-flow**(程式中的資料傳遞)，是 Compiler 優化的重要部分
@@ -231,7 +233,7 @@ STF id1, R1		// R1 的內容存入 id1 中
 </div>
 
 > ##### NOTE
-> 這篇是 Compiler 的第一篇筆記，透過本篇快速了解 Compiler 架構後再深入討論各部分的細節。  
+> This is first note of compilers, focus on the introduction of compilers.  
 > Last edit 09-23-2023 13:32  
 {: .block-warning }
 
