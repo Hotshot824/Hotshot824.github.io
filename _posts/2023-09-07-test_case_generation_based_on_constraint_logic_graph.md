@@ -1,5 +1,5 @@
 ---
-title: "Paper | Test Case Generation Based on Constraint Logic Graph (Unfinished)"
+title: "Paper | Test Case Generation Based on Constraint Logic Graph"
 author: Benson Hsu
 date: 2023-09-07
 category: Jekyll
@@ -19,7 +19,7 @@ tags: [software, software_qualitiy, generate_test_case]
 這裡指出了幾個測試流程:
 
 -   Unit testing(單元測試)
--   Intergration testing(整合測試)
+-   Integration testing(整合測試)
 -   System testing(系統測試)
 -   Acceptance testing(驗收測試)
 
@@ -29,9 +29,9 @@ tags: [software, software_qualitiy, generate_test_case]
 -   White-box testing(白箱測試)
 
 其中針對單元測試的 Tase case 可以分成兩種情況:
--   Vaild test case(符合前置條件的測試案例)
+-   Valid test case(符合前置條件的測試案例)
     -   符合程式預期輸入與輸出的測試案例，需要先得知測試前後的系統狀態(system pre-state/post-state)，參數(argument)，回傳值(return value)
--   Invaild test case(不符合前置條件行為測試案例)
+-   Invalid test case(不符合前置條件行為測試案例)
     -   可對程式產生錯誤的測試案例，也就是在 Java 中所發生的例外狀況(exception)。
 
 ##### 1.2 Method
@@ -218,6 +218,59 @@ AST 的每一個 Node 都代表一個 OCL 的運算式，以下是作者所設�
 
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/3.png?raw=true){:height="75%" width="75%"}
 
+```java
+public ASTNode(Constraint obj) {
+    super();
+    this.id = node_count++; // Auto-increment id
+    this.constraint = obj; // Type provided by DresdenOCL
+    parents = new ArrayList<INode>(); // Point to parents
+}
+```
+
+-   ASTNode 常用函數
+
+-   `public abstract CLGNode toCLG(Criterion criterion);`
+    -   產生 CLG 的函數，回傳此 ASTNode 所產生的 CLG 的第一個 CLGNode
+-   `public abstract Classifier getType();`
+    -   每個 ASTNode 都是運算式，函式回傳此 ASTNode 的回傳型態
+-   `public abstract String getState();`
+    -   取得此ASTNode 的是在哪個狀態(inv、pre、post)
+-   `public abstract ASTNode toDeMorgan();`
+    -   根據 De Morgan's law 對此 ASTNode 取反值
+-   `public abstract ASTNode toPreProcessing();`
+    -   將ASTNode 轉換成適合產生限制邏輯圖且比較簡單的 ASTNode，再根據新的 ASTNode 結構來產生 CLG
+
+<br>
+
+-   **Constraint**: 針對限制式所定義的物件型別，供內部需使用到限制式時使用
+
+```java
+public Constraint(Model model, tudresden.ocl20.pivot.pivotmodel.Constraint obj, ASTNode spec) {
+    super(obj);
+    this.dresden_constraint = obj; // Type provided by DresdenOCL
+    this.model = model; // Point to UML model
+    this.spec = spec; // Point to AST root node
+    this.spec.addPreviousNode(this);
+}
+```
+
+> 這裡只舉能產生分支的 ASTNode 為例子，全部的 Node 請參考論文
+{: .block-warning }
+
+-   **IfExp**: 指向 thenExp 與 elseExp
+
+```java
+public IfExp(Constraint obj, ASTNode conditionExp, ASTNode thenExp, ASTNode elseExp) {
+    super(obj);
+    this.conditionExp = conditionExp;
+    this.thenExp = thenExp;
+    this.elseExp = elseExp;
+    conditionExp.addPreviousNode(this);
+    thenExp.addPreviousNode(this);
+    elseExp.addPreviousNode(this);
+}
+```
+
 IfExp 的抽象語法樹如圖，根節點為IfExp
 -   conditionExp：ASTNode 第一個子樹，為condition 的運算式
 -   thenExp：ASTNode 第二個子樹，為then 的運算式
@@ -225,7 +278,40 @@ IfExp 的抽象語法樹如圖，根節點為IfExp
 
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/4.png?raw=true){:height="65%" width="65%"}
 
-> 這裡只舉 IfExp 為例子，全部的 Node 請參考論文
+-   **OperationCallExp**: 
+    -   `this.parameters`: 第二個子樹開始，不限個數的參數
+    -   `this.isMethod`: 是否為函數呼叫
+
+```java
+public OperationCallExp(
+    Constraint obj, 
+    ASTNode source, 
+    String name, 
+    Classifier type, 
+    boolean isMethod, 
+    Collection<ASTNode> parameters
+    ) 
+{
+    super(obj, source, name, type);
+    this.parameters = new ArrayList<ASTNode>(parameters);
+    this.isMethod = isMethod;
+}
+```
+
+-   **IteratorExp**: 迭代器依靠呼叫 IterateExp 來產生迭代的 AST
+    -   `global_iterate_id`: 來產生迭代的次數
+    -   `addPreviousNode`: 將此次迭代變為下次迭代的 Parent
+
+```java
+public IterateExp(Constraint obj, ASTNode source, String name, ASTNode accInitExp, ASTNode bodyExp) {
+    super(obj, source, name, accInitExp.getType());
+    this.accInitExp = accInitExp; // Initial value of the iterator
+    this.bodyExp = bodyExp; // Body of the iterator
+    accInitExp.addPreviousNode(this);
+    bodyExp.addPreviousNode(this);
+    this.iterate_id = global_iterate_id++;
+}
+```
 
 ##### 3.1.2 Example Triangle
 
@@ -263,7 +349,7 @@ post:
 ##### 3.2 AST Post-Processor
 
 因為 User 在描寫物件時會有一些口語上的習慣，因此會將 AST 再重構成結構簡單的 AST，他的條件如下:
-1.  不符合前置條件的重構
+1.  不符合前置條件的重構，以此產生不符合 Pre-condition 的 CLG
 2.  Flat IfExp(扁平化 IfExp)
 3.  Flat Logic Operator(扁平化 Logic Operator)
 4.  iterate Operator simplify，只能出現
@@ -348,7 +434,8 @@ pre:
 但是一個 Funciton 可能有多個不同的 Execption 跳出，這時就需要寫多個前置條件，這樣就會有兩個獨立的 CLG。
 
 ```
-context Class::Method(Parameter : Type) pre Constraint_Name_1 :
+context Class::Method(Parameter : Type) 
+pre Constraint_Name_1 :
     Constraint_1
 pre Constraint_Name_2 :
     Constraint_2
@@ -440,6 +527,17 @@ ifCLG(
 
 **IterateExp**
 
+-   因為 CLP 的變數是一個固定值，因此會在變數後面加上 Iterate 的編號
+-   左邊的迴圈在條件終止前會不斷迭代
+    1.  累加器(IterateAcc) Init
+    2.  迴圈計數器(IterateIndex) Init
+    3.  迴圈條件判斷
+    4.  Collection 取出這次迭代的值
+    5.  IterateAcc = IterateBody
+    6.  IterateIndex++
+
+> 前綴 # 代表是作者創造的變數，後面的數字是為了區分是第幾個 Iterate 的運算式
+
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/13.png?raw=true){:height="100%" width="100%"}
 
 > 上圖是 IterateExp AST & CLG 的轉換對照圖
@@ -476,7 +574,7 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 -   and 運算式來說 Exp1 and Exp2，兩者為真才為真，因此在 CLG 的角度來看就是兩個節點連在一起
 -   or 運算式則是 Exp1 or Exp2，其中之一為真即為真，故從 CLG 的角度來看 Exp1/2 可以視作兩條路徑上的節點，
-並且根據 DCC 的定義，每個條件的結果都至少有一次的 True 與 False，因此會如下圖所示:
+並且根據 DCC 的定義，至少有一次的 True 與 False，因此會如下圖所示:
 
 <div style="display: flex; justify-content: center;">
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/18.png?raw=true" 
@@ -513,7 +611,7 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 ##### 3.5.3 Multiple condition coverage
 
-> MCC 與 DCC 不同的是，MCC 需要展開所有的條件組合，因此會有 2<sup>n</sup> 條路徑，其中 n 為條件的數量
+> MCC 與 DCC 不同的是，MCC 需要展開所有的條件組合，因此會有 2<sup>n</sup> + 1 條路徑，其中 n 為條件的數量
 {: .block-warning }
 
 **or**
@@ -524,9 +622,195 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 **DCC Example of Triangle:**
 
-因為這樣產生的 CLG 非常複雜所以這裡就不放上，但這個 CLG 因為有六個 or 因此會有 2<sup>6</sup> = 64 條路徑。
+因為這樣產生的 CLG 非常複雜所以這裡就不放上，但這個 CLG 因為有五個同一層級的 or 因此會有 2<sup>5</sup> = 32 + 1 條路徑。
+
+---
 
 ### 4. Equivalence Class CLG Path Generator
+
+[4.1 CLG Paths lister](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#41-clg-paths-lister)  
+[4.2 Path Post-Processor](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#42-path-post-processor)  
+[4.3 Constraint Logic Program Coverage Criteria](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#43-constraint-logic-program-coverage-criteria)  
+[4.4 Triangle Example - Paths and Test Case](./2023-09-07-test_case_generation_based_on_constraint_logic_graph.html#44-triangle-example---paths-and-test-case)  
+
+這裡描述如何將 CLG 中的等價行為做分割，也就是從 CLG 中分割出不同的 Complete Path，產生測試路徑的架構圖如下:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/28.png?raw=true){:height="85%" width="85%"}
+
+當滿足以下兩個條件的其中一個，路徑條列就會結束:
+1.  可實行路徑組滿足覆蓋標準
+2.  失敗的路徑次數已經超過可容許錯誤次數
+
+整個 CLG 的路徑條列器工作流程如下:
+1.  透過 CLG 覆蓋標準找尋完整路徑
+2.  經由 Path Post-Processing 
+3.  交給 CLP Generator 然後由 Eclipseclp 求解(測試資料)
+4.  收集路徑與測試資料直到條件達成
+
+> 這裡所使用的 CLP Generator 使用 Y.-T. Lan, Automatic Conversion from UML/OCL Specification to CLP Specification, 2015. 所提出的方法
+
+##### 4.1 CLG Paths lister
+
+作者使用 BFS 來對 CLG Traverse
+
+##### 4.1.1 PathFinder Object Implementation
+
+作者實作了一個名為 FeasiblePathFinder Class，他的屬性與參數與方法如下:
+
+```
+FeasiblePathFinder(CoverageCriterion criterion, CLGNode graph, Model model)
+    CoverageCriterion criterion; //覆蓋標準
+    Queue<List<CLGNode>> path_queue; //未完整路徑佇列
+    Model model; //UML 類別圖
+```
+
+-   `Path getNextPath()`
+    -   會從此 CLG 的 StartNode 加入 `path_queue`，在之後的每次迭代把往下的 Node 全部加入 path_queue，如果有多條 path 就複製現有的 `List<CLGNode>` 並把不同的分支加入不同的 `List<CLGNode>`，
+    並檢查是否有已經完整的 Path，有則暫停並 Return path
+-   `isCompletePath(List<CLGNode> path)`
+    -   檢查是否為完整路徑，完整路徑的最後節點必然是 EndNode。
+
+如果已經產生過的 Complete Path ，再次被產生就判斷已經沒有路徑可以產生，因此會回傳 null，這樣就可以避免無限迴圈
+
+##### 4.2 Path Post-Processor
+
+一個完整路徑需要做後處理才能轉換成 CLP，Path Post-Processor 對路徑做三件事:
+
+1.  邊界值尋找器(Boundary value finder)
+2.  隱含後置條件的復原器(Implicit post-condition meger)
+3.  以靜態單賦值形式(Static Single Assignment Form，SSA Form) 再次給予各個變數名稱
+
+##### 4.2.1 Boundary value finder
+
+透過邊界值理論，對於 Path 中的每個限制式都視做 Domain 的一條邊界，透過呼叫 getBoundaryCombinationVariants() 產生符合的路徑如下:
+
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/29.png?raw=true" 
+    width="30%" height="30%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/30.png?raw=true" 
+    width="30%" height="30%">
+</div>
+
+> 上圖左為原始邊界，圖右分別為 內部點，兩條封閉邊界上的兩個點，以要遍歷 <, = 可以計算為 1 + n<sup>op</sup> - 1
+
+##### 4.2.2 Implicit Post-Condition Restorer
+
+在 CLG 中如果在 Post-Condition 中沒有特別指定物件的屬性是否有改變，就代表受測函式執行前後的屬性是一樣的，因此在產生測試路徑後可以先判斷 Post-Condtion 是否有定義 Pre-State 的改變，
+如果沒有就在完整路徑上補上隱含的 Post-Condtion，如下:
+
+```
+<!-- Complete Path -->
+self@pre.sideA <> self@pre.sideB
+self@pre.sideA = self@pre.sideC
+result = “Isosceles”
+<!-- Add Post-Processing -->
+self.sideA = self.sideA
+self.sideB = self.sideB
+self.sideC = self.sideC
+```
+
+> 下面三個 Post-Processor 產生的限制式會被加入完整路徑中
+
+##### 4.2.3 Static Single-Assignment Processor
+
+因為 CLP 中每個變數都只能有一個值，因此遇到迴圈時就需要另外處理變數名稱，例如以下的例子:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/31.png?raw=true){:height="100%" width="100%"}
+
+每次迭代就在後面加上數字代表這次迭代的變數，並將其收集就能知道一次迭代上的所有限制式。
+
+##### 4.2.4 Path Object Implementation
+
+以下是 Path Class 的屬性、參數與方法如下:
+
+```
+Path(List<CLGNode> nodes, Model model)
+    List<CLGNode> nodes;
+    int id;
+    List<ASTNode> actual_asts;
+    Model model;
+    Constraint dresden_constraint;
+```
+
+-   `List<ASTNode> getASTNodes()`
+    -   取得全部限制節點中的抽象語法樹(回傳 actual_asts)
+-   `void analysisASTNodes()`
+    -   會先呼叫 prepareNewSymbolTable() 來準備變數的符號表，針對#IterateAcc、#IterateIndex、#IterateElement 三個變數做特別處理，
+    若這三個變數在 Operator 的左邊則將變數名稱替換成 `OriginalName + Number`
+-   `private List<OperationCallExp> getEqualExpsForAttributeConsistency()`
+    -   偵測是否有屬性在 Post-Condtion 中有改變，若無則回傳一系列的 `Attribute = Attribute@Pre`
+-   `private HashMap<String, Integer> prepareNewSymbolTable()`
+    -   準備所有 Variable 的符號表，String 為變數名稱，Integer 為變數的位置，1 是 self, 2 開始是 parameter, 3 是 parameter 的 return value
+-   `private Set<Attribute> findUnchangedPropertyForParameter(final HashMap<String, Set<PropertyCallExp>> changedPropertyCallExprs, Parameter parameter)`
+    -   偵測是否有屬性在 Post-Condtion 中有改變，若無則回傳一系列的 `Attribute = Attribute@Pre`
+-   `public List<Path> getBoundaryCombinationVariants()`
+    -   透過呼叫 `calculateVariants()` 取得來源路徑中符合邊界值覆蓋的組合，接著複製相對應數量的路徑並將組合中的 OperationCallExp 取代原本的，並輸出全部組合的 Queue
+-   `private List<List<Pair<Integer, String>>> calculateVariants()`
+    -   會將 CLG 中的限制節點的 AST Node 中的邊界取出，並以一個固定規則來轉換
+    -   例如之前的 A <= B, B <= C，會將 <= 的位置取出，以 <<, <=, =<, == 的組合來取代，並刪除不合理的組合 `==`
+
+##### 4.3 Constraint Logic Program Coverage Criteria
+
+這章節會介紹 Coverage Criteria 的 Interface，要注意這裡談的是為了產生路徑的測試覆蓋標準，在 CLG Coverage Criteria 中作者目前僅有 Edge Coverage，
+也就是對所有邊界覆蓋。
+
+##### 4.3.1 Coverage Criteria Interface
+
+-   `void addFeasiblePath (List<CLGNode> path)`
+    -   當 Path 已經確定有解，這條 Path 放入 Feasible Path 中
+-   `void addInfeasiblePath (List<CLGNode> path)`
+    -   當 Path 無解，這條 Path 放入 Infeasible Path 中
+-   `void analysisTagetGraph(CLGNode graph)`
+    -   在產生完完整的限制邏輯圖之後，我們會使用此函式來幫忙分析這張完整的限制邏輯圖會需要覆蓋那些資訊
+-   `boolean meetRequirement()`
+    -   此函式是幫忙檢測是否已經將該覆蓋到的地方都已經覆蓋到了
+-   `boolean isVisitedFeasiblePath (List<CLGNode> path)`
+    -   此函式是幫忙檢測輸入的這條路徑是否已經被標註為可實行路徑
+-   `boolean isVisitedInfeasiblePath (List<CLGNode> path)`
+    -   此函式是幫忙檢測輸入的這條路徑是否已經被標註為不可實行路徑
+
+##### 4.3.2 Edge Coverage
+
+```
+Set<ImmutablePair<CLGNode, CLGNode>> all_branches; //全部的邊(點與點的配對)
+Set<ImmutablePair<CLGNode, CLGNode>> visited_branches; //已經走訪過的邊
+Set<List<CLGNode>> infeasible_path; //已走訪過不可實行路徑 
+Set<List<CLGNode>> feasible_path; //已走訪過可實行路徑
+```
+
+透過比較 `all_branches` 與 `visited_branches` 兩個集合內的邊，用來查看是 否全部的邊都已經被走訪過。
+
+> 因為不同測試標準會有不同的 CLG 因此在走訪完全部路徑就代表達成測試覆蓋標準
+
+##### 4.4 Triangle Example - Paths and Test Case
+
+在這裡我只舉用了 Triangle Consturctor 的符合/不符合 Pre-condition 為例子:
+
+##### 4.4.1 Decision coverage testcase
+
+Triangle 在 DC 測試標準下符合 Pre-condition 的測試資料只有一條，如下:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/16.png?raw=true){:height="100%" width="100%"}
+
+| Path | Parameter | Return value | Post-condition |
+| :---: | :---: | :---: | :---: |
+| 1 | 1, 1, 1 | void | Triangle(1, 1, 1) |
+
+Triangle 在 DC 測試標準下不符合 Pre-condition 的測試資料會有，但是在 Boundary value finder 上會把 or 做展開，因此會有七條路徑，如下:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/15.png?raw=true){:height="100%" width="100%"}
+
+| Path | Parameter | Execption |
+| :---: | :---: | :---: |
+| 1 | -10, -10, -10 | void |
+
+> 7條 Paths minumum solutions 都相同，這裡不全部列出
+
+##### 4.4.2 Decision condition coverage testcase
+
+Triangle 在 DCC 下不符合 Pre-condition 的測試
+
+---
 
 ### 5. Test Case Generator
 
@@ -534,6 +818,11 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 由於 Coverage Criteria 會產生不同的 CLG，產生路徑的時間與涵蓋到的內容也不一樣，我們將範例資訊顯示在下表，
 Class info 分別代表: Class Num, Association Num, Function Num, Can be excption function Num:
+
+-   IntegerRange: iterate 測試
+-   RecursionExample: fibonacci, factorial
+-   Triangle, Date: 表現複雜的分支測試
+-   Laboratory: 關聯多個類別的物件
 
 | Example | Class info | AST Node | Iteration |
 | :---: | :---: | :---: | :---: |
@@ -551,9 +840,53 @@ Class info 分別代表: Class Num, Association Num, Function Num, Can be excpti
 
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-07-test_case_generation_based_on_constraint_logic_graph/27.png?raw=true){:height="100%" width="100%"}
 
+就跟預料的一樣所花費時間 DC > DCC > MCC
+-   Date 是花費時間最長的範例，因為 Date 中有更多的 if, or 運算式
+-   Laboratory 是花費時間第二長的範例，因為 Laboratory 中有許多關聯物件，導致需要一併產生才能完成
+
+同時在 DCC, MCC 中會產生許多條不可實行路徑，例如以下的例子:
+
+```
+context Date::Date(y : Integer, m : Integer, d : Integer)
+    pre DateErrorException:
+    if (y.mod(400) = 0) or (y.mod(4) = 0 and y.mod(100) <> 0)
+        then d <= 29
+```
+
+DCC 會產生一條左為真，右為假的例子: `y.mod(400) = 0, y.mod(4) <> 0, y.mod(100) <> 0` 沒有數字能夠符合這三個條件，因此這條路徑是不可實行的
+
+```
+context Date::Date(y : Integer, m : Integer, d : Integer)
+    pre DateErrorException:
+    if ((m = 1) or (m = 3) or (m = 5) or (m = 7) or (m = 8) or (m = 10) or (m = 12))
+        then d <= 31
+```
+
+MCC 為了產生所有的組合，會有 m=1, m=3 這樣的例子出現
+
+##### 5.3 Quality of Coverage Criteria
+
+使用 [PIT] 來驗證三種 Coverage Criteria 下產生的 Test Case 的品質，DC 在各方面都表現得較差，而 DCC, MCC 雖然 MCC 可以產生更多的測試案例，
+但兩者的突變分數幾乎一樣，因此一般情況下使用 DCC 即可做到 MCC 差不多程度的覆蓋度。
+
+但是在幾個特定案例下，都無法達到 100% 的覆蓋度，因為透過 CLP 找解時會優先找出最簡的解(最小值)，因此例如: parm < 10 突變為 parm <= 10 時，
+就無法找出其中錯誤。
+
+---
+
+### 6. Conclusion and Future Work
+
+作者實作出了可以輔助測試驅動開發的系統，基於限制邏輯圖的測試案例產生器，透過規格文件產生黑箱函式測試案例。
+
+OCL 僅能支援部分 String 與部分 Collection 與完整的 Integer 型態。
+
+並在撰寫時需要明確寫出使用到的物件皆為前置狀態(意指obj@pre)，避免我們誤判成後置條件有被更動。
+
+另外就是如何判斷無效的測試路徑，如 5.2 所述的無效路徑將浪費大量的時間，因為這裡無效的判斷方式是以 CLP 的求解與超時來決定，
+如果有多個無解路徑將必然消耗固定的等待時間。
 
 > ##### NOTE
-> Last edit 11-2-2023 16:36  
+> Last edit 11-15-2023 12:55  
 {: .block-warning }
 
 [Constraint Satisfaction Problem]: ./2022-11-08-ai_csp.html
@@ -566,3 +899,5 @@ Class info 分別代表: Class Num, Association Num, Function Num, Can be excpti
 [HOL-TestGen]: https://brucker.ch/projects/hol-testgen/
 
 [De Morgan's laws]: https://en.wikipedia.org/wiki/De_Morgan%27s_laws
+
+[PIT]: https://pitest.org/

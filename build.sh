@@ -6,9 +6,6 @@
 # History:
 # 2023/11/04	Hotshot824	0.1.1
 
-WD=$(dirname $(readlink -f $0))
-TZ=$(cat /etc/timezone)
-
 function main() {
   while getopts ":bph" opt; do
     case ${opt} in
@@ -56,6 +53,8 @@ function push() {
 }
 
 (
+  WD=$(dirname $(readlink -f $0))
+  TZ=$(cat /etc/timezone)
   cd $WD
   main "$@"
 )
