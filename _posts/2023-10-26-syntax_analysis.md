@@ -18,7 +18,7 @@ tags: [Compiler]
 -   Push-down automata
 -   Top-down parsing
 -   Buttom-up parsing
--   Bison -a parser generator
+-   Bison a parser generator
 
 ### 4.1 Introduction to parsers
 
@@ -322,7 +322,266 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
 
 ##### 4.5.3 Shift-Reduce Parsing
 
+因此 Bottom-Up Parsing 又稱為 Shift-Reduce Parsing，因為他們的過程就是不斷的 Shift 和 Reduce
 
+-   Shift: shift the next input symbolonto the top of the stack
+-   Reduce: replace the handle at the top of the stack with the corresponding nonterminal
+-   Accept: announce successful completion of the parsing
+-   Error: call an error recovery routine
+
+例如之前的例子，其實就是一個不斷 Shift 和 Reduce 的過程:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/11.png?raw=true){:height="75%" width="75%"}
+
+---
+
+### 4.6 LR(k) Parsing
+
+> 目前流行的 Bottom-UP Parsing 都基於 LR(k) Parsers 的概念，幾乎可以支援所有 CFG，但是建立 Parser 很麻煩，因此通常會使用 Parser generator 來建立 Parser
+{: .block-tip }
+
+LR(k) Parsing:
+-   L 代表從左往右掃描輸入
+-   R 代表以 rightmost derivation 進行推導
+-   k 代表作出語法分析決策時的 Lookahead 輸入字元數
+
+這裡會介紹三種 LR Parsing:
+-   SLR(1) Parsing
+-   LR(1) Parsing
+-   LALR(1) Parsing
+
+從狀態數量來說 SLR > LALR > LR，但是能處理的 Grammar 來說 LR > LALR > SLR
+
+##### 4.6.2 Items and the LR(0) Automaton
+
+-   An LR(0) itemof a grammar in G is a production of G with a dotat some position of the right-hand side, A -> α⋅β
+-   An LR(0) item represents a statein an NPDA indicating how much of a production we have seen at a given point in the parsing process
+    -   NPDA means Non-deterministic Pushdown Automaton
+    -   DPDA means Deterministic Pushdown Automaton
+
+如果有一個 Production `A -> XYZ`，那他將會有四個 LR(0) item:
+-   A -> ⋅XYZ, A -> X⋅YZ, A -> XY⋅Z, A -> XYZ⋅
+
+這個點代表 Parse 的進度，藉由這些 item 我們可以建立一個 **NPDA**，再透過演算法來轉換成 **DPDA**，這個 DPDA 就是 **LR(0) Automaton**
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/12.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/13.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+> 上圖左為 NPDA，右為 DPDA，透過以下演算法將 NPDA 轉換成 DPDA:
+
+```pseudo
+functionitems(G');
+begin
+    C:= {closure({S' -> •S})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C= C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+```
+
+為了建構以上演算法我們需要以下函數與 Augmented grammar(加強語法):
+-   **Augmented grammar**: 
+    -   加入新的起始符號 S'，並且加入 Production S' -> S
+-   **closure(I)** adds more items to Iwhen there is a dot to the left of a nonterminal (corresponding to ε edges)
+-   **goto(I, X)** moves the dot past the symbol Xin all items in Ithat contain X (corresponding to non-ε edges)
+
+```pseudo
+function closure(I);
+begin
+    J := I;
+    repeat
+    for each item A -> α•Bβ in J and 
+    each production B -> γ in G such that
+    B -> •γ is not in J do
+        J = J ∪ {B -> •γ}
+    until no more items can be added to J;
+return J
+end
+```
+
+```pseudo
+function goto(I, X);
+begin
+    set J to the empty set
+    for any item A -> α•Xβ in I do
+        add the item A -> αX•β to J
+    return  closure(J)
+end
+```
+
+##### 4.6.4 SLR Parsing
+
+以下是 SLR 的演算法
+
+```pseudo
+procedure SLR(G');
+begin
+    for each state Iin items(G') do begin
+        if A -> α•aβ is in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if A -> α• in I and A != S' then
+            action[I, a] = "reduce A -> α" for all a in FOLLOW(A)
+        if S' -> S• in I then
+            action[I, $] = "accept"
+        if A -> α• Xβ in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+```
+
+以之前的 Grammar 為例，將其變為 **Augmented grammar**:
+
+```pseudo
+1.  E' -> E
+2.  E  -> E + T
+3.  E  -> T
+4.  T  -> T * F
+5.  T  -> F
+6.  F  -> (E)
+7.  F  -> id
+```
+
+透過演算法來找出所有的 Item:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/14.png?raw=true){:height="75%" width="75%"}
+
+之後將找到的 Item 填入表中:
+-   s<sub>n</sub>: 代表 shift 操作，與前往 State n
+-   r<sub>n</sub>: 代表 reduce 操作，並且使用編號 n 的 Production
+-   填表時注意 I<sub>n</sub> 中是否有 dot 走到最後，如果有就看是哪一個 Production，並填入 r<sub>n</sub>
+    -   如果 Production 是 S' -> S，那麼就填入 accept
+    -   要在什麼欄位填入 r<sub>n</sub>，就看 FOLLOW(A) 中有哪些 Terminal，就填入哪些 Terminal
+
+這裡我們用一個測試輸入 id + id 來驗證這個表的正確性，注意做完 reduce 後狀態是看前一個 Stack 中的狀態，
+再根據 Production 左邊的 Nonterminal 來進行 Goto，所以在 Step 7, 8, 9 是看 State 6 的 goto。
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/15.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/16.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+> 在同一欄遇到多個 reduce 那就需要進行嘗試，直到出現 Error 或是 Accept
+
+---
+
+### 4.7 More Powerful LR Parsers
+
+SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
+LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。
+
+##### 4.7.1 LR(1) Parsing Table LR(1) Items
+
+-   An LR(1) item of a grammar in G is a pair, (A -> α•β, a), of an LR(0) item A -> α•β and a lookahead symbol a
+-   The lookahead has no effect in an LR(1) item of the form (A -> α•β, a), where β is not ε
+-   An LR(1) item of the form (A -> α•, a) calls for reduction by A -> α only if the next input symbol is a
+
+我們先來看 LR(1) 的演算法:
+
+closure(I) 跟 SLR(1) 不同的是，對於每個 B -> γ，要找出所有可能的 b，b = FIRST(βa)，然後將 (B -> •γ, b) 加入 J 中。
+FIRST(βa) 其實就等於先看下一個 Nonterminal 的 FIRST。
+
+```
+function closure(I);
+begin
+    J := I;
+    repeat
+    foreach item (A -> α•Bβ, a) in J and 
+    each production B -> γ of G that
+    each b in FIRST(βa) such that
+    (B -> •γ, b) is not in J do
+        J := J ∪ {(B -> •γ, b)}
+    until no more items can be added to J;
+    return J
+end
+```
+
+goto(I, X) 其實跟 SLR(1) 一樣，只是 item 多了 lookahead(a)
+
+```
+function goto(I, X);
+begin
+    set J to the empty set
+    for any item (A -> α•Xβ, a) in I do
+        add the item (A -> αX•β, a) to J
+    return closure(J)
+end
+```
+
+下面這是完整的 LR(1) 演算法:
+
+```
+function items(G');
+begin
+    C := {closure({[S' -> •S, $]})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C := C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+```
+
+Example:
+
+```
+1.  S' -> S
+2.  S  -> CC
+3.  C  -> cC
+4.  C  -> d
+```
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/17.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/18.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+<br>
+
+1. 首先看 closure({(S' -> •S, $)}):
+    1.  首先計算 (S' -> •S, $)
+        -   以 (A -> α•Xβ, a) 來看會等於 A = S', α = ε, B = S, β = ε, a = $
+        -   加入 B -> •γ，也就是 S -> •CC
+        -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
+        -   加入 **(S -> •CC, $)**
+    2.  計算 (S -> •CC, $)
+        -   以 (A -> α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $
+        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   計算 b = FIRST(βa) = FIRST(C$) = { c, d }
+        -   加入 (C -> •cC, c), (C -> •cC, d), (C -> •d, c), (C -> •d, d)
+        -   簡化為 **(C -> •cC, c/d)**, **(C -> •d, c/d)**
+    3.  已經沒有 Item 可以加入，所以返回 I<sub>0</sub>
+2.  goto(I<sub>0</sub>, S): (S' -> S•, $)
+3.  goto(I<sub>0</sub>, C):
+    1.  (S -> C•C, $)
+        -   以 (A -> α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $
+        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
+        -   加入 **(C -> •cC, $)**, **(C -> •d, $)**
+4.  goto(I<sub>0</sub>, c)
+    1.  (C -> c•C, c/d)
+        -   以 (A -> α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d
+        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }
+        -   加入 **(C -> •cC, c/d)**, **(C -> •d, c/d)**
+
+之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true){:height="75%" width="75%"}
 
 > ##### Last Edit
 > 11-06-2023 17:12

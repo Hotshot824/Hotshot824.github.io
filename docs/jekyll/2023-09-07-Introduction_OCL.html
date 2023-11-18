@@ -205,7 +205,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#1-introduction">1. Introduction</a></li><li><a href="#2-characteristic">2. Characteristic</a></li></ul>
+                                    <ul><li><a href="#1-introduction">1. Introduction</a></li><li><a href="#2-basic-object-constraint-language">2. Basic Object Constraint Language</a></li><li><a href="#3-collection-in-ocl">3. Collection in OCL</a></li></ul>
 
                                 
                             
@@ -535,25 +535,285 @@
 
 <h3 id="1-introduction">1. Introduction</h3>
 
+<ul>
+  <li>通常只使用 UML 是不足以完全規範一個軟體系統</li>
+  <li>所以還需要 Constraint 來完全規範一個軟體系統</li>
+  <li>Constraint 是對軟體系統的一個或多個值的限制</li>
+  <li>Object Constraint Language(OCL) 是一種基於 Text 的語言，用於描述這些 Constraints</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>上圖展示了一個 Flight 的 Class invariant，如果 type == passenger，那麼 airplane.type 也必須為 passenger，同樣的 cargo 也只能對應 cargo
+這意思就如果是客運航班就要對應客機，貨運航班就要對應貨機。</p>
+
+<h3 id="2-basic-object-constraint-language">2. Basic Object Constraint Language</h3>
+
+<h5 id="221-kinds-of-constraints">2.2.1 Kinds of Constraints</h5>
+
 <p>因 UML 類別圖中無法包含一些細節資訊，若以自然語言描述，常造成開發者與使用者間認知差異，所以使用物件限制語言嚴謹的描述 UML 類別圖中有關系統規格的所有資訊，為 UML 標準的擴充機制。
 物件限制語言使用三種限制式(constraint)來描述類別的行為:</p>
 
 <ol>
-  <li>類別恆定條件(Class invariant)
-針對一個類別而言，此類別的任何物件在整個生命週期皆須滿足自身定義的恆定條件。</li>
-  <li>函式前置條件(Method pre-condition)
-針對一個函式而言，在此函式被呼叫之前須滿足前置條件，才能確保動作正確。</li>
-  <li>函式後置條件(Method post-condition)
-針對一個函式而言，若在此函式被呼叫之前滿足前置條件，則此函式在被呼叫後，一定滿足後置條件。</li>
+  <li>Class invariant(類別恆定條件): a constraint that must alwaysbe met by all instances of the class.
+    <ul>
+      <li>針對一個類別而言，此類別的任何物件在整個生命週期皆須滿足自身定義的恆定條件</li>
+    </ul>
+  </li>
+  <li>Method pre-condition(函式前置條件): a constraint that must always be true beforethe execution of the operation.
+    <ul>
+      <li>針對一個函式而言，在此函式被呼叫之前須滿足前置條件，才能確保動作正確</li>
+    </ul>
+  </li>
+  <li>Method post-condition(函式後置條件): a constraint that must always be true afterthe execution of the operation.
+    <ul>
+      <li>針對一個函式而言，若在此函式被呼叫之前滿足前置條件，則此函式在被呼叫後，一定滿足後置條件</li>
+    </ul>
+  </li>
+  <li>Other constraints(其他限制式) 在 OCL2 之後還有其他的限制式加入如:
+    <ul>
+      <li>Derive, Init, Let, Def, Package</li>
+    </ul>
+  </li>
 </ol>
 
-<h3 id="2-characteristic">2. Characteristic</h3>
+<blockquote class="block-tip">
+  <p>例如: 一個校園借書系統，那麼 Class invariant 必須為 Student，因為校外人士不能借閱，
+而還書時 Pre-condition 必須為至少要有那本要還的書，Post-condition 則必須沒有已經還回去的書。</p>
+</blockquote>
 
-<p>物件限制語言由 IBM 於 1997 年開發，他扮演以下角色:</p>
+<h5 id="222-constraint-context-and-self">2.2.2 Constraint Context and Self</h5>
+
+<ul>
+  <li>Every OCL expression is bound to a specific context.
+    <ul>
+      <li>The context is often the element (classor method) that the constraint is attached to.</li>
+    </ul>
+  </li>
+  <li>The context may be denoted within the expression using the keyword ‘self’.
+    <ul>
+      <li>‘self’ is implicit in all OCL expressions.</li>
+      <li>Similar to ‘this’ in Java.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>例如: 以下的 OCL，context Person 宣告了這個 Constraint 是屬於 Person 這個 Class，而 self 則專指這個 Person 的 attribute</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context Person
+inv: self.age &gt;= 0
+</code></pre></div></div>
+
+<h5 id="223-notation">2.2.3 Notation</h5>
+
+<p>OCL 可以單獨寫在一個文件中，也可以寫在 UML 的 Class diagram 裡面，這些表示方法都是相同的</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/9.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="224-elements-of-an-ocl-expression">2.2.4 Elements of an OCL Expression</h5>
+
+<ul>
+  <li>In an OCL expression these elements may be used:
+    <ul>
+      <li>basic types: String, Boolean, Integer, Real.</li>
+    </ul>
+  </li>
+  <li>classifiers from the UML model and their features
+    <ul>
+      <li>attributes, and class attributes</li>
+      <li>query operations, and class query operations (i.e., those operations that do not have side effects)</li>
+    </ul>
+  </li>
+  <li>associations from the UML model
+    <ul>
+      <li>Including Rolenames at either end of an association</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>OCL 同樣有型別的概念，並且可以使用 UML 的 Class diagram 中的 Attribute，Operation，Association 等等</p>
+</blockquote>
+
+<p><strong>Basic types</strong></p>
+
+<p>以下表示了 OCL 的基本型別，可以使用在 OCL 的表達式</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Airline</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">name</span><span class="p">.</span><span class="n">toLower</span> <span class="o">=</span> <span class="s1">'klm'</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="p">((</span><span class="mi">9</span><span class="p">.</span><span class="mi">6</span> <span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nf">floor</span> <span class="o">implies</span> <span class="n">mature</span> <span class="o">=</span> <span class="nb">true</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>這裡表現出了 name.toLower 必須為 String，而 age 則為 float，mature 則為 boolean</p>
+</blockquote>
+
+<p><strong>Attributes</strong></p>
+
+<p>OCL 中有專指 Object 實例的 Attribute，也有專指 Class 的 Attribute</p>
+<ul>
+  <li>Class attribute 會在所有 Object 實例中共享</li>
+  <li>Object attribute 則是每個 Object 實例都有自己的 Attribute</li>
+</ul>
+
+<p>以下是一個例子:</p>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Object attribute</span>
+<span class="k">context</span> <span class="n">Flight</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">maxNrPassengers</span><span class="o">&lt;=</span> <span class="mi">1000</span>
+<span class="c1">-- Class attribute</span>
+<span class="k">context</span> <span class="n">Passenger</span>
+    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="n">Passenger</span><span class="p">.</span><span class="n">minAge</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>這裡的 maxNrPassengers 為專指 Flight Object 的 Attribute，而 age 則為所有 Passenger Class 的 Attribute</p>
+</blockquote>
+
+<p><strong>The @Pre Keyword</strong></p>
+
+<ul>
+  <li>The @pre keyword indicates the value of an attribute at the start of the execution of the operation</li>
+  <li>The keyword must be postfixed to the name of the item concernedsize = size@pre + 1</li>
+</ul>
+
+<p>例如 <code class="language-plaintext highlighter-rouge">size = size@pre + 1</code>:</p>
+<ul>
+  <li>size@pre 表示在執行這個 Operation 前的 size</li>
+  <li>size 表示在執行這個 Operation 後的 size</li>
+</ul>
+
+<p>Example: 例如一個 Triangle 的完整 OCL 可能會類似以下，其中包含了:</p>
+<ul>
+  <li><strong>Class invariant</strong>: 三角形的三邊長必須符合三角不等式</li>
+  <li><strong>Constructor(int sa, int sb, int sc)</strong>: Triangle 的建構式
+    <ul>
+      <li>Pre-condition: 輸入值必須符合三角不等式</li>
+      <li>Post-condition: 建構後的 a, b, c 應該等於輸入的 sa, sb, sc</li>
+    </ul>
+  </li>
+  <li><strong>Method: category()</strong>: 用來判斷三角形的類型
+    <ul>
+      <li>Post-condition: 回傳值應該為 Equilateral, Isosceles, Scalene</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span>
+<span class="k">inv</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span> <span class="o">and</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">and</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">a</span>
+
+<span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">Triangle</span><span class="p">(</span><span class="n">int</span> <span class="n">sa</span><span class="p">,</span> <span class="n">int</span> <span class="n">sb</span><span class="p">,</span> <span class="n">int</span> <span class="n">sc</span><span class="p">)</span>
+<span class="k">pre</span> <span class="n">IllegealArgException</span><span class="p">:</span>
+    <span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">&gt;</span> <span class="n">sc</span> <span class="o">and</span> <span class="n">sa</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sa</span>
+<span class="k">post</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">c</span> <span class="o">=</span> <span class="n">sc</span>
+    
+<span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">category</span><span class="p">():</span> <span class="kd">String</span>
+<span class="k">post</span><span class="p">:</span> <span class="nb">result</span><span class="o">=</span>
+<span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span>
+    <span class="n">ifa</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Equilateral'</span>
+    <span class="k">else</span> <span class="s1">'Isosceles'</span> 
+    <span class="k">endif</span>
+<span class="k">else</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Isosceles'</span>
+    <span class="k">else</span>
+        <span class="k">if</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span><span class="s1">'Isosceles'</span>
+        <span class="k">else</span> <span class="s1">'Scalene'</span> 
+        <span class="k">endif</span>
+    <span class="k">endif</span>
+<span class="k">endif</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="3-collection-in-ocl">3. Collection in OCL</h3>
+
+<p>OCL 中有已經定義好的關於 Collection 的操作，語法上使用: <code class="language-plaintext highlighter-rouge">collection -&gt; operation</code> 來表示對 Collection 的操作</p>
+
+<h5 id="31-four-subtypes-of-collection">3.1 Four Subtypes of Collection</h5>
+
+<p>這裡有四種型態的 Collection 可以宣告:</p>
+<ul>
+  <li><strong>Set</strong>:
+    <ul>
+      <li>arrivingFlights(from the context Airport)</li>
+      <li>Non ordered, unique elements</li>
+    </ul>
+  </li>
+  <li><strong>OrderedSet</strong>:
+    <ul>
+      <li>passengers(from the context Flight)</li>
+      <li>Ordered, unique elements</li>
+    </ul>
+  </li>
+  <li><strong>Bag</strong>:
+    <ul>
+      <li>arrivingFlights.duration (from the context Airport)</li>
+      <li>Non ordered, non unique elements</li>
+    </ul>
+  </li>
+  <li><strong>Sequence</strong>:
+    <ul>
+      <li>passengers.age (from the context Flight)</li>
+      <li>Ordered, non unique elements</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Basic Collection Operations</strong></p>
+
+<ul>
+  <li><strong>Boolean</strong>
+    <ul>
+      <li>isEmpty(): 如果 Collection 為空則回傳 True</li>
+      <li>notEmpty(): 如果 Collection 不為空則回傳 True</li>
+      <li>includes(object): 如果 Collection 中包含 object 則回傳 True</li>
+      <li>excludes(object): 如果 Collection 中不包含 object 則回傳 True</li>
+      <li>includesAll(Collection): 如果 Collection 中包含所有 Collection 中的元素則回傳 True</li>
+      <li>excludesAll(Collection): 如果 Collection 中不包含所有 Collection 中的元素則回傳 True</li>
+    </ul>
+  </li>
+  <li><strong>Integer</strong>
+    <ul>
+      <li>size(): 回傳 Collection 的大小</li>
+      <li>count(object): 回傳 Collection 中符合條件的元素個數</li>
+      <li>sum(): 回傳 Collection 中所有元素的總和</li>
+    </ul>
+  </li>
+  <li><strong>Coolection</strong>
+    <ul>
+      <li>including(object): 回傳一個新的 Collection，包含了 object</li>
+      <li>excluding(object): 回傳一個新的 Collection，移除了 object</li>
+      <li>union(Collection): 回傳一個新的 Collection，包含了原本的 Collection 和另一個 Collection</li>
+      <li>intersection(Collection): 回傳一個新的 Collection，包含了原本的 Collection 和另一個 Collection 的交集</li>
+      <li>-(Collection): 回傳一個新的 Collection，從一個 Collection 中移除另一個 Collection 的元素</li>
+      <li>symmetricDifference(Collection): 回傳一個新的 Collection，包含了原本的 Collection 和另一個 Collection 的差集</li>
+    </ul>
+  </li>
+  <li><strong>Operations for Ordered Collection</strong>
+    <ul>
+      <li>first(): 回傳第一個元素</li>
+      <li>last(): 回傳最後一個元素</li>
+      <li>at(index): 回傳 index 的元素</li>
+      <li>indexOf(object): 回傳 object 在 Collection 中的 index</li>
+      <li>insertAt(index, object): 將 object 插入到 index 的位置</li>
+      <li>append(object): 將 object 插入到最後一個位置</li>
+      <li>prepend(object): 將 object 插入到第一個位置</li>
+      <li>subSequence(lower, upper): 返回一個包含從較低 index 到較高 index 的元素的新 Sequence</li>
+      <li>subOrderedSet(lower, upper): 返回一個包含從較低 index 到較高 index 的元素的新 OrderedSet</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Loop Collection Operations</strong></p>
 
 <blockquote class="block-warning">
   <h5 id="note">NOTE</h5>
-  <p>Last edit 09-07-2023 09:25</p>
+  <p>Last edit 11-20-2023 00:11</p>
 </blockquote>
 
                 </section>
@@ -707,7 +967,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-15 19:26:15 +0800"
+        "time": "2023-11-21 19:51:31 +0800"
     },
     "basePath": "",
     "book": {

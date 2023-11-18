@@ -1,19 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-15T19:26:15+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-21T19:51:31+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
 這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
 </blockquote>
 
-<p>以下是本章的主要內容</p>
+<p>本章先介紹如何使用組合邏輯來尋找限制式的組合，並使用 Constraint Logic Programming 來產生測試資料，
+接著介紹 UML/OCL 系統，使用 OCL 來描述一個 Class/Methods 的限制式，並且透過 Constraint Logic Graph 與 Constraint Logic Programming 來產生測試資料。</p>
 
 <ul>
-  <li>Combinational logic
+  <li><strong>Combinational logic</strong>
     <ul>
       <li>Decision tables</li>
       <li>Constraint logic programming</li>
     </ul>
   </li>
-  <li>UML/OCL
+  <li><strong>UML/OCL</strong>
     <ul>
       <li>Constraint logic graphs</li>
       <li>Constraint logic programming</li>
@@ -22,8 +23,6 @@
 </ul>
 
 <h3 id="41-combinational-models">4.1 Combinational Models</h3>
-
-<p>Combinational logic 是一種有效組合各種不同輸入條件的方法，並使不同輸入條件的組合來選擇輸出動作變的可能</p>
 
 <ul>
   <li>Many applications must select output actions by evaluating combinationsof input conditions (constraints on input variables).</li>
@@ -49,31 +48,24 @@
 </blockquote>
 
 <p><strong>Example: Class Triangle</strong>
-假如有一個 Triangle Java class 如下，Triangle constructor 只要滿足 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 就視為合法的 Tringle，否則拋出 Exception。</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">classTriangle</span>
+假如有一個 Triangle Java class 如下，Constructor 只要滿足 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 就視為合法的 Tringle，否則拋出 Exception。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Java class Triangle :: Constructor</span>
+<span class="n">classTriangle</span>
 <span class="o">{</span>
-    <span class="n">inta</span><span class="o">;</span><span class="c1">// lengths of sides</span>
+    <span class="n">inta</span><span class="o">;</span>
     <span class="n">intb</span><span class="o">;</span>
     <span class="n">intc</span><span class="o">;</span>
     <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="n">intsa</span><span class="o">,</span> <span class="n">intsb</span><span class="o">,</span> <span class="n">intsc</span><span class="o">);</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
 <span class="o">};</span>
 </code></pre></div></div>
-<p>以這三個條件我們能獲得以下的 Decision table，在去除不可能發生的條件後，得到最後可能產生的 Input data。</p>
+
+<p>以這三個條件進行 Combianational 能獲得以下的 Decision table，將這些限制式透過 CLP 求解就能得到右圖的測試資料:</p>
 
 <div style="display: flex; flex-direction: row; align-items: center;">
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/1.png?raw=true" width="50%" height="50%" />
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/2.png?raw=true" width="50%" height="50%" />
 </div>
-
-<p>這樣我們就能得到足夠測試 <strong>{sa + sb &gt; sc, sa + sc &gt; sb, sb + sc &gt; sa}</strong> 三個 Boundaries 的測試資料，並測試 Tringle constructor 是否能正確的拋出 Exception。</p>
-
-<p><strong>Constraint Logic Graph</strong></p>
-
-<p>可以透過 Constraint logic programming 來產生測資，以下是 Triangle constructor 的 Invalid Constraint logic graph，
-會產生三個 Invalid equivalence classes，加上 Valid equivalence classes 就能得到跟上面 Decision table 一樣的測試資料。</p>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/3.png?raw=true" alt="" height="50%" width="50%" /></p>
 
 <p><strong>Example: Method category</strong></p>
 
@@ -91,10 +83,8 @@
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/5.png?raw=true" width="50%" height="50%" />
 </div>
 
-<p>因為在 Triangle constructor 的測試中已經測試過 Valid equivalence classes，所以這裡只要使用 {a = b, a = c, b = c} 這三個條件約束就可以，
-並且也可以透過 CLP 來產生測試資料，這樣我們就能測試完所有 category 有可能的路徑。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Java class Triangle :: category()</span>
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">)</span>
 <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span> <span class="o">&amp;&amp;</span> <span class="n">b</span> <span class="o">==</span> <span class="n">c</span><span class="o">)</span>
         <span class="k">return</span> <span class="s">"Equilateral"</span><span class="o">;</span>
@@ -105,11 +95,9 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>拿上面的程式碼來做比對，實際上這個 Decision table 就是去走過所有在程式中可能發生的路徑。</p>
+<p>拿上面的程式碼來做比對，實際上這個 Decision table 就是去走過所有在 <code class="language-plaintext highlighter-rouge">Category</code> 中可能發生的路徑。</p>
 
-<blockquote>
-  <p>因為篇幅的關係這裡不會介紹 CLP 如何撰寫，考慮在之後另外寫一篇文章說明 CLP 如何使用</p>
-</blockquote>
+<hr />
 
 <h3 id="42-unified-modeling-language">4.2 Unified Modeling Language</h3>
 
@@ -154,161 +142,122 @@
 Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal 和 Dog 之間有一個繼承關係</p>
 </blockquote>
 
-<h3 id="43-object-constraint-language">4.3 Object Constraint Language</h3>
+<hr />
+
+<h3 id="43-basic-object-constraint-language">4.3 Basic Object Constraint Language</h3>
+
+<p>關於 OCL 的基礎語法可以參考之前的筆記 <a href="./2023-09-07-Introduction_OCL.html">Object Constraint Language Concepts</a>，這裡就不再贅述。</p>
+
+<hr />
+
+<h5 id="435-ocl-to-clg-example">4.3.5 OCL to CLG Example</h5>
+
+<p>這裡介紹如何將 OCL 抽象化成 CLG，之後就能透過 CLG 的路徑來產生測試資料</p>
+
+<p><strong>Constructor</strong></p>
 
 <ul>
-  <li>通常只使用 UML 是不足以完全規範一個軟體系統</li>
-  <li>所以還需要 Constraint 來完全規範一個軟體系統</li>
-  <li>Constraint 是對軟體系統的一個或多個值的限制</li>
-  <li>Object Constraint Language(OCL) 是一種基於 Text 的語言，用於描述這些 Constraints</li>
-</ul>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
-
-<p>上圖展示了一個 Flight 的 Class invariant，如果 type == passenger，那麼 airplane.type 也必須為 passenger，同樣的 cargo 也只能對應 cargo
-這意思就如果是客運航班就要對應客機，貨運航班就要對應貨機。</p>
-
-<h5 id="431-kinds-of-constraints">4.3.1 Kinds of Constraints</h5>
-
-<ul>
-  <li>Class invariant(不變式): a constraint that must alwaysbe met by all instances of the class.</li>
-  <li>Precondition of an operation(操作前提): a constraint that must always be true beforethe execution of the operation.</li>
-  <li>Postcondition of an operation(操作後置): a constraint that must always be true afterthe execution of the operation.</li>
-</ul>
-
-<p>例如: 一個校園借書系統，那麼 Class invariant 必須為 Student，因為校外人士不能借閱，
-而還書時 Precondition 必須為至少要有那本要還的書，Postcondition 則必須沒有已經還回去的書。</p>
-
-<h5 id="432-constraint-context-and-self">4.3.2 Constraint Context and Self</h5>
-<ul>
-  <li>Every OCL expression is bound to a specific context.
+  <li>Valid:
     <ul>
-      <li>The context is often the element (classor method) that the constraint is attached to.</li>
+      <li>Class invariant before invocation</li>
+      <li>Pre-Conditions</li>
+      <li>Post-Conditions</li>
+      <li>Default Post-Conditions</li>
     </ul>
   </li>
-  <li>The context may be denoted within the expression using the keyword ‘self’.
+  <li>Invalid:
     <ul>
-      <li>‘self’ is implicit in all OCL expressions.</li>
-      <li>Similar to ‘this’ in Java.</li>
+      <li>Class invariant before invocation</li>
+      <li>Negation of Pre-Conditions</li>
     </ul>
   </li>
 </ul>
 
-<p>例如: 以下的 OCL，context Person 宣告了這個 Constraint 是屬於 Person 這個 Class，而 self.age &gt;= 0 則專指這個 Person attribute age &gt;= 0</p>
+<p>因此一個 Function 的 Valid 輸入將會是符合 Pre/Post-Conditions 的 CLG 路徑，經由 CLP 產生的測試資料，
+反過來說當一個 Function 的 Pre-Conditions 不合法時將會產生 Invalid 的測試資料。</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context Person
-inv: self.age &gt;= 0
-</code></pre></div></div>
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/3.png?raw=true" width="50%" height="50%" />
+</div>
 
-<h5 id="433-notation">4.3.3 Notation</h5>
+<p>Negation 使用 De Morgan’s law 來轉換規則後得到 Pre-Conditions 的 Negation，這樣就有四條不同的路徑與下表相同:</p>
 
-<p>OCL 可以單獨寫在一個文件中，也可以寫在 UML 的 Class diagram 裡面，這些表示方法都是相同的</p>
+<table>
+  <thead>
+    <tr>
+      <th>Varients</th>
+      <th>sa+sb&gt;sc</th>
+      <th>sa+sc&gt;sb</th>
+      <th>sb+sc&gt;sa</th>
+      <th>(sa, sb, sc)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>T</td>
+      <td>T</td>
+      <td>T</td>
+      <td>(1, 1, 1)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>T</td>
+      <td>T</td>
+      <td>F</td>
+      <td>(2, 1, 1)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>T</td>
+      <td>F</td>
+      <td>T</td>
+      <td>(1, 2, 1)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>F</td>
+      <td>T</td>
+      <td>T</td>
+      <td>(1, 1, 2)</td>
+    </tr>
+  </tbody>
+</table>
 
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/8.png?raw=true" alt="" height="75%" width="75%" /></p>
-
-<h5 id="434-elements-of-an-ocl-expression">4.3.4 Elements of an OCL Expression</h5>
-
-<ul>
-  <li>In an OCL expression these elements may be used:
-    <ul>
-      <li>basic types: String, Boolean, Integer, Real.</li>
-    </ul>
-  </li>
-  <li>classifiers from the UML model and their features
-    <ul>
-      <li>attributes, and class attributes</li>
-      <li>query operations, and class query operations (i.e., those operations that do not have side effects)</li>
-    </ul>
-  </li>
-  <li>associations from the UML model
-    <ul>
-      <li>Including Rolenames at either end of an association</li>
-    </ul>
-  </li>
-</ul>
-
-<p><strong>Basic types</strong></p>
-
-<p>以下表示了 OCL 的基本型別，可以使用在 OCL 的表達式</p>
-
-<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Airline</span>
-    <span class="k">inv</span><span class="p">:</span> <span class="n">name</span><span class="p">.</span><span class="n">toLower</span> <span class="o">=</span> <span class="s1">'klm'</span>
-<span class="k">context</span> <span class="n">Passenger</span>
-    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="p">((</span><span class="mi">9</span><span class="p">.</span><span class="mi">6</span> <span class="o">-</span><span class="mi">3</span><span class="p">.</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1</span><span class="p">).</span><span class="nf">floor</span> <span class="o">implies</span> <span class="n">mature</span> <span class="o">=</span> <span class="nb">true</span>
-</code></pre></div></div>
-
-<p><strong>Attributes</strong></p>
-
-<p>OCL 中有專指 Object 實例的 Attribute，也有專指 Class 的 Attribute</p>
-<ul>
-  <li>Class attribute 會在所有 Object 實例中共享</li>
-  <li>Object attribute 則是每個 Object 實例都有自己的 Attribute</li>
-</ul>
-
-<p>以下是一個例子:</p>
-
-<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Object attribute</span>
-<span class="k">context</span> <span class="n">Flight</span>
-    <span class="k">inv</span><span class="p">:</span> <span class="nb">self</span><span class="p">.</span><span class="n">maxNrPassengers</span><span class="o">&lt;=</span> <span class="mi">1000</span>
-<span class="c1">-- Class attribute</span>
-<span class="k">context</span> <span class="n">Passenger</span>
-    <span class="k">inv</span><span class="p">:</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="n">Passenger</span><span class="p">.</span><span class="n">minAge</span>
-</code></pre></div></div>
-
-<p><strong>The @Pre Keyword</strong></p>
-
-<ul>
-  <li>The @pre keyword indicates the value of an attribute at the start of the execution of the operation</li>
-  <li>The keyword must be postfixed to the name of the item concernedsize = size@pre + 1</li>
-</ul>
-
-<p>例如 size = size@pre + 1: 
-    -   size@pre 表示在執行這個 Operation 前的 size
-    -   size 表示在執行這個 Operation 後的 size</p>
+<blockquote>
+  <p>這裡去除了 Can’t Happen 的條件，在這個例子中 Desicion table 應該會有 2<sup>3</sup> 種可能</p>
+</blockquote>
 
 <h5 id="435-ocl-examples-with-clg">4.3.5 OCL Examples with CLG</h5>
 
-<p>假如我們有以下 Java class Triangle，我們分別針對他的 Constructor 和 Method category 以及 Class invariant(Triangle Objects) 來撰寫 OCL</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Triangle</span>
-<span class="o">{</span>
-    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span> <span class="c1">// lengths of sides</span>
-    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
-    <span class="kt">int</span> <span class="n">c</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="nf">Triangle</span><span class="o">(</span><span class="kt">int</span> <span class="n">sa</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sb</span><span class="o">,</span> <span class="kt">int</span> <span class="n">sc</span><span class="o">);</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">category</span><span class="o">(</span> <span class="o">);</span>
-<span class="o">};</span>
-</code></pre></div></div>
-
-<p><strong>Example: Triangle Objects</strong></p>
-
-<p>一個 Triangle 應該永遠滿足三邊長的條件，所以使用 <strong>Class invariant</strong> 來限制所有 Triangle 的三邊長</p>
+<p>以之前的 Triangle 為例來撰寫 OCL 將會有:</p>
+<ul>
+  <li>Class invariant(Triangle Objects): 一個 Triangle 應該永遠滿足三邊長的條件，所以使用 <strong>Class invariant</strong> 來限制所有 Triangle 的三邊長</li>
+  <li>Constructor: OCL 表示 Triangle 這個 Constructor 的 Precondition 和 Postcondition
+    <ul>
+      <li><strong>Pre</strong>: 一個 Triangle constructor 的輸入必須滿足 <strong>sa + sb &gt; sc and sa + sc &gt; sb and sb + sc &gt; sa</strong></li>
+      <li><strong>Post</strong>: Triangle constructor 執行後應該滿足 <strong>a = sa and b = sb and c = sc</strong></li>
+    </ul>
+  </li>
+  <li>Method category:
+    <ul>
+      <li><strong>Post</strong>: 檢查 Triangle 的三邊長，並且回傳 Triangle 的類型</li>
+    </ul>
+  </li>
+</ul>
 
 <div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span>
 <span class="k">inv</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">c</span> <span class="o">and</span> <span class="n">a</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">and</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">a</span>
-</code></pre></div></div>
 
-<p><strong>Example: Constructor Triangle</strong></p>
-
-<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">Triangle</span><span class="p">(</span><span class="n">intsa</span><span class="p">,</span> <span class="n">intsb</span><span class="p">,</span> <span class="n">intsc</span><span class="p">)</span>
+<span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">Triangle</span><span class="p">(</span><span class="n">intsa</span><span class="p">,</span> <span class="n">intsb</span><span class="p">,</span> <span class="n">intsc</span><span class="p">)</span>
 <span class="k">pre</span> <span class="n">IllegealArgException</span><span class="p">:</span>
     <span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">&gt;</span> <span class="n">sc</span> <span class="o">and</span> <span class="n">sa</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sa</span>
 <span class="k">post</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">c</span> <span class="o">=</span> <span class="n">sc</span>
-</code></pre></div></div>
-
-<p>以上的 OCL 表示 Triangle 這個 Constructor Triangle 的 Precondition 和 Postcondition</p>
-<ul>
-  <li>Precondition: 一個 Triangle constructor 的輸入必須滿足 <strong>sa + sb &gt; sc and sa + sc &gt; sb and sb + sc &gt; sa</strong></li>
-  <li>Postcondition: Triangle constructor 執行後應該滿足 <strong>a = sa and b = sb and c = sc</strong></li>
-</ul>
-
-<p><strong>Example: Method category</strong></p>
-
-<p>以下是一個 Method category 的 OCL，這個 OCL 會檢查 Triangle 的三邊長，並且回傳 Triangle 的類型</p>
-
-<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">contextTriangle</span><span class="p">::</span><span class="n">category</span><span class="p">():</span> <span class="kd">String</span>
+    
+<span class="k">context</span> <span class="n">Triangle</span><span class="p">::</span><span class="n">category</span><span class="p">():</span> <span class="kd">String</span>
 <span class="k">post</span><span class="p">:</span> <span class="nb">result</span><span class="o">=</span>
 <span class="k">if</span> <span class="n">a</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">b</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span>
     <span class="n">ifa</span><span class="o">@</span><span class="k">pre</span> <span class="o">=</span> <span class="n">c</span><span class="o">@</span><span class="k">pre</span> <span class="k">then</span> <span class="s1">'Equilateral'</span>
@@ -326,7 +275,7 @@ inv: self.age &gt;= 0
 
 <p><strong>Constraint Logic Graph</strong></p>
 
-<p>我們依照上面的 Constructor Triangle 和 Method category 來建立 CLG，得到以下兩張圖，就可以以此來生成測試資料</p>
+<p>我們依照上面的 Constructor 和 Category 來建立 CLG，得到以下兩張圖，就可以以此來生成測試資料</p>
 
 <div style="display: flex; flex-direction: row; align-items: center;">
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/10.png?raw=true" width="50%" height="50%" />
@@ -382,7 +331,7 @@ inv: self.age &gt;= 0
   </tbody>
 </table>
 
-<p>依照這個 Table 這樣就能夠產生五條全部路徑的測試案例</p>
+<p>依照這個 Table 去跑限制式這樣就能夠產生五條全部路徑的測試案例，例如第一條路徑的 CLP 如下:</p>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
@@ -400,7 +349,7 @@ Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回�
   <li>Push-down automata</li>
   <li>Top-down parsing</li>
   <li>Buttom-up parsing</li>
-  <li>Bison -a parser generator</li>
+  <li>Bison a parser generator</li>
 </ul>
 
 <h3 id="41-introduction-to-parsers">4.1 Introduction to parsers</h3>
@@ -812,6 +761,305 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
 
 <h5 id="453-shift-reduce-parsing">4.5.3 Shift-Reduce Parsing</h5>
 
+<p>因此 Bottom-Up Parsing 又稱為 Shift-Reduce Parsing，因為他們的過程就是不斷的 Shift 和 Reduce</p>
+
+<ul>
+  <li>Shift: shift the next input symbolonto the top of the stack</li>
+  <li>Reduce: replace the handle at the top of the stack with the corresponding nonterminal</li>
+  <li>Accept: announce successful completion of the parsing</li>
+  <li>Error: call an error recovery routine</li>
+</ul>
+
+<p>例如之前的例子，其實就是一個不斷 Shift 和 Reduce 的過程:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/11.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<hr />
+
+<h3 id="46-lrk-parsing">4.6 LR(k) Parsing</h3>
+
+<blockquote class="block-tip">
+  <p>目前流行的 Bottom-UP Parsing 都基於 LR(k) Parsers 的概念，幾乎可以支援所有 CFG，但是建立 Parser 很麻煩，因此通常會使用 Parser generator 來建立 Parser</p>
+</blockquote>
+
+<p>LR(k) Parsing:</p>
+<ul>
+  <li>L 代表從左往右掃描輸入</li>
+  <li>R 代表以 rightmost derivation 進行推導</li>
+  <li>k 代表作出語法分析決策時的 Lookahead 輸入字元數</li>
+</ul>
+
+<p>這裡會介紹三種 LR Parsing:</p>
+<ul>
+  <li>SLR(1) Parsing</li>
+  <li>LR(1) Parsing</li>
+  <li>LALR(1) Parsing</li>
+</ul>
+
+<p>從狀態數量來說 SLR &gt; LALR &gt; LR，但是能處理的 Grammar 來說 LR &gt; LALR &gt; SLR</p>
+
+<h5 id="462-items-and-the-lr0-automaton">4.6.2 Items and the LR(0) Automaton</h5>
+
+<ul>
+  <li>An LR(0) itemof a grammar in G is a production of G with a dotat some position of the right-hand side, A -&gt; α⋅β</li>
+  <li>An LR(0) item represents a statein an NPDA indicating how much of a production we have seen at a given point in the parsing process
+    <ul>
+      <li>NPDA means Non-deterministic Pushdown Automaton</li>
+      <li>DPDA means Deterministic Pushdown Automaton</li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果有一個 Production <code class="language-plaintext highlighter-rouge">A -&gt; XYZ</code>，那他將會有四個 LR(0) item:</p>
+<ul>
+  <li>A -&gt; ⋅XYZ, A -&gt; X⋅YZ, A -&gt; XY⋅Z, A -&gt; XYZ⋅</li>
+</ul>
+
+<p>這個點代表 Parse 的進度，藉由這些 item 我們可以建立一個 <strong>NPDA</strong>，再透過演算法來轉換成 <strong>DPDA</strong>，這個 DPDA 就是 <strong>LR(0) Automaton</strong></p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/12.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/13.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左為 NPDA，右為 DPDA，透過以下演算法將 NPDA 轉換成 DPDA:</p>
+</blockquote>
+
+<pre><code class="language-pseudo">functionitems(G');
+begin
+    C:= {closure({S' -&gt; •S})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C= C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+</code></pre>
+
+<p>為了建構以上演算法我們需要以下函數與 Augmented grammar(加強語法):</p>
+<ul>
+  <li><strong>Augmented grammar</strong>:
+    <ul>
+      <li>加入新的起始符號 S’，並且加入 Production S’ -&gt; S</li>
+    </ul>
+  </li>
+  <li><strong>closure(I)</strong> adds more items to Iwhen there is a dot to the left of a nonterminal (corresponding to ε edges)</li>
+  <li><strong>goto(I, X)</strong> moves the dot past the symbol Xin all items in Ithat contain X (corresponding to non-ε edges)</li>
+</ul>
+
+<pre><code class="language-pseudo">function closure(I);
+begin
+    J := I;
+    repeat
+    for each item A -&gt; α•Bβ in J and 
+    each production B -&gt; γ in G such that
+    B -&gt; •γ is not in J do
+        J = J ∪ {B -&gt; •γ}
+    until no more items can be added to J;
+return J
+end
+</code></pre>
+
+<pre><code class="language-pseudo">function goto(I, X);
+begin
+    set J to the empty set
+    for any item A -&gt; α•Xβ in I do
+        add the item A -&gt; αX•β to J
+    return  closure(J)
+end
+</code></pre>
+
+<h5 id="464-slr-parsing">4.6.4 SLR Parsing</h5>
+
+<p>以下是 SLR 的演算法</p>
+
+<pre><code class="language-pseudo">procedure SLR(G');
+begin
+    for each state Iin items(G') do begin
+        if A -&gt; α•aβ is in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if A -&gt; α• in I and A != S' then
+            action[I, a] = "reduce A -&gt; α" for all a in FOLLOW(A)
+        if S' -&gt; S• in I then
+            action[I, $] = "accept"
+        if A -&gt; α• Xβ in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+</code></pre>
+
+<p>以之前的 Grammar 為例，將其變為 <strong>Augmented grammar</strong>:</p>
+
+<pre><code class="language-pseudo">1.  E' -&gt; E
+2.  E  -&gt; E + T
+3.  E  -&gt; T
+4.  T  -&gt; T * F
+5.  T  -&gt; F
+6.  F  -&gt; (E)
+7.  F  -&gt; id
+</code></pre>
+
+<p>透過演算法來找出所有的 Item:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>之後將找到的 Item 填入表中:</p>
+<ul>
+  <li>s<sub>n</sub>: 代表 shift 操作，與前往 State n</li>
+  <li>r<sub>n</sub>: 代表 reduce 操作，並且使用編號 n 的 Production</li>
+  <li>填表時注意 I<sub>n</sub> 中是否有 dot 走到最後，如果有就看是哪一個 Production，並填入 r<sub>n</sub>
+    <ul>
+      <li>如果 Production 是 S’ -&gt; S，那麼就填入 accept</li>
+      <li>要在什麼欄位填入 r<sub>n</sub>，就看 FOLLOW(A) 中有哪些 Terminal，就填入哪些 Terminal</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡我們用一個測試輸入 id + id 來驗證這個表的正確性，注意做完 reduce 後狀態是看前一個 Stack 中的狀態，
+再根據 Production 左邊的 Nonterminal 來進行 Goto，所以在 Step 7, 8, 9 是看 State 6 的 goto。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>在同一欄遇到多個 reduce 那就需要進行嘗試，直到出現 Error 或是 Accept</p>
+</blockquote>
+
+<hr />
+
+<h3 id="47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</h3>
+
+<p>SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
+LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。</p>
+
+<h5 id="471-lr1-parsing-table-lr1-items">4.7.1 LR(1) Parsing Table LR(1) Items</h5>
+
+<ul>
+  <li>An LR(1) item of a grammar in G is a pair, (A -&gt; α•β, a), of an LR(0) item A -&gt; α•β and a lookahead symbol a</li>
+  <li>The lookahead has no effect in an LR(1) item of the form (A -&gt; α•β, a), where β is not ε</li>
+  <li>An LR(1) item of the form (A -&gt; α•, a) calls for reduction by A -&gt; α only if the next input symbol is a</li>
+</ul>
+
+<p>我們先來看 LR(1) 的演算法:</p>
+
+<p>closure(I) 跟 SLR(1) 不同的是，對於每個 B -&gt; γ，要找出所有可能的 b，b = FIRST(βa)，然後將 (B -&gt; •γ, b) 加入 J 中。
+FIRST(βa) 其實就等於先看下一個 Nonterminal 的 FIRST。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function closure(I);
+begin
+    J := I;
+    repeat
+    foreach item (A -&gt; α•Bβ, a) in J and 
+    each production B -&gt; γ of G that
+    each b in FIRST(βa) such that
+    (B -&gt; •γ, b) is not in J do
+        J := J ∪ {(B -&gt; •γ, b)}
+    until no more items can be added to J;
+    return J
+end
+</code></pre></div></div>
+
+<p>goto(I, X) 其實跟 SLR(1) 一樣，只是 item 多了 lookahead(a)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function goto(I, X);
+begin
+    set J to the empty set
+    for any item (A -&gt; α•Xβ, a) in I do
+        add the item (A -&gt; αX•β, a) to J
+    return closure(J)
+end
+</code></pre></div></div>
+
+<p>下面這是完整的 LR(1) 演算法:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function items(G');
+begin
+    C := {closure({[S' -&gt; •S, $]})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C := C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+</code></pre></div></div>
+
+<p>Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  S' -&gt; S
+2.  S  -&gt; CC
+3.  C  -&gt; cC
+4.  C  -&gt; d
+</code></pre></div></div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/17.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/18.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+
+<ol>
+  <li>首先看 closure({(S’ -&gt; •S, $)}):
+    <ol>
+      <li>首先計算 (S’ -&gt; •S, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 S -&gt; •CC</li>
+          <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
+          <li>加入 <strong>(S -&gt; •CC, $)</strong></li>
+        </ul>
+      </li>
+      <li>計算 (S -&gt; •CC, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(C$) = { c, d }</li>
+          <li>加入 (C -&gt; •cC, c), (C -&gt; •cC, d), (C -&gt; •d, c), (C -&gt; •d, d)</li>
+          <li>簡化為 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
+        </ul>
+      </li>
+      <li>已經沒有 Item 可以加入，所以返回 I<sub>0</sub></li>
+    </ol>
+  </li>
+  <li>goto(I<sub>0</sub>, S): (S’ -&gt; S•, $)</li>
+  <li>goto(I<sub>0</sub>, C):
+    <ol>
+      <li>(S -&gt; C•C, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
+          <li>加入 <strong>(C -&gt; •cC, $)</strong>, <strong>(C -&gt; •d, $)</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>goto(I<sub>0</sub>, c)
+    <ol>
+      <li>(C -&gt; c•C, c/d)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }</li>
+          <li>加入 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p>之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true" alt="" height="75%" width="75%" /></p>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>11-06-2023 17:12</p>
@@ -833,9 +1081,16 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
 Linux Kernel 設計者仍然在考慮如何讓她變得更好。</p>
 </blockquote>
 
-<h3 id="41-noun-concept-definition">4.1 Noun, Concept definition</h3>
+<h3 id="noun-concept-definition">Noun, Concept definition</h3>
 
-<h5 id="411-task">4.1.1 Task</h5>
+<p><a href="./2023-10-19-cpu_scheduler.html#41-task">4.1 Task</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#42-scheduler-types">4.2 Scheduler Types</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#43-cooperative-multitasking---novell-netware">4.3 Cooperative multitasking - Novell-Netware</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#44-preemptable-os">4.4 Preemptable OS</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#45-scheduler--context-switch">4.5 Scheduler &amp; Context switch</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#46-scheduling-criteria">4.6 Scheduling Criteria</a></p>
+
+<h5 id="41-task">4.1 Task</h5>
 
 <ul>
   <li>在 Linux 中，Process 和 Thread 都是 Task</li>
@@ -859,33 +1114,430 @@ Linux Kernel 設計者仍然在考慮如何讓她變得更好。</p>
 <p>以下是一個 Task 的生命週期，這裡從 Scheduler 角度來看的話主要影響的是兩個部分:</p>
 <ul>
   <li>Waining(semaphore): 怎麼在 Waiting 時，讓 Task 的使用率最大化</li>
-  <li><strong><a href="https://en.wikipedia.org/wiki/Cooperative_multitasking">Cooperative multitasking</a></strong>(協同運作式多工), <strong><a href="https://en.wikipedia.org/wiki/Preemption_%28computing%29">Preemptable OS</a></strong>(搶占式多任務處理)</li>
+  <li>OS 可以分成兩大類:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Cooperative_multitasking">Cooperative multitasking</a></strong>(Non-preemptive, 協同運作式多工)</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Preemption_%28computing%29">Preemptable OS</a></strong>(Preemptive, 搶占式多任務處理)</li>
+    </ul>
+  </li>
 </ul>
 
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/1.png?raw=true" alt="" height="100%" width="100%" /></p>
 
-<h5 id="412-scheduler-types">4.1.2 Scheduler Types</h5>
+<h5 id="42-scheduler-types">4.2 Scheduler Types</h5>
 
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/2.png?raw=true" alt="" height="100%" width="100%" /></p>
 
 <ul>
-  <li><strong>Preemptive OS</strong>:
-    <ul>
-      <li>Task 會有一個 Time slice 執行，例如: 1/1000 Sec，執行結束就要做切換</li>
-      <li></li>
-    </ul>
-  </li>
-  <li><strong>Non-preemptive OS</strong>: 就是指只有 Task 自己放棄 CPU 使用權時，才會做 Context Switch
-    <ul>
+  <li><strong>Non-preemptive OS</strong>(△): 就是指只有 Task 自己放棄 CPU 使用權，才會交出 CPU 使用權
+    <ol>
       <li>Task 執行結束，這樣當然就交出 CPU 使用權</li>
       <li>Task 發出 Blocking I/O request 因為要等待 I/O 完成，因此也會交出 CPU 使用權
         <ul>
           <li>當然也有 Async I/O，Vectored I/O 等方法，這裡先不討論</li>
         </ul>
       </li>
+    </ol>
+  </li>
+  <li><strong>Preemptive OS</strong>(☐△):
+    <ol>
+      <li>每個 Task 會有一個 Time slice 執行，例如: 1/1000 Sec，執行結束就要做切換</li>
+      <li>從 Wating 等待完畢 I/O 後，返回 Runtable 時要不要馬上切回該 Task</li>
+      <li>新的 Task 也可以給予高優先權，讓他馬上執行
+        <ul>
+          <li>Preemptive OS 又分為:</li>
+        </ul>
+        <ul>
+          <li><strong>Preemptable Kernel</strong>, <strong>Non-preemptable Kernel</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h5 id="43-cooperative-multitasking---novell-netware">4.3 Cooperative multitasking - Novell-Netware</h5>
+
+<p><a href="https://en.wikipedia.org/wiki/NetWare">Netware</a>:</p>
+<ul>
+  <li>Netware 所有的程式都在 ring 0 執行，但是這樣就要確保所有的程式都是由 Novell 來控制，
+這樣才能確保所有的程式都是可信任的，沒有惡意程式</li>
+  <li>但是當 CPU 效能變強之後，這樣的設計就不太好，因為所有的程式都要由 Novell 來提供，這不太可能，因此最後由 Windows NT 勝出</li>
+</ul>
+
+<h5 id="44-preemptable-os">4.4 Preemptable OS</h5>
+
+<p><strong>Preemptive OS:</strong></p>
+<ul>
+  <li>如果一個 Task 執行過久，OS 會主動將 CPU 控制權交給下一個 Task</li>
+  <li>如果要設計 Preemptive OS 必須要有 Hardware support，例如: Timer, Interrupt
+    <ul>
+      <li>Timer: 用來計算 Task 執行的時間</li>
+      <li>Interrupt: 使 OS 能獲得 CPU 控制權</li>
+    </ul>
+  </li>
+  <li>所有版本的 Linux 都是 Preemptive OS</li>
+</ul>
+
+<p><strong>Preemptive Kernel</strong></p>
+
+<ul>
+  <li>Non-preemptive Kernel(throughput):
+    <ul>
+      <li>在 2.6 Kernel 之前，Linux 是 Non-preemptable Kernel</li>
+      <li>當 Task 執行在 Kernel mode 時，其優先權無限大
+        <ul>
+          <li>Context switch 只會發生在 Task 由 Kernel mode 切換到 User mode 時</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Preemptive Kernel(latency):
+    <ul>
+      <li>在 2.6 Kernel 之後，Linux 可以設定為 Preemptable Kernel</li>
+      <li>當 Task 執行在 Kernel mode 時如果沒有任何的 Lock 就可能發生 Context switch</li>
     </ul>
   </li>
 </ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/3.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/4.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote class="block-tip">
+  <p>注意如果在 Kernel 中發生 Interrupt，下次 Task A 執行時會直接從 Kernel mode 中繼續執行，
+因此在 2.6 Kernel 後編譯時可以選擇 Kernel 注重 throughput 還是 latency，</p>
+</blockquote>
+
+<p><strong>Form Non-preemprive kernel to Preemprive kernel</strong></p>
+
+<ul>
+  <li>在 Non-Preemprive kernel 中，所有進入 Kernel 的 Task 可以假設自己不會被 Preempt，因此存取很多共用資料，不需要使用 Lock</li>
+  <li>在 Preemprive kernel 中，程式設計師需要仔細思考、改寫程式碼，所有存取到共用資料的程式碼都需要使用 Lock-UnLock 來保護
+    <ul>
+      <li>這是一件非常耗費人力的工作</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="45-scheduler--context-switch">4.5 Scheduler &amp; Context switch</h5>
+
+<ul>
+  <li><strong>Scheduler</strong> 決定接下來要執行哪一個 Task
+    <ul>
+      <li>使用 C language 撰寫</li>
+    </ul>
+  </li>
+  <li><strong>Context switch</strong>
+    <ul>
+      <li>負責從一個 Task 切換到另一個 Task</li>
+      <li>主要切換的是普通 Register</li>
+      <li>如果 Task 使用到一些特別的 Register，例如: 浮點數運算器(Floating Point Unit, FPU)，則需要額外處理(Lazy)
+        <ul>
+          <li>Lazy: 只有新的 Task 需要使用到 FPU 時，才會切換 FPU 相關的 Register</li>
+        </ul>
+      </li>
+      <li>Context switch 隱含的切換
+        <ul>
+          <li>依照需求切換 Page Table(TLB)</li>
+          <li>切換 Cache 的內容</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="46-scheduling-criteria">4.6 Scheduling Criteria</h5>
+
+<p>這裡介紹如何分析一個 Scheduler 的好壞</p>
+
+<ul>
+  <li><strong>CPU Utilization</strong>(使用率): CPU 維持在高使用率，Task 之間互相有等待的關係，要如何 Schedule?</li>
+  <li><strong>Throughput</strong>(吞吐量): 在單位時間內，CPU 可以執行多少 Task
+    <ul>
+      <li>例如: 讓 I/O Task 優先執行</li>
+    </ul>
+  </li>
+  <li><strong>Turnaround time</strong>(往返時間): Task 從開始到結束的時間，與 Scheduler 及程式本身的執行程度相關</li>
+  <li><strong>Waiting time</strong>(等待時間): Task 在 Ready Queue 中等待的時間，通常高優先權的 Task 會等待較短的時間
+    <ul>
+      <li>只要一個 Task 能執行，但 OS 使其等待就要算入 Waiting time</li>
+    </ul>
+  </li>
+  <li><strong>Response time</strong>(回應時間): Task 從發出 Request 到第一次回應的時間
+    <ul>
+      <li>例如: 程式需要輸出回應到螢幕，好的 Scheduler 可以讓 Progress bar 非常即時的反應</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>CPU Utilization</strong></p>
+
+<p>實際的 CPU 使用率會受到 Task 的高低優先權影響，因此 CPU 使用率會有兩種情況:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/5.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/6.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>可以透過軟體的方式對 Lock-Unlock 做最佳化，例如: Intel vtune, kernelshark 之類的視覺化工具</p>
+</blockquote>
+
+<p><strong>Response time</strong></p>
+
+<p>假如系統中有 10 個 Task，這 10 個 Task 連接到 10 個 User，如果要讓執行感覺流暢的話，有以下做法:</p>
+
+<ol>
+  <li>單向互動:
+    <ul>
+      <li>假如 Task 是播放影片，那就安排適當的 Buffer，解碼後的影片放入 Buffer 供 User task 拿取</li>
+      <li>只要 Buffer 夠大，即使每 10 秒才輪到一次執行，使用者也不會覺得 Lag</li>
+    </ul>
+  </li>
+  <li>雙向互動:
+    <ul>
+      <li>假如 Task 是語音通話，必須在 150ms 中輪到執行一次，否則會覺得通話品質不好</li>
+      <li>那每個 Task 一回合只能執行 15ms</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="scheduler-concepts">Scheduler Concepts</h3>
+
+<h5 id="47-simple-scheduler">4.7 Simple Scheduler</h5>
+
+<ul>
+  <li><strong>FCFS(Fisrt Come First Serve)</strong>
+    <ul>
+      <li>依照 Task 的抵達順序，依照順序執行</li>
+    </ul>
+  </li>
+  <li><strong>SJF(Shortest Job First)</strong>
+    <ul>
+      <li>依照 Task 的執行時間，執行時間短的 Task 優先執行</li>
+    </ul>
+  </li>
+  <li><strong>RR(Round Robin)</strong>
+    <ul>
+      <li>在一群 Task 中輪流執行，每一個 Task 最多執行 X 個 Time slice</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在 Linux 中可以看到上面三種方法的影子</p>
+</blockquote>
+
+<p><strong>FCFS</strong></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/7.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Wating time: P1 = 0, P2 = 100, P3 = 150</li>
+  <li>Average waiting time: (0 + 100 + 150) / 3 = 83.3</li>
+  <li>如果先抵達的 Task 執行時間很長，Average waiting time 就會變得比較長</li>
+</ul>
+
+<p><strong>SJF</strong></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/8.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>在 P1 執行中，P2、P3 抵達，放入 Ready Queue，然後依照執行時間排序</li>
+  <li>Wating time: P1 = 0, P2 = 110, P3 = 100</li>
+  <li>Average waiting time: (0 + 110 + 100) / 3 = 70</li>
+</ul>
+
+<p><strong>Preemptive SJF</strong></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/9.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>只要有工作進入 Ready Queue，或有工作結束就要決定執行的 Task</li>
+  <li>Wating time: P1 = 60, P2 = 10, P3 = 0</li>
+  <li>Average waiting time: (60 + 10 + 0) / 3 = 23.3</li>
+</ul>
+
+<blockquote>
+  <p>直觀上會覺得 Preemptive SJF 是比較好的演算法，但注意 Preemptive SJF 有 Context switch overhead</p>
+</blockquote>
+
+<ul>
+  <li>如果只是寫 SJF 通常指 Non-preemptive SJF</li>
+  <li>Preemptive SJF 又稱作 SRTF(Shortest Remaining Time First)</li>
+  <li>在 Average waiting time 方面，SJF &amp; SRTF 分別是 Preemptable scheduling &amp; Non-preemptable scheduling 的最佳演算法</li>
+</ul>
+
+<p><strong>Estimate Execution Time</strong></p>
+
+<p>前面提到的 Scheduler 都是假設 Task 的執行時間是已知的，但實際上 Task 的執行時間是不知道的，因此需要估計 Task 的執行時間</p>
+
+<ul>
+  <li>一個 Task 的生命週期分為兩種情況
+    <ul>
+      <li>Using CPU, Waiting</li>
+    </ul>
+  </li>
+  <li>依照 Task 以前使用 CPU 使用時間的多寡，來預測這次使用 CPU 時間的多寡，例如以下公式
+    <ul>
+      <li>t<sub>n</sub>: 上一次的 CPU time</li>
+      <li>𝜏<sub>x</sub>: 預測的第 x 次的 CPU time</li>
+      <li>Linux Kernel 2.4 使用以下的方法，並且 𝛼 取 1/2 因為可以避免浮點數運算
+        <ul>
+          <li>t<sub>n+1</sub> = 𝛼 * t<sub>n</sub> + (1 - 𝛼) * 𝜏<sub>n</sub></li>
+          <li>𝛼 是一個權重因子界於 0 ~ 1 之間
+            <ul>
+              <li>越靠近 1，表示越重視過去的 CPU time</li>
+              <li>越靠近 0，表示越重視預測的 CPU time</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Round Robin</strong></p>
+
+<p>如果使用 RR 那麼 Time slice 要設定為多少?</p>
+<ul>
+  <li>太長: 會讓 Task 等待的時間變長</li>
+  <li>太短: 會讓 Context switch overhead 變大</li>
+  <li>通常 Time slice 會設定為一個 Task 可以在 Time slice 內執行完畢，變成 Waiting 狀態
+    <ul>
+      <li>也就是在 Time slice 中成功把 I/O request 發出去</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>目前 Linux 的設定為使用者需要多少的 Time slice，可以動態的調整 Time slice 的大小</p>
+</blockquote>
+
+<h3 id="linux-scheduler">Linux Scheduler</h3>
+
+<ul>
+  <li>Linux 共有 140 個優先權等級
+    <ul>
+      <li>0 ~ 99: Real-time priority
+        <ul>
+          <li>通常是一些需要 Real-time 的 Task，例如: 影片播放，聲音播放</li>
+        </ul>
+      </li>
+      <li>100 ~ 139: Normal priority
+        <ul>
+          <li>對使用者而言是 -20 ~ +19，預設值為 0，稱作 Nice value</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Nice value 是由 User 指定，Linux 當作參考用以計算 Dynamic priority，Dynamic priority 會因以下因素影響:
+    <ul>
+      <li>該 Task 是 I/O bound 還是 CPU bound</li>
+      <li>考慮 Core 的特性</li>
+      <li>考慮 Multi-thread 的特性</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>使用者在啟動 Task 時可以指定 Nice value，或在 Task 執行時使用 renice 指令來調整 Nice value</p>
+</blockquote>
+
+<h5 id="48-linux-24-scheduler">4.8 Linux 2.4 Scheduler</h5>
+
+<ol>
+  <li>在 2.4 Scheduler 中如何對 I/O 進行優化</li>
+  <li>思考在 2.4 在 Multi-processor 的環境下欠缺什麼?</li>
+</ol>
+
+<ul>
+  <li>Non-preemptible kernel
+    <ul>
+      <li>Set p-&gt;need_resched if schedule() should be invoked at the ‘next opportunity’(kernel -&gt; user mode).</li>
+      <li>所以一個正在 Kernel 中運行的 Task 要進行 Context switch 時就會將 need_resched 設為 1</li>
+    </ul>
+  </li>
+  <li>Round-Robin
+    <ul>
+      <li>task_struct-&gt;counter: number of clock ticks left to run in this scheduling slice, decremented by a timer.</li>
+      <li>這是一個 Task 執行的 counter，每個 time tick 就 -1，用完了就不能在這個回合內使用 CPU</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>2.4 Scheduler - SMP:</strong></p>
+
+<p>當有 CPU 進入 Idle 時，2.4 Scheduler 會從 Ready Queue 中 Search &amp; Estimate，找出最佳的 Task 來執行</p>
+<ul>
+  <li>Search: 會依照這個 Task 對這個 CPU 有多適合</li>
+</ul>
+
+<div style="display: flex; justify-content: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/11.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>2.4 Scheduler - Run-Queue:</strong></p>
+
+<p>在 2.4 中所有人都是使用同一個 Run-Queue:</p>
+<ol>
+  <li>Use spin_lock_irq() to lock “runqueue_lock”
+    <ul>
+      <li>因為 2.4 Scheduler 僅有一個 Run-Queue，要在運算時 Lock 然後運算完 Unlock，自然會造成效能瓶頸</li>
+    </ul>
+  </li>
+  <li>Check if a task is “runnable”
+    <ul>
+      <li>in TASK_RUNNING state</li>
+      <li>in TASK_INTERRUPTIBLE state and a signal is pending</li>
+    </ul>
+  </li>
+  <li>Examine the “goodness” of each process
+    <ul>
+      <li>檢查所有 Task 的 Goodness，並且選出最好的 Task</li>
+    </ul>
+  </li>
+  <li>Context switch</li>
+</ol>
+
+<p><strong>2.4 Scheduler - Goodness:</strong></p>
+
+<ul>
+  <li>“goodness”: identifying the best candidate among all processes in the runqueue list.</li>
+  <li>“goodness” = 0: the entity has exhausted its quantum.</li>
+  <li>0 &lt; “goodness” &lt; 1000: the entity is a conventional process/thread that has not exhausted its quantum; a higher value denotes a higher level of goodness.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if (p-&gt;mm == prev-&gt;mm)
+return p-&gt;counter + p-&gt;priority + 1;
+else
+return p-&gt;counter + p-&gt;priority;
+</code></pre></div></div>
+
+<p>A small bonus is given to the task p if it shares the address space with the previous task.</p>
+
+<p>Examine the processor field of the processes and gives a consistent bonus (that is PROC_CHANGE_PENALTY, usually 15) 
+to the process that was last executed on the ‘this_cpu’ CPU.</p>
+
+<p>例如: 一個 Multi-thread 程式的 Task，如果有一個 Thread 執行在一個 CPU 上，那麼其他的 Thread 就會有一個加分，讓他們可以在同一個 CPU 上執行。
+同樣的如果一個 Process 最後是在這 this_cpu 上運行，那麼他在這顆 CPU 上計算分數時也會有獎勵加分。</p>
+
+<blockquote class="block-danger">
+  <p>2.4 Scheduler 的問題是 Scheduler 要對所有的 Task 計算 goodness，每次都要重算。但其實大多數時間每次計算出的 goodness 都是差不多的，
+真的有需要每次都重算嗎?</p>
+</blockquote>
+
+<h5 id="48-linux-24-scheduler---improve-io-performance">4.8 Linux 2.4 Scheduler - Improve I/O performance</h5>
+
+<p>Defintion:</p>
+<ul>
+  <li>I/O-bound processes: spends much of its time submitting and waiting on I/O requests</li>
+  <li>Processor-bound processes: spend much of their time executing code</li>
+</ul>
+
+<p>Linux 傾向於支援 I/O-bound processes，這樣會提供好的 Process response time，但是怎麼對 Process 進行分類?</p>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>

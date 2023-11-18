@@ -84,7 +84,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#41-introduction-to-parsers">4.1 Introduction to parsers</a></li><li><a href="#42-context-free-grammars">4.2 Context-free grammars</a></li><li><a href="#43-writing-a-grammar">4.3 Writing a Grammar</a></li><li><a href="#44-top-down-parsing">4.4 Top-down Parsing</a></li><li><a href="#45-bottom-up-parsing">4.5 Bottom-up Parsing</a></li></ul>
+                                    <ul><li><a href="#41-introduction-to-parsers">4.1 Introduction to parsers</a></li><li><a href="#42-context-free-grammars">4.2 Context-free grammars</a></li><li><a href="#43-writing-a-grammar">4.3 Writing a Grammar</a></li><li><a href="#44-top-down-parsing">4.4 Top-down Parsing</a></li><li><a href="#45-bottom-up-parsing">4.5 Bottom-up Parsing</a></li><li><a href="#46-lrk-parsing">4.6 LR(k) Parsing</a></li><li><a href="#47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</a></li></ul>
 
                                 
                             
@@ -542,7 +542,7 @@ Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回�
   <li>Push-down automata</li>
   <li>Top-down parsing</li>
   <li>Buttom-up parsing</li>
-  <li>Bison -a parser generator</li>
+  <li>Bison a parser generator</li>
 </ul>
 
 <h3 id="41-introduction-to-parsers">4.1 Introduction to parsers</h3>
@@ -954,6 +954,305 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
 
 <h5 id="453-shift-reduce-parsing">4.5.3 Shift-Reduce Parsing</h5>
 
+<p>因此 Bottom-Up Parsing 又稱為 Shift-Reduce Parsing，因為他們的過程就是不斷的 Shift 和 Reduce</p>
+
+<ul>
+  <li>Shift: shift the next input symbolonto the top of the stack</li>
+  <li>Reduce: replace the handle at the top of the stack with the corresponding nonterminal</li>
+  <li>Accept: announce successful completion of the parsing</li>
+  <li>Error: call an error recovery routine</li>
+</ul>
+
+<p>例如之前的例子，其實就是一個不斷 Shift 和 Reduce 的過程:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/11.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<hr />
+
+<h3 id="46-lrk-parsing">4.6 LR(k) Parsing</h3>
+
+<blockquote class="block-tip">
+  <p>目前流行的 Bottom-UP Parsing 都基於 LR(k) Parsers 的概念，幾乎可以支援所有 CFG，但是建立 Parser 很麻煩，因此通常會使用 Parser generator 來建立 Parser</p>
+</blockquote>
+
+<p>LR(k) Parsing:</p>
+<ul>
+  <li>L 代表從左往右掃描輸入</li>
+  <li>R 代表以 rightmost derivation 進行推導</li>
+  <li>k 代表作出語法分析決策時的 Lookahead 輸入字元數</li>
+</ul>
+
+<p>這裡會介紹三種 LR Parsing:</p>
+<ul>
+  <li>SLR(1) Parsing</li>
+  <li>LR(1) Parsing</li>
+  <li>LALR(1) Parsing</li>
+</ul>
+
+<p>從狀態數量來說 SLR &gt; LALR &gt; LR，但是能處理的 Grammar 來說 LR &gt; LALR &gt; SLR</p>
+
+<h5 id="462-items-and-the-lr0-automaton">4.6.2 Items and the LR(0) Automaton</h5>
+
+<ul>
+  <li>An LR(0) itemof a grammar in G is a production of G with a dotat some position of the right-hand side, A -&gt; α⋅β</li>
+  <li>An LR(0) item represents a statein an NPDA indicating how much of a production we have seen at a given point in the parsing process
+    <ul>
+      <li>NPDA means Non-deterministic Pushdown Automaton</li>
+      <li>DPDA means Deterministic Pushdown Automaton</li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果有一個 Production <code class="language-plaintext highlighter-rouge">A -&gt; XYZ</code>，那他將會有四個 LR(0) item:</p>
+<ul>
+  <li>A -&gt; ⋅XYZ, A -&gt; X⋅YZ, A -&gt; XY⋅Z, A -&gt; XYZ⋅</li>
+</ul>
+
+<p>這個點代表 Parse 的進度，藉由這些 item 我們可以建立一個 <strong>NPDA</strong>，再透過演算法來轉換成 <strong>DPDA</strong>，這個 DPDA 就是 <strong>LR(0) Automaton</strong></p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/12.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/13.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左為 NPDA，右為 DPDA，透過以下演算法將 NPDA 轉換成 DPDA:</p>
+</blockquote>
+
+<pre><code class="language-pseudo">functionitems(G');
+begin
+    C:= {closure({S' -&gt; •S})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C= C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+</code></pre>
+
+<p>為了建構以上演算法我們需要以下函數與 Augmented grammar(加強語法):</p>
+<ul>
+  <li><strong>Augmented grammar</strong>:
+    <ul>
+      <li>加入新的起始符號 S’，並且加入 Production S’ -&gt; S</li>
+    </ul>
+  </li>
+  <li><strong>closure(I)</strong> adds more items to Iwhen there is a dot to the left of a nonterminal (corresponding to ε edges)</li>
+  <li><strong>goto(I, X)</strong> moves the dot past the symbol Xin all items in Ithat contain X (corresponding to non-ε edges)</li>
+</ul>
+
+<pre><code class="language-pseudo">function closure(I);
+begin
+    J := I;
+    repeat
+    for each item A -&gt; α•Bβ in J and 
+    each production B -&gt; γ in G such that
+    B -&gt; •γ is not in J do
+        J = J ∪ {B -&gt; •γ}
+    until no more items can be added to J;
+return J
+end
+</code></pre>
+
+<pre><code class="language-pseudo">function goto(I, X);
+begin
+    set J to the empty set
+    for any item A -&gt; α•Xβ in I do
+        add the item A -&gt; αX•β to J
+    return  closure(J)
+end
+</code></pre>
+
+<h5 id="464-slr-parsing">4.6.4 SLR Parsing</h5>
+
+<p>以下是 SLR 的演算法</p>
+
+<pre><code class="language-pseudo">procedure SLR(G');
+begin
+    for each state Iin items(G') do begin
+        if A -&gt; α•aβ is in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if A -&gt; α• in I and A != S' then
+            action[I, a] = "reduce A -&gt; α" for all a in FOLLOW(A)
+        if S' -&gt; S• in I then
+            action[I, $] = "accept"
+        if A -&gt; α• Xβ in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+</code></pre>
+
+<p>以之前的 Grammar 為例，將其變為 <strong>Augmented grammar</strong>:</p>
+
+<pre><code class="language-pseudo">1.  E' -&gt; E
+2.  E  -&gt; E + T
+3.  E  -&gt; T
+4.  T  -&gt; T * F
+5.  T  -&gt; F
+6.  F  -&gt; (E)
+7.  F  -&gt; id
+</code></pre>
+
+<p>透過演算法來找出所有的 Item:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p>之後將找到的 Item 填入表中:</p>
+<ul>
+  <li>s<sub>n</sub>: 代表 shift 操作，與前往 State n</li>
+  <li>r<sub>n</sub>: 代表 reduce 操作，並且使用編號 n 的 Production</li>
+  <li>填表時注意 I<sub>n</sub> 中是否有 dot 走到最後，如果有就看是哪一個 Production，並填入 r<sub>n</sub>
+    <ul>
+      <li>如果 Production 是 S’ -&gt; S，那麼就填入 accept</li>
+      <li>要在什麼欄位填入 r<sub>n</sub>，就看 FOLLOW(A) 中有哪些 Terminal，就填入哪些 Terminal</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡我們用一個測試輸入 id + id 來驗證這個表的正確性，注意做完 reduce 後狀態是看前一個 Stack 中的狀態，
+再根據 Production 左邊的 Nonterminal 來進行 Goto，所以在 Step 7, 8, 9 是看 State 6 的 goto。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/15.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/16.png?raw=true" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>在同一欄遇到多個 reduce 那就需要進行嘗試，直到出現 Error 或是 Accept</p>
+</blockquote>
+
+<hr />
+
+<h3 id="47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</h3>
+
+<p>SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
+LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。</p>
+
+<h5 id="471-lr1-parsing-table-lr1-items">4.7.1 LR(1) Parsing Table LR(1) Items</h5>
+
+<ul>
+  <li>An LR(1) item of a grammar in G is a pair, (A -&gt; α•β, a), of an LR(0) item A -&gt; α•β and a lookahead symbol a</li>
+  <li>The lookahead has no effect in an LR(1) item of the form (A -&gt; α•β, a), where β is not ε</li>
+  <li>An LR(1) item of the form (A -&gt; α•, a) calls for reduction by A -&gt; α only if the next input symbol is a</li>
+</ul>
+
+<p>我們先來看 LR(1) 的演算法:</p>
+
+<p>closure(I) 跟 SLR(1) 不同的是，對於每個 B -&gt; γ，要找出所有可能的 b，b = FIRST(βa)，然後將 (B -&gt; •γ, b) 加入 J 中。
+FIRST(βa) 其實就等於先看下一個 Nonterminal 的 FIRST。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function closure(I);
+begin
+    J := I;
+    repeat
+    foreach item (A -&gt; α•Bβ, a) in J and 
+    each production B -&gt; γ of G that
+    each b in FIRST(βa) such that
+    (B -&gt; •γ, b) is not in J do
+        J := J ∪ {(B -&gt; •γ, b)}
+    until no more items can be added to J;
+    return J
+end
+</code></pre></div></div>
+
+<p>goto(I, X) 其實跟 SLR(1) 一樣，只是 item 多了 lookahead(a)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function goto(I, X);
+begin
+    set J to the empty set
+    for any item (A -&gt; α•Xβ, a) in I do
+        add the item (A -&gt; αX•β, a) to J
+    return closure(J)
+end
+</code></pre></div></div>
+
+<p>下面這是完整的 LR(1) 演算法:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function items(G');
+begin
+    C := {closure({[S' -&gt; •S, $]})}
+    repeat
+        for each set of items I in C and each symbol X do
+            J := goto(I, X)
+            if J is not empty and not in C then
+                C := C ∪ {J}
+    until no more sets of items can be added to C
+    return C
+end
+</code></pre></div></div>
+
+<p>Example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  S' -&gt; S
+2.  S  -&gt; CC
+3.  C  -&gt; cC
+4.  C  -&gt; d
+</code></pre></div></div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/17.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/18.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><br /></p>
+
+<ol>
+  <li>首先看 closure({(S’ -&gt; •S, $)}):
+    <ol>
+      <li>首先計算 (S’ -&gt; •S, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 S -&gt; •CC</li>
+          <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
+          <li>加入 <strong>(S -&gt; •CC, $)</strong></li>
+        </ul>
+      </li>
+      <li>計算 (S -&gt; •CC, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(C$) = { c, d }</li>
+          <li>加入 (C -&gt; •cC, c), (C -&gt; •cC, d), (C -&gt; •d, c), (C -&gt; •d, d)</li>
+          <li>簡化為 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
+        </ul>
+      </li>
+      <li>已經沒有 Item 可以加入，所以返回 I<sub>0</sub></li>
+    </ol>
+  </li>
+  <li>goto(I<sub>0</sub>, S): (S’ -&gt; S•, $)</li>
+  <li>goto(I<sub>0</sub>, C):
+    <ol>
+      <li>(S -&gt; C•C, $)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
+          <li>加入 <strong>(C -&gt; •cC, $)</strong>, <strong>(C -&gt; •d, $)</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>goto(I<sub>0</sub>, c)
+    <ol>
+      <li>(C -&gt; c•C, c/d)
+        <ul>
+          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
+          <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
+          <li>計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }</li>
+          <li>加入 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p>之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true" alt="" height="75%" width="75%" /></p>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>11-06-2023 17:12</p>
@@ -1108,7 +1407,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-15 19:26:15 +0800"
+        "time": "2023-11-21 19:51:31 +0800"
     },
     "basePath": "",
     "book": {
