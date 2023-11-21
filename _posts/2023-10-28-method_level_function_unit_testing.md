@@ -7,9 +7,8 @@ layout: post
 tags: [software, software_qualitiy]
 ---
 
-
 > Software testing course notes from CCU, lecturer Nai-Wei Lin.  
-> 這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing
+> 這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入
 {: .block-tip }
 
 本章先介紹如何使用組合邏輯來尋找限制式的組合，並使用 Constraint Logic Programming 來產生測試資料，
@@ -239,6 +238,19 @@ endif
 | Post a = a@, b = b@, c = c@ |
 
 依照這個 Table 去跑限制式這樣就能夠產生五條全部路徑的測試案例，例如第一條路徑的 CLP 如下:
+
+### 4.4 Significance of Collections in OCL
+
+OCL 支援 Collection，詳細的語法可以參考 [Object Constraint Language Concepts]，這裡介紹 Collection 如何進行測試。
+
+##### 4.4.1 Testing of Collections
+
+-   For boundedcollections, test collections with bound 0, 1, n (where n 4).
+-   For a boundedcollection with bound n, test instances of size 0, 1, m (where 1 < m < n –1), n –1, and n.
+-   For unboundedcollections, test instances of size 0, 1, and m (where m > 1).
+-   You can write a CLP predicate to generate these collection instances.
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true){:height="75%" width="75%"}
 
 > ##### Last Edit
 > 10-29-2023 15:56 

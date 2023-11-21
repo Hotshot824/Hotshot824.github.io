@@ -66,6 +66,28 @@
 
                     
                         
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                                Testing | Method-Level Structural Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
                         <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
                         
                             <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
@@ -1204,7 +1226,7 @@ end
     <ol>
       <li>首先計算 (S’ -&gt; •S, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
           <li>加入 B -&gt; •γ，也就是 S -&gt; •CC</li>
           <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
           <li>加入 <strong>(S -&gt; •CC, $)</strong></li>
@@ -1212,7 +1234,7 @@ end
       </li>
       <li>計算 (S -&gt; •CC, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(C$) = { c, d }</li>
           <li>加入 (C -&gt; •cC, c), (C -&gt; •cC, d), (C -&gt; •d, c), (C -&gt; •d, d)</li>
@@ -1227,7 +1249,7 @@ end
     <ol>
       <li>(S -&gt; C•C, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
           <li>加入 <strong>(C -&gt; •cC, $)</strong>, <strong>(C -&gt; •d, $)</strong></li>
@@ -1239,7 +1261,7 @@ end
     <ol>
       <li>(C -&gt; c•C, c/d)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }</li>
           <li>加入 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
@@ -1252,6 +1274,8 @@ end
 <p>之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:</p>
 
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="lalr1-parsing-table-the-core-of-lr1-items">LALR(1) Parsing Table The Core of LR(1) Items</h5>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
@@ -1407,7 +1431,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-21 19:51:31 +0800"
+        "time": "2023-11-26 15:42:15 +0800"
     },
     "basePath": "",
     "book": {

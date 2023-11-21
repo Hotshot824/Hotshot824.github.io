@@ -27,6 +27,8 @@
         
 
         
+            <link rel="next" href="/jekyll/2023-11-23-based_on_clp_testcases.html" />
+        
     </head>
     <body>
         <div class="book"><div class="book-summary">
@@ -64,6 +66,28 @@
 
                     
                         
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                                Testing | Method-Level Structural Unit Testing (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
                         <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
                         
                             <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
@@ -71,7 +95,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#41-combinational-models">4.1 Combinational Models</a></li><li><a href="#42-unified-modeling-language">4.2 Unified Modeling Language</a></li><li><a href="#43-basic-object-constraint-language">4.3 Basic Object Constraint Language</a></li></ul>
+                                    <ul><li><a href="#41-combinational-models">4.1 Combinational Models</a></li><li><a href="#42-unified-modeling-language">4.2 Unified Modeling Language</a></li><li><a href="#43-basic-object-constraint-language">4.3 Basic Object Constraint Language</a></li><li><a href="#44-significance-of-collections-in-ocl">4.4 Significance of Collections in OCL</a></li></ul>
 
                                 
                             
@@ -529,7 +553,7 @@
 
                     <blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
-這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
+這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入</p>
 </blockquote>
 
 <p>本章先介紹如何使用組合邏輯來尋找限制式的組合，並使用 Constraint Logic Programming 來產生測試資料，
@@ -861,6 +885,21 @@ Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal �
 
 <p>依照這個 Table 去跑限制式這樣就能夠產生五條全部路徑的測試案例，例如第一條路徑的 CLP 如下:</p>
 
+<h3 id="44-significance-of-collections-in-ocl">4.4 Significance of Collections in OCL</h3>
+
+<p>OCL 支援 Collection，詳細的語法可以參考 <a href="./2023-09-07-Introduction_OCL.html">Object Constraint Language Concepts</a>，這裡介紹 Collection 如何進行測試。</p>
+
+<h5 id="441-testing-of-collections">4.4.1 Testing of Collections</h5>
+
+<ul>
+  <li>For boundedcollections, test collections with bound 0, 1, n (where n 4).</li>
+  <li>For a boundedcollection with bound n, test instances of size 0, 1, m (where 1 &lt; m &lt; n –1), n –1, and n.</li>
+  <li>For unboundedcollections, test instances of size 0, 1, and m (where m &gt; 1).</li>
+  <li>You can write a CLP predicate to generate these collection instances.</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>10-29-2023 15:56</p>
@@ -907,13 +946,13 @@ MathJax = {
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script><!-- customize line 38-50 swap next previous-->
                     
-                        <a href="/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Home">
+                        <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Compiler | Syntax Analysis Notes (Unfinished)">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     
 
                     
-                        <a href="/jekylls/2023-10-26-syntax_analysis.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ">
+                        <a href="/jekylls/2023-10-26-syntax_analysis.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Testing | Based on CLP Testcases">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -928,6 +967,15 @@ MathJax = {
         "title": "Introduction",
         "level": "1.1",
         "depth": 1,
+        
+        "next": {
+            "title": "Testing | Based on CLP Testcases",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023-11-23-based_on_clp_testcases.md",
+            "ref": "_posts/2023-11-23-based_on_clp_testcases.md",
+            "articles": []
+        },
         
         "dir": "ltr"
     },    "config": {
@@ -1009,7 +1057,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-21 19:51:31 +0800"
+        "time": "2023-11-26 15:42:15 +0800"
     },
     "basePath": "",
     "book": {

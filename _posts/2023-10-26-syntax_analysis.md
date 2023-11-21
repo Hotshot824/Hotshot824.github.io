@@ -554,12 +554,12 @@ Example:
 
 1. 首先看 closure({(S' -> •S, $)}):
     1.  首先計算 (S' -> •S, $)
-        -   以 (A -> α•Xβ, a) 來看會等於 A = S', α = ε, B = S, β = ε, a = $
+        -   以 (A -> α•Bβ, a) 來看會等於 A = S', α = ε, B = S, β = ε, a = $
         -   加入 B -> •γ，也就是 S -> •CC
         -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
         -   加入 **(S -> •CC, $)**
     2.  計算 (S -> •CC, $)
-        -   以 (A -> α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $
+        -   以 (A -> α•Bβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $
         -   加入 B -> •γ，也就是 C -> •cC, C -> •d
         -   計算 b = FIRST(βa) = FIRST(C$) = { c, d }
         -   加入 (C -> •cC, c), (C -> •cC, d), (C -> •d, c), (C -> •d, d)
@@ -568,13 +568,13 @@ Example:
 2.  goto(I<sub>0</sub>, S): (S' -> S•, $)
 3.  goto(I<sub>0</sub>, C):
     1.  (S -> C•C, $)
-        -   以 (A -> α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $
+        -   以 (A -> α•Bβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $
         -   加入 B -> •γ，也就是 C -> •cC, C -> •d
         -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
         -   加入 **(C -> •cC, $)**, **(C -> •d, $)**
 4.  goto(I<sub>0</sub>, c)
     1.  (C -> c•C, c/d)
-        -   以 (A -> α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d
+        -   以 (A -> α•Bβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d
         -   加入 B -> •γ，也就是 C -> •cC, C -> •d
         -   計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }
         -   加入 **(C -> •cC, c/d)**, **(C -> •d, c/d)**
@@ -582,6 +582,8 @@ Example:
 之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:
 
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true){:height="75%" width="75%"}
+
+##### LALR(1) Parsing Table The Core of LR(1) Items
 
 > ##### Last Edit
 > 11-06-2023 17:12

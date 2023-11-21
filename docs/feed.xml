@@ -1,7 +1,160 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-21T19:51:31+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
-</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-26T15:42:15+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Structural Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-11-25-method_level_structural_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Structural Unit Testing (Unfinished)" /><published>2023-11-25T00:00:00+08:00</published><updated>2023-11-25T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_structural_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-11-25-method_level_structural_unit_testing.html"><![CDATA[<blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
-這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing</p>
+這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入</p>
+</blockquote>
+
+<p>白箱測試 (White-box testing) 是透過實作的程式碼來進行測試，所以這章節會介紹如何從程式碼的角度來進行測試，而不是從 Specification 的角度來進行測試</p>
+
+<p><strong>Structural Testing(White-Box Testing)</strong></p>
+
+<ul>
+  <li>In structural testing, the software is viewed as a white box.</li>
+  <li><strong>Test inputs</strong> are derived from the <strong>implementation</strong> of the software.</li>
+  <li><strong>Expected outputs</strong> are still derived from the <strong>specification</strong> of the software.</li>
+  <li>Structural testing techniques include <strong>control flow testing</strong> and <strong>data flow testing</strong>.
+    <ul>
+      <li>Control flow: 透過 flowchart 來確認路徑，並且進行測試</li>
+      <li>Data flow: 透過 data 的細微變化，來進行測試</li>
+      <li>通常 Data flow 能比 Control flow 更細緻的進行測試，但是也更難進行測試</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="51-control-flow-testing">5.1 Control Flow Testing</h3>
+
+<ul>
+  <li>Control flow testing(控制流程測試)使用程式的控制結構來制定程式的 Test cases</li>
+  <li>Test cases 的設計是基於在充分覆蓋程式的整個控制結構上</li>
+  <li>Control flow graph(CFG, 控制流程圖)可以用來描述程式的控制結構</li>
+</ul>
+
+<p><strong>Control flow graph</strong></p>
+
+<ul>
+  <li>一個程式的 Control flow graph, G = (N, E)，包含一組節點 N 和一組邊 E</li>
+  <li>每個 Node 都代表一組程式的 Statement，有五種不同的 Node
+    <ul>
+      <li><strong>Entry</strong>: 程式的進入點</li>
+      <li><strong>Exit</strong>: 程式的結束點</li>
+      <li><strong>Statement</strong>: 程式的一般陳述句，不會創建新的分支，如: letExpr</li>
+      <li><strong>Decision</strong>: 包含一個條件陳述，由該條件創建 2 個或以上的分支，如: ifExpr, switchExpr</li>
+      <li><strong>Merge</strong>: 分支的合併點</li>
+    </ul>
+  </li>
+  <li>如果 Control 可以從 N<sub>1</sub> 到 N<sub>2</sub>，則存在一條從 N<sub>1</sub> 到 N<sub>2</sub> 的 Edge</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/1.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Test Input</strong></p>
+
+<ul>
+  <li>測試輸入可以由一條 CFG 的完整路徑中得到
+    <ul>
+      <li>完整路徑: 一條從 Entry 到 Exit 的路徑</li>
+    </ul>
+  </li>
+  <li>測試覆蓋標準(Test coverage criterion) 衡量<strong>一組測試輸入</strong>對程式的覆蓋程度</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/2.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>假如有一個完整的 CFG 使用 BFS 會找出右邊的路徑，但要注意路徑並不代表一定能找出符合的測試輸入</p>
+</blockquote>
+
+<p><strong>Path Predicate Expression</strong></p>
+
+<ul>
+  <li>Input vector: 是輸入變數的 Vector 相對應的 Tuple of values</li>
+  <li>Complete path: 包含一系列的 Decision Node</li>
+  <li>Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-25-2023 13:34</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入]]></summary></entry><entry><title type="html">Testing | Based on CLP Testcases</title><link href="http://0.0.0.0:4000/jekyll/2023-11-23-based_on_clp_testcases.html" rel="alternate" type="text/html" title="Testing | Based on CLP Testcases" /><published>2023-11-23T00:00:00+08:00</published><updated>2023-11-23T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/based_on_clp_testcases</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-11-23-based_on_clp_testcases.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+簡單記錄下 OCL 與 CLP 的對應關係，以及如何使用 CLP 產生測試案例。</p>
+</blockquote>
+
+<h3 id="1-constraint-logic-programming-specification">1. Constraint Logic Programming Specification</h3>
+
+<p><strong>Constraint Logic Programming Predicates</strong></p>
+
+<p>以下是一個產生測試案例的 CLP Predicate 規範，分別應對 Constructor 與 Method 的測試案例:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">testConstructor(ArgPre, Obj, Arg, Exc):-</code>
+    <ul>
+      <li>ArgPre: the arguments before the constructor call</li>
+      <li>Obj: the object created after the constructor call</li>
+      <li>Arg: the arguments after the constructor call</li>
+      <li>Exc: the exception thrown after the constructor call</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">testMethod(ObjPre, ArgPre, ObjPost, ArgPost, Ret, Exc):-</code>
+    <ul>
+      <li>ObjPre: object before invocation</li>
+      <li>ArgPre: arguments before invocation</li>
+      <li>ObjPost: object after invocation</li>
+      <li>ArgPre: arguments after invocation</li>
+      <li>Ret: value returned after successful invocation</li>
+      <li>Exc: exception thrown after failed invocation</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+
+<p>以下是一個 Triangle Constructor 的 OCL:</p>
+<div class="language-ocl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">contextTriangle</span> <span class="p">::</span> <span class="n">Triangle</span><span class="p">(</span><span class="n">int</span> <span class="n">sa</span><span class="p">,</span> <span class="n">int</span> <span class="n">sb</span><span class="p">,</span> <span class="n">int</span> <span class="n">sc</span><span class="p">)</span>
+<span class="k">pre</span> <span class="n">IllegealArgException</span><span class="p">:</span>
+    <span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span> <span class="o">&gt;</span> <span class="n">sc</span> <span class="o">and</span> <span class="n">sa</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">sb</span> <span class="o">+</span> <span class="n">sc</span> <span class="o">&gt;</span> <span class="n">sa</span>
+<span class="k">post</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sa</span> <span class="o">and</span> <span class="n">b</span> <span class="o">=</span> <span class="n">sb</span> <span class="o">and</span> <span class="n">c</span> <span class="o">=</span> <span class="n">sc</span>
+</code></pre></div></div>
+
+<p>以此建立 OCL 後將會得到以下四條路徑，並收集路徑上的限制式(Constraint)來編寫 CLP:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/10.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/3.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p>Valid 的 CLP 將會是以下的形式:</p>
+<div class="language-prolog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">% Include constraint solving library</span>
+<span class="p">:-</span> <span class="ss">lib</span><span class="p">(</span><span class="ss">ic</span><span class="p">).</span>
+<span class="ss">testTriangle1</span><span class="p">([</span><span class="nv">Sa</span><span class="p">,</span><span class="nv">Sb</span><span class="p">,</span><span class="nv">Sc</span><span class="p">],</span> <span class="p">[</span><span class="nv">A</span><span class="p">,</span><span class="nv">B</span><span class="p">,</span><span class="nv">C</span><span class="p">],</span> <span class="p">[</span><span class="nv">Sa</span><span class="p">,</span><span class="nv">Sb</span><span class="p">,</span><span class="nv">Sc</span><span class="p">],</span> <span class="p">[]):-</span>
+<span class="c1">% Domains of variables</span>
+    <span class="p">[</span><span class="nv">Sa</span><span class="p">,</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sc</span><span class="p">,</span> <span class="nv">A</span><span class="p">,</span> <span class="nv">B</span><span class="p">,</span> <span class="nv">C</span><span class="p">]</span> <span class="o">::</span> <span class="m">1</span> <span class="p">..</span> <span class="m">32767</span><span class="p">,</span>
+<span class="c1">% Constraints on variables</span>
+    <span class="nv">Sa</span> <span class="o">+</span> <span class="nv">Sb</span> <span class="o">#&gt;</span> <span class="nv">Sc</span><span class="p">,</span> <span class="nv">Sa</span> <span class="o">+</span> <span class="nv">Sc</span> <span class="o">#&gt;</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sb</span> <span class="o">+</span> <span class="nv">Sc</span> <span class="o">#&gt;</span> <span class="nv">Sa</span><span class="p">,</span>
+    <span class="nv">A</span> <span class="o">#=</span> <span class="nv">Sa</span><span class="p">,</span> <span class="nv">B</span> <span class="o">#=</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">C</span> <span class="o">#=</span> <span class="nv">Sc</span><span class="p">,</span>
+<span class="c1">% Solving constraints</span>
+    <span class="ss">labeling</span><span class="p">([</span><span class="nv">Sa</span><span class="p">,</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sc</span><span class="p">,</span> <span class="nv">A</span><span class="p">,</span> <span class="nv">B</span><span class="p">,</span> <span class="nv">C</span><span class="p">]).</span>
+</code></pre></div></div>
+
+<p>Invalid 的 CLP 將會是以下的形式，將 Precondition 的限制式改為不符合的形式:</p>
+<div class="language-prolog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">% Include constraint solving library</span>
+<span class="p">:-</span> <span class="ss">lib</span><span class="p">(</span><span class="ss">ic</span><span class="p">).</span>
+<span class="ss">testTriangle2</span><span class="p">([</span><span class="nv">Sa</span><span class="p">,</span><span class="nv">Sb</span><span class="p">,</span><span class="nv">Sc</span><span class="p">],</span> <span class="p">[],</span> <span class="p">[</span><span class="nv">Sa</span><span class="p">,</span><span class="nv">Sb</span><span class="p">,</span><span class="nv">Sc</span><span class="p">],</span> <span class="p">[</span><span class="ss">exception</span><span class="p">]):-</span>
+<span class="c1">% Domains of variables</span>
+    <span class="p">[</span><span class="nv">Sa</span><span class="p">,</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sc</span><span class="p">]</span> <span class="o">::</span> <span class="m">1</span> <span class="p">..</span> <span class="m">32767</span><span class="p">,</span>
+<span class="c1">% Constraints on variables</span>
+    <span class="nv">Sa</span> <span class="o">+</span> <span class="nv">Sb</span> <span class="o">#&gt;</span> <span class="nv">Sc</span><span class="p">,</span> <span class="nv">Sa</span> <span class="o">+</span> <span class="nv">Sc</span> <span class="o">#&gt;</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sb</span> <span class="o">+</span> <span class="nv">Sc</span> <span class="o">#=&lt;</span> <span class="nv">Sa</span><span class="p">,</span>
+<span class="c1">% Solving constraints</span>
+    <span class="ss">labeling</span><span class="p">([</span><span class="nv">Sa</span><span class="p">,</span> <span class="nv">Sb</span><span class="p">,</span> <span class="nv">Sc</span><span class="p">]).</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-23-2023 15:56</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 簡單記錄下 OCL 與 CLP 的對應關係，以及如何使用 CLP 產生測試案例。]]></summary></entry><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入</p>
 </blockquote>
 
 <p>本章先介紹如何使用組合邏輯來尋找限制式的組合，並使用 Constraint Logic Programming 來產生測試資料，
@@ -333,10 +486,25 @@ Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal �
 
 <p>依照這個 Table 去跑限制式這樣就能夠產生五條全部路徑的測試案例，例如第一條路徑的 CLP 如下:</p>
 
+<h3 id="44-significance-of-collections-in-ocl">4.4 Significance of Collections in OCL</h3>
+
+<p>OCL 支援 Collection，詳細的語法可以參考 <a href="./2023-09-07-Introduction_OCL.html">Object Constraint Language Concepts</a>，這裡介紹 Collection 如何進行測試。</p>
+
+<h5 id="441-testing-of-collections">4.4.1 Testing of Collections</h5>
+
+<ul>
+  <li>For boundedcollections, test collections with bound 0, 1, n (where n 4).</li>
+  <li>For a boundedcollection with bound n, test instances of size 0, 1, m (where 1 &lt; m &lt; n –1), n –1, and n.</li>
+  <li>For unboundedcollections, test instances of size 0, 1, and m (where m &gt; 1).</li>
+  <li>You can write a CLP predicate to generate these collection instances.</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>10-29-2023 15:56</p>
-</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Specification，來對每個 Method 進行獨立的 Unit testing]]></summary></entry><entry><title type="html">Compiler | Syntax Analysis Notes (Unfinished)</title><link href="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html" rel="alternate" type="text/html" title="Compiler | Syntax Analysis Notes (Unfinished)" /><published>2023-10-26T00:00:00+08:00</published><updated>2023-10-26T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/syntax_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html"><![CDATA[<blockquote class="block-tip">
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入]]></summary></entry><entry><title type="html">Compiler | Syntax Analysis Notes (Unfinished)</title><link href="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html" rel="alternate" type="text/html" title="Compiler | Syntax Analysis Notes (Unfinished)" /><published>2023-10-26T00:00:00+08:00</published><updated>2023-10-26T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/syntax_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html"><![CDATA[<blockquote class="block-tip">
   <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
 Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回的 Token 是否符合語法規則，並且建立語法樹</p>
 </blockquote>
@@ -1011,7 +1179,7 @@ end
     <ol>
       <li>首先計算 (S’ -&gt; •S, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S’, α = ε, B = S, β = ε, a = $</li>
           <li>加入 B -&gt; •γ，也就是 S -&gt; •CC</li>
           <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
           <li>加入 <strong>(S -&gt; •CC, $)</strong></li>
@@ -1019,7 +1187,7 @@ end
       </li>
       <li>計算 (S -&gt; •CC, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(C$) = { c, d }</li>
           <li>加入 (C -&gt; •cC, c), (C -&gt; •cC, d), (C -&gt; •d, c), (C -&gt; •d, d)</li>
@@ -1034,7 +1202,7 @@ end
     <ol>
       <li>(S -&gt; C•C, $)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(ε$) = { $ }</li>
           <li>加入 <strong>(C -&gt; •cC, $)</strong>, <strong>(C -&gt; •d, $)</strong></li>
@@ -1046,7 +1214,7 @@ end
     <ol>
       <li>(C -&gt; c•C, c/d)
         <ul>
-          <li>以 (A -&gt; α•Xβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
+          <li>以 (A -&gt; α•Bβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d</li>
           <li>加入 B -&gt; •γ，也就是 C -&gt; •cC, C -&gt; •d</li>
           <li>計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }</li>
           <li>加入 <strong>(C -&gt; •cC, c/d)</strong>, <strong>(C -&gt; •d, c/d)</strong></li>
@@ -1059,6 +1227,8 @@ end
 <p>之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:</p>
 
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h5 id="lalr1-parsing-table-the-core-of-lr1-items">LALR(1) Parsing Table The Core of LR(1) Items</h5>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
@@ -3483,859 +3653,4 @@ const typeof( ((type *)0)-&gt;member ) *__mptr = (ptr);    \
   <h5 id="note">NOTE</h5>
   <p>本篇只是講述軟體測試的概論，後續會再討論各個章節的細節<br />
 Last edit 09-24-2023 15:50</p>
-</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 軟體測試是確保軟體品質的重要過程，這個過程確保軟體產品符合預期的需求，並確保軟體產品無缺陷，這裡介紹軟測的基礎概論。]]></summary></entry><entry><title type="html">Compiler | Lexical Analysis Notes</title><link href="http://0.0.0.0:4000/jekylls/2023-09-21-lexical_analysis.html" rel="alternate" type="text/html" title="Compiler | Lexical Analysis Notes" /><published>2023-09-21T00:00:00+08:00</published><updated>2023-09-21T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/lexical_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-09-21-lexical_analysis.html"><![CDATA[<blockquote class="block-tip">
-  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
-Lexical analysis(語彙分析) 將文本轉換為有意義的語彙標記(Token)，這通常是 Compiler 步驟的第一步。</p>
-</blockquote>
-
-<p>Compilers: Principles, Techniques, and Tools 介紹使用 <strong>Regular Expression</strong>(RE, 正規表達式)描述 Lexemes 的方法，並透過一個 <strong>Lexical-analyzer generator</strong>(語彙分析器生成工具)來進行代碼生成，
-使我們可以專注在如何描述 Lexemes。</p>
-
-<p>因此會先學習 RE 的使用方法，RE 能被轉換為 <strong>Nondeterministic Finite Automata</strong>(NFA, 非確定有限狀態自動機)問題在轉換為 <strong>Deterministic Finite Automata</strong>(DFA, 確定有限狀態自動機)問題，
-之後就能用程式碼模擬自動機運作。</p>
-
-<h3 id="31-the-role-of-the-lexical-analyzer">3.1 The Role of the Lexical Analyzer</h3>
-
-<p>Lexical analyzer(語彙分析器)主要任務就是讀取 Source code 的輸入字符(characters)，並將其組成為 Lexeme，並輸出一個 Token 序列，並在識別到 Identifier 時要將其添加到 Symbol table 中。</p>
-
-<p>下圖顯示一個 Syntax analyzer(語法分析器)與 Lexical analyzer 互動的過程，呼叫 getNextToken 來使語彙分析器不斷讀取字符，直到識別出下一個 Token 將其返回給語法分析器。</p>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/1.png?raw=true" alt="" height="60%" width="60%" /></p>
-
-<ul>
-  <li>語彙分析器可以被劃分為兩個骨牌效應的過程:
-    <ul>
-      <li>掃描不需要轉變為 Token 的部分的過程
-        <ul>
-          <li>例如: 過濾 Comments, Whitespace (blank, newline, tab …)</li>
-        </ul>
-      </li>
-      <li>實際的 Lexical analysis，從掃描的輸入中產生 Token</li>
-    </ul>
-  </li>
-</ul>
-
-<blockquote class="block-warning">
-  <ul>
-    <li>語彙分析器還可以將 Compiler 的錯誤訊息與 Source code 的發生位置聯繫起來，例如:
-      <ul>
-        <li>紀錄換行符號的行數，以便在出錯時給予一個行數</li>
-        <li>某些編譯器中會將 Source code 複製一份，並將錯誤訊息插入該位置</li>
-      </ul>
-    </li>
-  </ul>
-</blockquote>
-
-<h5 id="311-lexical-analysis-versus-parsing">3.1.1 Lexical Analysis Versus Parsing</h5>
-
-<p>把 Lexical analysis(Scanning) 與 Syntax analysis(Parsing) 分開有三個原因:</p>
-<ol>
-  <li>簡化編譯器設計，分離可以更好的專注在不同任務上
-    <ul>
-      <li>如果我們正在設計一種新的語言，將詞法和語法問題分開也可以使整體語言設計更加清晰</li>
-    </ul>
-  </li>
-  <li>提高編譯器的效率
-    <ul>
-      <li>Lexical analyzer 獨立後我們就可以去更方便的優化 I/O 的處理</li>
-    </ul>
-  </li>
-  <li>提高編譯器的可移植性，輸入設備特定的特性可以限制在詞法分析器中
-    <ul>
-      <li>例如: Windows 的換行符是 <code class="language-plaintext highlighter-rouge">\r\n</code>，Linux 上的是 <code class="language-plaintext highlighter-rouge">\n</code></li>
-    </ul>
-  </li>
-</ol>
-
-<blockquote>
-  <p>延伸閱讀 <a href="https://www.codingninjas.com/studio/library/input-buffering-in-compiler-design">Input Buffering in Compiler Design</a></p>
-</blockquote>
-
-<h5 id="312-tokens-patterns-and-lexemes">3.1.2 Tokens, Patterns, and Lexemes</h5>
-
-<p>在討論 Lexical analyzer，這裡有三個需要了解的術語:</p>
-<ul>
-  <li>token(language): a set of strings
-    <ul>
-      <li>if, identifier, relop</li>
-    </ul>
-  </li>
-  <li>Pattern(grammar): a rule defining a token
-    <ul>
-      <li>if: if</li>
-      <li>identifier: letter followed by letters and digits</li>
-      <li>relop: &lt; or &lt;= or = or &lt;&gt; or &gt;= or &gt;</li>
-    </ul>
-  </li>
-  <li>Lexemes(sentence): a string matched by the parrern of a token
-    <ul>
-      <li>if, Pi, count, &lt;, &lt;=</li>
-    </ul>
-  </li>
-</ul>
-
-<p>假設有以下 Clang code，依照 Figure 3.2 <code class="language-plaintext highlighter-rouge">print</code> 與 <code class="language-plaintext highlighter-rouge">score</code> 是 Token <em>id</em> 所匹配的 Lexeme，<code class="language-plaintext highlighter-rouge">"Total = %d\n"</code> 則是與 <em>literal</em> 匹配的 Lexeme。</p>
-
-<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printf</span><span class="p">(</span><span class="s">"Total = %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">score</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/2.png?raw=true" alt="" height="60%" width="60%" /></p>
-
-<p>在很多程式語言設計中，大部分 Token 被分成以下幾類:</p>
-
-<ol>
-  <li>Reserved words(保留字)都有一個 Token，保留字的 Pattern 與保留字相同</li>
-  <li>Operators 的 Token，可以表示單個運算符，也有像 comparison 有多個同類別的運算符</li>
-  <li>Identifier 只用一種 Token 表示</li>
-  <li>Constants 有一個或多個 Token，例如 number、literal</li>
-  <li>Punctuation symbol 都有各自的 Token，例如 <code class="language-plaintext highlighter-rouge">(</code>, <code class="language-plaintext highlighter-rouge">)</code>, <code class="language-plaintext highlighter-rouge">,</code>, <code class="language-plaintext highlighter-rouge">;</code></li>
-</ol>
-
-<h5 id="313-attributes-for-tokens">3.1.3 Attributes for Tokens</h5>
-
-<p>Attributes 是用來區分 Token 中的不同 Lexeme，例如 0, 1 都能跟 Token <code class="language-plaintext highlighter-rouge">number</code> 匹配，因為 Lexcial analyzer 很多時候不能僅返回給 Syntax analyzer 一個 Token name，
-Token name 影響 Syntax analyzer，而 Attributes 會影響 Parsing 之後的 Semantic analyzer。</p>
-
-<ul>
-  <li>&lt; if, &gt;</li>
-  <li>&lt; identifier, <code class="language-plaintext highlighter-rouge">pointer to symbol table entry</code> &gt;</li>
-  <li>&lt; relop, <code class="language-plaintext highlighter-rouge">=</code> &gt;</li>
-  <li>&lt; number, <code class="language-plaintext highlighter-rouge">value</code> &gt;</li>
-</ul>
-
-<hr />
-
-<h3 id="33-specification-of-tokens">3.3 Specification of Tokens</h3>
-
-<p>Token 的一種重要的表示方式(規格)就是 Regular expression，RE 可以高效的描述處理 Token 時要用到的 Pattern。</p>
-
-<h5 id="333-regular-expression">3.3.3 Regular Expression</h5>
-
-<p><strong><a href="https://en.wikipedia.org/wiki/Regular_expression#">Regular Expression</a></strong>(RE, 正規表達式)是由較小的 RE 按照以下規則遞迴建構，下面的規則定義了某個 Alphabet ∑ 的 RE:</p>
-
-<ol>
-  <li>ε 是一個 RE，<strong>L(ε) = {ε}</strong>，也就是該語言只包含空字串</li>
-  <li>如果 a 是 ∑ 中的符號，那麼 a 也是一個 RE 代表 L(a) = {a}，也就是說這個語言僅包含長度為 1 的字串 a。</li>
-</ol>
-
-<ul>
-  <li>Suppose r and s are RE denoting L(r) and L(s)</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>(r)</td>
-          <td>(s) is a RE denoting L(r) ∪ L(s)</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-  <li>(r)(s) is a RE denoting L(r)L(s)</li>
-  <li>(r)* is a RE denoting (L(r))*</li>
-  <li>(r) is a RE denoting L(r)</li>
-</ul>
-
-<p><strong>Example:</strong></p>
-<pre><code class="language-re">a | b               {a, b}
-(a | b)(a | b)      {aa, ab, ba, bb}
-a*                  {ε, a, aa, aaa, ...}
-(a | b)*            the set of all strings of a's and b's
-a | a*b             the set containing the string a and all strings consisting of zero or more a's followed by a b
-</code></pre>
-
-<p><strong>Order of operations:</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Priority</th>
-      <th>Symbol</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Highest</td>
-      <td>\</td>
-    </tr>
-    <tr>
-      <td>High</td>
-      <td>(), (?:), (?=), []</td>
-    </tr>
-    <tr>
-      <td>Middle</td>
-      <td>*, +, ?, {n}, {n,}, {n,m}</td>
-    </tr>
-    <tr>
-      <td>Low</td>
-      <td>^, $</td>
-    </tr>
-    <tr>
-      <td>Second lowest</td>
-      <td>concatenation</td>
-    </tr>
-    <tr>
-      <td>Lowest</td>
-      <td>|</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>Algebraic laws:</strong></p>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/3.png?raw=true" alt="" height="60%" width="60%" /></p>
-
-<h5 id="334-regular-definitions">3.3.4 Regular Definitions</h5>
-
-<p>為了方便表示，我們可能會給某些 RE 別名，並在之後的 RE 中使用符號一樣使用這些別名，例如:</p>
-<ul>
-  <li>Name for regular expression<br />
-$d_1 \rightarrow r_1$<br />
-$d_2 \rightarrow r_2$<br />
-$…$<br />
-$d_n \rightarrow r_n$<br />
-$where\;r_i\;over\;alphabet\cup ( d_1, d_2, …, d_{i-1} )$</li>
-  <li>Examples:<br />
-$letter \rightarrow A | B | … | Z | a | b | … | z$<br />
-$digit \rightarrow 0 | 1 | … | 9$<br />
-$identifier \rightarrow letter(letter | digit)*$</li>
-</ul>
-
-<blockquote>
-  <p>上面的 Examples 定義了一個僅能由 letter 開頭但的 identifier</p>
-</blockquote>
-
-<h5 id="335-extensions-of-regular-expressions">3.3.5 Extensions of Regular Expressions</h5>
-
-<p>RE 後續有其他的擴展，用來增強 RE 表達字串的能力，這裡會介紹最常被使用的幾種擴展</p>
-
-<ul>
-  <li><strong><em>One or more instances</em></strong><br />
-(r)<sup>+</sup> denoting (L(r))<sup>+</sup><br />
-r* = r<sup>+</sup> | ε<br />
-r<sup>+</sup> = rr*</li>
-  <li><strong><em>Zero or one instance</em></strong><br />
-r? = r | ε</li>
-  <li>
-    <p><strong><em>Character classes</em></strong><br />
-[abc] = a | b | c<br />
-[a-z] = a | b | … | z<br />
-[^a-z] = any character except [a-z]</p>
-  </li>
-  <li><strong>Examples</strong>:<br />
-$digit \rightarrow 0 | 1 | … | 9$<br />
-$digits \rightarrow digit^+$
-$number \rightarrow digits(.digits)?(E[+-]?digits)?$</li>
-</ul>
-
-<blockquote>
-  <p>上面的 Examples 定義了從 digit 到 digits 最後到 number 的過程</p>
-</blockquote>
-
-<hr />
-
-<h3 id="36-finite-automata">3.6 Finite Automata</h3>
-
-<blockquote class="block-danger">
-  <p>這裡 3.6/3.7 章不會依照課本順序，而是依照課程進度。<br />
-NFA 的 Transition function 可以指向多個 State，DFA 的 Transition function 只能指向一個 State<br />
-會先介紹相對簡單的 DFA 再介紹 NFA，這樣可以更容易理解 NFA 的運作</p>
-</blockquote>
-
-<p>要注意自動機的幾個特性:</p>
-<ol>
-  <li>自動機是 Recongnizer(識別器)，他們只能對輸入的字串進行判斷 “Yes” or “No”</li>
-  <li>Finite automata 分為兩類
-    <ul>
-      <li><strong>Nondeterministic finite automata</strong> (NFA, 非確定有限狀態自動機)
-        <ul>
-          <li>A symbol can label <strong>several edges</strong> out of the same state, the <strong>empty string(ε)</strong> is a possible label.</li>
-        </ul>
-      </li>
-      <li><strong>Deterministic finite automata</strong> (DFA, 確定有限狀態自動機)
-        <ul>
-          <li>For each state, and for each symbol of its input <strong>exactly one edge</strong> with that symbol leaving that state.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-<h5 id="361-nondeterministic-finite-automata">3.6.1 Nondeterministic Finite Automata</h5>
-
-<p>An NFA consists of:</p>
-<ol>
-  <li>A finite set of states</li>
-  <li>A finite set of input symbols, default empty string is not in the set.</li>
-  <li>A transition function (or transition table ) that maps (state, symbol) pairs to sets of states</li>
-  <li>A state distinguished as start state</li>
-  <li>A set of states distinguished as final states</li>
-</ol>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/4.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/5.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>上圖左是 NFA’s transition graph 在狀態 0 有 a, b 兩種狀態轉移，圖右是他對應的範例</p>
-</blockquote>
-
-<h5 id="362-transition-tables">3.6.2 Transition Tables</h5>
-
-<p>NFA 可以表示為一張 Transition table(轉換表)，例如:</p>
-
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/6.png?raw=true" alt="" height="60%" width="60%" /></p>
-
-<blockquote>
-  <p>轉換表可以更容易看出 NFA 的狀態轉移，缺點是當 NFA 狀態(Alphabet)很多時，轉換表會變得很大佔用空間</p>
-</blockquote>
-
-<h5 id="363-acceptance-of-input-strings-by-automata">3.6.3 Acceptance of Input Strings by Automata</h5>
-
-<ul>
-  <li>NFA accept 輸入字串 s，如果從 Start state 開始，有一條路徑可以走到 <strong>Final state</strong>，這條路徑的轉移符合這個 Automata 所定義的語言</li>
-</ul>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/7.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/8.png?raw=true" width="50%" height="50%" />
-</div>
-
-<h5 id="364-deterministic-finite-automata">3.6.4 Deterministic Finite Automata</h5>
-
-<p>這裡會先談一個 DFA 怎麼用程式碼模擬，因為相較於 DFA 簡單許多</p>
-
-<ul>
-  <li>Deterministic finite automata (DFA, 確定有限狀態自動機) 是 NFA 中的一種特例，其中:
-    <ul>
-      <li>There are no moves on input ε</li>
-      <li>For each state s and input symbol a, there is exactly one edge out of s labeled a.</li>
-    </ul>
-  </li>
-  <li><strong>Algorithm 3.18 : Simulating a DFA.</strong> from Compiler: Principles, Techniques, and Tools p.150
-    <ul>
-      <li><strong>Input</strong>: An input string ended with eof and a DFA with start state s 0 and final states F.</li>
-      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
-    </ul>
-  </li>
-</ul>
-
-<pre><code class="language-pseudocode">begin
-s := s0;
-c := nextchar;
-    while (c != EOF) do begin
-        s := move(s, c);
-        c := nextchar;
-    end;
-    if (s ∈ F) then return "yes";
-    else return "no";
-end;
-</code></pre>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/13.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/14.png?raw=true" width="50%" height="50%" />
-</div>
-
-<h5 id="365-simulation-of-an-nfa">3.6.5 Simulation of an NFA</h5>
-
-<p>NFA 與 DFA 在模擬上的演算法幾乎一樣，最大的區別在於 ε-closure() 的建構，因為 NFA 在給定輸入的狀況下可以存在多個 State，
-因此在模擬上需要處理 State set。課本中會在 3.6.4 提前介紹 <strong>Algorithm 3.18 : Simulating a DFA. - p.151</strong></p>
-
-<ul>
-  <li><strong>Algorithm 3.22 : Simulating a NFA.</strong> from Compiler: Principles, Techniques, and Tools p.156
-    <ul>
-      <li><strong>Input</strong>: An input string ended with eof and an NFA with start state s 0 and final states F</li>
-      <li><strong>Output</strong>: The answer “yes” if accepts, “no” otherwise.</li>
-    </ul>
-  </li>
-</ul>
-
-<pre><code class="language-pseudocode">begin
-S := ε-closure({S0});
-c := nextchar();
-    while (c != EOF) do begin
-        S := ε-closure(move(S, c));
-        c := nextchar();
-    end;
-    if (S ∩ F != ∅) then return "yes";
-    else return "no";
-end;
-</code></pre>
-
-<ul>
-  <li>上面的 Pseudocode 模擬 NFA 的運作，其中:
-    <ul>
-      <li>move(s, c): 從 <strong>state s</strong> 輸入 c 可以到達的 NFA state set</li>
-      <li>move(<em>S</em>, c): 從 <strong>state s set S</strong> 輸入 c 可以到達的 NFA state set</li>
-      <li>ε-closure(s): 沒有輸入字元，從 <strong>state s</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
-      <li>ε-closure(<em>S</em>): 沒有輸入字元，從 <strong>state s set S</strong> 僅通過 ε-transitions 可以到達的 NFA state set</li>
-      <li>nextchar(): 回傳下一個輸入字元</li>
-    </ul>
-  </li>
-</ul>
-
-<blockquote>
-  <p>注意上面的 S 是 NFA state set，而 s 是 NFA state</p>
-</blockquote>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/9.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/10.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>上圖左邊的最後的 S 與 Final state {3} 有交集，因此回傳 “yes”，右邊的則沒有交集，回傳 “no”</p>
-</blockquote>
-
-<blockquote>
-  <p>注意上圖的 NFA 並沒有加入 ε-closure() 因為沒有任何 ε State，因此可以只透過 move() 來模擬 NFA 運作</p>
-</blockquote>
-
-<h5 id="366-computation-of-ε-closure">3.6.6 Computation of ε-closure</h5>
-
-<p>從上面的例子可以說明 move() 是如何運作，接下來這裡會講解 ε-closure() 是如何運作，用一個 DFS 來找出所有可以到達的 ε-State，返回一個 T set</p>
-
-<p><strong>Computing ε-closure(T)</strong></p>
-<ul>
-  <li><strong>Input</strong>: An NFA and a set of NFA states S.</li>
-  <li><strong>Output</strong>: T = ε-closure(S).</li>
-</ul>
-
-<pre><code class="language-pseudocode">begin 
-    push all states in S onto stack;
-    T := S;
-    while stack is not empty do begin
-        pop t, the top element, off stack;
-        for each state u with an edge from t to u labeled ε do begin
-            if u is not in T then begin
-                add u to T;
-                push u onto stack;
-            end;
-        end;
-        return T;
-end;
-</code></pre>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/12.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>上面的例子看似複雜，其實只是組合了 move() 和 ε-closure() 的運作</p>
-</blockquote>
-
-<hr />
-
-<h3 id="37-from-regular-expressions-to-automata">3.7 From Regular Expressions to Automata</h3>
-
-<p>從 RE 轉換為 NFA，再從 NFA 轉換為 DFA，這裡會用這樣的順序來介紹</p>
-
-<h5 id="371-construction-of-an-nfa-from-a-regular-expression">3.7.1 Construction of an NFA from a Regular Expression</h5>
-
-<p>使用 <a href="https://en.wikipedia.org/wiki/Thompson%27s_construction">McNaughton-Yamada-Thompson construction algorithm</a>，可以將 RE 轉換為 NFA。</p>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/15.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/16.png?raw=true" width="50%" height="50%" />
-</div>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/17.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/21.jpg?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote class="block-warning">
-  <p>以上說明了 (ε), (a), (s|t), (st), (s<em>), 的轉換過程，跟使用 (a|b)</em>abb 作為例子來一步步轉換</p>
-</blockquote>
-
-<blockquote>
-  <p>在 Compilers: Principles, Techniques, and Tools p.161 - Example 3.24 有類似的轉換過程</p>
-</blockquote>
-
-<h5 id="372-conversion-of-an-nfa-to-a-dfa">3.7.2 Conversion of an NFA to a DFA</h5>
-
-<p>使用 <a href="https://en.wikipedia.org/wiki/Powerset_construction">Subset construction algorithm</a>，可以將 NFA 轉換為 DFA。</p>
-
-<p>Subset construction 的概念是 DFA 的每個 State 都對應 NFA 的一組 State，也就是 DFA 的每個 State 都代表 NFA 在讀取相同輸入後可能存在的所有狀態。
-但是這樣的話 DFA 的 State 數量會變得非常多，因此 Subset construction 會將相同的 NFA State set 合併成一個 DFA State。</p>
-
-<ul>
-  <li>a DFA state ≡ a set of NFA states
-    <ul>
-      <li>Find the inital state in the DFA</li>
-      <li>Find all the states in the DFA</li>
-      <li>Construct the transition table</li>
-      <li>Find the final state of the DFA</li>
-    </ul>
-  </li>
-</ul>
-
-<blockquote>
-  <p>例如一個 NFA 有 3 個 State，那麼他的 DFA 最多會有 2<sup>3</sup> = 8 個 State 才能表示所有的 NFA State set，<br />
-但是在實際的語言處理中通常不會看到這種指數增長，並非所有的 NFA State 組合都會出現在實際的輸入序列中。</p>
-</blockquote>
-
-<ul>
-  <li><strong>Algorithm 3.20 : The subset construction of a DFA from an NFA.</strong> from Compiler: Principles, Techniques, and Tools p.153
-    <ul>
-      <li><strong>Input</strong>: An NFA N.</li>
-      <li><strong>Output</strong>: A DFA D with states Dstates and trasition table Dtran</li>
-    </ul>
-  </li>
-</ul>
-
-<pre><code class="language-pseudocode">begin
-add ε-closure(s0) as an unmarked state to Dstates;
-while there is an unmarked state T in Dstates do begin
-    mark T;
-    for each input symbol a do begin
-        U := ε-closure(move(T, a));
-        if U is not in Dstates then
-            add U as an unmarked state to Dstates;
-        Dtran[T, a] := U;
-    end;
-end;
-</code></pre>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/18.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/19.png?raw=true" width="50%" height="50%" />
-</div>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/11.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-21-lexical_analysis/20.png?raw=true" width="50%" height="50%" />
-</div>
-
-<p>上面是一個將 NFA 轉換為 DFA 的例子</p>
-<ol>
-  <li>透過 ε-closure(), move($state, $symbols) 找出所有的 NFA State set</li>
-  <li>將相同的 NFA State set 合併成一個 DFA State</li>
-  <li>這樣就能透過 DFA State 來繪製出一張 DFA</li>
-</ol>
-
-<h5 id="373-tiem-space-tradeoffs">3.7.3 Tiem Space Tradeoffs</h5>
-
-<ul>
-  <li>RE to NFA, simulate NFA
-    <ul>
-      <li>time: O(|r| * |x|), space O(|r|)</li>
-    </ul>
-  </li>
-  <li>RE to NFA, NFA to DFA, simula
-    <ul>
-      <li>time: O(|x|), space: O(2<sup>|r|</sup>)</li>
-    </ul>
-  </li>
-  <li><a href="https://en.wikipedia.org/wiki/Lazy_evaluation">Lazy transition evaluation</a>
-    <ul>
-      <li>transitions are computed as needed at run time; 
-computed transitions are stored in cache for later use.</li>
-    </ul>
-  </li>
-</ul>
-
-<blockquote>
-  <p>Lazy evaluation(惰性求值)，目的是要最小化計算機要做的工作。可以在空間複雜度上得到極大的優化，從而可以輕易構造一個無限大的數據類型。</p>
-</blockquote>
-
-<blockquote class="block-warning">
-  <h5 id="last-edit">Last Edit</h5>
-  <p>10-02-2023 17:50</p>
-</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Lexical analysis(語彙分析) 將文本轉換為有意義的語彙標記(Token)，這通常是 Compiler 步驟的第一步。]]></summary></entry><entry><title type="html">Compiler | Compilers Introduction</title><link href="http://0.0.0.0:4000/jekyll/2023-09-20-compiler_introduction.html" rel="alternate" type="text/html" title="Compiler | Compilers Introduction" /><published>2023-09-20T00:00:00+08:00</published><updated>2023-09-20T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/compiler_introduction</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-09-20-compiler_introduction.html"><![CDATA[<blockquote class="block-tip">
-  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
-編譯器這門課可以讓人更深入的了解 Programming language，如果能知道編譯器如何將 High level language 轉換為 Machine code 與背後的工作原理，
-就能更有效的去編寫程式。在修 OS 的時候更有感覺，有些是針對編譯器與平台的優化去更改寫法，有些小小的改動就能減少數行的指令去提升效能。</p>
-</blockquote>
-
-<blockquote class="block-danger">
-  <p>linux/lib/rbtree.c 在 6.4 版做了一個非常簡單的 <a href="https://github.com/torvalds/linux/commit/b0687c1119b4e8c88a651b6e876b7eae28d076e3">commit</a>，將 bitwise | 換成 +，這個替換使 x86 平台上可以使用 <strong>lea</strong> Assemble，
-將兩道指令變成一道指令。正是了解 Compiler Optimization 才能知道這樣修改有什麼用。</p>
-</blockquote>
-
-<div align="center">
-  <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/1.png?raw=true" />
-</div>
-
-<ul>
-  <li>Human use <strong>nature languages</strong> to communicate with <strong>each other</strong></li>
-  <li>Human use <strong>programming language</strong> to communicate with <strong>computers</strong></li>
-</ul>
-
-<h3 id="11-language-processors">1.1 Language Processors</h3>
-
-<p>廣義的說 Compiler 就是一個可以將一個 Language 翻譯成另一個 Language 的工具，同時 Compiler 的另一個重要功能是發現翻譯過程中 Original language 的錯誤。</p>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/2.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/3.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>上圖展示了一個 Compiler 與 Interpreter 的差異，另外 Java language process 結合了兩者的過程，既有 Target code 也有用於執行程序的 Interpreter。</p>
-</blockquote>
-
-<p>但是一個程式語言從 Compile 到 Execute 除了 Compiler 還有很多其他的處理程序，如: Preprocessor、Assembler、Linker、Loader。但這裡專注於 Compiler 的部分，
-在 1.2 再詳細說明 Compiler 的結構。</p>
-
-<h3 id="12-the-structure-of-a-compiler">1.2 The Structure of a Compiler</h3>
-
-<p>首先我們可以把 Compiler 分為 Frontend/Backend 兩個部分:</p>
-<ul>
-  <li>Analysis(Front-End):  將 Source code 分解成多個組成要素，並在這些要素之上加入語法結構。使用這個結構來建立 Intermediate code，並且可以檢查原始程式是否符合正確的語法與語意，並且提供資訊給使用者修改。
-並且把 Source code 的資訊收集為 Symbol table，之後將 Intermediate code 與 Symbol table 一起送給後端。</li>
-  <li>Synthesis(Back-End):  根據 Intermediate code 與 Symbol table 來建立目標程式</li>
-</ul>
-
-<div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/4.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/5.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>上圖都是 Compiler 的結構，右圖表述了每個步驟之間的更多細節</p>
-</blockquote>
-
-<p>有些編譯器在前端與後端之間會有 Machine-independent optimization(機器無關的最佳化)步驟，這個最佳化的目的是在 Intermediate code 之間進行轉換。</p>
-
-<h5 id="121-lexical-analysis">1.2.1 Lexical analysis</h5>
-
-<p>Lexical analysis(語彙分析)也被稱做 Scanning(掃描)，是編譯器的第一個步驟，進行讀取原始程式的字元串流，並依據 Lexeme(詞素)來產生 Token(詞彙單位)作為輸出。</p>
-<ul>
-  <li><em>Lexeme</em>:	是 Source code 中具有相同意義的字符序列，如 <code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">return</code>, <code class="language-plaintext highlighter-rouge">=</code> 都是 Lexeme。</li>
-  <li><em>Token</em>:	是 Lexical analysis 後的結果，它的形式可能像 <strong>&lt;token-name, attribute-value&gt;</strong>
-    <ul>
-      <li>例如 <code class="language-plaintext highlighter-rouge">Position = initial + rate * 60</code> 在經過 Lexical Analysis 後會變成: <code class="language-plaintext highlighter-rouge">&lt;id, 1&gt; &lt;=&gt; &lt;id, 2&gt; &lt;+&gt; &lt;id, 3&gt; &lt;*&gt; &lt;60&gt;</code> 這樣的 Token</li>
-      <li>其中 Position 對應 &lt;id, 1&gt;，id 代表 <strong>identifier</strong>，而 1 指向 Symbol table 中所對應的條目</li>
-    </ul>
-  </li>
-</ul>
-
-<h5 id="122-syntax-analysis">1.2.2 Syntax analysis</h5>
-
-<p>Syntax analysis(語法分析)也被稱做 Parsing(解析)，使用 Lexical analysis 產生的 Token 來建立 Syntax tree。之後會介紹 Context free grammar 來描述程式語言的語法結構，
-並自動為某些類型的語法建構高效率語法分析器的演算法。</p>
-
-<h5 id="123-semantic-analysis">1.2.3 Semantic analysis</h5>
-
-<p>Semantic analysis(語意分析) 使用 Syntax tree 和 Symbol table 中的資訊來檢查原始程式是否符合程式語言的規則，並且在這裡收集型別的資訊。</p>
-<ul>
-  <li><em>Type checking</em>: 這是 Semantic analysis 的重要部分，檢查每個運算子是否具有一致的運算元。例如: Array 的 Index 應該要為 int，若有 float 就應該回報錯誤。</li>
-  <li><em>Coercion</em>: 程式語言也可以做型別轉換，例如 <code class="language-plaintext highlighter-rouge">Position = initial + rate * 60</code>，而所有變數都已經宣告為 float，此時就能將 60 轉換為 60.0。</li>
-</ul>
-
-<h5 id="124-intermediate-code-generation">1.2.4 Intermediate code generation</h5>
-
-<p>在 Source code 變成 Target code 的過程中可能會產生一個到多個的 Intermediate representation(IR, 中間表述)也可以稱作為 Intermediate code(中間碼)，
-Syntax tree 也可以算做是一種 IR，這些中間表述應該要有兩個重要的性質: <strong>Easy to produce</strong>(易於生產), <strong>Easy to translate</strong>(易於轉譯為 Machine language)</p>
-
-<p>例如使用類似 Assembly language 的一種三位址碼作為 Intermediate code:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t1 = inttofloat(60)
-t2 = id3 * t1
-t3 = id2 + t2
-id1 = t3
-</code></pre></div></div>
-
-<ul>
-  <li>使用 Intermediate code 還能使我們更好的分離前端與後端，並且也增加了移植性與優化的可能性</li>
-  <li>使用多層的 IR 可以使每層都專注在不同的目標上，這樣可以使編譯過程分隔後更易於模塊化</li>
-</ul>
-
-<div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/6.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/7.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote>
-  <p>如果不使用 Intermediate code，我們可能要去應對多種對應不同平台的轉換</p>
-</blockquote>
-
-<h5 id="125-code-optimization">1.2.5 Code optimization</h5>
-
-<p>Code optimization 的目的在於將程式碼變得更「好」，這裡指的並不只是效能上的提升，例如更短或者占用資源更少的目的碼。
-分為 Machine-independent(機器無關) 和 Machine-dependent(機器相關)的最佳化:</p>
-<ul>
-  <li><em>Machine-independent</em>:  發生在 Compiler 的中間階段，也就是生成 Intermediate code 的時候可以進行優化。這種優化並不依賴於特定的平台，因此可以在不同的硬體平台上重用。</li>
-  <li><em>Machine-dependent</em>: 發生在 Compiler 的最後階段，也就是將 Intermediate code 轉化為 Target code 的時候進行優化，此時就要考慮不同的機器有不同的 CPU 架構與指令集，
-此時就能利用平台的特性來幫助優化。</li>
-</ul>
-
-<p>例如 1.2.4 展示的三位址碼，我們可以對其進行平台無關的優化，直接將 60 轉為 60.0 替代整數就可以消除 inttofloat 運算，並可以少去 <code class="language-plaintext highlighter-rouge">t3 = id2 + t2</code> 的運算，
-把值直接傳給 <code class="language-plaintext highlighter-rouge">id1</code>，這樣就能得到一個更短的 Intermediate code。</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>t1 = id3 * 60.0
-id1 = id2 + t1
-</code></pre></div></div>
-<blockquote>
-  <p>Compiler Optimization 通常會另外開一門課特別講述，目前越來越強大的現代編譯器所做的程式碼最佳化已超出許多人預料。延伸閱讀: <a href="https://hackmd.io/@sysprog/c-compiler-optimization">你所不知道的 C 語言：編譯器和最佳化原理篇</a></p>
-</blockquote>
-
-<h5 id="126-code-generation">1.2.6 Code generation</h5>
-
-<p>Code generator(代碼生成器)將會以 Intermediate code 作為輸入，並將其映射至 Target code，例如 Assembly language。</p>
-<ul>
-  <li>Target code 若是 Assembly language，就必須為 Intermediate code 的變數分配 Memory address 或 Register</li>
-  <li>A crucial aspect of code generation is the judicious assignment of registers to hold variables</li>
-</ul>
-
-<p>例如 1.2.5 的優化過後的中間碼，這裡進行翻譯成組合語言</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LDF R2, id3		// id3 的內容載入 R3 Regiester
-MULF R2, R2, #60.0	// R2 與 60.0 進行乘法運算
-LDF R1, id2		// id2 的內容載入 R2 Regiester
-ADDF R1, R1, R2		// R1 與 R2 的值相加存到 R1
-STF id1, R1		// R1 的內容存入 id1 中
-</code></pre></div></div>
-
-<blockquote>
-  <p>這裡忽略了對於 Identifiers 儲存分配的問題，在後面會討論到</p>
-</blockquote>
-
-<h5 id="129-compiler-construction-tools">1.2.9 Compiler-construction tools</h5>
-
-<p>跟其他軟體開發一樣，開發 Compiler 也可以利用許多現代開發工具，除了通用的軟體開發工具之外也有一些更加針對 Compiler 的工具。</p>
-
-<ol>
-  <li><em>Scanner generators</em>: 可以根據一個語言的 Lexemes 的正規表達式(<strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular Expression</a></strong>)描述來生成語彙分析器
-    <ul>
-      <li>Lex, Flex</li>
-    </ul>
-  </li>
-  <li><em>Parser generators</em>: 可以根據一個程式語言的語法(<strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>)描述自動生成語法分析器
-    <ul>
-      <li>Yacc, Bison</li>
-    </ul>
-  </li>
-  <li><em>Syntax-directed translation engines</em>: 用於 Traversal syntax tree 並使用 <strong>Attribute grammars</strong> 生成中間代碼</li>
-  <li><em>Code-generator generators</em>: 根據中間語言翻譯成目標機器的機器語言的規則(<strong>Tree grammars</strong>) 來生成代碼生成器</li>
-  <li><em>Data-flow analysis engines</em>: 可以幫助收集 <strong>Data-flow</strong>(程式中的資料傳遞)，是 Compiler 優化的重要部分</li>
-  <li><em>Compiler-construction toolkits</em>: 可用於構造編譯器不同階段的工具</li>
-</ol>
-
-<h3 id="13-formal-language-theory">1.3 Formal Language Theory</h3>
-
-<blockquote>
-  <p>Compilers: Principles, Techniques and Tools 書中 1.3 談論的是程式語言歷史，這裡改為討論語言的定義與自動機。</p>
-</blockquote>
-
-<h5 id="131-language-definition">1.3.1 Language definition</h5>
-
-<p>在談論 <strong><a href="https://en.wikipedia.org/wiki/Formal_language">Formal Language</a></strong>(形式語言)前首先要談的是 Alphabet, String, Language 的不同定義:</p>
-
-<ol>
-  <li><strong>Alphabet</strong>: a finite set of symbols.
-    <ul>
-      <li>{0, 1}: binary alphabet</li>
-    </ul>
-  </li>
-  <li><strong>String</strong>: a finite sequence of symbols from the alphabet.
-    <ul>
-      <li>1011: a string of length 4</li>
-      <li>ε: the empty string</li>
-    </ul>
-  </li>
-  <li><strong>Language</strong>: a set of strings on the alphabet.
-    <ul>
-      <li>{00, 01, 10, 11}: the set of strings of length 2</li>
-      <li>∅: the empty set</li>
-    </ul>
-  </li>
-</ol>
-
-<p>對於 String 與 Language 有以下的基本運算:</p>
-
-<div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/8.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/9.png?raw=true" width="50%" height="50%" />
-</div>
-
-<h5 id="132-grammars--metalanguage">1.3.2 Grammars &amp; Metalanguage</h5>
-
-<ul>
-  <li><strong>Grammars</strong>: The sentences in a language may be defined by a set of rules called a grammar.
-    <ul>
-      <li>例如有語法規則 G: the set of binary strings of length 2</li>
-      <li>那麼 L : {00, 01, 10, 11} 就是符合該語法規則的句子</li>
-    </ul>
-  </li>
-  <li><strong>Metalanguage</strong> : a language used to define another language</li>
-</ul>
-
-<blockquote>
-  <p>如果透過一種語言來定義另一種語言，那麼該語言(Metalanguage) 必須是有明確的規則才能清楚作出清楚的定義，這樣才有可能實作下個階段的 Automata</p>
-</blockquote>
-
-<h5 id="133-automata">1.3.3 Automata</h5>
-
-<p>我們能在 Compiler 中需要實作的就是 <a href="自動機">Automata</a>，Automata 往往與 Formal language 密切關聯，自動機被用作可能是無限的形式語言的有限表示。
-因此可以在實作上透過 Automata 使語言輸入並通過(Accept) 與 (Transform)轉換。</p>
-
-<ul>
-  <li><strong>Acceptor</strong>(接受器): 一種自動機，用 Grammar 確定輸入的字符串是否為該語言的句子</li>
-  <li><strong>Transducer</strong>(轉換器): 一種自動機，依照 Grammar 的定義來轉換輸入的字符串成為另一種語言。</li>
-</ul>
-
-<p><img src="https://cs.lmu.edu/~ray/images/fa-three-consecutive-as.png" alt="" height="75%" width="75%" /></p>
-
-<blockquote>
-  <p>狀態機透過 State, Event, Output, Input 來達成如何精確地描述和處理可能無窮大的信息集合。</p>
-</blockquote>
-
-<div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/10.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/11.png?raw=true" width="50%" height="50%" />
-</div>
-
-<h5 id="134-compiler-compiler">1.3.4 Compiler-Compiler</h5>
-
-<ul>
-  <li>既然 Compiler 是透過 Grammars 來進行對一種語言的通過(Accept) 與 (Transform)轉換，這個 Grammars 必定是一種精確的規格(Specification)，
-這就讓我們可以透過 Specification 來撰寫 Automata，使我們可以透過 Grammars 來自動生成(<strong>Generate automatically</strong>) Automata</li>
-  <li>那麼定義 Grammars 的元語言(Metalanguage) 必然也是有精確的規則存在，那我們當然也可以透過 Matelanguage 來進行 Compiler 的自動生成，
-這就是 <strong>Compiler-Compiler</strong>(編譯器的編譯器) 或 <strong>Compiler-Generator</strong>(編譯器生成器)
-    <ul>
-      <li>使用不同的 Matelanguage 來定義 Compiler 不同階段的元件，我們就能以此來自動生成這些元件</li>
-    </ul>
-  </li>
-</ul>
-
-<p>這是我們在各個階段可以使用的 Matelanguage，以及透過這些 Matelanguage 我們可以怎麼去實作 Automata</p>
-
-<ul>
-  <li>Lexical syntax:
-    <ul>
-      <li><strong><a href="https://en.wikipedia.org/wiki/Regular_expression">Regular expression</a></strong>: finite automata, lexical analyzer</li>
-    </ul>
-  </li>
-  <li>Syntax:
-    <ul>
-      <li><strong><a href="https://en.wikipedia.org/wiki/Context-free_grammar">Context free grammars</a></strong>: pushdown automata, parser</li>
-    </ul>
-  </li>
-  <li>Semantics:
-    <ul>
-      <li><strong><a href="https://en.wikipedia.org/wiki/Attribute_grammar">Attribute grammars</a></strong>: attribute evaluators, type checker</li>
-    </ul>
-  </li>
-  <li>Intermediate code generation:
-    <ul>
-      <li><strong><a href="https://en.wikipedia.org/wiki/Attribute_grammar">Attribute grammars</a></strong>: intermediate code generator</li>
-    </ul>
-  </li>
-  <li>Code generation:
-    <ul>
-      <li><strong><a href="https://inria.hal.science/hal-03367725/document">Tree grammars</a></strong>: finite tree automata, code generator</li>
-    </ul>
-  </li>
-</ul>
-
-<div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/12.png?raw=true" width="50%" height="50%" />
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-09-20-compiler_introduction/13.png?raw=true" width="50%" height="50%" />
-</div>
-
-<blockquote class="block-warning">
-  <h5 id="note">NOTE</h5>
-  <p>This is first note of compilers, focus on the introduction of compilers.<br />
-Last edit 09-23-2023 13:32</p>
-</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="Compiler" /><category term="OS" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. 編譯器這門課可以讓人更深入的了解 Programming language，如果能知道編譯器如何將 High level language 轉換為 Machine code 與背後的工作原理， 就能更有效的去編寫程式。在修 OS 的時候更有感覺，有些是針對編譯器與平台的優化去更改寫法，有些小小的改動就能減少數行的指令去提升效能。]]></summary></entry></feed>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 軟體測試是確保軟體品質的重要過程，這個過程確保軟體產品符合預期的需求，並確保軟體產品無缺陷，這裡介紹軟測的基礎概論。]]></summary></entry></feed>
