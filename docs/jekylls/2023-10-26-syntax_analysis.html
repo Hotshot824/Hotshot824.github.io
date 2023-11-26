@@ -91,7 +91,7 @@
                         <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
                         
                             <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
-                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                                Testing | Method-Level Functional Unit Testing
                             </a>
                             
                                 
@@ -106,7 +106,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#41-introduction-to-parsers">4.1 Introduction to parsers</a></li><li><a href="#42-context-free-grammars">4.2 Context-free grammars</a></li><li><a href="#43-writing-a-grammar">4.3 Writing a Grammar</a></li><li><a href="#44-top-down-parsing">4.4 Top-down Parsing</a></li><li><a href="#45-bottom-up-parsing">4.5 Bottom-up Parsing</a></li><li><a href="#46-lrk-parsing">4.6 LR(k) Parsing</a></li><li><a href="#47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</a></li></ul>
+                                    <ul><li><a href="#41-introduction-to-parsers">4.1 Introduction to parsers</a></li><li><a href="#42-context-free-grammars">4.2 Context-free grammars</a></li><li><a href="#43-writing-a-grammar">4.3 Writing a Grammar</a></li><li><a href="#44-top-down-parsing">4.4 Top-down Parsing</a></li><li><a href="#45-bottom-up-parsing">4.5 Bottom-up Parsing</a></li><li><a href="#46-lrk-parsing">4.6 LR(k) Parsing</a></li><li><a href="#47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</a></li><li><a href="#48-using-ambiguous-grammars">4.8 Using Ambiguous Grammars</a></li></ul>
 
                                 
                             
@@ -1150,8 +1150,12 @@ end
 
 <h3 id="47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</h3>
 
-<p>SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
-LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。</p>
+<p>SLR(1) 雖然很簡單，但會有很多 Grammar 不能處理，因此有了更強大的 LR(1) 和 LALR(1)。</p>
+
+<ul>
+  <li>LR(1) Parsing: 可以處理最多的 Grammar，但是他的狀態數量也是最多的</li>
+  <li>LALR(1) Parsing: 可以處理的 Grammar 接近 LR(1)，但是狀態數量基本跟 SLR(1) 一樣</li>
+</ul>
 
 <h5 id="471-lr1-parsing-table-lr1-items">4.7.1 LR(1) Parsing Table LR(1) Items</h5>
 
@@ -1277,6 +1281,192 @@ end
 
 <h5 id="lalr1-parsing-table-the-core-of-lr1-items">LALR(1) Parsing Table The Core of LR(1) Items</h5>
 
+<ul>
+  <li>LALR 透過合併 LR 的狀態來減少狀態數量
+    <ul>
+      <li>將 LR(1) 中 core 相同的狀態合併</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>procedure LALR(G');
+begin
+    for each state I in mergeCore(items(G')) do begin
+        if (A -&gt; α•aβ, b) in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if (A -&gt; α•, a) in I and A != S' then
+            action[I, a] = "reduce A -&gt; α"
+        if (S' -&gt; S•, $) in I then 
+            action[I, $] = "accept"
+        if (A -&gt; α•Xβ, b) in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+</code></pre></div></div>
+
+<p>以之前的例子為例，將 Core 相同的狀態合併:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<ul>
+  <li>I<sub>3</sub> 和 I<sub>6</sub> 合併就寫作 I<sub>36</sub></li>
+  <li>在合併的同時 Lookahead 也要合併，例如 I<sub>47</sub>
+    <ul>
+      <li>I<sub>4</sub> 的 Lookahead 是 c/d，I<sub>7</sub> 的 Lookahead 是 $，合併後 Lookahead 就是 c/d/$</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/21.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h3 id="48-using-ambiguous-grammars">4.8 Using Ambiguous Grammars</h3>
+
+<blockquote class="block-warning">
+  <p>要注意所有的 Ambiguous Grammar 都不是 LR(1) 的，LR(1) 的 Parsing Table 不會產生 multiply-defined entries</p>
+</blockquote>
+
+<ul>
+  <li>A grammar is SLR(1) iff its SLR(1) parsing table has no multiply-defined entries</li>
+  <li>A grammar is LR(1) iff its LR(1) parsing table has no multiply-defined entries</li>
+  <li>A grammar is LALR(1) iff its LALR(1) parsing table has no multiply-defined entries</li>
+</ul>
+
+<p>一個 Grammar 如果產生 SLR/LR/LALR Parsing Table 並且沒有 <strong>multiply-defined entries</strong>，那麼就可以稱這個 Grammar 是 SLR/LR/LALR grammar，
+multiply-defined entries 也可以稱為 conflict(衝突)，例如:</p>
+<ul>
+  <li><strong>shift-reduce conflict</strong>: 一個狀態同時有 shift 和 reduce 的動作</li>
+  <li><strong>reduce-reduce conflict</strong>: 一個狀態同時有兩個 reduce 的動作</li>
+</ul>
+
+<blockquote>
+  <p>一個 grammar 可以是 LALR(1) grammar 但不是 SLR(1) grammar，例如下面的題目:</p>
+</blockquote>
+
+<p><strong>Exercise 4.7.4</strong>:</p>
+
+<p>Show that the following grammar<br />
+S -&gt; Aa | bAc | dc | bda<br />
+A -&gt; a<br />
+is LALR(1) but not SLR(1).</p>
+
+<p>先求出 FLLOW Set:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FLLOW(S) = { $ }
+FLLOW(A) = { a, c }
+</code></pre></div></div>
+
+<p>將其轉換成 LR(1) 與 SLR(1) 的 DPDA Graph(<strong>Left LR(1); Right SLR(1)</strong>):</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/22.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/24.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<blockquote>
+  <p>上圖是 LR(1)/LALR(1) 的 Parsing Table 與 Graph，並沒有 conflict 產生</p>
+</blockquote>
+
+<p>因為沒有可以合併的 core，所以最後 LALR(1) 將會與 LR(1) 相同，並且 LR(1) 並不會產生 multiply-defined entries，
+所以 LALR(1) 也不會產生 multiply-defined entries，因此這個 Grammar 是 LALR(1)的。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/23.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>上圖是 SLR(1) 的 Graph</p>
+</blockquote>
+
+<p>但是我們在 SLR(1) 的 I<sub>7</sub> 可以看到當下一個輸入為 a 時，因為 FLLOW(A) = { a, c }，此時會產生要使用 <code class="language-plaintext highlighter-rouge">A -&gt; d</code> 進行 <strong>reduce</strong>，
+還是要 <strong>shift</strong> a 進入 I<sub>10</sub> 的 conflict，因為有 conflict 產生，所以這個 Grammar 不是 SLR(1) 的。</p>
+
+<h5 id="481-hierarchy-of-grammar-classes">4.8.1 Hierarchy of Grammar Classes</h5>
+
+<p>如果把 Parsing 能處理的 Grammar 範圍畫成圖就會類似下圖:</p>
+<ul>
+  <li>如果一個 grammar 以及是 ambiguous 那麼勿論什麼 parsing 都不能處理這個 grammar</li>
+  <li>Top-Down: LL(k) 相較於 LR(k) 能處理的 grammar 少，但沒辦法和 SLR, LALR 做比較</li>
+  <li>Bottom-Up: 能處理的 grammar 從多到少依序為，LR(k) &gt; LALR(k) &gt; SLR(1)</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/25.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p>接下來就依序解釋為什麼會有這樣的差異</p>
+
+<p><strong>LL(k) vs. LR(k)</strong></p>
+
+<ul>
+  <li>For a grammar to be LL(k), we must be able to recognize the use of a production 
+by seeing only the first k symbols of what its right-hand side derives</li>
+  <li>For a grammar to be LR(k), we must be able to recognize the use of a production 
+by having seen all of what is derived from its right-hand side with k more symbols of lookahead</li>
+</ul>
+
+<blockquote>
+  <p>簡單的說法就是，LR(k) 是 rightmost 推導，所以結合 lookahead 可以更好的知道該執行 shift/reduce</p>
+</blockquote>
+
+<p><strong>LALR(k) vs. LR(k)</strong></p>
+
+<ul>
+  <li>The merge of the sets of LR(1) items having the same core does not introduce shift/reduce conflicts</li>
+  <li>Suppose there is a shift-reduce conflict on lookahead a in the merged set because of
+    <ol>
+      <li>(A -&gt; α•, a)</li>
+      <li>(B -&gt; β•a γ, b)</li>
+    </ol>
+  </li>
+  <li>Then some set of items has item (A -&gt; α•, a) , and since the cores of all sets merged are the same, 
+it must have an item (B -&gt; β•a γ, b) for some c</li>
+  <li>But then this set has the same shift/reduce conflict on a</li>
+</ul>
+
+<blockquote>
+  <p>如果一個 LR(1) 沒有 shift/reduce conflict 那麼由合併的 items 也必然沒有 shift/reduce conflict，
+但如果本來 LR(1) 就有 shift/reduce conflict 那麼合併後會繼承已有 shift/reduce conflict</p>
+</blockquote>
+
+<ul>
+  <li>The merge of the sets of LR(1) items having the same core may introduce reduce/reduce conflicts</li>
+  <li>As an example, consider the grammar<br />
+S’ -&gt; S  <br />
+S  -&gt; a A d | a B e | b A e | b B d<br />
+A  -&gt; c<br />
+B  -&gt; c<br />
+that generates acd, ace, bce, bcd</li>
+  <li>The set <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, d), (B -&gt; c•, e)}</code> is valid for acx</li>
+  <li>The set <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, e), (B -&gt; c•, d)}</code> is valid for bcx</li>
+  <li>But the union <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, d/e), (B -&gt; c•, d/e)}</code> generates a reduce/reduce conflict</li>
+</ul>
+
+<blockquote>
+  <p>但合併 items 可能會產生 reduce/reduce conflict，因為合併後也會合併 lookahead，這樣有可能使原本沒有 conflict 的 items 產生 conflict，
+因此產生 reduce/reduce conflict。</p>
+</blockquote>
+
+<p><strong>SLR(k) vs. LALR(k)</strong></p>
+
+<p>SLR(k) 與 LALR(k) 我們用一個例子來說明:</p>
+
+<ul>
+  <li>As an example, consider the grammar<br />
+S’ -&gt; S
+S  -&gt; L = R
+S  -&gt; R
+L  -&gt; * R
+L  -&gt; id
+R  -&gt; L</li>
+</ul>
+
+<p>FOLLOW(R) = { =, S }</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/26.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/27.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/28.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/29.png?raw=true" width="50%" height="50%" />
+</div>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>11-06-2023 17:12</p>
@@ -1326,7 +1516,7 @@ MathJax = {
                     
 
                     
-                        <a href="/jekyll/2023-10-19-cpu_scheduler.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Testing | Method-Level Functional Unit Testing (Unfinished)">
+                        <a href="/jekyll/2023-10-19-cpu_scheduler.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Testing | Method-Level Functional Unit Testing">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     
@@ -1343,7 +1533,7 @@ MathJax = {
         "depth": 1,
         
         "next": {
-            "title": "Testing | Method-Level Functional Unit Testing (Unfinished)",
+            "title": "Testing | Method-Level Functional Unit Testing",
             "level": "1.2",
             "depth": 1,
             "path": "_posts/2023-10-28-method_level_function_unit_testing.md",
@@ -1431,7 +1621,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-26 15:42:15 +0800"
+        "time": "2023-11-27 16:13:14 +0800"
     },
     "basePath": "",
     "book": {

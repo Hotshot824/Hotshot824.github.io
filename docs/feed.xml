@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-26T15:42:15+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/" rel="alternate" type="text/html" /><updated>2023-11-27T16:13:14+08:00</updated><id>http://0.0.0.0:4000/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
 </subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Testing | Method-Level Structural Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-11-25-method_level_structural_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Structural Unit Testing (Unfinished)" /><published>2023-11-25T00:00:00+08:00</published><updated>2023-11-25T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_structural_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-11-25-method_level_structural_unit_testing.html"><![CDATA[<blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
 這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入</p>
@@ -70,6 +70,37 @@
   <li>Input vector: 是輸入變數的 Vector 相對應的 Tuple of values</li>
   <li>Complete path: 包含一系列的 Decision Node</li>
   <li>Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector</li>
+</ul>
+
+<p>簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/3.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/4.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>Path Sensitization</strong></p>
+
+<ul>
+  <li>Path sensitization 是尋找 Paht predicate expression 的解集的過程</li>
+  <li>可以使用 Constraint Logic Programming(CLP) predicates 來實現 Path sensitization</li>
+  <li>如果一個 Path sensitization 有解就代表這條路徑是可行的</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/5.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/6.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h3 id="52-test-coverage-criteria">5.2 Test Coverage Criteria</h3>
+
+<ul>
+  <li>Statement coverage (SC)</li>
+  <li>Decision coverage (DC)</li>
+  <li>Condition coverage (CC)</li>
+  <li>Decision/condition coverage (D/CC)</li>
+  <li>Multiple condition coverage (MCC)</li>
+  <li>Path coverage (PC)</li>
 </ul>
 
 <blockquote class="block-warning">
@@ -152,7 +183,7 @@
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>11-23-2023 15:56</p>
-</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 簡單記錄下 OCL 與 CLP 的對應關係，以及如何使用 CLP 產生測試案例。]]></summary></entry><entry><title type="html">Testing | Method-Level Functional Unit Testing (Unfinished)</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing (Unfinished)" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 簡單記錄下 OCL 與 CLP 的對應關係，以及如何使用 CLP 產生測試案例。]]></summary></entry><entry><title type="html">Testing | Method-Level Functional Unit Testing</title><link href="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Functional Unit Testing" /><published>2023-10-28T00:00:00+08:00</published><updated>2023-10-28T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekyll/method_level_function_unit_testing</id><content type="html" xml:base="http://0.0.0.0:4000/jekyll/2023-10-28-method_level_function_unit_testing.html"><![CDATA[<blockquote class="block-tip">
   <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
 這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入</p>
 </blockquote>
@@ -499,11 +530,59 @@ Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal �
   <li>You can write a CLP predicate to generate these collection instances.</li>
 </ul>
 
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h3 id="45-inheritance-of-constraints">4.5 Inheritance of Constraints</h3>
+
+<ul>
+  <li>Liskov’s Substitution Principle(LSP, 約化的替代原則): “Whenever an instance of a class is expected, 
+one can always substitute an instance of any of its subclasses.”
+    <ul>
+      <li>當一個程式希望使用某個 Class 時，該 Class 可以被任何繼承該 Class 的子類別所替代</li>
+      <li>即使 Subclass 進行 override，也只能產生不同的行為，但不違反本來的條件</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong> 有一個 Supercalss <code class="language-plaintext highlighter-rouge">Report</code> 其中有一個 Method <code class="language-plaintext highlighter-rouge">toString</code>，假設 Report.toString 將會返回一個空字串，
+並且有以下的 contract:</p>
+<ul>
+  <li>toString() 應該提供一個具有某種格式的字串</li>
+  <li>toString() 不能改變 Report 的對象</li>
+  <li>toString() 永遠不會 throw Exception</li>
+</ul>
+
+<p>在這些規則下，chirdren class <code class="language-plaintext highlighter-rouge">HTMLReport</code> 也必須遵守這些規則，但是可以改變 toString() 的行為</p>
+<ul>
+  <li>toString() 返回一個 HTML 格式的字串</li>
+</ul>
+
+<p>但是如果你的 contract 是: toString() 無論如何都返回空字串，那麼任何 override 這個 method 的子類別都會違反 LSP。</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://softwareengineering.stackexchange.com/questions/244773/is-method-overriding-always-a-violation-of-liskov-substitution-principle">Is method overriding always a violation of Liskov Substitution Principle?</a></p>
+</blockquote>
+
+<p><strong>Inheritance of Constraints</strong></p>
+
+<ul>
+  <li>對於 invariants LSP 的影響:
+    <ul>
+      <li>每個 Subclass 的 invariants 都繼承自 superclass</li>
+      <li>Subclass 可以加強自己的 invariants</li>
+    </ul>
+  </li>
+  <li>對於 Pre/Post-condition 的影響:
+    <ul>
+      <li>Pre-condition 可能會被減弱(contravariance)</li>
+      <li>Post-condition 可能會被加強(covariance)</li>
+    </ul>
+  </li>
+</ul>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
-  <p>10-29-2023 15:56</p>
+  <p>11-26-2023 15:56</p>
 </blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Unit testing，以 Black-box 的角度來切入]]></summary></entry><entry><title type="html">Compiler | Syntax Analysis Notes (Unfinished)</title><link href="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html" rel="alternate" type="text/html" title="Compiler | Syntax Analysis Notes (Unfinished)" /><published>2023-10-26T00:00:00+08:00</published><updated>2023-10-26T00:00:00+08:00</updated><id>http://0.0.0.0:4000/jekylls/syntax_analysis</id><content type="html" xml:base="http://0.0.0.0:4000/jekylls/2023-10-26-syntax_analysis.html"><![CDATA[<blockquote class="block-tip">
   <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.
 Syntax Analysis(語法分析) 在這個階段會檢查 Lexical Analysis 返回的 Token 是否符合語法規則，並且建立語法樹</p>
@@ -1103,8 +1182,12 @@ end
 
 <h3 id="47-more-powerful-lr-parsers">4.7 More Powerful LR Parsers</h3>
 
-<p>SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
-LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。</p>
+<p>SLR(1) 雖然很簡單，但會有很多 Grammar 不能處理，因此有了更強大的 LR(1) 和 LALR(1)。</p>
+
+<ul>
+  <li>LR(1) Parsing: 可以處理最多的 Grammar，但是他的狀態數量也是最多的</li>
+  <li>LALR(1) Parsing: 可以處理的 Grammar 接近 LR(1)，但是狀態數量基本跟 SLR(1) 一樣</li>
+</ul>
 
 <h5 id="471-lr1-parsing-table-lr1-items">4.7.1 LR(1) Parsing Table LR(1) Items</h5>
 
@@ -1229,6 +1312,192 @@ end
 <p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true" alt="" height="75%" width="75%" /></p>
 
 <h5 id="lalr1-parsing-table-the-core-of-lr1-items">LALR(1) Parsing Table The Core of LR(1) Items</h5>
+
+<ul>
+  <li>LALR 透過合併 LR 的狀態來減少狀態數量
+    <ul>
+      <li>將 LR(1) 中 core 相同的狀態合併</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>procedure LALR(G');
+begin
+    for each state I in mergeCore(items(G')) do begin
+        if (A -&gt; α•aβ, b) in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if (A -&gt; α•, a) in I and A != S' then
+            action[I, a] = "reduce A -&gt; α"
+        if (S' -&gt; S•, $) in I then 
+            action[I, $] = "accept"
+        if (A -&gt; α•Xβ, b) in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+</code></pre></div></div>
+
+<p>以之前的例子為例，將 Core 相同的狀態合併:</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<ul>
+  <li>I<sub>3</sub> 和 I<sub>6</sub> 合併就寫作 I<sub>36</sub></li>
+  <li>在合併的同時 Lookahead 也要合併，例如 I<sub>47</sub>
+    <ul>
+      <li>I<sub>4</sub> 的 Lookahead 是 c/d，I<sub>7</sub> 的 Lookahead 是 $，合併後 Lookahead 就是 c/d/$</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/21.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h3 id="48-using-ambiguous-grammars">4.8 Using Ambiguous Grammars</h3>
+
+<blockquote class="block-warning">
+  <p>要注意所有的 Ambiguous Grammar 都不是 LR(1) 的，LR(1) 的 Parsing Table 不會產生 multiply-defined entries</p>
+</blockquote>
+
+<ul>
+  <li>A grammar is SLR(1) iff its SLR(1) parsing table has no multiply-defined entries</li>
+  <li>A grammar is LR(1) iff its LR(1) parsing table has no multiply-defined entries</li>
+  <li>A grammar is LALR(1) iff its LALR(1) parsing table has no multiply-defined entries</li>
+</ul>
+
+<p>一個 Grammar 如果產生 SLR/LR/LALR Parsing Table 並且沒有 <strong>multiply-defined entries</strong>，那麼就可以稱這個 Grammar 是 SLR/LR/LALR grammar，
+multiply-defined entries 也可以稱為 conflict(衝突)，例如:</p>
+<ul>
+  <li><strong>shift-reduce conflict</strong>: 一個狀態同時有 shift 和 reduce 的動作</li>
+  <li><strong>reduce-reduce conflict</strong>: 一個狀態同時有兩個 reduce 的動作</li>
+</ul>
+
+<blockquote>
+  <p>一個 grammar 可以是 LALR(1) grammar 但不是 SLR(1) grammar，例如下面的題目:</p>
+</blockquote>
+
+<p><strong>Exercise 4.7.4</strong>:</p>
+
+<p>Show that the following grammar<br />
+S -&gt; Aa | bAc | dc | bda<br />
+A -&gt; a<br />
+is LALR(1) but not SLR(1).</p>
+
+<p>先求出 FLLOW Set:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FLLOW(S) = { $ }
+FLLOW(A) = { a, c }
+</code></pre></div></div>
+
+<p>將其轉換成 LR(1) 與 SLR(1) 的 DPDA Graph(<strong>Left LR(1); Right SLR(1)</strong>):</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/22.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/24.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<blockquote>
+  <p>上圖是 LR(1)/LALR(1) 的 Parsing Table 與 Graph，並沒有 conflict 產生</p>
+</blockquote>
+
+<p>因為沒有可以合併的 core，所以最後 LALR(1) 將會與 LR(1) 相同，並且 LR(1) 並不會產生 multiply-defined entries，
+所以 LALR(1) 也不會產生 multiply-defined entries，因此這個 Grammar 是 LALR(1)的。</p>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/23.png?raw=true" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>上圖是 SLR(1) 的 Graph</p>
+</blockquote>
+
+<p>但是我們在 SLR(1) 的 I<sub>7</sub> 可以看到當下一個輸入為 a 時，因為 FLLOW(A) = { a, c }，此時會產生要使用 <code class="language-plaintext highlighter-rouge">A -&gt; d</code> 進行 <strong>reduce</strong>，
+還是要 <strong>shift</strong> a 進入 I<sub>10</sub> 的 conflict，因為有 conflict 產生，所以這個 Grammar 不是 SLR(1) 的。</p>
+
+<h5 id="481-hierarchy-of-grammar-classes">4.8.1 Hierarchy of Grammar Classes</h5>
+
+<p>如果把 Parsing 能處理的 Grammar 範圍畫成圖就會類似下圖:</p>
+<ul>
+  <li>如果一個 grammar 以及是 ambiguous 那麼勿論什麼 parsing 都不能處理這個 grammar</li>
+  <li>Top-Down: LL(k) 相較於 LR(k) 能處理的 grammar 少，但沒辦法和 SLR, LALR 做比較</li>
+  <li>Bottom-Up: 能處理的 grammar 從多到少依序為，LR(k) &gt; LALR(k) &gt; SLR(1)</li>
+</ul>
+
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/25.png?raw=true" alt="" height="50%" width="50%" /></p>
+
+<p>接下來就依序解釋為什麼會有這樣的差異</p>
+
+<p><strong>LL(k) vs. LR(k)</strong></p>
+
+<ul>
+  <li>For a grammar to be LL(k), we must be able to recognize the use of a production 
+by seeing only the first k symbols of what its right-hand side derives</li>
+  <li>For a grammar to be LR(k), we must be able to recognize the use of a production 
+by having seen all of what is derived from its right-hand side with k more symbols of lookahead</li>
+</ul>
+
+<blockquote>
+  <p>簡單的說法就是，LR(k) 是 rightmost 推導，所以結合 lookahead 可以更好的知道該執行 shift/reduce</p>
+</blockquote>
+
+<p><strong>LALR(k) vs. LR(k)</strong></p>
+
+<ul>
+  <li>The merge of the sets of LR(1) items having the same core does not introduce shift/reduce conflicts</li>
+  <li>Suppose there is a shift-reduce conflict on lookahead a in the merged set because of
+    <ol>
+      <li>(A -&gt; α•, a)</li>
+      <li>(B -&gt; β•a γ, b)</li>
+    </ol>
+  </li>
+  <li>Then some set of items has item (A -&gt; α•, a) , and since the cores of all sets merged are the same, 
+it must have an item (B -&gt; β•a γ, b) for some c</li>
+  <li>But then this set has the same shift/reduce conflict on a</li>
+</ul>
+
+<blockquote>
+  <p>如果一個 LR(1) 沒有 shift/reduce conflict 那麼由合併的 items 也必然沒有 shift/reduce conflict，
+但如果本來 LR(1) 就有 shift/reduce conflict 那麼合併後會繼承已有 shift/reduce conflict</p>
+</blockquote>
+
+<ul>
+  <li>The merge of the sets of LR(1) items having the same core may introduce reduce/reduce conflicts</li>
+  <li>As an example, consider the grammar<br />
+S’ -&gt; S  <br />
+S  -&gt; a A d | a B e | b A e | b B d<br />
+A  -&gt; c<br />
+B  -&gt; c<br />
+that generates acd, ace, bce, bcd</li>
+  <li>The set <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, d), (B -&gt; c•, e)}</code> is valid for acx</li>
+  <li>The set <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, e), (B -&gt; c•, d)}</code> is valid for bcx</li>
+  <li>But the union <code class="language-plaintext highlighter-rouge">{(A -&gt; c•, d/e), (B -&gt; c•, d/e)}</code> generates a reduce/reduce conflict</li>
+</ul>
+
+<blockquote>
+  <p>但合併 items 可能會產生 reduce/reduce conflict，因為合併後也會合併 lookahead，這樣有可能使原本沒有 conflict 的 items 產生 conflict，
+因此產生 reduce/reduce conflict。</p>
+</blockquote>
+
+<p><strong>SLR(k) vs. LALR(k)</strong></p>
+
+<p>SLR(k) 與 LALR(k) 我們用一個例子來說明:</p>
+
+<ul>
+  <li>As an example, consider the grammar<br />
+S’ -&gt; S
+S  -&gt; L = R
+S  -&gt; R
+L  -&gt; * R
+L  -&gt; id
+R  -&gt; L</li>
+</ul>
+
+<p>FOLLOW(R) = { =, S }</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/26.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/27.png?raw=true" width="50%" height="50%" />
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/28.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/29.png?raw=true" width="50%" height="50%" />
+</div>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>

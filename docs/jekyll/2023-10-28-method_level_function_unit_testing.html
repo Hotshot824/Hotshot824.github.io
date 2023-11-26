@@ -2,7 +2,7 @@
 <html lang="en" >
     <head><meta charset="UTF-8">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Testing | Method-Level Functional Unit Testing (Unfinished) · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Testing | Method-Level Functional Unit Testing · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="Build Jekyll site with the GitBook style.
 "><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
 <link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
@@ -91,11 +91,11 @@
                         <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
                         
                             <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
-                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                                Testing | Method-Level Functional Unit Testing
                             </a>
                             
                                 
-                                    <ul><li><a href="#41-combinational-models">4.1 Combinational Models</a></li><li><a href="#42-unified-modeling-language">4.2 Unified Modeling Language</a></li><li><a href="#43-basic-object-constraint-language">4.3 Basic Object Constraint Language</a></li><li><a href="#44-significance-of-collections-in-ocl">4.4 Significance of Collections in OCL</a></li></ul>
+                                    <ul><li><a href="#41-combinational-models">4.1 Combinational Models</a></li><li><a href="#42-unified-modeling-language">4.2 Unified Modeling Language</a></li><li><a href="#43-basic-object-constraint-language">4.3 Basic Object Constraint Language</a></li><li><a href="#44-significance-of-collections-in-ocl">4.4 Significance of Collections in OCL</a></li><li><a href="#45-inheritance-of-constraints">4.5 Inheritance of Constraints</a></li></ul>
 
                                 
                             
@@ -529,7 +529,7 @@
                     <h1>
                         <i class="fa fa-circle-o-notch fa-spin"></i>
                         
-                            <a href="." >Testing | Method-Level Functional Unit Testing (Unfinished)</a>
+                            <a href="." >Testing | Method-Level Functional Unit Testing</a>
                         
                     </h1>
                 </div>
@@ -548,7 +548,7 @@
             <div class="search-noresults">
                 <section class="normal markdown-section">
                     
-                    <h1 id="/jekyll/method_level_function_unit_testing">Testing | Method-Level Functional Unit Testing (Unfinished)</h1>
+                    <h1 id="/jekyll/method_level_function_unit_testing">Testing | Method-Level Functional Unit Testing</h1>
                     
 
                     <blockquote class="block-tip">
@@ -898,11 +898,59 @@ Generalization 表示的是兩個 Class 之間有繼承關係，例如: Animal �
   <li>You can write a CLP predicate to generate these collection instances.</li>
 </ul>
 
-<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true" alt="" height="75%" width="75%" /></p>
+<p><img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/14.png?raw=true" alt="" height="75%" width="75%" /></p>
+
+<h3 id="45-inheritance-of-constraints">4.5 Inheritance of Constraints</h3>
+
+<ul>
+  <li>Liskov’s Substitution Principle(LSP, 約化的替代原則): “Whenever an instance of a class is expected, 
+one can always substitute an instance of any of its subclasses.”
+    <ul>
+      <li>當一個程式希望使用某個 Class 時，該 Class 可以被任何繼承該 Class 的子類別所替代</li>
+      <li>即使 Subclass 進行 override，也只能產生不同的行為，但不違反本來的條件</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong> 有一個 Supercalss <code class="language-plaintext highlighter-rouge">Report</code> 其中有一個 Method <code class="language-plaintext highlighter-rouge">toString</code>，假設 Report.toString 將會返回一個空字串，
+並且有以下的 contract:</p>
+<ul>
+  <li>toString() 應該提供一個具有某種格式的字串</li>
+  <li>toString() 不能改變 Report 的對象</li>
+  <li>toString() 永遠不會 throw Exception</li>
+</ul>
+
+<p>在這些規則下，chirdren class <code class="language-plaintext highlighter-rouge">HTMLReport</code> 也必須遵守這些規則，但是可以改變 toString() 的行為</p>
+<ul>
+  <li>toString() 返回一個 HTML 格式的字串</li>
+</ul>
+
+<p>但是如果你的 contract 是: toString() 無論如何都返回空字串，那麼任何 override 這個 method 的子類別都會違反 LSP。</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://softwareengineering.stackexchange.com/questions/244773/is-method-overriding-always-a-violation-of-liskov-substitution-principle">Is method overriding always a violation of Liskov Substitution Principle?</a></p>
+</blockquote>
+
+<p><strong>Inheritance of Constraints</strong></p>
+
+<ul>
+  <li>對於 invariants LSP 的影響:
+    <ul>
+      <li>每個 Subclass 的 invariants 都繼承自 superclass</li>
+      <li>Subclass 可以加強自己的 invariants</li>
+    </ul>
+  </li>
+  <li>對於 Pre/Post-condition 的影響:
+    <ul>
+      <li>Pre-condition 可能會被減弱(contravariance)</li>
+      <li>Post-condition 可能會被加強(covariance)</li>
+    </ul>
+  </li>
+</ul>
 
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
-  <p>10-29-2023 15:56</p>
+  <p>11-26-2023 15:56</p>
 </blockquote>
 
 
@@ -1057,7 +1105,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-26 15:42:15 +0800"
+        "time": "2023-11-27 16:13:14 +0800"
     },
     "basePath": "",
     "book": {

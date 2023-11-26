@@ -477,8 +477,10 @@ end
 
 ### 4.7 More Powerful LR Parsers
 
-SLR(1) 並沒有辦法處理所有 Grammar，而 LR(1) 雖然能處理更多 Grammar 但他的狀態數量卻比 SLR(1) 還要多，因此 LALR(1) 就是為了解決這個問題而生的，
-LALR(1) 是從建立好的 SLR(1) Automaton 中找出相同的狀態並且合併，透過這樣來減少狀態數量。
+SLR(1) 雖然很簡單，但會有很多 Grammar 不能處理，因此有了更強大的 LR(1) 和 LALR(1)。
+
+-   LR(1) Parsing: 可以處理最多的 Grammar，但是他的狀態數量也是最多的
+-   LALR(1) Parsing: 可以處理的 Grammar 接近 LR(1)，但是狀態數量基本跟 SLR(1) 一樣
 
 ##### 4.7.1 LR(1) Parsing Table LR(1) Items
 
@@ -584,6 +586,159 @@ Example:
 ![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/19.png?raw=true){:height="75%" width="75%"}
 
 ##### LALR(1) Parsing Table The Core of LR(1) Items
+
+-   LALR 透過合併 LR 的狀態來減少狀態數量
+    -   將 LR(1) 中 core 相同的狀態合併
+
+```
+procedure LALR(G');
+begin
+    for each state I in mergeCore(items(G')) do begin
+        if (A -> α•aβ, b) in I and goto(I, a) = J for a terminal a then
+            action[I, a] = "shift J"
+        if (A -> α•, a) in I and A != S' then
+            action[I, a] = "reduce A -> α"
+        if (S' -> S•, $) in I then 
+            action[I, $] = "accept"
+        if (A -> α•Xβ, b) in I and goto(I, X) = J for a nonterminal X then
+            goto[I, X] = J
+    end
+    all other entries in actionand gotoare made error
+end
+```
+
+以之前的例子為例，將 Core 相同的狀態合併:
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true){:height="75%" width="75%"}
+
+-   I<sub>3</sub> 和 I<sub>6</sub> 合併就寫作 I<sub>36</sub>
+-   在合併的同時 Lookahead 也要合併，例如 I<sub>47</sub>
+    -   I<sub>4</sub> 的 Lookahead 是 c/d，I<sub>7</sub> 的 Lookahead 是 $，合併後 Lookahead 就是 c/d/$
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/21.png?raw=true){:height="75%" width="75%"}
+
+### 4.8 Using Ambiguous Grammars
+
+> 要注意所有的 Ambiguous Grammar 都不是 LR(1) 的，LR(1) 的 Parsing Table 不會產生 multiply-defined entries
+{: .block-warning }
+
+-   A grammar is SLR(1) iff its SLR(1) parsing table has no multiply-defined entries
+-   A grammar is LR(1) iff its LR(1) parsing table has no multiply-defined entries
+-   A grammar is LALR(1) iff its LALR(1) parsing table has no multiply-defined entries
+
+一個 Grammar 如果產生 SLR/LR/LALR Parsing Table 並且沒有 **multiply-defined entries**，那麼就可以稱這個 Grammar 是 SLR/LR/LALR grammar，
+multiply-defined entries 也可以稱為 conflict(衝突)，例如:
+-   **shift-reduce conflict**: 一個狀態同時有 shift 和 reduce 的動作
+-   **reduce-reduce conflict**: 一個狀態同時有兩個 reduce 的動作
+
+> 一個 grammar 可以是 LALR(1) grammar 但不是 SLR(1) grammar，例如下面的題目:
+
+**Exercise 4.7.4**:
+
+Show that the following grammar  
+S -> Aa | bAc | dc | bda  
+A -> a  
+is LALR(1) but not SLR(1).
+
+先求出 FLLOW Set:
+```
+FLLOW(S) = { $ }
+FLLOW(A) = { a, c }
+```
+
+將其轉換成 LR(1) 與 SLR(1) 的 DPDA Graph(**Left LR(1); Right SLR(1)**):
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/22.png?raw=true){:height="100%" width="100%"}
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/24.png?raw=true){:height="50%" width="50%"}
+
+> 上圖是 LR(1)/LALR(1) 的 Parsing Table 與 Graph，並沒有 conflict 產生
+
+因為沒有可以合併的 core，所以最後 LALR(1) 將會與 LR(1) 相同，並且 LR(1) 並不會產生 multiply-defined entries，
+所以 LALR(1) 也不會產生 multiply-defined entries，因此這個 Grammar 是 LALR(1)的。
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/23.png?raw=true){:height="100%" width="100%"}
+
+> 上圖是 SLR(1) 的 Graph
+
+但是我們在 SLR(1) 的 I<sub>7</sub> 可以看到當下一個輸入為 a 時，因為 FLLOW(A) = { a, c }，此時會產生要使用 `A -> d` 進行 **reduce**，
+還是要 **shift** a 進入 I<sub>10</sub> 的 conflict，因為有 conflict 產生，所以這個 Grammar 不是 SLR(1) 的。
+
+##### 4.8.1 Hierarchy of Grammar Classes
+
+如果把 Parsing 能處理的 Grammar 範圍畫成圖就會類似下圖:
+-   如果一個 grammar 以及是 ambiguous 那麼勿論什麼 parsing 都不能處理這個 grammar
+-   Top-Down: LL(k) 相較於 LR(k) 能處理的 grammar 少，但沒辦法和 SLR, LALR 做比較
+-   Bottom-Up: 能處理的 grammar 從多到少依序為，LR(k) > LALR(k) > SLR(1)
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/25.png?raw=true){:height="50%" width="50%"}
+
+接下來就依序解釋為什麼會有這樣的差異
+
+**LL(k) vs. LR(k)**
+
+-   For a grammar to be LL(k), we must be able to recognize the use of a production 
+by seeing only the first k symbols of what its right-hand side derives
+-   For a grammar to be LR(k), we must be able to recognize the use of a production 
+by having seen all of what is derived from its right-hand side with k more symbols of lookahead
+
+> 簡單的說法就是，LR(k) 是 rightmost 推導，所以結合 lookahead 可以更好的知道該執行 shift/reduce
+
+**LALR(k) vs. LR(k)**
+
+-   The merge of the sets of LR(1) items having the same core does not introduce shift/reduce conflicts
+-   Suppose there is a shift-reduce conflict on lookahead a in the merged set because of
+    1. (A -> α•, a) 
+    2. (B -> β•a γ, b)
+-   Then some set of items has item (A -> α•, a) , and since the cores of all sets merged are the same, 
+it must have an item (B -> β•a γ, b) for some c
+-   But then this set has the same shift/reduce conflict on a
+
+> 如果一個 LR(1) 沒有 shift/reduce conflict 那麼由合併的 items 也必然沒有 shift/reduce conflict，
+> 但如果本來 LR(1) 就有 shift/reduce conflict 那麼合併後會繼承已有 shift/reduce conflict
+
+-   The merge of the sets of LR(1) items having the same core may introduce reduce/reduce conflicts
+-   As an example, consider the grammar  
+S’ -> S    
+S  -> a A d | a B e | b A e | b B d  
+A  -> c  
+B  -> c  
+that generates acd, ace, bce, bcd
+-   The set `{(A -> c•, d), (B -> c•, e)}` is valid for acx
+-   The set `{(A -> c•, e), (B -> c•, d)}` is valid for bcx
+-   But the union `{(A -> c•, d/e), (B -> c•, d/e)}` generates a reduce/reduce conflict
+
+> 但合併 items 可能會產生 reduce/reduce conflict，因為合併後也會合併 lookahead，這樣有可能使原本沒有 conflict 的 items 產生 conflict，
+> 因此產生 reduce/reduce conflict。
+
+**SLR(k) vs. LALR(k)**
+
+SLR(k) 與 LALR(k) 我們用一個例子來說明:
+
+-   As an example, consider the grammar  
+S' -> S
+S  -> L = R
+S  -> R
+L  -> * R
+L  -> id
+R  -> L
+
+FOLLOW(R) = { =, S }
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/26.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/27.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/28.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/29.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
 
 > ##### Last Edit
 > 11-06-2023 17:12

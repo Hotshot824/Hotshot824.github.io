@@ -71,7 +71,7 @@
                             </a>
                             
                                 
-                                    <ul><li><a href="#51-control-flow-testing">5.1 Control Flow Testing</a></li></ul>
+                                    <ul><li><a href="#51-control-flow-testing">5.1 Control Flow Testing</a></li><li><a href="#52-test-coverage-criteria">5.2 Test Coverage Criteria</a></li></ul>
 
                                 
                             
@@ -92,7 +92,7 @@
                         <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
                         
                             <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html">
-                                Testing | Method-Level Functional Unit Testing (Unfinished)
+                                Testing | Method-Level Functional Unit Testing
                             </a>
                             
                                 
@@ -622,6 +622,37 @@
   <li>Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector</li>
 </ul>
 
+<p>簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/3.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/4.png?raw=true" width="50%" height="50%" />
+</div>
+
+<p><strong>Path Sensitization</strong></p>
+
+<ul>
+  <li>Path sensitization 是尋找 Paht predicate expression 的解集的過程</li>
+  <li>可以使用 Constraint Logic Programming(CLP) predicates 來實現 Path sensitization</li>
+  <li>如果一個 Path sensitization 有解就代表這條路徑是可行的</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/5.png?raw=true" width="50%" height="50%" />
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/6.png?raw=true" width="50%" height="50%" />
+</div>
+
+<h3 id="52-test-coverage-criteria">5.2 Test Coverage Criteria</h3>
+
+<ul>
+  <li>Statement coverage (SC)</li>
+  <li>Decision coverage (DC)</li>
+  <li>Condition coverage (CC)</li>
+  <li>Decision/condition coverage (D/CC)</li>
+  <li>Multiple condition coverage (MCC)</li>
+  <li>Path coverage (PC)</li>
+</ul>
+
 <blockquote class="block-warning">
   <h5 id="last-edit">Last Edit</h5>
   <p>11-25-2023 13:34</p>
@@ -769,7 +800,7 @@ MathJax = {
     },
     "gitbook": {
         "version": "3.2.3",
-        "time": "2023-11-26 15:42:15 +0800"
+        "time": "2023-11-27 16:13:14 +0800"
     },
     "basePath": "",
     "book": {

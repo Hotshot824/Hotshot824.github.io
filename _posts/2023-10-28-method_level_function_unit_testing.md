@@ -1,5 +1,5 @@
 ---
-title: "Testing | Method-Level Functional Unit Testing (Unfinished)"
+title: "Testing | Method-Level Functional Unit Testing"
 author: Benson Hsu
 date: 2023-10-28
 category: Jekyll
@@ -250,13 +250,44 @@ OCL 支援 Collection，詳細的語法可以參考 [Object Constraint Language 
 -   For unboundedcollections, test instances of size 0, 1, and m (where m > 1).
 -   You can write a CLP predicate to generate these collection instances.
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/20.png?raw=true){:height="75%" width="75%"}
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-28-method_level_function_unit_testing/14.png?raw=true){:height="75%" width="75%"}
+
+### 4.5 Inheritance of Constraints
+
+-   Liskov’s Substitution Principle(LSP, 約化的替代原則): "Whenever an instance of a class is expected, 
+one can always substitute an instance of any of its subclasses."
+    -   當一個程式希望使用某個 Class 時，該 Class 可以被任何繼承該 Class 的子類別所替代
+    -   即使 Subclass 進行 override，也只能產生不同的行為，但不違反本來的條件
+
+**Example:** 有一個 Supercalss `Report` 其中有一個 Method `toString`，假設 Report.toString 將會返回一個空字串，
+並且有以下的 contract:
+-   toString() 應該提供一個具有某種格式的字串
+-   toString() 不能改變 Report 的對象
+-   toString() 永遠不會 throw Exception
+
+在這些規則下，chirdren class `HTMLReport` 也必須遵守這些規則，但是可以改變 toString() 的行為
+-   toString() 返回一個 HTML 格式的字串
+
+但是如果你的 contract 是: toString() 無論如何都返回空字串，那麼任何 override 這個 method 的子類別都會違反 LSP。
+
+> 延伸閱讀: [Is method overriding always a violation of Liskov Substitution Principle?]
+
+**Inheritance of Constraints**
+
+-   對於 invariants LSP 的影響:
+    -   每個 Subclass 的 invariants 都繼承自 superclass
+    -   Subclass 可以加強自己的 invariants
+-   對於 Pre/Post-condition 的影響:
+    -   Pre-condition 可能會被減弱(contravariance)
+    -   Post-condition 可能會被加強(covariance)
 
 > ##### Last Edit
-> 10-29-2023 15:56 
+> 11-26-2023 15:56 
 {: .block-warning }
 
 [Unified Modeling Language Concepts]: ./2023-07-26-unified_modeling_language.html
 [UML Structure Diagrams Introduction 1.1 Class diagram]: ./2023-07-28-UML_structure_diagrams.html#11-class-diagram
 
 [Object Constraint Language Concepts]: ./2023-09-07-Introduction_OCL.html
+
+[Is method overriding always a violation of Liskov Substitution Principle?]: https://softwareengineering.stackexchange.com/questions/244773/is-method-overriding-always-a-violation-of-liskov-substitution-principle

@@ -58,6 +58,37 @@ tags: [software, software_qualitiy]
 -   Complete path: 包含一系列的 Decision Node
 -   Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector
 
+簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/3.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/4.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+**Path Sensitization**
+
+-   Path sensitization 是尋找 Paht predicate expression 的解集的過程
+-   可以使用 Constraint Logic Programming(CLP) predicates 來實現 Path sensitization
+-   如果一個 Path sensitization 有解就代表這條路徑是可行的
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/5.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/6.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+### 5.2 Test Coverage Criteria
+
+-   Statement coverage (SC)
+-   Decision coverage (DC)
+-   Condition coverage (CC)
+-   Decision/condition coverage (D/CC)
+-   Multiple condition coverage (MCC)
+-   Path coverage (PC)
+
 > ##### Last Edit
 > 11-25-2023 13:34 
 {: .block-warning }
