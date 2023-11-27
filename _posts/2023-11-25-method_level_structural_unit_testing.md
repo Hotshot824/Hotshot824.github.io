@@ -89,6 +89,67 @@ tags: [software, software_qualitiy]
 -   Multiple condition coverage (MCC)
 -   Path coverage (PC)
 
+這幾種 Test coverage criteria 會在另外一篇做介紹，請參考: [Note - Test Coverage Criteria]
+
+### CFG to CLG
+
+這裡介紹如何將 Control Flow Graph(控制流程圖)傳換成 Constriant Logic Graph(限制邏輯圖)，
+如果能將 CFG 轉換成 CLG 就能更容易地透過 Graph algorithm 來找出 Path predicate expression
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/7.png?raw=true" 
+    width="50%" height="50%">
+    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/8.png?raw=true" 
+    width="50%" height="50%">
+</div>
+
+### 5.4 Data Flow Testing
+
+Data flow testing(資料流程控制)也要使用 Control flow graph(CFG) 來找出 data flow anomalies(資料流異常)，
+data flow anomalies 是基於 value 和 Variable 之間的關聯性來檢測的，例如:
+-   Variables are used without being initialized.
+-   Initialized variables are not used once.
+
+**Definitions and Uses of Variables**
+
+-   An occurrence of a variable in the program is a definition of the variable if 
+a value is bound to the variable at that occurrence.
+-   An occurrence of a variable in the program is a use of the variable 
+if the value of the variable is referred at that occurrence.
+
+**Predicate Uses and Computation Uses**
+
+-   A use of a variable is a predicate use **(p-use)** if the variable is in a predicate
+and its value is used to decide an execution path.
+-   A use of a variable is a computation use **(c-use)** if the value of the variable is
+used to compute a value for defining another variable or as an output value.
+
+> 簡單來說 p-use 是用於 Decision，c-use 用於計算變數上
+
+**Definition Clear Paths**
+
+-   A path (i, n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>, j) is a definition-clear path
+for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not contain a definition of x.
+
+**Definition-C-Use Associations**
+
+-   Given a definition of x in node nd and a c-use of x in node nc-use, 
+the presence of a definition-clear path for x from nd to nc-use establishes the definition-c-use association (nd, nc-use, x).
+
+**Definition-P-Use Associations**
+
+-   Given a definition of x in node nd and a p-use of x in node np-use, 
+the presence of a definition-clear path for x from nd to np-use establishes a pair of definition-p-use associations (nd, (np-use, t),x) and (nd, (np-use, f), x).
+
+**DU-Paths**
+
+-   A path (n1, …, nm) is a du-path for variable x if n1 contains a definition of x and
+either nm has a c-use of x and (n1, …, nm) is a definition-clear simple path
+for x (all nodes, except possibly n1 and nm, are distinct) or is a p-use of x
+and is a definition-clear loop-free path for x (all nodes are distinct).
+
 > ##### Last Edit
 > 11-25-2023 13:34 
 {: .block-warning }
+
+[Note - Test Coverage Criteria]: ./2023-11-28-test_coverage_criteria.html

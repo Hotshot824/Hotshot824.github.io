@@ -1,5 +1,5 @@
 ---
-title: "Compiler | Syntax Analysis Notes (Unfinished)"
+title: "Compiler | Syntax Analysis Notes"
 author: Benson Hsu
 date: 2023-10-26 
 category: Jekylls
@@ -723,7 +723,10 @@ L  -> * R
 L  -> id
 R  -> L
 
-FOLLOW(R) = { =, S }
+FOLLOW(R) = { =, $ }
+
+先看 SLR(1) 的 Items set，因為是使用 FOLLOW(R) 來進行 reduce，所以在 I<sub>2</sub> 產生 shift/reduce conflict，
+在 I<sub>2</sub> 可以 shift `=`，也可以使用 R -> L 進行 reduce，因為 FOLLOW(R) = { =, $ }。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/26.png?raw=true" 
@@ -731,6 +734,8 @@ FOLLOW(R) = { =, S }
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/27.png?raw=true" 
     width="50%" height="50%">
 </div>
+
+在 LALR(1) 因為從 LR(1) 合併而來，因此有 lookahead 的存在，所以即使在 core 相同的時候，也可以透過 lookahead 來區分是否要進行 reduce。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
     <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-26-syntax_analysis/28.png?raw=true" 
@@ -740,6 +745,6 @@ FOLLOW(R) = { =, S }
 </div>
 
 
-> ##### Last Edit
-> 11-06-2023 17:12
+> ##### Last Edit 11-27-2023 16:19  
+> 還有一個部分是使用 bison 來實作 Syntax analysis，但這個篇章已經很長了，所以我會放在另一篇講述如何實作  
 {: .block-warning }

@@ -308,6 +308,105 @@ Defintion:
 
 Linux 傾向於支援 I/O-bound processes，這樣會提供好的 Process response time，但是怎麼對 Process 進行分類?
 
+-   將 **Run time** 分為無數個 **epoch**
+-   當沒有 task 可以執行時就換到下一個 epoch
+    -   此時可能有些 task 的 **time slice** 還沒用完，但這些 task 正在 waiting
+    -   2.4 Scheduler 假設所有的 waiting 就是在 **waiting I/O**
+-   進入下一個 epoch 的時候，補充所有 task 的 time slice
+    -   如果是 I/O-bound task，因為在上一個 epoch 在 waiting I/O，還有一些 time slice 沒用完，
+    因此補充後這些 task 會有較多的 time slice
+-   在 Linux 2.4 中，time slice 就是 dynamic priority
+    -   因此 I/O-bound task 會有較高的 dynamic priority
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/9.png?raw=true){:height="100%" width="100%"}
+
+從上面的圖來看:
+-   Epoch1: CPU bound 都已經用完 time slice，此時剩下 I/O bound slice，必須進入下一個 epoch 否則會進入 idle
+-   Epoch2: 使用 timeSlice<sub>new</sub> = timeSlice<sub>old</sub> / 2 + baseTimeSlicep[nice] 的公式來補充 time slice
+-   依照這樣的運算 Epoch2 的 I/O bound task 一定會比 CPU bound 有更高的 Priority
+
+> 注意 Kernel 中不會使用 FPU，因此不會有 float point
+
+**Cauclate time Slice**
+
+timeSlice<sub>new</sub> = timeSlice<sub>old</sub> / 2 + baseTimeSlicep[nice]
+
+為什麼要除以 2，假如有一個惡意的程式如下:
+
+```c
+int main() {
+    sleep(65535);
+    while(1)
+        ;
+}
+```
+
+每次拿到 CPU time 就去 sleep，因此在 sleep 中會被視為一個 I/O bound task，因此拿到很高的 time slice，
+這樣醒來時就是一個 CPU bound task 同時也有很高的 time slice，可以搶佔 CPU 造成其他的 I/O bound task 也無法獲取 CPU time。
+
+**Main disadvantages of 2.4 Scheduler**
+
+-   計算 goodness 太耗費時間，就算某個 Task goodness 一直沒變，每次還是要重新計算
+-   所有 CPU 共用同一個 Run queue，這個 Run queue 會變成系統的效能瓶頸，因為每次都要 Lock & Unlock
+-   Wating 不一定是 I/O，例如: sleep()
+    -   在 2.4 Scheduler 中只針對 I/O 做提高優先權
+    -   例如 waiting child process 也是一種 waiting，也可以被考慮在內
+
+##### 4.9 Linux 2.6 Scheduler
+
+-   O(1) Scheduler
+-   CFS(Complete Fair Scheduler)
+
+**2.6 Scheduler Architecture**
+
+2.6 Scheduler 首先在架構的改善就是使每一顆 CPU 有自己的 Run queue
+-   即使這樣 CPU 要去 Run queue 拿資料時也要做 Lock & Unlock
+-   因為是 Lock 自己的 Run queue，因此 Lock & Unlock 通常都會成功，不會有競爭的情況發生
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/13.png?raw=true){:height="100%" width="100%"}
+
+當自己有自己的 Run queue 後要考慮的就是 Load balancing(負載平衡)
+-   系統去檢查 Run queue 是否 Loading 過重，如果是就會將 Task 搬移到另一個 Run queue
+-   因此才需要 Lock & Unlock，是為了避免 CPU 在搬移 Task 時出現錯誤
+    -   Put: 當 CPU 覺得自己的 loading 太重，將 task 塞給另一顆 CPU
+    -   Pull: 覺得自己的 loading 太輕，從別的 CPU 拉 task 過來
+-   如何評估 Loading 輕重
+    -   比較簡單的方式，查看每個 CPU 的 Task 數量跟 runnable task 數量
+
+每一顆 CPU 上都會有一個 thread 來觀察是否要做 Load balancing，這個 thread 稱作 Balance thread
+
+> 但假如 A, B 兩顆 CPU 同時要搬移 Task 要給予對方，同時鎖定對方的 Run queue，就會造成互相等待，造成 Deadlock，這部分後面會說明
+{: .block-warning }
+
+**CPU Affinity**
+
+-   由於每一顆 CPU 都有自己的 Run queue，通常除非 Loading unbalance，否則不會去觸發 Task migration
+    -   因此 2.6 Scheduler 可以更有效的使用 Cache
+
+**Fully Preemptible Kernel**
+
+2.6 Kernel 之後，Linux 中每一個 Task 執行於 Kernel mode 時會有一個變數 `preempt_count`，用於記錄該 Task 是否可以被 Preempt
+-   每當 Lock 一個 Resource 時，`preempt_count++`
+-   每當 Unlock 一個 Resource 時，`preempt_count--`
+-   如果 `preempt_count == 0`，Kernel 可以做 Context switch
+    -   Kernel 要做 Context switch 通常是因為 interrupt，例如: 一個高優先權的 task 正在等這個 interrupt
+    -   每次 `preempt_count` 從 1 變為 0，Kernel 都會檢查一下是否要 Context switch
+-   如果 Kernel 直接執行 schedule()，無論 `preempt_count` 是多少，都會做 Context switch
+
+> schedule() 是在 Linux kernel 中的重要函數，會直接進行 scheduler 調度，並且切換到下一個 Task 執行
+
+> 延伸閱讀: [Linux kernel: schedule() function]
+
+##### O(1) & CFS scheduler
+
+-   2.5 ~ 2.6.22: **O(1) Scheduler**
+    -   Time complexity: O(1)
+    -   Using Run queue(an active Q and an expired Q) to realize the ready queue
+-   2.6.23 ~ : **CFS Scheduler**
+    -   Time complexity: O(log N)
+    -   the ready queue is implemented as a red-black tree
+
+
 > ##### Last Edit
 > 10-18-2023 23:21
 {: .block-warning }
@@ -316,3 +415,5 @@ Linux 傾向於支援 I/O-bound processes，這樣會提供好的 Process respon
 [Preemptable OS]: https://en.wikipedia.org/wiki/Preemption_%28computing%29
 
 [Netware]: https://en.wikipedia.org/wiki/NetWare
+
+[Linux kernel: schedule() function]: https://stackoverflow.com/questions/20679228/linux-kernel-schedule-function
