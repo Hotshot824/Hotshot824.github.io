@@ -1,5 +1,5 @@
 ---
-title: "Compiler | Syntax Analysis Notes"
+title: "Compiler | Semantic Analysis Notes"
 author: Benson Hsu
 date: 2023-10-29
 category: Jekylls

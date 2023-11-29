@@ -124,7 +124,7 @@ and its value is used to decide an execution path.
 -   A use of a variable is a computation use **(c-use)** if the value of the variable is
 used to compute a value for defining another variable or as an output value.
 
-> 簡單來說 p-use 是用於 Decision，c-use 用於計算變數上
+> 簡單來說 p-use 是指變數被用於決策計算上 ，c-use 是指變數被用於計算來定義其他變數
 
 **Definition Clear Paths**
 
