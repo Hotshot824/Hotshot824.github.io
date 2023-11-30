@@ -106,47 +106,69 @@ tags: [software, software_qualitiy]
 ### 5.4 Data Flow Testing
 
 Data flow testing(資料流程控制)也要使用 Control flow graph(CFG) 來找出 data flow anomalies(資料流異常)，
-data flow anomalies 是基於 value 和 Variable 之間的關聯性來檢測的，例如:
+資料流異常是基於 value 和 Variable 之間的關聯性來檢測的，例如:
 -   Variables are used without being initialized.
 -   Initialized variables are not used once.
 
 **Definitions and Uses of Variables**
 
--   An occurrence of a variable in the program is a definition of the variable if 
-a value is bound to the variable at that occurrence.
--   An occurrence of a variable in the program is a use of the variable 
-if the value of the variable is referred at that occurrence.
+-   **Definition(定義)**:
+    -   An occurrence of a variable in the program is a definition of the variable if 
+    a value is bound to the variable at that occurrence.
+-   **Use(使用)**:
+    -   An occurrence of a variable in the program is a use of the variable 
+    if the value of the variable is referred at that occurrence.
 
 **Predicate Uses and Computation Uses**
 
--   A use of a variable is a predicate use **(p-use)** if the variable is in a predicate
-and its value is used to decide an execution path.
--   A use of a variable is a computation use **(c-use)** if the value of the variable is
-used to compute a value for defining another variable or as an output value.
+-   **Predicate Uses(謂詞使用)**:
+    -   A use of a variable is a predicate use **(p-use)** if the variable is in a predicate
+    and its value is used to decide an execution path.
+-   **Computation Uses(計算使用)**:
+    -   A use of a variable is a computation use **(c-use)** if the value of the variable is
+    used to compute a value for defining another variable or as an output value.
 
-> 簡單來說 p-use 是指變數被用於決策計算上 ，c-use 是指變數被用於計算來定義其他變數
+> 如果變數 x 被使用在決策就是 p-use，如果變數 x 被使用在計算就是 c-use
 
 **Definition Clear Paths**
 
 -   A path (i, n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>, j) is a definition-clear path
 for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not contain a definition of x.
 
+> 如果路徑中的 n<sub>1</sub> 到 n<sub>m</sub> 都沒有定義過 x 變數，則這條路徑是一條 definition-clear path
+
 **Definition-C-Use Associations**
 
--   Given a definition of x in node nd and a c-use of x in node nc-use, 
-the presence of a definition-clear path for x from nd to nc-use establishes the definition-c-use association (nd, nc-use, x).
+-   如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>c-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>c-use</sub> 存在一條 definition-clear path，
+則會產生一個 **definition-c-use association**(定義-計算使用關聯) 
+    -   `(n<sub>d</sub>, n<sub>c-use</sub>, x)`
 
 **Definition-P-Use Associations**
 
--   Given a definition of x in node nd and a p-use of x in node np-use, 
-the presence of a definition-clear path for x from nd to np-use establishes a pair of definition-p-use associations (nd, (np-use, t),x) and (nd, (np-use, f), x).
+-   如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>p-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>p-use</sub> 存在一條 definition-clear path，
+則會產生兩個 **definition-p-use association**(定義-謂詞使用關聯): 
+    -   True:  `(n<sub>d</sub>, (n<sub>p-use</sub>, t), x)`
+    -   Flase: `(n<sub>d</sub>, (n<sub>p-use</sub>, f), x)`
 
-**DU-Paths**
+**Definition-Use paths**
 
--   A path (n1, …, nm) is a du-path for variable x if n1 contains a definition of x and
-either nm has a c-use of x and (n1, …, nm) is a definition-clear simple path
-for x (all nodes, except possibly n1 and nm, are distinct) or is a p-use of x
-and is a definition-clear loop-free path for x (all nodes are distinct).
+-   **Definition-Use paths(DU-Path, 定義-使用路徑)**:
+    -   如果一條 path (n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>) 滿足以下條件則他是變數 x 的 DU-Path:
+        -   n<sub>1</sub> 是 x 的 definition
+        -   n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear simple path(DCSP, 定義-清晰簡單路徑)
+        -   n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear loop-free path(DCLFP, 定義-清晰無迴圈路徑)
+-   **Definition-clear simple path:** 除了 n<sub>1</sub> 和 n<sub>m</sub> 之外的所有 Node 都是不同的，並且 n<sub>m</sub> 是 x 的 definition
+    -   n<sub>m</sub> 必需是一個 c-use
+-   **Definition-clear loop-free path:** 所有 Node 都是不同的
+    -   n<sub>m</sub> 必需是一個 p-use
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/9.png?raw=true){:height="75%" width="75%"}
+
+上圖中的 (1, 2, 4) 是一條 DCSP，而 (1, 2, 3, 5) 是一條 DCLFP
+
+> (1, 2, 3, 5, 1) 也是一條 DU-Path，因為這是一條 Definition-clear simple path，1 跟 5 都是 x 的 definition
 
 > ##### Last Edit
 > 11-25-2023 13:34 
