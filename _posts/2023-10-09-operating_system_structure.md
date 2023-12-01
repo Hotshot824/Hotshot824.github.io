@@ -188,9 +188,9 @@ ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0	    [vsyscall]
 而圖右就將這個資料結構直接映射到 User space，clock_gettime() 呼叫 timekeeping_update() 一樣會去更新 cur_time，但直接去讀 vDSO 中的資料，這樣的話速度就跟 Function call 一樣快了。
 
 <div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/1.png?raw=true" 
+    <img src="../assets/image/2023-10-09-operating_system_structure/1.png" 
     width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/2.png?raw=true" 
+    <img src="../assets/image/2023-10-09-operating_system_structure/2.png" 
     width="50%" height="50%">
 </div>
 
@@ -264,7 +264,7 @@ Layered approach 在 OS 的缺點是，並不一定能切出 Layer，跟 Network
 -   將系統分成 N 層
 -   第 N 層可以使用第 N-1 層的功能，不可以使用 N+1 層的功能
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-09-operating_system_structure/3.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-10-09-operating_system_structure/3.png){:height="100%" width="100%"}
 
 > 例如 I/O memagement 需要 Buffer 因此需要 Memory management，Memory management 有時也需要將 Memory 寫到 Disk，因此需要 I/O management，這樣就很難分層
 

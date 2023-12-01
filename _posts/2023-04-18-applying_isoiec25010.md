@@ -25,7 +25,7 @@ tags: [software, software_qualitiy, standard]
 詳細的敘述與子項可見[Note - ISO/IEC]
 
 **在論文中將 `ISO/IEC 25010: 2011` 分為兩種類型的模型**
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-04-18-applying_isoiec25010/1.png?raw=true){:height="80%" width="80%"}
+![](../assets/image/2023-04-18-applying_isoiec25010/1.png){:height="80%" width="80%"}
 
 ### 3. Applying the ISO/IEC 25010: 2011 Quality Models
 
@@ -35,7 +35,7 @@ tags: [software, software_qualitiy, standard]
 >"a conceptual framework and not a ready-to-use solution" from Biscoglio and Marchetti (2015) define software quality evaluation plans in a conference paper.
 
 **應用品質管理中的 `7Ms Model` 來涵蓋軟體開發中的行為**
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-04-18-applying_isoiec25010/2.png?raw=true){:height="80%" width="80%"}
+![](../assets/image/2023-04-18-applying_isoiec25010/2.png){:height="80%" width="80%"}
 
 1. `7Ms Model` 是品質管理中常使用的工具，其中的 M 可視為是品質管理中的基本要素，其中包含:  
     - `Machine`, `Method`, `Material`, `Manpower`, `Management`, `Milieu`, `Measurement`

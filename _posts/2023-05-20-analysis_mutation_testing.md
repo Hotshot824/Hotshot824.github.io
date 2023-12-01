@@ -34,9 +34,9 @@ tags: [software, software_qualitiy, mutation_testing]
 
 本文作者整理了一系列的突變測試論文，將重要的論文註記於 Table. 1.，及關於增長趨勢的圖表 Fig. 1.。
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/1.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-05-20-analysis_mutation_testing/1.png){:height="100%" width="100%"}
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/2.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-05-20-analysis_mutation_testing/2.png){:height="100%" width="100%"}
 
 ### 2. The theory of mutation testing
 
@@ -71,11 +71,11 @@ tags: [software, software_qualitiy, mutation_testing]
 這種轉換規則稱作 mutation operator(突變運算符)，典型的突變運算符用於替換、插入或刪除運算符來修改變數和表達式。 Table. 3. 是 Fortran 的第一套正式突變運算符，
 在 **Mothra mutation system** 上被實現。
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/3.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-05-20-analysis_mutation_testing/3.png){:height="100%" width="100%"}
 
 <div style="display: flex; flex-direction: row;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/4.png?raw=true" alt="Image 1" width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/5.png?raw=true" alt="Image 2" width="50%" height="50%">
+    <img src="../assets/image/2023-05-20-analysis_mutation_testing/4.png" alt="Image 1" width="50%" height="50%">
+    <img src="../assets/image/2023-05-20-analysis_mutation_testing/5.png" alt="Image 2" width="50%" height="50%">
 </div>
 
 [123] 使用了一種腳本語言 *Mutation Operator Constraint Script (MOCS)*，提供兩種類型的約束:
@@ -119,7 +119,7 @@ tags: [software, software_qualitiy, mutation_testing]
 Fig. 3. 是已發表關於降低成本的想法的時間發展與情況  
 作者整理的當下 **Selective Mutation(選擇性突變)**, **Weak Mutation(弱突變)**是最廣泛使用的成本降低技術，見論文 Fig. 4.
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-05-20-analysis_mutation_testing/6.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-05-20-analysis_mutation_testing/6.png){:height="100%" width="100%"}
 
 ##### 3.1 Mutant Reduction Techniques
 

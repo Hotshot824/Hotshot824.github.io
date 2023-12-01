@@ -2,7 +2,7 @@
 layout: home
 title: Benson's Blog
 permalink: /
-cover: https://hotshot824.github.io/assets/dinosaur.gif
+cover: ./assets/dinosaur.gif
 ---
 
 ## Notes |  Software Dev | OS 

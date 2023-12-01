@@ -44,14 +44,14 @@ International Computer Symposium , 2018.
 
 - *Wizard*: In Eclipse, a wizard is commonly used for the creation of new elements, imports or exports.
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-06-23-Intergrated_environment_sdd/1.png?raw=true){:height="30%" width="30%"}
+![](../assets/image/2023-06-23-Intergrated_environment_sdd/1.png){:height="30%" width="30%"}
 > fig 3. 規格驅動開發專案檔案目錄
 
 在規格文件(Specification file)上需要 User 提供一個描述類別圖與精簡狀態圖的 UML 和 OCL file，使用 Eclipse 的 Papyrus 來繪製類別圖與精簡狀態圖，
 並使用一個**基於 Xtext 所製作的 OCL 編輯器**來編輯 OCL。Testing Case 是經由團隊開發的 OCL 語法經由 Antlr 來產生，所以才需要製作一個 OCL 編輯器來進行高亮、語法檢查等功能，
 讓使用者能確保語法正確並可以讓 OCL 分析器來進行分析。
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-06-23-Intergrated_environment_sdd/2.png?raw=true){:height="75%" width="75%"}
+![](../assets/image/2023-06-23-Intergrated_environment_sdd/2.png){:height="75%" width="75%"}
 > fig 17. 規格驅動開發整合環境，其中 CBTCG 是團隊所開發的測試案例產生器。
 
 > ##### NOTE

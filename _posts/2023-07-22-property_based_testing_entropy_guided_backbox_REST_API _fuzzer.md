@@ -123,7 +123,7 @@ $I_{e}=-\log_{2}{1 \over 50}=5.64$
 利用 Hypothesis 這個 Python 編寫的函式庫，在本篇論文中作為變異（Mutation）及模糊測試的主要架構，通過實時變更函式庫的設定值，
 讓其依照資訊熵的變化調整參數或是去更新其種子。使用 表.3 的規範方式作為特性測試之邏輯條件，進而調整變異方式及偵測 API 的弱點。
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API_fuzzer/1.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API_fuzzer/1.png){:height="100%" width="100%"}
 
 **3.4 Parallel Request Sending**
 
