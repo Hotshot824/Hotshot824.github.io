@@ -24,7 +24,7 @@ tags: [software, software_qualitiy]
 
 上面的這幾個例子都會用以下的圖來講解:
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/1.png?raw=true){:height="50%" width="50%"}
+![](../assets/image/2023-11-28-test_coverage_criteria/1.png){:height="50%" width="50%"}
 
 ##### Statement coverage (SC)
 
@@ -67,7 +67,7 @@ and every conditionin each decision has taken all possible outcomes at least onc
 
 程式中的每個 Condition 的可能的組合都要被執行到，所以有 n 個 Condition 就會有 2<sup>n</sup> 種可能的組合。
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/2.png?raw=true){:height="100%" width="100%"}
+![](../assets/image/2023-11-28-test_coverage_criteria/2.png){:height="100%" width="100%"}
 
 所以以上面的突來說，如果 Condiction 是 C<sub>A</sub>, C<sub>B</sub>, C<sub>C</sub>:
 -   **DC**: 一個 1 與 2 的組合都能滿足標準
@@ -107,9 +107,9 @@ Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執�
 下圖是目前拿來做例子的 Control Flow Graph:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/10.png?raw=true" 
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/10.png" 
     width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-25-method_level_structural_unit_testing/11.png?raw=true" 
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/11.png" 
     width="50%" height="50%">
 </div>
 
@@ -120,7 +120,7 @@ Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執�
 
 -   Test cases include a definition-clear path from every definition to some corresponding use (c-use or p-use).
 
-![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/3.png?raw=true){:height="50%" width="50%"}
+![](../assets/image/2023-11-28-test_coverage_criteria/3.png){:height="50%" width="50%"}
 
 > All-Defs 是相對寬鬆的標準，只要所有的 Definition 都有被執行到就能滿足標準
 
@@ -134,9 +134,9 @@ Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執�
 > 都是要求全部的 C-use/P-use 被執行到
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/4.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/4.png" 
     width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/5.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/5.png" 
     width="50%" height="50%">
 </div>
 
@@ -152,9 +152,9 @@ Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執�
 > 都是要求全部的 C-use/P-use 被執行到，但是如果該變數沒有 C-use/P-use，則要求被執行另外一種 Use 至少一次
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/6.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/6.png" 
     width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/7.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/7.png" 
     width="50%" height="50%">
 </div>
 
@@ -170,9 +170,9 @@ Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執�
 > 通常只需要 All-Uses 就能滿足需求，All-DU-Paths 相對的測試成本會大很多
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/8.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/8.png" 
     width="50%" height="50%">
-    <img src="https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-11-28-test_coverage_criteria/9.png?raw=true" 
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/9.png" 
     width="50%" height="50%">
 </div>
 
