@@ -1,5 +1,5 @@
 ---
-title: "Note | Test Coverage Criteria(Unfinished)"
+title: "Note | Test Coverage Criteria"
 author: Benson Hsu
 date: 2023-11-28
 category: Jekyll

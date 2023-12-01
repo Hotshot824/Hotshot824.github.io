@@ -227,6 +227,10 @@ tags: [OS]
 
 ### Linux Scheduler
 
+[4.8 Linux 2.4 Scheduler](./2023-10-19-cpu_scheduler.html#48-linux-24-scheduler)  
+[4.9 Linux 2.6 Scheduler](./2023-10-19-cpu_scheduler.html#49-linux-26-scheduler)  
+[4.10 O(1) Scheduler](./2023-10-19-cpu_scheduler.html#410-o1-scheduler)  
+
 -   Linux 共有 140 個優先權等級
     -   0 ~ 99: Real-time priority
         -   通常是一些需要 Real-time 的 Task，例如: 影片播放，聲音播放
@@ -300,7 +304,7 @@ to the process that was last executed on the ‘this_cpu’ CPU.
 > 真的有需要每次都重算嗎?
 {: .block-danger }
 
-##### 4.8 Linux 2.4 Scheduler - Improve I/O performance
+##### Linux 2.4 Scheduler - Improve I/O performance
 
 Defintion:
 -   I/O-bound processes: spends much of its time submitting and waiting on I/O requests 
@@ -351,6 +355,8 @@ int main() {
 -   Wating 不一定是 I/O，例如: sleep()
     -   在 2.4 Scheduler 中只針對 I/O 做提高優先權
     -   例如 waiting child process 也是一種 waiting，也可以被考慮在內
+
+---
 
 ##### 4.9 Linux 2.6 Scheduler
 
@@ -406,6 +412,48 @@ int main() {
     -   Time complexity: O(log N)
     -   the ready queue is implemented as a red-black tree
 
+##### 4.10 O(1) Scheduler
+
+-   每顆 CPU 有自己的 Run queue，每個 Run queue 由兩個 Array 組成
+    -   active array: time quantum 還沒用完的 task
+    -   expired array: time quantum 用完的 task
+
+-   Time complexity: O(1)
+    -   能在 O(1) 的時間內 access, search, insert, delete
+    -   每次用完 time quantum 的 task 被移到 expired array 並在**此時計算下一回合的 Dynamic priority**
+-   選出最高 Priority 的 Task，就使用求 min 的演算法
+
+> 對一個 array 求 min 的演算法最佳 time complexity 為使用 heap 建立資料結構，time complexity 為 O(log N)，
+> 但是因為 Linux 的優先權只有 140 種，因此可以使用一些方法來優化到 O(1)
+{: .block-warning }
+
+```c
+struct prio_array {
+    unsigned int nr_active;
+    unsigned long bitmap[BITMAP_SIZE];  // BITMAP_SIZE = 140
+    struct list_head queue[MAX_PRIO];   // MAX_PRIO = 140
+};
+
+typedef struct prio_array prio_array_t;
+struct runqueue {
+    /* ... */
+    struct mm_struct *prev_mm;          // prev task's mm_struct
+    prio_array_t *active, *expired;
+    prio_array_t arrays[2];
+    /* ... */
+};
+```
+
+-   **prio_array**
+    -   nr_active: 紀錄 active array 中有多少 task
+    -   bitmap: 用來快速查詢至少有一個 task 的 priority， 如果為 1 表示至少有一個 task
+    -   queue: 用來存放相同 priority 的 task
+-   **runqueue** 中維護了兩個 prio_array，分別是 active, expired
+    -   *prev_mm: 如果 task 是同一個程式的 thread 那麼 mm_struct 指向的位置會是一樣，這樣就可以不用做 Memory context switch
+
+> 延伸閱讀: [Linux 核心設計: O(1) Scheduler], [Linux 核心設計: 不只挑選任務的排程器: O(1) Scheduler]
+
+![](https://github.com/Hotshot824/Hotshot824.github.io/blob/master/_image/2023-10-19-cpu_scheduler/14.png?raw=true){:height="100%" width="100%"}
 
 > ##### Last Edit
 > 10-18-2023 23:21
@@ -417,3 +465,6 @@ int main() {
 [Netware]: https://en.wikipedia.org/wiki/NetWare
 
 [Linux kernel: schedule() function]: https://stackoverflow.com/questions/20679228/linux-kernel-schedule-function
+
+[Linux 核心設計: O(1) Scheduler]: https://hackmd.io/@RinHizakura/S1opp7-mP
+[Linux 核心設計: 不只挑選任務的排程器: O(1) Scheduler]: https://hackmd.io/@sysprog/linux-scheduler#%E7%AC%A6%E5%90%88-O1-%E6%93%8D%E4%BD%9C%E7%9A%84%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B
