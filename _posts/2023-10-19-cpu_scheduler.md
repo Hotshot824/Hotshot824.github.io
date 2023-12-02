@@ -1,5 +1,5 @@
 ---
-title: "OS | CPU Scheduler (Unfinished)"
+title: "OS | CPU Scheduler"
 author: Benson Hsu
 date: 2023-10-19
 category: Jekyll
@@ -229,7 +229,6 @@ tags: [OS]
 
 [4.8 Linux 2.4 Scheduler](./2023-10-19-cpu_scheduler.html#48-linux-24-scheduler)  
 [4.9 Linux 2.6 Scheduler](./2023-10-19-cpu_scheduler.html#49-linux-26-scheduler)  
-[4.10 O(1) Scheduler](./2023-10-19-cpu_scheduler.html#410-o1-scheduler)  
 
 -   Linux 共有 140 個優先權等級
     -   0 ~ 99: Real-time priority
@@ -304,7 +303,7 @@ to the process that was last executed on the ‘this_cpu’ CPU.
 > 真的有需要每次都重算嗎?
 {: .block-danger }
 
-##### Linux 2.4 Scheduler - Improve I/O performance
+**Linux 2.4 Scheduler - Improve I/O performance**
 
 Defintion:
 -   I/O-bound processes: spends much of its time submitting and waiting on I/O requests 
@@ -403,7 +402,12 @@ int main() {
 
 > 延伸閱讀: [Linux kernel: schedule() function]
 
-##### O(1) & CFS scheduler
+---
+
+### O(1) & CFS scheduler
+
+[4.10 O(1) Scheduler](./2023-10-19-cpu_scheduler.html#410-o1-scheduler)  
+[4.11 CFS Scheduler](./2023-10-19-cpu_scheduler.html#411-cfs-scheduler)  
 
 -   2.5 ~ 2.6.22: **O(1) Scheduler**
     -   Time complexity: O(1)
@@ -446,7 +450,7 @@ struct runqueue {
 
 -   **prio_array**
     -   nr_active: 紀錄 active array 中有多少 task
-    -   bitmap: 用來快速查詢至少有一個 task 的 priority， 如果為 1 表示至少有一個 task
+    -   bitmap: 用來快速查詢至少有一個 task 的 priority
     -   queue: 用來存放相同 priority 的 task
 -   **runqueue** 中維護了兩個 prio_array，分別是 active, expired
     -   *prev_mm: 如果 task 是同一個程式的 thread 那麼 mm_struct 指向的位置會是一樣，這樣就可以不用做 Memory context switch
@@ -455,8 +459,131 @@ struct runqueue {
 
 ![](../assets/image/2023-10-19-cpu_scheduler/14.png){:height="100%" width="100%"}
 
+-   在這兩個 Queue 中每個 Task 可以拿到的 Time quantum 大約等於 1 / priority
+-   在 Linux 中 Priority 高有兩個好處:
+    1.  有較高的 Time quantum(Time slice) 
+    2.  可以更快的搶到 CPU
+-   在 Active queue 中較高優先權的 task 除非放棄或是 time quantum 用完，否則後面的 task 都不會執行
+    -   在同一個 priority 中，會依照 Round-Robin 的方式來輪流執行
+    -   如果進行 I/O bound 也就是放棄，那麼就會被移到 expired queue，並且在此時計算下一回合的 Dynamic priority
+    -   如果是 I/O bound 那就會獲得比較高的 Priority
+-   等到 Active queue 中的所有的 task 都被移到 expired queue 後，就會將兩個 queue 交換
+
+**4.10 O(1) Scheduler - bitmap**
+
+![](https://imgur-backup.hackmd.io/nM1OlJA.png){:height="100%" width="100%"}
+
+-   在 bitmap 中每個 bit 代表一個 priority，如果為 1 表示至少有一個 task
+-   Insert, Delete 的演算法如下:
+    -   Y = priority / 32, X = priority % 32
+    -   例如: 編號 9 的 Priority，9 / 32 = 0, 9 % 32 = 9, 即可存取 bitmap[0][9] 設定為 0 或 1
+-   Min(尋找最高優先權的 Task):
+    -   從 0 開始找顯然要 O(N) 的時間，不是 O(1)
+    -   有硬體支援的話就能直接使用一個 Function [ffs()] 就能做到 O(1)
+    -   在 [include/asm-generic/bitops] 中有一系列 ffs() 的實作
+
+**Disadvantages of O(1) Scheduler**
+
+-   跟 2.4 Scheduler 一樣，使用 Epoch 來區分 I/O bound & CPU bound
+-   因此每個 Task 都要再使用完 Time slice 以後，經過一個 Epoch 才能獲得更多的 Time slice
+-   對於某些需要更頻繁的獲取 CPU time 的 Task 來說，無論 Priority 多高都要等待一個 Epoch 才能獲得更多的 Time slice
+    -   例如: 遊戲、多媒體
+
+> 延伸閱讀: [谈谈调度 - Linux O(1)]
+
+##### 4.11 CFS Scheduler
+
+> CFS source code 目前存在於: [linux/kernel/sched/fair.c]
+{: .block-warning }
+
+CFS (Completely Fair Scheduler) 在 2.6.23 之後取代 O(1) Scheduler，但是 O(1) Scheduler 獨特的設計與簡單的算法，
+影響了很多系統的設計。CFS 雖然在性能上比 O(1) Scheduler 差，但是在公平性上比 O(1) Scheduler 好。
+
+-   CFS 獨特的地方在於回填 Time quantum
+-   相較於前面兩種 Scheduler，Priority 高的 Task 回填速度會更快
+    -   因此高 Priority 的 Task 會有更多的 Time slice，更好的 Response time
+
+**Design Concept**
+
+-   將一顆 Physical CPU 依照目前正在執行的 Task 分成多個 Virtual CPU
+-   假如這些 Task 的 Priority 都一樣，那麼每個 Virtual CPU 的效能為 Physical CPU 效能的 1 / N
+    -   這表示如果 Task 的優先權越低，那麼他的 Time slice 就會越小
+-   但是每次的執行時間也有下限，不可能依照 Task 的數量無限制的分割 1 / N，所以會有一個臨界值 λ
+    -   λ = 「希望達到的反應時間」/「\# of task」
+    -   這個 λ 是可以由使用者設定的
+
+
+前兩個 Scheduler 都是等到所有 Ready queue 裡面的 Task 都用完 Time slice，Scheduler 才會去計算下一回合的 Time slice，
+稱作 **Epoch**。
+-   藉由 Epoch 可以看 Task 在上一個 Epoch 的行為來判斷他是 I/O bound 還是 CPU bound
+-   但是在 CFS 中，是依照 waiting time 來決定執行順序，waiting time 越長的 Task 優先執行
+
+**CFS Architecture**
+
+-   這裡使用 rbtree 來實作 Ready queue，依照 Task 的 vruntime 來排序
+    -   vruntime 表示的是一個 task 真正在 CPU 上的執行時間
+    -   vruntime 越小表示 Task 在 CPU 上執行的時間越少，因此從公平的角度來看優先權越高
+-   每次執行就取出 rbtree 中最左邊的 Task 執行
+    -   執行完畢後就計加上 delta_exec，然後重新放回紅黑樹中因此 **Time Complexity 為 Θ(log N)**
+    -   這樣可以確保每個 Task 都有機會在 rbtree 的最左邊，也就是最優先執行的位置
+
+![](../assets/image/2023-10-19-cpu_scheduler/15.png){:height="100%" width="100%"}
+
+> 延伸閱讀: [Linux CFS 调度器：原理、设计与内核实现（2023）]
+
+> delta_exec 如何計算的 source code 目前存在於: [linux/kernel/sched/fair.c] 中的 `__calc_delta()`
+{: .block-warning }
+
+**Virtual Time**
+
+在之前的 Scheduler，Time slice 是不固定的，優先權越高的 Task Time slice 越長，但是在 CFS 中，Time slice 是固定的，
+這個 Time slice 是依照系統希望的 Response time 來計算的。
+
+例如下面的例子，如果將 CPU 模擬為 3 個 CPU，分別為 1/2(藍色), 1/4, 1/4 的效能，那麼每次當藍色的 Task 執行完畢後，
+計算出的 vrutime 會比 1/4 的還要小，因此在同一個時間單位內，藍色的 Task 會執行更多次。
+
+![](../assets/image/2023-10-19-cpu_scheduler/16.png){:height="100%" width="100%"}
+
+**CFS - I/O**
+
+-   如果有從 Waiting queue 回來的 I/O Task 怎麼把他放到 rbtree 最左邊
+-   將他設定為最小的 vruntime 這樣就能強制 Scheduler 馬上進行 Context switch 執行 I/O Task
+    -   min_vruntime: CFS 會去維護一個 min_vruntime，表示目前 rbtree 中最小的 vruntime
+    -   min_vruntime - Δ 設定為從 waiting queue 回來的 Task 的 vruntime 這樣就能馬上執行
+
+也因為這樣的設計，假如有一個 CPU bound Task 在這樣的設計下即使 Priority 最高 -19，也會被搶走 CPU time。
+
+**CFS - New Task**
+
+將新進入系統的 Task 都設為 min_vruntime 插入到 rbtree 的最左邊，但是如果有一個這樣的程式:
+```c
+while(1) {
+    fork();
+}
+```
+在 Linux 的解決方法是將剩餘的 CPU time 平均分配給 child, parent，另外也可以設定 ulimit 來限制一個 process 可以 fork 的次數，
+超過這個次數就可以認為他是一個惡意的程式。
+
+> 延伸閱讀: [Fork bomb]
+
+---
+
+### Scheduler Problem
+
+對於現在的 Linux Scheduler 來說還有什麼需求沒有被滿足:
+
+-   對於 Real-time 的支援
+    -   目前最主流的擴充套件是 [RTAI](Real-Time Application Interface)
+    -   已經可以被使用在加工上 [LinuxCNC]
+-   對於 Power management 的支援(Power saving)
+    -   動態調整 CPU clock rate, voltage
+    -   讓 CPU 能進入省電模式，例如: ACPI 定義的 C0, C1, C2 ...，Advanced Configuration and Power Interface
+-   對於 BigLittle 等新的 CPU Architecture 的支援
+-   優先權是否可以和 Time slice 拆開，以實現更好的 QoS(Quality of Service)
+    -   例如: 實現一個 system call 叫做 balance，可以調整 time slice 和 priority 的比例
+
 > ##### Last Edit
-> 10-18-2023 23:21
+> 12-02-2023 16:03
 {: .block-warning }
 
 [Cooperative multitasking]: https://en.wikipedia.org/wiki/Cooperative_multitasking
@@ -468,3 +595,15 @@ struct runqueue {
 
 [Linux 核心設計: O(1) Scheduler]: https://hackmd.io/@RinHizakura/S1opp7-mP
 [Linux 核心設計: 不只挑選任務的排程器: O(1) Scheduler]: https://hackmd.io/@sysprog/linux-scheduler#%E7%AC%A6%E5%90%88-O1-%E6%93%8D%E4%BD%9C%E7%9A%84%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B
+[谈谈调度 - Linux O(1)]: https://zhuanlan.zhihu.com/p/33461281
+
+[ffs()]: https://en.wikipedia.org/wiki/Find_first_set
+[include/asm-generic/bitops]: https://github.com/torvalds/linux/blob/master/tools/include/linux/bitops.h
+
+[linux/kernel/sched/fair.c]: https://github.com/torvalds/linux/blob/master/kernel/sched/fair.c
+
+[Linux CFS 调度器：原理、设计与内核实现（2023）]: https://arthurchiao.art/blog/linux-cfs-design-and-implementation-zh/#22-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5
+[Fork bomb]: https://en.wikipedia.org/wiki/Fork_bomb 
+
+[RTAI]: https://www.rtai.org/
+[LinuxCNC]: https://linuxcnc.org/
