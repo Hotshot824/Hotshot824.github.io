@@ -7,6 +7,10 @@ layout: post
 tags: [Compiler]
 ---
 
+> Compilers course notes from CCU, lecturer Nai-Wei Lin.  
+> Semantic Analysis 這個階段主要用來檢查程式碼的語意是否正確，如果語意有錯誤則會產生錯誤訊息。
+{: .block-tip }
+
 **Outline**
 -   Semantic Analyzer
 -   Attribute Grammars
