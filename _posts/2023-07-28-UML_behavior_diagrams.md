@@ -12,9 +12,9 @@ tags: [software, software_development]
 
 ### 1. Behavior diagrams
 
-[1.1 Activity diagram](./2023-07-28-UML_structure_diagrams.html#11-activity-diagram)  
-[1.2 Use case diagram](./2023-07-28-UML_structure_diagrams.html#12-use-case-diagram)  
-[1.3 State diagram](./2023-07-28-UML_structure_diagrams.html#13-state-diagram)  
+[1.1 Activity diagram](./2023-07-28-UML_behavior_diagrams.html#11-activity-diagram)  
+[1.2 Use case diagram](./2023-07-28-UML_behavior_diagrams.html#12-use-case-diagram)  
+[1.3 State diagram](./2023-07-28-UML_behavior_diagrams.html#13-state-diagram)  
 
 ##### 1.1 [Activity diagram]
 
@@ -88,6 +88,8 @@ Substate 可以有自己的進入狀態、結束狀態、以及在子狀態之�
 
 ![](https://www.cybermedian.com/tw/wp-content/uploads/sites/5/2022/02/0-otCYx4pB3g5r02b.png)
 
+> 延伸閱讀 [UML 2 Tutorial - State Machine Diagram]
+
 ### 2. Interaction diagrams
 
 [2.1 Sequence diagram](./#21-sequence-diagram)  
@@ -148,6 +150,7 @@ Communication diagram / Seqence diagram 之間可以**互相轉換**，最主要
 [Use case diagram]: https://en.wikipedia.org/wiki/Use_case_diagram
 
 [State diagram]: https://en.wikipedia.org/wiki/UML_state_machine
+[UML 2 Tutorial - State Machine Diagram]: https://sparxsystems.com/resources/tutorials/uml2/state-diagram.html
 
 [Sequence diagram]: https://en.wikipedia.org/wiki/Sequence_diagram
 
