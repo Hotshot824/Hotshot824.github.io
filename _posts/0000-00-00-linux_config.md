@@ -28,12 +28,85 @@ tags: [linux, tool]
 4.  Login new username and delete temporary user
     -   `sudo userdel -r tempuser`
 
+---
+
+### Disk mount
+
+##### Ext4 with LVM Resize
+
+Reduce LVM size
+1.  Check disk mount `df -h`
+    ```bash
+    df -h /home
+    # Filesystem                        Size  Used Avail Use% Mounted on
+    # /dev/mapper/debian--vg-home   23G  1.9G   20G   9% /home
+    ```
+2.  Unmount disk `umount`, then check and fix disk `e2kfsck`
+    ```bash
+    umount /dev/mapper/debian--vg-home
+    e2kfsck -f /dev/mapper/debian--vg-home
+    ```
+3.  Resize file system `resize2fs`
+    ```bash
+    resize2fs /dev/mapper/debian--vg-home 80G
+    # resize2fs 1.42.9 (28-Dec-2023)
+    # Resizing the filesystem on /dev/mapper/debian--vg-home to 28321400 (4k) blocks.
+    # The filesystem on /dev/mapper/debian--vg-home is now 28321400 blocks long.
+    ```
+4.  Reduce LVM size `lvreduce`, then check and fix LVM `e2kfsck`
+    ```bash
+    lvreduce -L 80G /dev/mapper/debian--vg-home
+    e2kfsck -f /dev/mapper/debian--vg-home
+    ```
+5.  Mount disk `mount`
+    ```bash
+    mount /dev/mapper/debian--vg-home
+    ```
+
+Extend LVM size
+1.  Check physical volume `pvdisplay` and volume group `vgdisplay`
+    ```bash
+    pvdisplay
+    # --- Physical volume ---
+    # PV Name               /dev/sda5
+    # VG Name               debian-vg
+    # PV Size               100.00 GiB / not usable 2.00 MiB
+    # Allocatable           yes (but full)
+    # PE Size               4.00 MiB
+    vgdisplay
+    # --- Volume group ---
+    # VG Name               debian-vg
+    # Free  PE / Size       2560 / 9.99 GiB
+    ```
+2.  Extend LVM size `lvextend` Using percentage
+    ```bash
+    lvextend -l +100%FREE /dev/mapper/debian--vg-home
+    ```
+3.  Resize file system
+    -   ext4 or ext3 use `resize2fs`
+    ```bash
+    resize2fs /dev/mapper/debian--vg-home
+    ```
+    -   xfs use `xfs_growfs`
+    ```bash
+    xfs_growfs /dev/mapper/debian--vg-home
+    ```
+4.  Check disk mount `df -h`
+    ```bash
+    df -h /home
+    ```
+
+[Reduce]: https://linux.cn/article-12740-1.html
+[Extend]: https://linux.cn/article-12673-1-rel.html
+
+---
+
 ### Firewall
 
 ##### ufw (Uncomplicated Firewall)
 
 ```bash
-# 如果要允許連線指定 port 可以輸入指令:
+# 如果要允許連線指定 Port 可以輸入指令:
 sudo ufw allow <port-number>
 sudo ufw deny <port-number>
 
@@ -41,7 +114,7 @@ sudo ufw deny <port-number>
 sudo ufw allow from <IP> to any port <port-number>
 sudo ufw deny from <IP> to any port <port-number>
 
-# 只允許子網路可以連線到，可以輸入以下指令:
+# 只允許 Subnet 可以連線到，可以輸入以下指令:
 sudo ufw allow from <IP-with-mask> to any port <port-number>
 sudo ufw deny from <IP-with-mask> to any port <port-number>
 sudo ufw allow from 159.66.109.0/24 to any port 22
@@ -52,7 +125,7 @@ sudo ufw status numbered
 sudo ufw delete <rule-number>
 ```
 
-<hr>
+---
 
 ### Network config
 
@@ -167,6 +240,8 @@ sudo bash -c iptables-save > /etc/iptables/rules.v4
 -   Last using `sudo iptables -L -v` to check iptables rules.
 
 [ZeroTier Route Config]: https://zerotier.atlassian.net/wiki/spaces/SD/pages/224395274/Route+between+ZeroTier+and+Physical+Networks
+
+---
 
 ### Other
 
