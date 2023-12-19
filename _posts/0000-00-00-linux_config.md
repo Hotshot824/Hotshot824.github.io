@@ -8,6 +8,7 @@ tags: [linux, tool]
 ---
 
 > Notes Linux config
+{: .block-tip }
 
 ### Change username
 
