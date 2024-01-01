@@ -1,7 +1,7 @@
 ---
 title: "OS | Virtual Memory (Unfinished)"
 author: Benson Hsu
-date: 2023-12-19
+date: 2023-12-23
 category: Jekyll
 layout: post
 tags: [OS]
