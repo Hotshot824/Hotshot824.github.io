@@ -1,7 +1,7 @@
 ---
 title: "OS | Virtual Memory (Unfinished)"
 author: Benson Hsu
-date: 2023-12-5
+date: 2023-12-19
 category: Jekyll
 layout: post
 tags: [OS]
@@ -54,10 +54,15 @@ tags: [OS]
 
 ##### 8.2 Virtual Memory Components
 
--   Hardware table(假設 TLB miss 由硬體處理)
+> 下圖是 Virtual Memory 中會需要的組件
+
+![](../assets/image/2023-12-23-virtual_memory/1.png){:height="100%" width="100%"}
+
+-   Hardware table(Page table)
+    -   這部分由 OS 來寫入硬體所設計的表格，由 MMU 來讀取，例如: x86 定義表格，Linux 依照 x86 的定義來實作
     -   每個 Process 都有自己的 Page table
     -   如果 TLB miss 硬體查詢 Page table 還是找不到，此時觸發 Page fault exception
--   Software table
+-   Software table(mm_struct, kerne mapping table)
     -   每個 Process 甚至 Linux Kernel 都需要一個查詢表，快速的查詢每個 Memory 是否正確
     -   如果正確還發生 Page fault 如何處理？
 -   處理 Page fault
@@ -68,16 +73,16 @@ tags: [OS]
 
 ##### 8.3 Shard Memory
 
-![](../assets/image/2023-12-05-virtual_memory/2.png){:height="75%" width="75%"}
+![](../assets/image/2023-12-23-virtual_memory/2.png){:height="75%" width="75%"}
 
 -   stack, heap 這部分是程式自己獨有的
 -   黑色的部分是共享的:
     -   code, libc: 這兩個是同一個程式但是開了兩個 Process
         -   因為在執行時會去 Mapping 硬碟上的執行檔，這樣 OS 就能知道其實這兩個 Process 完全是一樣的
+        -   並且這部分只能 Read，這樣就沒有 Locked 所造成的效能瓶頸
     -   mmap: 這部分不是由 Kernel 去分享的，當 Shell 去呼叫 mmap syscall，後得到一個符號這樣就可以將該記憶體映射至自己的 Memory
         -   shell-1 將資料傳給 shell-2 要傳的是資料在 mmap 中的 offset
         -   盡量不要去指定 mmap 要被映射的 Address
-
 -   Virtual Memory 允許 Code, Data 共享
     -   多個程式使用相同的 Library，例如: libc
     -   應用程式透過 Shared memory 共享資料，例如: mmap
@@ -112,8 +117,8 @@ tags: [OS]
 -   除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
     -   例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入
 
-![](../assets/image/2023-12-05-virtual_memory/3.png){:height="75%" width="75%"}
+![](../assets/image/2023-12-23-virtual_memory/3.png){:height="75%" width="75%"}
 
 > ##### Last Edit
-> 12-02-2023 16:03
+> 12-19-2023 16:03
 {: .block-warning }
