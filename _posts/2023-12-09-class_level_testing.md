@@ -15,20 +15,23 @@ Class level 開始不再把 Method 看作單一的個體，而是以狀態的角
 
 ### 6.1 UML State Machine Diagram
 
+> 在這個章節就是介紹什麼是 State Machine Diagram，以及相關的名詞與概念
+{: .block-warning }
+
+> 這裡可以參照 UML 中的 [State diagram], [UML 2 Tutorial - State Machine Diagram]
+
 -   Finite State Machines(FSM, 有限狀態機)用來描述 Object 隨時間變化的動態行為模型
 -   FSM 視為對 Object 的一種局部視圖
 -   每個 Object 都作為一個獨立的實體，透過 Event 與 Action 來做出反應與外部通訊
-
-> 這裡可以參照 UML 中的 [State diagram], [UML 2 Tutorial - State Machine Diagram]
 
 ![](../assets/image/2023-12-09-class_level_testing/1.png){:height="75%" width="75%"}
 
 ##### 6.1.1 Events
 
 -   事件代表 Object 可以偵測到的改變，例如:
-    -   一個 Object 對另一個 Object 的呼叫或 Single
+    -   一個 Object 對另一個 Object 的呼叫或 Signal 的接收
     -   特定的 Variable 的變化或時間的流逝
--   任何可以影響一個物件的事物都可以被視為 Event
+-   任何可以影響一個 Object 的事物都可以被視為 Event
 -   Event 發生在某一時刻，他並不具有持續性
 
 **Event Type**
@@ -119,6 +122,9 @@ FSM 中的 State 可以分為以下幾類
 
 ### 6.2 Test Coverage Criteria
 
+> 關於測試覆蓋標準的詳細說明可以參考 [Test Coverage Criteria] 這裡主要以 All-definition-use coverage 來說明
+{: .block-warning }
+
 -   Control flow
     -   All-state coverage: 所有的 State 都被執行到的路徑
     -   All-transition coverage: 所有的 Transition(邊界)都被執行到的路徑
@@ -128,8 +134,6 @@ FSM 中的 State 可以分為以下幾類
     -   **All-definition-use coverage:** 所有的 Definition 與 Use 都被執行到的路徑
 -   Both
     -   All-path coverage: 所有的路徑都被執行到，但如果有無限迴圈的話就無法完成
-
-關於測試覆蓋標準的詳細說明可以參考 [Test Coverage Criteria] 這裡主要以 All-definition-use coverage 來說明
 
 ##### 6.2.1 Testing Paths
 
@@ -149,12 +153,12 @@ FSM 中的 State 可以分為以下幾類
 **All-definition-use coverage 的測試流程如下:**
 1.  找出所有的 Associations:
     -   每個 Definition 與 Use 之間都會有一個 Association
-2.  使用圖形演算法找出路徑，這裡假設為 BFS
+2.  使用圖形演算法找出路徑，這裡使用 BFS
 3.  找到一條路徑後就標記該條路徑覆蓋到的 Association
 4.  直到所有的 Association 都被標記為止
     -   不是所有 Association 都是可行的，這裡可以使用手動判斷或是使用演算法來判斷
 
-> 這裡所說的都是 Nonorthogonal state
+> 要注意這裡所說的都是 Nonorthogonal state
 
 ##### 6.2.1 Orthogonal States
 
@@ -172,7 +176,7 @@ FSM 中的 State 可以分為以下幾類
 
 ![](../assets/image/2023-12-09-class_level_testing/7.png){:height="75%" width="75%"}
 
-> 上圖將 Orthogonal State 中的所有狀態可能同時發生的情況都列出來然後組成一個新的 Nonorthogonal State
+上圖將上方的 Orthogonal State 中的所有狀態可能同時發生的情況都列出來，然後組成下方的 Nonorthogonal State
 
 ### 6.3 Constriant Logic Graph
 
@@ -186,6 +190,9 @@ FSM 中的 State 可以分為以下幾類
 </div>
 
 > 假如有一個 stack 的 State machine 如圖左，將其轉換為右圖的 CLG 後會更好的找出 Associations 與路徑
+
+這樣做的好處是可以專注在 Graph traversal algorithm，將所路徑上的 Expression 收集後再處理成 CLP 就可以找出 test case，
+不用再像 State Diagram 需要處理複雜的 Node 結構。
 
 > ##### Last Edit
 > 12-12-2023 17:37 
