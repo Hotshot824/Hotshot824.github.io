@@ -1,0 +1,2229 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator><link href="https://hotshot824.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hotshot824.github.io/" rel="alternate" type="text/html" /><updated>2024-01-04T00:29:29+00:00</updated><id>https://hotshot824.github.io/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Compiler | Code Generation (Unfinished)</title><link href="https://hotshot824.github.io/jekylls/2023-12-26-code_generation.html" rel="alternate" type="text/html" title="Compiler | Code Generation (Unfinished)" /><published>2023-12-26T00:00:00+00:00</published><updated>2023-12-26T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/code_generation</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2023-12-26-code_generation.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.</p>
+</blockquote>
+
+<ul>
+  <li><strong>The target machine</strong></li>
+  <li><strong>Instruction selection and register allocation</strong></li>
+  <li><strong>Basic blocks and flow graphs</strong></li>
+  <li>A simple code generator</li>
+  <li>Peephole optimization</li>
+  <li>Instruction selector generator</li>
+  <li><strong>Graph-coloring register allocator</strong></li>
+</ul>
+
+<h3 id="the-target-machine">The target machine</h3>
+
+<p>假設這是一台 Byte-addressable 的機器，每個指令由 4 個 bytes 組成，並且有 n 個 registers，這代表機器的最小尋址單位是 1 byte。</p>
+
+<ul>
+  <li>Two address instructions(雙地址指令)
+    <ul>
+      <li>opsource, destination</li>
+    </ul>
+  </li>
+  <li>Six addressing modes(六種尋址模式)
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>absolute        M           M                       1
+register        R           R                       0
+indexed         c(R)        c+content(R)            1
+ind register    *R          content(R)              0
+ind indexed     *c(R)       content(c+content(R))   1
+iteral          #c          c                       1
+</code></pre></div>    </div>
+    <p>上面的表格中，第一欄是尋址模式，第二欄是對應的表示方式，第三欄是對應的實際 bit 大小，最後一欄是對應的位址計算方式會需要幾個 word。</p>
+  </li>
+  <li>M: 使用到記憶體位置需要 1 個 word</li>
+  <li>c: 使用到常數需要 1 個 word</li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MOV R0, M       /* 2 words */
+MOV 4 (R0), M   /* 3 words */
+MOV *R0, M      /* 2 words */
+MOV *4 (R0), M  /* 3 words */
+MOV #1, R0      /* 2 words */
+</code></pre></div></div>
+
+<h5 id="61-instruction-costs">6.1 Instruction Costs</h5>
+
+<ul>
+  <li>一個指令的成本等於 1 加上尋址模式的成本</li>
+  <li>這個成本會跟指令的長度成正比</li>
+  <li>因此最小化指令長度也可以減少指令的執行時間</li>
+</ul>
+
+<blockquote>
+  <p>這裡很直覺的，如果一個指令的長度越小，那麼執行的時間也會越短，因為每個指令都需要一個 clock cycle 來執行，所以指令長度越小，執行的時間也會越短。</p>
+</blockquote>
+
+<p><strong>Example</strong></p>
+
+<p>假如有一個 a := b + c 的原始碼，這裡有不同種類的指令可以選擇:</p>
+
+<p><img src="../assets/image/2023-12-26-code_generation/1.png" alt="" height="100%" width="100%" /></p>
+
+<ol>
+  <li>搬移到 Reg 再運算，成本是 2 + 2 + 2 = 6</li>
+  <li>直接以記憶體地址運算，成本是 3 + 3 = 6</li>
+  <li>在某些情況下，如果 Reg 中已經存在 a, b, c 那麼成本是 1 + 1 = 2</li>
+  <li>如果 Reg 中存在 b, c，成本是 1 + 2 = 3</li>
+</ol>
+
+<h3 id="graph-coloring">Graph Coloring</h3>
+
+<p>我們可以了解到 Register 的分配對於程式的效能有很大影響，但是這個問題是一個 NP-Complete 的問題，這裡有一些 approximation 的方法可以解決這個問題。</p>
+
+<h5 id="71-graph-coloring">7.1 Graph Coloring</h5>
+
+<ol>
+  <li>首先掃描一次程式碼，並且選擇好要使用的指令，此時可以任意分配 Symbolic register</li>
+  <li>第二遍掃描時，使用 Graph coloring algorithm 來分配 Physical register 給 Symbolic register
+    <ul>
+      <li>在第二遍掃描分配時有可能會發生衝突，此時就需要進行 Spilling</li>
+      <li>Spilling: 決定那些 Register 需要被 spill，並且將 spill 的資料存到 Memory 中(類似 virtual memory 的 swap)</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Interference Graph</strong></p>
+
+<ul>
+  <li>在每個 Basic block 中，都會去建立一個 interference graph</li>
+  <li>圖中的每個 Node 代表一個 symbolic register</li>
+  <li>如果一個 Node 在另一個 Node 被定義的時候仍然活躍，那麼這兩個 Node 之間會連接一條邊</li>
+</ul>
+
+<p><strong>K-colorable Graph</strong></p>
+
+<ul>
+  <li>一個圖如果每個 Node 都可以被賦予 K 個顏色，並且相鄰的 Node 顏色都不相同，那麼這個圖就是 K-colorable</li>
+  <li>這裡的 Color 就是 Physical register</li>
+  <li>想要確認一個圖是否是 K-colorable，是 NP-Complete 的問題
+    <ul>
+      <li>這裡會用 Greedy algorithm 來解決這個問題</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>A Graph Coloring Algorithm</strong></p>
+
+<ol>
+  <li>如果一個 Node 及其邊的 Neighbor 數量小於 K，那麼就移除這個 Node</li>
+  <li>重複上面的步驟直到所有的 Node 都被移除或者是留下的 Node 邊的數量大於 K</li>
+  <li>如果有 Node 無法移除，那麼就需要進行 Spilled 的動作
+    <ul>
+      <li>刪除最多邊的 Node，之後重複上面的步驟，直到最後所有的 Node 都被移除</li>
+    </ul>
+  </li>
+  <li>現在開始依照被移除的逆序來分配 Color 給 Node</li>
+  <li>每個 Node 都要分配鄰居沒有使用過的 Color
+    <ul>
+      <li>被 Spilled 的 Node 可以使用任何 Color</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Example:</strong></p>
+
+<p><img src="../assets/image/2023-12-26-code_generation/2.png" alt="" height="100%" width="100%" /></p>
+
+<p><img src="../assets/image/2023-12-26-code_generation/3.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>1-4-2021 01:26</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin.]]></summary></entry><entry><title type="html">OS | Virtual Memory (Unfinished)</title><link href="https://hotshot824.github.io/jekyll/2023-12-23-virtual_memory.html" rel="alternate" type="text/html" title="OS | Virtual Memory (Unfinished)" /><published>2023-12-23T00:00:00+00:00</published><updated>2023-12-23T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/virtual_memory</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-12-23-virtual_memory.html"><![CDATA[<blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>本章節會主要介紹 Virtual Memory 這是這章節的討論範圍</p>
+
+<ul>
+  <li>Virtual Memory Hardware and Software</li>
+  <li>Virtual Memory Example</li>
+  <li>Page Replacement</li>
+  <li>Working Set</li>
+  <li>open, read, writ vs. mmap
+    <ul>
+      <li>這幾種 System Call 的差異</li>
+    </ul>
+  </li>
+  <li>TLB miss</li>
+</ul>
+
+<h5 id="mmu-main-function">MMU Main Function</h5>
+
+<ul>
+  <li>MMU 主要處理記憶體分配的問題
+    <ul>
+      <li>消除了 External fragmentation(外部碎片)</li>
+      <li>由於 Page size 僅有 4KB，所以 Internal fragmentation(內部碎片)很輕微</li>
+    </ul>
+  </li>
+  <li>如果 TLB miss
+    <ul>
+      <li>假設該 TLB 要去 Mapping 的 Page 在 Memory 中只要將 Virtual memory to Physical memory 的 Mapping 加入 TLB 即可</li>
+      <li>上述的動作可以使用 Hardware 來完成，或使用 Software 來完成</li>
+    </ul>
+  </li>
+  <li>如果 TLB miss 並且 Hardware 的表格也查不到呢
+    <ul>
+      <li>稱之為 Page fault</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="what-is-virtual-memory">What is Virtual Memory</h3>
+
+<h5 id="81-define-the-virtual-memory">8.1 Define the Virtual Memory</h5>
+
+<p>嚴格的定義: <strong>由軟體重新定義 Page fault</strong></p>
+<ul>
+  <li>當 CPU 所要存取的 Memory 根本不存在於 DRAM 中時，就稱作為 Page fault
+    <ul>
+      <li>如果我們啟動 Software 此時該 Software 所要存取的 Memory 根本不存在於 DRAM 中，就稱作為 Page fault，例如 Segmentation fault</li>
+    </ul>
+  </li>
+  <li>OS 設計者重新詮釋了 Page fault 的意義，例如:
+    <ul>
+      <li>OS 暫時還沒把該 Page 載入到 DRAM 中，重新載入就好
+        <ul>
+          <li>例如: Execl 我可以不用一次把所有的功能都載入，等到使用者真的要使用到該功能時，再載入該功能就好</li>
+        </ul>
+      </li>
+      <li>OS 讓不同的 Process 隱形共用內容相同的 Page
+        <ul>
+          <li>唯讀，不會有任何問題發生，還可以減少記憶體使用量，例如: fork() 使用 Copy-on-write 的技術來實作</li>
+          <li>寫入，OS 必須確保每個 Process 在邏輯上都有自己的 Page，例如: 即使 fork() 使用同一份 Memory，但是要確保程式的 Logic address 上是不同的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>稍微寬鬆一點的定義: <strong>讓 Mapping 變得更加靈活</strong></p>
+<ul>
+  <li>透過設定 MMU，使 Memory Mapping 更加靈活的例子
+    <ul>
+      <li>Shard Memory，讓不同的 Process 可以共用同一份 Memory</li>
+      <li>可以將檔案 Mapping 到 Process 的 Memory Space，讓 Process 可以直接存取檔案</li>
+      <li>可以將部分 I/O 的記憶體 Mapping 到 Process 的 Memory Space，讓 Process 可以直接控制 I/O
+        <ul>
+          <li>Linux 中使用 mmap 存取 <code class="language-plaintext highlighter-rouge">/dev/mem</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="82-virtual-memory-components">8.2 Virtual Memory Components</h5>
+
+<blockquote>
+  <p>下圖是 Virtual Memory 中會需要的組件</p>
+</blockquote>
+
+<p><img src="../assets/image/2023-12-23-virtual_memory/1.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Hardware table(Page table)
+    <ul>
+      <li>這部分由 OS 來寫入硬體所設計的表格，由 MMU 來讀取，例如: x86 定義表格，Linux 依照 x86 的定義來實作</li>
+      <li>每個 Process 都有自己的 Page table</li>
+      <li>如果 TLB miss 硬體查詢 Page table 還是找不到，此時觸發 Page fault exception</li>
+    </ul>
+  </li>
+  <li>Software table(mm_struct, kerne mapping table)
+    <ul>
+      <li>每個 Process 甚至 Linux Kernel 都需要一個查詢表，快速的查詢每個 Memory 是否正確</li>
+      <li>如果正確還發生 Page fault 如何處理？</li>
+    </ul>
+  </li>
+  <li>處理 Page fault
+    <ul>
+      <li>OS 必須有 Page fault handler(Interrupt service routine)</li>
+      <li>並且要能紀錄: 錯誤的原因，錯誤的 Address</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="virtual-memory-example">Virtual Memory Example</h3>
+
+<h5 id="83-shard-memory">8.3 Shard Memory</h5>
+
+<p><img src="../assets/image/2023-12-23-virtual_memory/2.png" alt="" height="75%" width="75%" /></p>
+
+<ul>
+  <li>stack, heap 這部分是程式自己獨有的</li>
+  <li>黑色的部分是共享的:
+    <ul>
+      <li>code, libc: 這兩個是同一個程式但是開了兩個 Process
+        <ul>
+          <li>因為在執行時會去 Mapping 硬碟上的執行檔，這樣 OS 就能知道其實這兩個 Process 完全是一樣的</li>
+          <li>並且這部分只能 Read，這樣就沒有 Locked 所造成的效能瓶頸</li>
+        </ul>
+      </li>
+      <li>mmap: 這部分不是由 Kernel 去分享的，當 Shell 去呼叫 mmap syscall，後得到一個符號這樣就可以將該記憶體映射至自己的 Memory
+        <ul>
+          <li>shell-1 將資料傳給 shell-2 要傳的是資料在 mmap 中的 offset</li>
+          <li>盡量不要去指定 mmap 要被映射的 Address</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Virtual Memory 允許 Code, Data 共享
+    <ul>
+      <li>多個程式使用相同的 Library，例如: libc</li>
+      <li>應用程式透過 Shared memory 共享資料，例如: mmap</li>
+      <li>Parent 和 Child 都沒呼叫 execv 的話，記憶體內容幾乎一樣，例如: Copy-on-Write</li>
+    </ul>
+  </li>
+  <li>Linux 允許隱含式的共享
+    <ul>
+      <li>Linux kernel 可能會掃描 Memory，將內容一樣的 Page 隱含共享</li>
+      <li>例如: 電腦的桌布跟登入畫面使用同一張圖片，記憶體內容是一樣的</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="84-demand-paging">8.4 Demand Paging</h5>
+
+<p><strong>Define of Demand paging</strong></p>
+
+<ul>
+  <li>作業系統不會立刻將使用者所需要的 Memory 配置給 User</li>
+  <li>發生 Page fault 時，才會載入該段記憶體的資料</li>
+</ul>
+
+<p><strong>Demand paging advantage</strong></p>
+
+<p>因為只需要載入需要的資料</p>
+<ul>
+  <li>Less I/O needed</li>
+  <li>Less memory needed</li>
+  <li>Faster response
+    <ul>
+      <li>啟動時間，只需要載入需要的資料就能啟動了</li>
+    </ul>
+  </li>
+  <li>More users/programs
+    <ul>
+      <li>因為每個程式需要的記憶體較少，因此可以載入更多的應用程式</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Demand paging shortcoming</strong></p>
+
+<ul>
+  <li>對於 Disk system，Demand paging 雖然減少了讀取的量，但是會引發大量的 Random access
+    <ul>
+      <li>例如: 執行兩個程式，這兩個程式一共 100 MB，OS 可以驅動 Disk 使用兩秒鐘的時間來載入這兩個應用程式。</li>
+      <li>如果使用 Pure demand paging，假設只要讀入 10 MB，2560 個 Pages，假如這兩個程式輪流執行，並且執行的程式碼<strong>「隨機散布」</strong>，
+目前 Disk 的 IOPS 約為 200，則載入兩個程式的時間變為 25.6 Sec</li>
+    </ul>
+  </li>
+  <li>除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
+    <ul>
+      <li>例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../assets/image/2023-12-23-virtual_memory/3.png" alt="" height="75%" width="75%" /></p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>12-19-2023 16:03</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.]]></summary></entry><entry><title type="html">Testing | System Testing</title><link href="https://hotshot824.github.io/jekyll/2023-12-20-system_testing.html" rel="alternate" type="text/html" title="Testing | System Testing" /><published>2023-12-20T00:00:00+00:00</published><updated>2023-12-20T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/system_testing</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-12-20-system_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+前面講的部分都是如何去產生測試案例，這裡會介紹 Mutation Testing，這是一種可以評估測試案例的方法</p>
+</blockquote>
+
+<p>System Testing 通常是在 Integration Testing 之後，並且是內部測試的最後一個階段，因此此時通常會在一個完整的系統(包含軟體與硬體)上進行，
+用來評估系統是否符合其需求規格。</p>
+
+<p>系統測試通常是屬於黑箱測試的範疇，因此不需要對程式碼或邏輯的內部設計有所了解。</p>
+
+<h3 id="system-testing">System Testing</h3>
+
+<p><a href="./2023-12-20-system_testing.md#82-performance-testing">8.2 Performance Testing</a><br />
+<a href="./2023-12-20-system_testing.md#83-load-testing">8.3 Load Testing</a><br />
+<a href="./2023-12-20-system_testing.md#84-stress-testing">8.4 Stress Testing</a></p>
+
+<h5 id="81-system-testing">8.1 System Testing</h5>
+
+<ul>
+  <li>系統測試所使用的輸入資料是所有已經成功完成集成測試的整合軟體組件。</li>
+  <li>這是 User acceptance testing(使用者驗收測試)前的最後一個階段，也就是最後的內部測試階段。</li>
+</ul>
+
+<p>在這個階段測試可以採用一種接近破壞性的測試方式，這代表測試不僅僅侷限於驗證系統是否符合需求規格，也會去驗證系統是否能夠承受極端的使用情境，還是否能符合預期。</p>
+
+<ul>
+  <li>因此在這個階段測試軟體/硬體在要求規格中所定義的邊界，甚至超出邊界的情況</li>
+</ul>
+
+<p><strong>Types of System Testing</strong></p>
+
+<ul>
+  <li>性能測試(Performance testing)</li>
+  <li>負載測試(Load testing)</li>
+  <li>壓力測試(Stress testing)</li>
+  <li>可用性測試(Usability testing)</li>
+  <li>安全測試(Security testing)</li>
+</ul>
+
+<hr />
+
+<h5 id="82-performance-testing">8.2 Performance Testing</h5>
+
+<ul>
+  <li>性能測試的目標不是發現錯誤，而是消除性能瓶頸並為未來的回歸測試建立基準</li>
+  <li>進行性能測試代表需要一個可以謹慎控制的測量與分析的過程</li>
+  <li>理想情況下是正在測試的軟體已經足夠穩定，使這個過程可以專注於性能問題</li>
+</ul>
+
+<p>以下會介紹性能測試的重要步驟</p>
+
+<p><strong>Set of Expectations</strong></p>
+
+<ul>
+  <li>一套清晰定義的預期結果對於有意義的性能測試至關重要，如果測試者根本不知道在性能方面要達到什麼目標，
+那麼在測試過程中所採取的任何行動都是毫無意義的</li>
+  <li>例如: 對於一個網路應用程式，至少要知道兩件事
+    <ol>
+      <li>在一個給定的時間內，系統應該能夠處理多少個同時連線的使用者</li>
+      <li>系統應該能夠在多少時間內回應使用者的請求</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>Looking for Bottlenecks</strong></p>
+
+<ul>
+  <li>一旦已經了解想到達到的目標，就可以開始不斷增加系統的負載來開始測試，同時尋找系統中的瓶頸</li>
+  <li>例如: 以之前的網路程式為例
+    <ul>
+      <li>這些瓶頸可以存在於多個層面上，為了找到這些瓶頸，可以使用各種工具來監控系統的狀態</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這是一些工具的例子:</p>
+<ul>
+  <li><em>Application level:</em> Developer 可以使用一些分析工具來找出程式碼中的低效之處</li>
+  <li><em>Database level:</em> 使用特定於資料庫的分析器與查詢優化</li>
+  <li><em>Operating system level:</em> System Engineer 可以使用如 top, vmstat, iostat(on Unix) 或者 PerfMon(on Windows) 之類的工具來監控硬體資源，
+CPU, memory, swap space, disk I/O, network I/O 等等…</li>
+  <li><em>Network level:</em> Network Engineer 可以使用如 tcpdump, Wireshark, iptraf 之類的封包嗅探器，網路協議分析器如 ethereal，
+以及各種工具如 netstat, MRTG, ntop, mii-tool 等等…</li>
+</ul>
+
+<p><strong>Performance Tuning</strong></p>
+
+<ul>
+  <li>當 Load testing 的結果顯示系統效能沒有達到預期目標時，就是進行調整的時候了，假設從 Application/Nework level 開始
+    <ul>
+      <li>這時就要確保程式碼中沒有低效之處</li>
+      <li>確保程式碼中沒有不必要的 DB Query，並且 DB 在特定的 OS/Hardware 上的配置下是最佳化的</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>JUnitPerf</strong></p>
+<ul>
+  <li>實踐 TDD(Test-Driven Development) 的開發者會發現，像是 Mike Clark 所寫的 JUnitPerf 這樣的工具在 JUnit 中是非常有用的，
+他可以通過增加 Load testing 和增加計時測試功能來增強現有的單元測試代碼</li>
+  <li>一旦重構某個特定函數或方法後，就可以使用 JUnitPerf 來確保其性能沒有受到影響，Mike Clark 稱其為 <strong>Continuous Performance Testing</strong>(持續性能測試)</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://github.com/clarkware/junitperf">JUnitPerf</a></p>
+</blockquote>
+
+<p>當然有可能即使 Application level 的程式碼已經是最佳化的，但是系統的瓶頸還是存在於其他層面，因此系統的性能還是沒有達到預期目標，
+那麼在前面討論過的所有 Level 上都還有許多調整工作可以進行</p>
+
+<ul>
+  <li>這裡列出一些可能的方法，這些方法都不局限於軟體的 Source code
+    <ul>
+      <li>Use Web cache mechanisms, such as the one provided by Squid.</li>
+      <li>Publish highly-requested Web pages statically, so that they don’t hit the database.</li>
+      <li>Scale the Web server farm horizontally via load balancing.</li>
+      <li>Scale the database servers horizontally and split them into read/write servers and read-only servers, 
+then load balance the read-only servers.</li>
+      <li>Scale the Web and database servers vertically, by adding more hardware resources (CPU, RAM, disks).</li>
+      <li>Increase the available network bandwidth.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>One Variable at a Time</strong></p>
+
+<blockquote class="block-warning">
+  <p>這裡就跟機器學習中的 Hyperparameter tuning 一樣，以列舉的方式來找出最佳的參數，並且一次只會調整一個參數</p>
+</blockquote>
+
+<ul>
+  <li>進行性能測試時，有時更像是一種藝術而不是科學，因為有太多的變數需要考慮，而且這些變數之間的關係也很複雜
+    <ul>
+      <li>每次調整效能時，必須警慎的一次修改一個變數，並再次測量數據</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Staging Environment</strong></p>
+
+<ul>
+  <li>通常會有一個獨立的環境，用來進行性能測試，這個環境通常稱為 Staging Environment</li>
+  <li>這個環境或許不能複製 Production Environment 的所有特性與效能，但是至少要能夠模擬 Production Environment 的行為
+    <ul>
+      <li>在這個預期之下系統的預期性能可以相應的進行縮放</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>現在測試的環境通常都是在雲端上，因此可以很容易的進行縮放</p>
+</blockquote>
+
+<p><strong>Baseline</strong></p>
+
+<p>在運行時要尊從「Run load test -&gt; Measure performance -&gt; Tune System」 的循環重複進行，直到被測試的系統達到預期的效能為止。</p>
+<ul>
+  <li>並且要在系統中建立一個 Baseline，這個 Baseline 代表系統在預期的負載下所能達到的效能</li>
+  <li>這是為了在 Regression Testing(回歸測試)中，可以透過這個 Baseline 來衡量系統的效能表現</li>
+</ul>
+
+<p><strong>Benchmarks</strong></p>
+
+<p>另一種方式是建立一個 Benchmark，這個 Benchmark 代表系統在預期的負載下所能達到的效能，並且這個 Benchmark 會被用來衡量系統的效能表現</p>
+<ul>
+  <li>這就很像手機每次發表新的型號時，都會使用 AnTuTu Benchmark 來衡量其效能表現一樣</li>
+  <li>各家廠商可能會去針對這個 Benchmark 進行優化，好拿到更好的成績</li>
+</ul>
+
+<hr />
+
+<h5 id="83-load-testing">8.3 Load Testing</h5>
+
+<p>在測試相關的文章中，Load testing 通常被定義: 「通過向被測系統提供他所能夠操作的最大任務來進行系統練習的過程」</p>
+
+<p>Load testing 有時也被稱作 Volume testing(容量測試)或者 Longevity/Endurance testing (耐久性/持久性測試)</p>
+
+<p><strong>Example of Volume Testing</strong></p>
+
+<ul>
+  <li>通過編輯一個非常大的文件來測試一個文字編輯器</li>
+  <li>通過向打印機發送一個非常大的文件來測試一個打印機</li>
+  <li>對於一個 Mail Server，通過向其發送大量的郵件來測試容量</li>
+  <li>這裡有一個特別的測試是 Zero-volume testing，這是一種測試，用來測試系統被提供空任務時的行為</li>
+</ul>
+
+<p><strong>Example of Longevity/Endurance testing</strong></p>
+
+<ul>
+  <li>通過長時間內讓 Clien 對 Server 進行循環發送請求來測試一個 Client-Server 系統</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://testsigma.com/blog/volume-testing/">Volume testing</a></p>
+</blockquote>
+
+<p><strong>Goals of Load Testing</strong></p>
+
+<p>Load testing 的目標如下</p>
+<ul>
+  <li>檢查再粗略的測試中不會被發現的錯誤，例如: Memory management bugs, Memory leaks, Buffer overflows, etc.</li>
+  <li>確保系統能滿足性能測試中建立的 Performance baseline</li>
+  <li>這些都是通過指定的最大負載下對程式運行回歸測試來完成的</li>
+</ul>
+
+<p><strong>Performance vs. Load Testing</strong></p>
+
+<ul>
+  <li>Performance testing 通常使用負載測試技術和工具來進行測量與建立 Baseline, 或使用 Benchmark 來進行測量</li>
+  <li>Load testing 是在一個預定地負載下對系統進行測試，通常是系統在仍然能正常運作下可以承受的最大負載</li>
+</ul>
+
+<blockquote>
+  <p>注意 Load testing 並不是通過壓倒性的負載來破壞系統，而是試圖讓系統能像一台嚴密潤滑的機器一樣運作</p>
+</blockquote>
+
+<p><strong>Large Datasets</strong></p>
+
+<ul>
+  <li>在 Load testing 中<strong>「大型的資料集是非常重要的」</strong></li>
+  <li>因為很多重要的錯誤只有在處理非常大的實體時才會出現:
+    <ul>
+      <li>LDAP/NIS/Active Directory 中成千上萬的使用者，成千上萬的 mailboxes，Database 中的 multi-gigabyte tables，File 上的超深層文件/目錄等等…</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h5 id="84-stress-testing">8.4 Stress Testing</h5>
+
+<p>Stress testing(壓力測試)是試圖通過壓倒系統資源或從系統中奪走資源來破壞被測系統(也被稱為負面測試 Negative testin)。</p>
+
+<ul>
+  <li>這種測試的目的是確保系統能夠在壓力下能夠 Graceful Failure(優雅的失敗)並恢復，這種被稱為 Recoverability(可恢復性)的能力。</li>
+  <li>在 Performance testing 中，系統的負載是在可控的情況下，但壓力測試則需要引入混亂與不可控性</li>
+</ul>
+
+<p><strong>Example of Stress Testing</strong></p>
+
+<ul>
+  <li>將一次可以連線的最大用戶數量翻倍</li>
+  <li>隨便拔除 Server 中的網路線，例如透過 SNMP 來控制</li>
+  <li>斷開 Database 的連線，然後重新啟動</li>
+  <li>系統運行中拔掉硬碟，然後重新插入新的硬碟重組 RAID</li>
+  <li>在伺服器上運行其他會強佔消耗資源的 Process</li>
+</ul>
+
+<p><strong>Goals of Stress Testing</strong></p>
+
+<ul>
+  <li>Stress testing 不僅僅是為了破壞系統而破壞他，而是讓測試人員觀察系統對失敗的反應
+    <ul>
+      <li>是否有保存狀態，還是直接崩潰</li>
+      <li>是中斷狀態後恢復，還是優雅的失敗</li>
+      <li>重啟後，他能從最後一個狀態恢復嗎</li>
+      <li>是否有向用戶提供有用的 Log 訊息，還是顯示難以理解的 Hex dump</li>
+      <li>因為意外的失敗，系統的安全性是否受到威脅</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>1-2-2024 05:23</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 前面講的部分都是如何去產生測試案例，這裡會介紹 Mutation Testing，這是一種可以評估測試案例的方法]]></summary></entry><entry><title type="html">Compiler | Intermediate Code Generation (Unfinished)</title><link href="https://hotshot824.github.io/jekylls/2023-12-16-intermediate_code_generation.html" rel="alternate" type="text/html" title="Compiler | Intermediate Code Generation (Unfinished)" /><published>2023-12-16T00:00:00+00:00</published><updated>2023-12-16T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/intermediate_code_generation</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2023-12-16-intermediate_code_generation.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.<br />
+Intermediate Code Generation 這個階段主要是將 Syntax Tree 轉換成 Intermediate Code，這個階段的目的是為了讓後面的 Code Optimization 更容易進行。</p>
+</blockquote>
+
+<ul>
+  <li>Intermediate Language</li>
+  <li>Declarations</li>
+  <li>Expressions</li>
+  <li>Statements</li>
+</ul>
+
+<h3 id="intermediate-language">Intermediate Language</h3>
+
+<p>中間語言並不一定是某種語言，也可以是一種 IR (Intermediate Representation, 中間表示)，是為了好處理後續的優化或代碼生成而產生的一種語言。</p>
+
+<ul>
+  <li>Syntax Tree</li>
+  <li>Postfix Notation
+    <ul>
+      <li>a b c - * b c - * + :=</li>
+      <li>stack machine</li>
+    </ul>
+  </li>
+  <li>Three-Address Code
+    <ul>
+      <li>a = b + c</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>這裡會以一種直接把 Asbtact Syntax Tree 轉換成 MIPS(Targer Language) 的方式來做說明，實際上會需要 IR 來先做平台無關的優化，再轉換成 MIPS。</p>
+</blockquote>
+
+<p>這裡就不介紹 MIPS 相關的語法、特性等等，而是直接以範例來說明後續的轉換過程。</p>
+
+<h3 id="declarations">Declarations</h3>
+
+<h3 id="expressions">Expressions</h3>
+
+<h3 id="statements">Statements</h3>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>因為後續的部分都是以範例來說明，而且在系統上並不是很清楚，所以打算在之後再補上。<br />
+1-4-2021 01:26</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Intermediate Code Generation 這個階段主要是將 Syntax Tree 轉換成 Intermediate Code，這個階段的目的是為了讓後面的 Code Optimization 更容易進行。]]></summary></entry><entry><title type="html">Testing | Mutation Testing</title><link href="https://hotshot824.github.io/jekyll/2023-12-12-mutation_testing.html" rel="alternate" type="text/html" title="Testing | Mutation Testing" /><published>2023-12-12T00:00:00+00:00</published><updated>2023-12-12T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/mutation_testing</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-12-12-mutation_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+前面講的部分都是如何去產生測試案例，這裡會介紹 Mutation Testing，這是一種可以評估測試案例的方法</p>
+</blockquote>
+
+<h3 id="mutation-testing">Mutation Testing</h3>
+
+<h5 id="71-what-is-mutation-testing">7.1 What is Mutation Testing?</h5>
+
+<ul>
+  <li>Mutation testing(突變測試)是一種基於錯誤的測試技術</li>
+  <li>如果一個測試能檢測出大部分簡單的錯誤，那麼這個程式就已經被充分的測試了</li>
+</ul>
+
+<p>突變測試會去產生一組原程式的缺陷版本，這些缺陷版本被稱為突變體(mutant)，每個突變體都只包含一個簡單的錯誤，
+通常是針對程式的一些運算子做修改，讓他與原程式不同造成錯誤。</p>
+
+<p><img src="../assets/image/2023-12-12-mutation_testing/1.png" alt="" /></p>
+
+<blockquote>
+  <p>上圖是一個突變的範例，把 <code class="language-plaintext highlighter-rouge">&gt;</code> 改成 <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code>, <code class="language-plaintext highlighter-rouge">&lt;=</code>, <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code> 這樣就產生了五個突變體</p>
+</blockquote>
+
+<p><strong>Mutation Analysis Process</strong></p>
+
+<p>突變分析的流程:</p>
+
+<ol>
+  <li>首先以一組測試案例來測試原程式，這裡應該要確保原程式是能通過測試的</li>
+  <li>同樣的一組測試案例來測試突變體</li>
+  <li>如果一個突變體產生了與原程式不同的輸出，那麼這個突變體就被殺死了</li>
+  <li>一個測試案例如果至少殺死了一個突變體，那麼這個測試案例就被認為是足夠有效的</li>
+</ol>
+
+<p><strong>Equivalent Mutants</strong></p>
+
+<p>Equivalent Mutants(等價突變體):</p>
+
+<ul>
+  <li>如果兩個程式在每個輸入上始終保持相同的輸出，那我們可以說這兩個程式在功能上是等價的</li>
+  <li>突變體也是一樣，如果突變體與原程式是等價的，那麼這個突變體就是等價突變體
+    <ul>
+      <li>因為是等價的，所以突變體並不會被測試案例集殺死</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以之前的例子為例，下面這個原始程式與突變體就是等價的，這邊要注意到即使輸入兩個相同的變數，原始程式返回 b，突變體返回 a，但這個程式在輸出上始終保持相同的輸出，所以這兩個程式是等價的。</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">max</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">max</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;=</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h5 id="72-mutation-score">7.2 Mutation Score</h5>
+
+<ul>
+  <li>Mutation Score(突變分數)，就是一組測試案例所可以殺死的非等價突變體的比例
+    <ul>
+      <li>P: Program</li>
+      <li>T: Test Case Set</li>
+      <li>K: Number of killed mutants</li>
+      <li>M: Number of mutants</li>
+      <li>E: Number of equivalent mutants</li>
+    </ul>
+  </li>
+  <li>以下是突變分數的公式，分數越高代表測試案例集越有效，可以殺死更多的突變體
+\begin{flalign}
+&amp; \text{MS(P, T)} = \frac{\text{K}}{\text{M - E}} &amp;
+\end{flalign}</li>
+</ul>
+
+<p><strong>Measuring Mutation Score of a Test Case Set</strong></p>
+
+<p>如果一組測試案例集的突變分數為 100% 就代表是 Mutation adequate(突變充分的)，這組測試案例集可以殺死所有的非等價突變體。
+但是在真實的開發中，要擁有一組突變分數到達 95% 以上的測試案例集是非常困難的。</p>
+
+<h5 id="73-mutation-operators">7.3 Mutation Operators</h5>
+
+<p>Mutation Operators(突變運算子)是對原程式做修改的規則:</p>
+<ul>
+  <li>突變運算子的集合取決於所使用的程式語言</li>
+  <li>Mothra 是一個用於 Fortran 77 程式的突變測試工具，他提供了 22 種突變運算子</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://ieeexplore.ieee.org/document/48002">The Mothra tool set (software testing)</a></p>
+</blockquote>
+
+<p>這裡列出 Mothra 提供的突變運算子:</p>
+
+<p>AAR: array reference for array reference replacement<br />
+ABS: absolute value insertion<br />
+ACR: array reference for constant replacement<br />
+AOR: arithmetic operator replacement<br />
+ASR: array reference for scalar variable replacement<br />
+CAR: constant for array reference replacement<br />
+CNR: comparable array name replacement<br />
+CRP: constant replacement<br />
+CSR constant for scalar variable replacement<br />
+DER: DO statement end replacement<br />
+DSA: DATA statement alternations<br />
+GLR: GOTO label replacement<br />
+LCR: logical connector replacement<br />
+ROR: relational operator replacement<br />
+RSR: RETURN statement replacement<br />
+SAN: statement analysis<br />
+SAR: scalar variable for array reference replacement<br />
+SCR: scalar for constant replacement<br />
+SDL: statement deletion<br />
+SRC: source constant replacement<br />
+SVR: scalar variable replacement<br />
+UOI: unary operator insertion</p>
+
+<p><strong>Categories of Mutation Operators</strong></p>
+
+<p>我們可以把突變運算子分成三種類別:</p>
+<ol>
+  <li>Replacement of Operandoperators:
+    <ul>
+      <li>把程式中的每個 Operand 都替換成其他的 Operand</li>
+      <li>AAR, ACR, ASR, CAR, CNR, CSR, SAR, SCR, SRC, SVR</li>
+    </ul>
+  </li>
+  <li>Expression Modification Operators:
+    <ul>
+      <li>把程式中的每個 Operator 都替換成其他的 Operator</li>
+      <li>ABS, AOR, ROR, UOI</li>
+    </ul>
+  </li>
+  <li>Statement Modification Operators:
+    <ul>
+      <li>把程式中的每個 Statement 都替換成其他的 Statement</li>
+      <li>DER, DSA, GLR, LCR, SDL</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="high-cost-of-mutation-testing">High Cost of Mutation Testing</h3>
+
+<ul>
+  <li>突變測試的主要缺點是運行大量突變體對抗測試案例集的成本非常高</li>
+  <li>為一個程式產生的突變體數量與數據引用數和數據對象數的乘積成正比</li>
+  <li>即使是一個小程式，這個數字也是相當大的</li>
+</ul>
+
+<p><strong>Reducing Cost of Mutation Testing</strong></p>
+
+<p>這裡提出幾種可能減少突變測試成本的方法:</p>
+<ol>
+  <li>Selective Mutation: 做更少的方法</li>
+  <li>Weak Mutation: 做的更聰明的方法</li>
+  <li>Schema-Based Mutation: 做的更快的方法</li>
+</ol>
+
+<p><a href="https://cs.gmu.edu/~offutt/mujava/">MuJava</a> 是一個針對 Java 的突變測試系統，實現了這三種方法，同時在 Eclipse 上也有提供插件 <a href="https://muclipse.sourceforge.net/">MuClipse</a></p>
+
+<h5 id="75-selective-mutation">7.5 Selective Mutation</h5>
+
+<ul>
+  <li>Selective Mutation(選擇性突變): 是指只針對一些特定的方法做突變，忽略那些會造成大量突變體的 Operator</li>
+  <li>N-Selective Mutation(N-選擇性突變): 忽略最常導致突變體產生的 N 個 Operator
+    <ul>
+      <li>像是 Mothra 來說就省略了 SVR、ASR 兩種 Operator</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../assets/image/2023-12-12-mutation_testing/2.png" alt="" /></p>
+
+<blockquote>
+  <p>SVR、ASR 兩種 Operator 是會產生最多突變體的前兩名 Operator</p>
+</blockquote>
+
+<p><strong>Compare Selective Mutation with Non-Selective Mutation</strong></p>
+
+<p>假如我們使用了「一組測試案例」去針對 Selective Mutation 來達到 100% 的突變分數，如果這組測試案例在 Non-Selective Mutation(非選擇性突變)的突變分數也能表現良好，
+那麼就能以此來證明 Selective Mutation 是有效的。</p>
+
+<ul>
+  <li>Non-Selective Mutation: 針對所有的 Operator 做突變</li>
+</ul>
+
+<p><strong>Experiments</strong></p>
+
+<p>來自 <a href="https://dl.acm.org/doi/10.1145/227607.227610">An experimental determination of sufficient mutant operators</a> 的實驗結果，它們使用多個程式來進行突變，並在之後比較四種不同的突變方法:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-12-12-mutation_testing/3.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-12-12-mutation_testing/4.png" width="50%" height="50%" />
+</div>
+
+<p>最終的結論是，實際上只要保留五個關鍵的 Mutation Operator 就能提供與 Mothra 中的 22 個 Operator 幾乎相同的覆蓋率，
+並且成本在小型程式中減少了四倍，在大型程式中減少了五十倍。</p>
+
+<ul>
+  <li>這五個關鍵的 Operator 是: ABS, AOR, LCR, ROR, UOI</li>
+</ul>
+
+<h5 id="76-weak-mutation">7.6 Weak Mutation</h5>
+
+<p>Weak Mutation(弱突變) 是一種近似的突變測試方法，他在程式的突變位置執行後立刻去比較突變體與原程式的內部狀態，
+已經有實驗證明，Weak Mutation 與 Strong Mutation(強突變) 一樣有效，並且成本降低至少 50%。</p>
+
+<p><strong>Four Potential Points for State Comparison</strong></p>
+
+<p>那我們需要考慮的就是在什麼時間點去比較突變體與原程式的內部狀態，這裡提出了四個可能的時間點:</p>
+<ol>
+  <li>在突變符號的 Innermost Expression 進行第一次評估之後</li>
+  <li>在突變 Statement 進行第一次評估之後</li>
+  <li>在包含突變語句的 Basic Block 進行第一次評估之後</li>
+  <li>在包含突變語句的 Basic Block 全部評估之後</li>
+</ol>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="cm">/* 1 */</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* 2 */</span>
+    <span class="p">}</span> <span class="cm">/* 3 */</span><span class="k">else</span> <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+    <span class="cm">/* 4 */</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Schema-Based Mutation Analysis</strong></p>
+
+<p>Schema-Based Mutation Analysis(基於模式的突變分析)是一種弱突變的方法</p>
+<ul>
+  <li>將所有突變體編碼到一個可以參數化的 Source-level program(源程式)中，稱為 Meta-Mutant(元突變體)</li>
+  <li>元突變體使用與編譯原始程式相同的編譯器進行編譯</li>
+  <li>元突變體具有運行時充當任何突變體的能力</li>
+  <li>這樣成本就能減少到一個數量級</li>
+</ul>
+
+<p><strong>Metaoperators</strong></p>
+
+<p>Metaoperators(元運算子)是一種用來產生元突變體的突變運算子，例如:</p>
+<ul>
+  <li>AOR metaoperator: 用來產生 AOR 元突變體</li>
+  <li>對於 Statement <code class="language-plaintext highlighter-rouge">Result = A - B</code>，可以產生四種突變體:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Result = A + B</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Result = A * B</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Result = A / B</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Result = A % B</code></li>
+    </ul>
+  </li>
+  <li>那麼這些突變體可以通用的表示為 <code class="language-plaintext highlighter-rouge">Result = A ArithOp B</code>，其中 ArithOp 是 Metaoperator</li>
+</ul>
+
+<p><strong>Metaprocedures</strong></p>
+
+<ul>
+  <li>把上面的方法重寫為 Result = AOrr(A, B)，其中 AOrr 是 Metaprocedure
+    <ul>
+      <li>在 AOrr 中會執行 <code class="language-plaintext highlighter-rouge">Result = A ArithOp B</code> 這五種可能的突變體</li>
+    </ul>
+  </li>
+  <li>這樣就可以把所有的突變體都編碼到一個可以參數化的 Source-level program 中</li>
+</ul>
+
+<p><strong>Class Level Mutation Operators in MuClipse</strong></p>
+<ul>
+  <li>Access control: AMC</li>
+  <li>Inheritance: IHD, IHI, IOD, IOP, IOR, ISK, IPC</li>
+  <li>Polymorphism: PNC, PMD, PPD, PRV</li>
+  <li>Overloading: OMR, OMD, OAO, OAN</li>
+  <li>Java-specific features: JTD, JSC, JID, JDC</li>
+  <li>Common-programming mistakes: EOA, EOC, EAM, EMM</li>
+</ul>
+
+<p>這些是 MuClipse 所提供的 Class-level 突變運算子，這些突變運算子都是針對 Java 語言所設計的</p>
+
+<h5 id="77-equivalent-mutants">7.7 Equivalent Mutants</h5>
+
+<p>這裡做了一個實驗，對於 6 個程式一共 866 個 Class 進行不同層級的突變，來查看等價突變體的比例:</p>
+<ul>
+  <li>在 Method-level 突變測試中，Equivalents Mutants 的比例約為 5% ~ 15%</li>
+  <li>在 Class-level 突變測試中，Equivalents Mutants 的比例平均為 75%</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>1-2-2024 02:51</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 前面講的部分都是如何去產生測試案例，這裡會介紹 Mutation Testing，這是一種可以評估測試案例的方法]]></summary></entry><entry><title type="html">Testing | Class-Level Unit Testing</title><link href="https://hotshot824.github.io/jekyll/2023-12-09-class_level_testing.html" rel="alternate" type="text/html" title="Testing | Class-Level Unit Testing" /><published>2023-12-09T00:00:00+00:00</published><updated>2023-12-09T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/class_level_testing</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-12-09-class_level_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Class 層級的 Unit testing。</p>
+</blockquote>
+
+<p>Class level 開始不再把 Method 看作單一的個體，而是以狀態的角度來查看一個 Class 在不同狀態下是否能符合規格。</p>
+
+<h3 id="61-uml-state-machine-diagram">6.1 UML State Machine Diagram</h3>
+
+<blockquote class="block-warning">
+  <p>在這個章節就是介紹什麼是 State Machine Diagram，以及相關的名詞與概念</p>
+</blockquote>
+
+<blockquote>
+  <p>這裡可以參照 UML 中的 <a href="./2023-07-28-UML_behavior_diagrams.html#13-state-diagram">State diagram</a>, <a href="https://sparxsystems.com/resources/tutorials/uml2/state-diagram.html">UML 2 Tutorial - State Machine Diagram</a></p>
+</blockquote>
+
+<ul>
+  <li>Finite State Machines(FSM, 有限狀態機)用來描述 Object 隨時間變化的動態行為模型</li>
+  <li>FSM 視為對 Object 的一種局部視圖</li>
+  <li>每個 Object 都作為一個獨立的實體，透過 Event 與 Action 來做出反應與外部通訊</li>
+</ul>
+
+<p><img src="../assets/image/2023-12-09-class_level_testing/1.png" alt="" height="75%" width="75%" /></p>
+
+<h5 id="611-events">6.1.1 Events</h5>
+
+<ul>
+  <li>事件代表 Object 可以偵測到的改變，例如:
+    <ul>
+      <li>一個 Object 對另一個 Object 的呼叫或 Signal 的接收</li>
+      <li>特定的 Variable 的變化或時間的流逝</li>
+    </ul>
+  </li>
+  <li>任何可以影響一個 Object 的事物都可以被視為 Event</li>
+  <li>Event 發生在某一時刻，他並不具有持續性</li>
+</ul>
+
+<p><strong>Event Type</strong></p>
+
+<ul>
+  <li>Call event:
+    <ul>
+      <li>一個 Object 接受明確的同步呼叫請求，op(a : T)</li>
+    </ul>
+  </li>
+  <li>Change event:
+    <ul>
+      <li>Boolean expression 的值發生變化，when(exp)</li>
+    </ul>
+  </li>
+  <li>Single event:
+    <ul>
+      <li>Object 收到一個明確，並被命名的異步通訊(Async)，sname(a : T)</li>
+    </ul>
+  </li>
+  <li>Time event:
+    <ul>
+      <li>絕對時間或相對時間的流逝，after(time)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以之前的例子來說，receive order, rejected, approved 都是 Event</p>
+
+<h5 id="612-state">6.1.2 State</h5>
+
+<p>Finit state machine 定義了數個 State，一個 State 可以用三種互補的方式來描述:</p>
+<ol>
+  <li>一組性質相似的 Object values</li>
+  <li>Object 等待某個事件或多個事件發生的時間段</li>
+  <li>Object 執行某個持續進行的活動得時間段</li>
+</ol>
+
+<h5 id="613-transitions">6.1.3 Transitions</h5>
+
+<ul>
+  <li>離開一個 State 的轉換定義了 Object 在該 State 中對於 Event 發生的回應</li>
+  <li>通常情況下一個轉換 <code class="language-plaintext highlighter-rouge">e(a : T)[guard]/activity</code> 包含:
+    <ul>
+      <li><strong>Event trigger(事件觸發器):</strong> <code class="language-plaintext highlighter-rouge">e(a : T)</code></li>
+      <li><strong>Guard condition(守衛條件):</strong> <code class="language-plaintext highlighter-rouge">[guard]</code></li>
+      <li><strong>Effect(效果):</strong> <code class="language-plaintext highlighter-rouge">activity</code></li>
+      <li><strong>Target state(目標狀態)</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Event Triggers</strong></p>
+<ul>
+  <li>Event triggers(事件觸發器)指定了能夠觸發轉換的事件</li>
+  <li>如果該 Event 包含參數，這些參數在轉換的過程中可能會產生某些效果</li>
+</ul>
+
+<p><strong>Guard condition</strong></p>
+<ul>
+  <li>一個轉換可能有 Guard condition(守衛條件)，這是一個 Boolean expression</li>
+  <li>他可能引用被轉換的 Object 的 attributes, parameters</li>
+  <li>當觸發事件發生時就評估 Guard condition
+    <ul>
+      <li>如果為 true 則轉換發生; false 則不發生</li>
+    </ul>
+  </li>
+  <li>同個事件可以觸發單一 State 中的多個轉換
+    <ul>
+      <li>但是使用相同事件的轉換之間必須有不同的 Guard condition</li>
+      <li>而一個 Guard condition set 將涵蓋所有可能性，確保 event 會觸發某個轉換</li>
+    </ul>
+  </li>
+  <li>一個事件中只有一個轉換可能被觸發</li>
+</ul>
+
+<p><strong>Effects</strong></p>
+<ul>
+  <li>當一個轉換觸發時，他的 Effects(效果)將被執行</li>
+  <li>效果可以是一個 Action 或 Activity
+    <ul>
+      <li>Action: 可以是一個基本的計算，例如:
+        <ul>
+          <li>assignment statement</li>
+          <li>simple arithmetic computation</li>
+          <li>sending a signal</li>
+          <li>calling an operation</li>
+          <li>createing/destorying an object</li>
+          <li>getter/setter</li>
+        </ul>
+      </li>
+      <li>Activity: 一連串的 Actions</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Change of State</strong></p>
+<ul>
+  <li>當一個 Effect 執行完畢，則 State 就將改變到 Target state</li>
+</ul>
+
+<h5 id="614-activites-in-state">6.1.4 Activites in State</h5>
+
+<p>一個 State 中也可以包含一系列的 Activity:</p>
+
+<ul>
+  <li>Entry activity: that is executed when a state is entered –entry/activity.</li>
+  <li>Exit activity: that is executed when a state is exited –exit/activity.</li>
+  <li>Internal activity: that is executed after the entry activity and before the exit activity –e(a:T)[guard]/activity.</li>
+</ul>
+
+<p><img src="../assets/image/2023-12-09-class_level_testing/2.png" alt="" height="75%" width="75%" /></p>
+
+<h5 id="64-state-type">6.4 State Type</h5>
+
+<p>FSM 中的 State 可以分為以下幾類</p>
+<ul>
+  <li><strong>Initial state/Final state:</strong> 一個 Psudo state(偽狀態)，用來表示 State machine 的開始與結束</li>
+  <li><strong>Terminate:</strong> 表示 State machine 的銷毀或結束，包含釋放部分資源，清除狀態等</li>
+  <li><strong>Simple State:</strong> 沒有子結構的 State</li>
+  <li><strong>Nonorthogonal State:</strong> 包含一個或多個子狀態的複合狀態，狀態活動時代表其中至少有一個子狀態處於活動狀態</li>
+  <li><strong>Orthogonalstate</strong>: 包含兩個或更多子狀態的複合狀態，狀態活動時代表其中所有子狀態都處於活動狀態</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-12-09-class_level_testing/3.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-12-09-class_level_testing/4.png" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>上圖左邊是 Nonorthogonal state，右邊是 Orthogonal state</p>
+</blockquote>
+
+<h3 id="62-test-coverage-criteria">6.2 Test Coverage Criteria</h3>
+
+<blockquote class="block-warning">
+  <p>關於測試覆蓋標準的詳細說明可以參考 <a href="./2023-11-28-test_coverage_criteria.html">Test Coverage Criteria</a> 這裡主要以 All-definition-use coverage 來說明</p>
+</blockquote>
+
+<ul>
+  <li>Control flow
+    <ul>
+      <li>All-state coverage: 所有的 State 都被執行到的路徑</li>
+      <li>All-transition coverage: 所有的 Transition(邊界)都被執行到的路徑</li>
+    </ul>
+  </li>
+  <li><strong>Data flow</strong>
+    <ul>
+      <li>All-definition coverage: 所有的 Definition 都被執行到的路徑</li>
+      <li>All-use coverage: 所有的 Use 都被執行到的路徑</li>
+      <li><strong>All-definition-use coverage:</strong> 所有的 Definition 與 Use 都被執行到的路徑</li>
+    </ul>
+  </li>
+  <li>Both
+    <ul>
+      <li>All-path coverage: 所有的路徑都被執行到，但如果有無限迴圈的話就無法完成</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="621-testing-paths">6.2.1 Testing Paths</h5>
+
+<p><strong>Definition-Use Pairs</strong></p>
+<ul>
+  <li>The value of a definition of a variable may be used by several different uses of the variable.</li>
+  <li>A use of a variable may use the value defined by several different definitions of the variable.</li>
+  <li>Each definition and each of its uses compose a definition-use pair.</li>
+  <li>The set of definition-use pairs includes all the data flow relations.</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-12-09-class_level_testing/5.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-12-09-class_level_testing/6.png" width="50%" height="50%" />
+</div>
+
+<p><strong>All-definition-use coverage 的測試流程如下:</strong></p>
+<ol>
+  <li>找出所有的 Associations:
+    <ul>
+      <li>每個 Definition 與 Use 之間都會有一個 Association</li>
+    </ul>
+  </li>
+  <li>使用圖形演算法找出路徑，這裡使用 BFS</li>
+  <li>找到一條路徑後就標記該條路徑覆蓋到的 Association</li>
+  <li>直到所有的 Association 都被標記為止
+    <ul>
+      <li>不是所有 Association 都是可行的，這裡可以使用手動判斷或是使用演算法來判斷</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>要注意這裡所說的都是 Nonorthogonal state</p>
+</blockquote>
+
+<h5 id="621-orthogonal-states">6.2.1 Orthogonal States</h5>
+
+<p>因為 Orthogonal State 中的 concurrency(並行)特性會使得測試變得複雜，所以需要將 Orthogonal State 轉換成 Nonorthogonal State 來進行測試。</p>
+
+<ul>
+  <li>如果一條路徑包含了 Orthogonal State 可以<strong>將 State 中的每個完整子路徑都視為一條路徑來擴展成一組完整路徑集合</strong></li>
+  <li>因為 Orthogonal State 中的 <strong>Concurrency</strong> 特性，我們需要<strong>將 Orthogonal State 轉換成 Nonorthogonal State</strong></li>
+</ul>
+
+<p><strong>Orthogonal States to Nonorthogonal States</strong></p>
+
+<ul>
+  <li>假設有一個 Orthogonal State 有 n 個區域，並且 n<sub>i</sub> 中有 m<sub>i</sub> 個狀態</li>
+  <li>每個新狀態都是一個 n-tuple( x<sub>1</sub>, …, x<sub>i</sub>, x<sub>n</sub> ), x<sub>i</sub> 是第 i 個區域中的舊狀態</li>
+  <li>如果在第 i 個區域中存在從 x<sub>i1</sub> 到 x<sub>i2</sub> 的轉換，那就存在一個 ( x<sub>1</sub>, …, x<sub>i1</sub>, x<sub>n</sub> ) 到
+( x<sub>1</sub>, …, x<sub>i2</sub>, x<sub>n</sub> ) 的轉換</li>
+</ul>
+
+<p><img src="../assets/image/2023-12-09-class_level_testing/7.png" alt="" height="75%" width="75%" /></p>
+
+<p>上圖將上方的 Orthogonal State 中的所有狀態可能同時發生的情況都列出來，然後組成下方的 Nonorthogonal State</p>
+
+<h3 id="63-constriant-logic-graph">6.3 Constriant Logic Graph</h3>
+
+<p>如果直接從 State Diagram 來進行走訪與測試的話會需要很多而外的處理，所以更簡單的方式是將 State Diagram 轉換成 Constriant Logic Graph 來進行走訪。</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-12-09-class_level_testing/8.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-12-09-class_level_testing/9.png" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>假如有一個 stack 的 State machine 如圖左，將其轉換為右圖的 CLG 後會更好的找出 Associations 與路徑</p>
+</blockquote>
+
+<p>這樣做的好處是可以專注在 Graph traversal algorithm，將所路徑上的 Expression 收集後再處理成 CLP 就可以找出 test case，
+不用再像 State Diagram 需要處理複雜的 Node 結構。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>12-12-2023 17:37</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Class 層級的 Unit testing。]]></summary></entry><entry><title type="html">Compiler | Semantic Analysis Notes</title><link href="https://hotshot824.github.io/jekylls/2023-11-29-semantic_analysis.html" rel="alternate" type="text/html" title="Compiler | Semantic Analysis Notes" /><published>2023-11-29T00:00:00+00:00</published><updated>2023-11-29T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/semantic_analysis</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2023-11-29-semantic_analysis.html"><![CDATA[<blockquote class="block-tip">
+  <p>Compilers course notes from CCU, lecturer Nai-Wei Lin.<br />
+Semantic Analysis 這個階段主要用來檢查程式碼的語意是否正確，如果語意有錯誤則會產生錯誤訊息。</p>
+</blockquote>
+
+<p><strong>Outline</strong></p>
+<ul>
+  <li>Semantic Analyzer</li>
+  <li>Attribute Grammars</li>
+  <li>Syntax Directed Translation</li>
+  <li>Type Checking</li>
+  <li>Syntax Tree Construction</li>
+  <li>Bottom Up Translators</li>
+  <li>Bison A Bottom Up Translator Generator</li>
+</ul>
+
+<h3 id="semantic-analyzer">Semantic Analyzer</h3>
+
+<p>狹義上的 Semantic Analyzer(語意分析)只負責 Type checking，
+但廣義上的語意分析則可以同時在 Type checking 時進行程式碼的 Interpretation 或 Translation。</p>
+
+<ul>
+  <li>Type checking of each construct</li>
+  <li>Interpreation of each construct</li>
+  <li>Translation of each construct</li>
+</ul>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/1.png" alt="" height="100%" width="100%" /></p>
+
+<h5 id="51-attribute-grammars">5.1 Attribute Grammars</h5>
+
+<p>Attribute Grammar(屬性語法) 也可以稱為 <strong>Syntax Directed Definition</strong>(SDD, 語法導向定義):</p>
+<ul>
+  <li>Attribute Grammars 是帶有 Associated semantic attributes(關聯語意屬性)與 Semantic rules(語意規則)的 Context-free grammar</li>
+  <li>每個 Grammar symbol 都關聯一組 <strong>Semantic attributes</strong></li>
+  <li>每個 Production 與關聯一組計算屬性的 <strong>Semantic rules</strong></li>
+</ul>
+
+<p><strong>Example 5.1 An Attribute Grammar</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>L -&gt; E '\n'     {print(E.val)}
+E -&gt; E '+' T    {E.val = E.val + T.val}
+E -&gt; T          {E.val = T.val}
+T -&gt; T '*' F    {T.val = T.val * F.val}
+T -&gt; F          {T.val = F.val}
+F -&gt; '(' E ')'  {F.val = E.val}
+F -&gt; digit      {F.val = digit.val}
+# val represents the value of an expression
+</code></pre></div></div>
+
+<p>例如 <code class="language-plaintext highlighter-rouge">E -&gt; E '+' T</code>，他的 Semantic rules 為 <code class="language-plaintext highlighter-rouge">E.val = E.val + T.val</code>，其中 <code class="language-plaintext highlighter-rouge">E.val</code> 與 <code class="language-plaintext highlighter-rouge">T.val</code> 為 Semantic attributes。</p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/2.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>把 3 * 5 + 4 當作範例化成 Syntax Tree 將會如上圖所示</p>
+</blockquote>
+
+<ul>
+  <li><strong>Synthesized attributes</strong>(合成屬性):<br />
+如果一個 Node(Grammar symbol) 在解析樹中的屬性值是由其子節點的屬性值計算出來的，則稱該屬性為合成屬性</li>
+  <li><strong>Inherited attributes</strong>(繼承屬性):
+如果一個 Node(Grammar symbol) 在解析樹中的屬性值是由其父節點的屬性值計算出來的，則稱該屬性為繼承屬性</li>
+</ul>
+
+<blockquote>
+  <p>5.1 的例子中可以看出全部都是 Synthesized attributes，下面是 Inherited attributes 的例子</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>D -&gt; T { L.in := T.type } L
+L -&gt; int { L.type := integer }
+L -&gt; float { L.type := float }
+L -&gt; { L1.in := L.in} L1 ',' id { addtype(id.entry, L1.in) }
+L -&gt; { addtype(id.entry, L.in) }
+</code></pre></div></div>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/3.png" alt="" height="100%" width="100%" /></p>
+
+<p><strong>S-Attributed Attribute Grammar</strong></p>
+<ul>
+  <li>如果一個 Attribute Grammar 的每個 Attribute 都是 Synthesized attributes，則稱為 S-Attributed Attribute Grammar</li>
+</ul>
+
+<p><strong>L-Attributed Attribute Grammar</strong></p>
+
+<ul>
+  <li>An attribute grammar is L attributed if each attribute in each semantic rule for each production<br />
+A -&gt; X<sub>1</sub> X<sub>2</sub> … X<sub>n</sub>
+is a synthesized attribute, or an inherited attribute of X<sub>j</sub> , 1 &lt;= j &lt;= n, depending only on
+    <ol>
+      <li>the attributes of X<sub>1</sub> , X<sub>2</sub> , …, X<sub>j-1</sub></li>
+      <li>the inherited attributes of A</li>
+    </ol>
+  </li>
+</ul>
+
+<blockquote>
+  <p>簡單來說就是如果一個 attribute 所使用的<strong>「資訊來自上層或左邊」</strong>，則稱為 L-Attributed Attribute Grammar</p>
+</blockquote>
+
+<p><strong>A Counter Example</strong></p>
+
+<p>這裡簡單舉一個錯誤的例子:<br />
+A -&gt; { L.in := l(A.in) } L { M.in := m(L.s) } M { A.s := f(M.s) }<br />
+A -&gt; <strong>{ Q.in := q(R.s) }</strong> Q { R.in := r(A.in) } R { A.s := f(Q.s) }</p>
+
+<p>在這裡使用到了 R.s 因此導致錯誤，要注意 R.s 應該是來自於 R，但是在這裡 R 還沒有被計算出來。</p>
+
+<p><strong>Attribute Parse Tree</strong></p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/4.png" alt="" height="100%" width="100%" /></p>
+
+<p>這裡表示一種名為 Attribute Parse Tree(屬性解析樹)的資料結構，虛線的位置表示語意規則，實線的位置解析的語法規則。
+這樣整棵樹就能以一種 Preorder 的方式來計算出所有的 Semantic attributes。</p>
+
+<p><strong>Example</strong></p>
+
+<p>E -&gt; T <strong>{ R.i := T.s }</strong> R <strong>{ E.s := R.s }</strong><br />
+T -&gt; num <strong>{ T.s := num.val }</strong><br />
+R -&gt; addop T <strong>{ R<sub>1</sub>.i := R.i addop.lexeme T.s }</strong> R<sub>1</sub> <strong>{ R.s := R<sub>1</sub>.s }</strong><br />
+R -&gt; ε <strong>{ R.s := R.i }</strong></p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/5.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>上面是一個直譯的例子，最後在 Root 能求出 E.s 的值</p>
+</blockquote>
+
+<hr />
+
+<h3 id="type-checking">Type Checking</h3>
+
+<p>在這裡所談的是 Static Type Checking(靜態型別檢查)，也就是在編譯時期就能檢查出來的型別錯誤。</p>
+
+<p>這邊可以把 Type 的應用分為兩種:</p>
+
+<ul>
+  <li>Type Checking(型別檢查)
+    <ul>
+      <li>型別檢查確保運算子(Operator)與運算元(Operand)的型別是相容的，例如: Java 規定 &amp;&amp; 的兩邊必須是 boolean</li>
+    </ul>
+  </li>
+  <li>Translation application
+    <ul>
+      <li>根據型別的名稱，Compiler 可以決定需要多大的記憶體空間，這些資訊還會被很多後續的階段使用，例如: Array 中的起始位置，進行運算時的型別轉換等等…</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="52-type-systems">5.2 Type Systems</h5>
+
+<ul>
+  <li>Type system(型別系統)是一種用來描述程式語言中的型別的規則，而 Type checker(型別檢查器)實現了這些規則</li>
+  <li>Type expression(型別表示式)是一種用來描述型別的方式，例如: <code class="language-plaintext highlighter-rouge">int x</code>，宣告了一個名為 x 的變數，型別為 int</li>
+</ul>
+
+<p><strong>Type Expression</strong></p>
+
+<ul>
+  <li>基本型別
+    <ul>
+      <li>boolean, int, float, char, real, void, type_error</li>
+    </ul>
+  </li>
+  <li>類型構造函數也是一種 Type expression
+    <ul>
+      <li>array: array(S, T), means an array of T type with size S</li>
+      <li>product: T<sub>1</sub> x T<sub>2</sub> x … x T<sub>n</sub>, means a product of T<sub>1</sub>, T<sub>2</sub>, …, T<sub>n</sub></li>
+      <li>pointer: pointer(T), means a pointer to T type</li>
+      <li>function: int function(int, float), means a function that takes an int and a float and returns an int.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Type Checker</strong></p>
+
+<ul>
+  <li>通過宣告的時候把型別資訊與對應的 Identifier 放入符號表(Symbol Table)</li>
+  <li>這樣在表達式中就能透過符號表來檢查 Identifier 的型別是否正確</li>
+</ul>
+
+<p><strong>Type Checking of Expressions</strong></p>
+
+<p>這裡展示一個可能的型別檢查的規則:</p>
+
+<p>E -&gt; literal { E.type := char }<br />
+E -&gt; num { E.type := int }<br />
+E -&gt; id { E.type := lookup(id.name).type }<br />
+E -&gt; E<sub>1</sub> mod E<sub>2</sub> <strong>{ if E<sub>1</sub>.type == int and E<sub>2</sub>.type == int then E.type := int else E.type := type_error }</strong></p>
+
+<p>在 mod 的語意規則中，加入了型別檢查的規則，如果 E<sub>1</sub> 與 E<sub>2</sub> 的型別都是 int，則 E 的型別也是 int，否則 E 的型別為 type_error，
+這樣在後續的處理就能夠判斷出來是否有錯誤。</p>
+
+<hr />
+
+<h3 id="postfix-translation-scheme">Postfix Translation Scheme</h3>
+
+<p>Postfix Translation Scheme(後序翻譯方案)是一種用來描述語法規則的方式，假如一個文法是 S-Attributed Attribute Grammar，
+那在 LR 中就能夠使用 Postfix Translation Scheme 來描述語法規則。</p>
+
+<h5 id="53-bottom-up-translators">5.3 Bottom-Up Translators</h5>
+
+<p>因為在 Bottom-Up 的過程中我們會有一個 Stack 紀錄已經解析過的 Token，因此我們也可以透過這個 Stack 來傳遞 Attribute。</p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/8.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>假如有一個語法規則 A -&gt; XYZ, { A.a := f(X.x, Y.y, Z.z) }</li>
+  <li>如果要對這個語法規則做 Reduce，那麼 Stack 中必然已經存在依序的 XYZ
+    <ul>
+      <li>此時就可以透過偏移量來取得 XYZ 的 Attribute，例如: val[Top-2] is X.x</li>
+      <li>如果要做 Reduce，最後 A 會存在於消除 XYZ 後的 Stack 最上面，因此會與 X 的位置相同，也就是 val[Top-2]</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example</strong></p>
+
+<p>這裡給出一個例子，實際上在 Bison 中使用時會有一些差異，但是大致上是相同的。</p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/9.png" alt="" height="100%" width="100%" /></p>
+
+<p>下圖是以這個例子來建立的例子</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-29-semantic_analysis/10.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-29-semantic_analysis/11.png" width="50%" height="50%" />
+</div>
+
+<blockquote>
+  <p>實際上這樣的方法並不好用，因為在 Bison 中如果想要手動處理 Stack 的偏移，尤其是 -1 這種偏移量，會非常的麻煩</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>延伸閱讀: <a href="https://www.gnu.org/software/bison/manual/html_node/Actions.html">Bison 3.4.6 Actions</a>, 這裡會提到如何使用 $0, $-1 等方式來取得 Stack 中的值<br />
+參考範例: <a href="https://gist.github.com/Hotshot824/71cee7b2c6a6d7e8da23149ea34b4780">negative_stack.y</a> 這裡是可以參考的範例</p>
+</blockquote>
+<hr />
+
+<h3 id="syntax-tree-construction">Syntax Tree Construction</h3>
+
+<h5 id="53-syntax-tree-construction">5.3 Syntax Tree Construction</h5>
+
+<p>在這裡我們能發現在 Syntax Analysis 的時候，Bottom-up 的 Parser 是比較強大的方法，因為能透過 lookahead 等方法提前知道後續的 Token，
+但是在 Semantic Analysis 的時候，Top-down 的 Parser 是比較強大的方法，因為在傳遞 Attribute 的時候，Top-down 的 Parser 能夠很容易的傳遞 Attribute。</p>
+
+<p>而這裡會使用一種 Abstract Syntax Tree(抽象語法樹)來表示語法結構，這是一種 IR(Intermediate Representation, 中間表示法)，
+透過這個資料結構我們就能排除掉 Bottom-up 或 Top-down 的 Parser 的難點。</p>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/6.png" alt="" height="100%" width="100%" /></p>
+
+<p><strong>Syntax Tree for Expression</strong></p>
+
+<ul>
+  <li>Interior nodes(內部節點)表示運算子，例如: <code class="language-plaintext highlighter-rouge">+, -, *, /, mod</code></li>
+  <li>Leaf nodes(葉節點)表示運算元，例如: <code class="language-plaintext highlighter-rouge">literal, identifier, num</code></li>
+  <li>假設建構節點的函數如下:
+    <ul>
+      <li>mknode(op, left, right)</li>
+      <li>mkleaf(id, entry)</li>
+      <li>mkleaf(num, value)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../assets/image/2023-11-29-semantic_analysis/7.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>上圖展示了一個 a - 4 + b 的 AST</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-29-2023 18:10</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[Compilers course notes from CCU, lecturer Nai-Wei Lin. Semantic Analysis 這個階段主要用來檢查程式碼的語意是否正確，如果語意有錯誤則會產生錯誤訊息。]]></summary></entry><entry><title type="html">Note | Test Coverage Criteria</title><link href="https://hotshot824.github.io/jekyll/2023-11-28-test_coverage_criteria.html" rel="alternate" type="text/html" title="Note | Test Coverage Criteria" /><published>2023-11-28T00:00:00+00:00</published><updated>2023-11-28T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/test_coverage_criteria</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-11-28-test_coverage_criteria.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+本關介紹關於 Structural Testing 的 Test Coverage Criteria，分為兩個部分 Control Flow 與 Data Flow</p>
+</blockquote>
+
+<h3 id="11-control-flow">1.1 Control Flow</h3>
+
+<p>在 Control Flow 中，Coverage Criteria 通常注意的是 Edge, Node, Condition，透過這些是否被執行到來判斷是否有達到覆蓋的標準</p>
+
+<ul>
+  <li>Statement coverage (SC)</li>
+  <li>Decision coverage (DC)</li>
+  <li>Condition coverage (CC)</li>
+  <li>Decision/condition coverage (D/CC)</li>
+  <li>Multiple condition coverage (MCC)</li>
+  <li>Path coverage (PC)</li>
+</ul>
+
+<p>上面的這幾個例子都會用以下的圖來講解:</p>
+
+<p><img src="../assets/image/2023-11-28-test_coverage_criteria/1.png" alt="" height="50%" width="50%" /></p>
+
+<h5 id="statement-coverage-sc">Statement coverage (SC)</h5>
+
+<ul>
+  <li>Every statementin the program has been executed at least once.
+    <ul>
+      <li>1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 2 -&gt; 6</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Statement Coverage 又可以被稱為 Node Coverage，基本上就是要求每個 Statement 都要被執行到，
+但是 Statement Coverage 並不會要求每個 Decision 都要被執行到，所以有可能會有一些 Decision 沒有被執行到。</p>
+
+<h5 id="decision-coverage-dc">Decision Coverage (DC)</h5>
+
+<ul>
+  <li>Every statementin the program has been executed at least once, 
+and every decisionin the program has taken all possible outcomes at least once.
+    <ul>
+      <li>1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 2 -&gt; 6</li>
+      <li>1 -&gt; 2 -&gt; 3 -&gt; 5 -&gt; 2 -&gt; 6</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Decision Coverage 又可以被稱為 Edge Coverage，基本上就是要求每個 Edge 都要被執行到，所以 Decision Node 就會有分支產生，
+就算 Decision Node 中有多個 Condition，但也只要求 Decision 的 True/False 都要被執行到。</p>
+
+<h5 id="condition-coverage-cc">Condition Coverage (CC)</h5>
+
+<ul>
+  <li>Every statementin the program has been executed at least once, 
+and every conditionin each decision has taken all possible outcomes at least once.</li>
+</ul>
+
+<p>程式中的每個 Condition 都要是少執行到一次 True/False，但不一定要求每個 Decision 都要被執行到。</p>
+
+<h5 id="decisioncondition-coverage-dcc">Decision/condition coverage (D/CC)</h5>
+
+<ul>
+  <li>Every statementin the program has been executed at least once, 
+every decisionin the program has taken all possible outcomes at least once, 
+and every conditionin each decision has taken all possible outcomes at least once.</li>
+</ul>
+
+<p>程式中的每個 Condition 與 Decision 都要是少執行到一次 True/False。</p>
+
+<h5 id="multiple-condition-coverage-mcc">Multiple Condition Coverage (MCC)</h5>
+
+<ul>
+  <li>Every <strong>statement</strong> in the program has been executed at least once, 
+<strong>all possible combination of condition outcomes</strong> in each decision has been invoked at least once.</li>
+  <li>There are <strong>2<sup>n</sup></strong> combinations of condition outcomes in a decision with <strong>n</strong> conditions.</li>
+</ul>
+
+<p>程式中的每個 Condition 的可能的組合都要被執行到，所以有 n 個 Condition 就會有 2<sup>n</sup> 種可能的組合。</p>
+
+<p><img src="../assets/image/2023-11-28-test_coverage_criteria/2.png" alt="" height="100%" width="100%" /></p>
+
+<p>所以以上面的突來說，如果 Condiction 是 C<sub>A</sub>, C<sub>B</sub>, C<sub>C</sub>:</p>
+<ul>
+  <li><strong>DC</strong>: 一個 1 與 2 的組合都能滿足標準</li>
+  <li><strong>CC</strong>: 下標相同數字的組合都能滿足標準，因為 Condiction 都有被執行，例如: 1<sub>1</sub>, 2<sub>1</sub></li>
+  <li><strong>DCC</strong>: Combination 2 不可能滿足 DCC，其他下標相同的組合都能滿足 DCC，例如: 1<sub>1</sub>, 2<sub>1</sub>
+    <ul>
+      <li>因為 2, 7 的組合 Decision 都是 True，沒有滿足 Decision 的需求</li>
+    </ul>
+  </li>
+  <li><strong>MCC</strong>: Combination 1 ~ 8 都要被執行，3 個 Condiction 有 2<sup>3</sup> 種可能的組合</li>
+</ul>
+
+<h5 id="path-coverage-pc">Path Coverage (PC)</h5>
+
+<ul>
+  <li>Every complete pathin the program has been executed at least once.</li>
+  <li>A loop usually has an infinitenumber of complete paths.</li>
+</ul>
+
+<blockquote>
+  <p>通常不會用到 Path Coverage，並且在 PC 的標準下如果有迴圈將會產生無限條路徑</p>
+</blockquote>
+
+<p><strong>Test Coverage Criteria Hierarchy</strong></p>
+
+<p>而覆蓋的範圍從大到小依序為: <strong>PC &gt; MCC &gt; D/CC &gt; CC = DC &gt; SC</strong></p>
+
+<blockquote class="block-tip">
+  <p>使用 D/CC 就能有不錯的覆蓋率，並且不會有太多的測試成本，所以 D/CC 是一個不錯的選擇</p>
+</blockquote>
+
+<hr />
+
+<h3 id="12-data-flow">1.2 Data Flow</h3>
+
+<p>Data Flow 中則有 Definition, Use, DU-Path 的概念，以這些是否被執行來判斷是否有達到覆蓋的標準</p>
+
+<ul>
+  <li>All-defs coverage</li>
+  <li>All-c-uses coverage</li>
+  <li>All-c-uses/some-p-uses coverage</li>
+  <li>All-p-uses coverage</li>
+  <li>All-p-uses/some-c-uses coverage</li>
+  <li>All-uses coverage</li>
+  <li>All-du-paths coverage</li>
+</ul>
+
+<p>下圖是目前拿來做例子的 Control Flow Graph:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/10.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/11.png" width="50%" height="50%" />
+</div>
+
+<blockquote class="block-warning">
+  <p>上面兩條路徑是剛好覆蓋了全部 Node 的路徑，但是還要檢查是否有覆蓋到全部的 Associations</p>
+</blockquote>
+
+<h5 id="all-defs-coverage">All-Defs Coverage</h5>
+
+<ul>
+  <li>Test cases include a definition-clear path from every definition to some corresponding use (c-use or p-use).</li>
+</ul>
+
+<p><img src="../assets/image/2023-11-28-test_coverage_criteria/3.png" alt="" height="50%" width="50%" /></p>
+
+<blockquote>
+  <p>All-Defs 是相對寬鬆的標準，只要所有的 Definition 都有被執行到就能滿足標準</p>
+</blockquote>
+
+<h5 id="all-c-uses-coverage--all-p-uses-coverage">All-C-uses Coverage / All-P-Uses Coverage</h5>
+
+<ul>
+  <li>All-C-uses:
+    <ul>
+      <li>Test cases include a definition-clear path from every definition to all of its corresponding c-uses.</li>
+    </ul>
+  </li>
+  <li>All-P-uses:
+    <ul>
+      <li>Test cases include a definition-clear path from every definition to all of its corresponding p-uses.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>都是要求全部的 C-use/P-use 被執行到</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/4.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/5.png" width="50%" height="50%" />
+</div>
+
+<h5 id="all-c-usessome-p-uses-coverage--all-p-usessome-c-uses-coverage">All-C-Uses/Some-P-Uses Coverage / All-P-Uses/Some-C-Uses Coverage</h5>
+
+<ul>
+  <li>All-C-Uses/Some-P-Uses:
+    <ul>
+      <li>Test cases include a definition-clear path from every definition to all of its corresponding c-uses. 
+In addition, if a definition has no c-use, then test cases include a definition-clear path to some p-use.</li>
+    </ul>
+  </li>
+  <li>All-P-Uses/Some-C-Uses:
+    <ul>
+      <li>Test cases include a definition-clear path from every definition to all of its corresponding p-uses. 
+In addition, if a definition has no p-use, then test cases include a definition-clear path to some c-use.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>都是要求全部的 C-use/P-use 被執行到，但是如果該變數沒有 C-use/P-use，則要求被執行另外一種 Use 至少一次</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/6.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/7.png" width="50%" height="50%" />
+</div>
+
+<h5 id="all-uses-coverage--all-du-paths-coverage">All-Uses Coverage / All-DU-Paths Coverage</h5>
+
+<ul>
+  <li>All-Uses:
+    <ul>
+      <li>Test cases include a definition-clear path from every definition to each of its uses including both c-uses and p-uses.</li>
+    </ul>
+  </li>
+  <li>All-DU-Paths:
+    <ul>
+      <li>Test cases include all du-paths for each definition. Therefore, if there are multiple pathsbetween a given definition and a use, 
+they must all be included.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>All-Uses 與 All-DU-Paths 都是要求全部的 C-use/P-use 都被執行到，但是 All-DU-Paths 還要求全部的 DU-Paths 都被執行到，
+通常只需要 All-Uses 就能滿足需求，All-DU-Paths 相對的測試成本會大很多</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/8.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-28-test_coverage_criteria/9.png" width="50%" height="50%" />
+</div>
+
+<p><strong>Test Coverage Criteria Hierarchy</strong></p>
+
+<p>而覆蓋的範圍從大到小依序為: <strong>All-paths &gt; All-Du-Paths &gt; All-Uses &gt; All-C-Uses/Some-P-Uses = All-P-Uses/Some-C-Uses &gt; All-C-Uses = All-Defs = All-P-Use</strong></p>
+
+<blockquote class="block-tip">
+  <p>使用 All-Uses 就能有不錯的覆蓋率，並且不會有太多的測試成本，所以 All-Uses 是一個不錯的選擇</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>12-01-2023 16:02</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 本關介紹關於 Structural Testing 的 Test Coverage Criteria，分為兩個部分 Control Flow 與 Data Flow]]></summary></entry><entry><title type="html">Testing | Method-Level Structural Unit Testing</title><link href="https://hotshot824.github.io/jekyll/2023-11-25-method_level_structural_unit_testing.html" rel="alternate" type="text/html" title="Testing | Method-Level Structural Unit Testing" /><published>2023-11-25T00:00:00+00:00</published><updated>2023-11-25T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/method_level_structural_unit_testing</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-11-25-method_level_structural_unit_testing.html"><![CDATA[<blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入</p>
+</blockquote>
+
+<p>白箱測試 (White-box testing) 是透過實作的程式碼來進行測試，所以這章節會介紹如何從程式碼的角度來進行測試，而不是從 Specification 的角度來進行測試</p>
+
+<p><strong>Structural Testing(White-Box Testing)</strong></p>
+
+<ul>
+  <li>In structural testing, the software is viewed as a white box.</li>
+  <li><strong>Test inputs</strong> are derived from the <strong>implementation</strong> of the software.</li>
+  <li><strong>Expected outputs</strong> are still derived from the <strong>specification</strong> of the software.</li>
+  <li>Structural testing techniques include <strong>control flow testing</strong> and <strong>data flow testing</strong>.
+    <ul>
+      <li>Control flow: 透過 flowchart 來確認路徑，並且進行測試</li>
+      <li>Data flow: 透過 data 的細微變化，來進行測試</li>
+      <li>通常 Data flow 能比 Control flow 更細緻的進行測試，但是也更難進行測試</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="51-control-flow-testing">5.1 Control Flow Testing</h3>
+
+<ul>
+  <li>Control flow testing(控制流程測試)使用程式的控制結構來制定程式的 Test cases</li>
+  <li>Test cases 的設計是基於在充分覆蓋程式的整個控制結構上</li>
+  <li>Control flow graph(CFG, 控制流程圖)可以用來描述程式的控制結構</li>
+</ul>
+
+<p><strong>Control flow graph</strong></p>
+
+<ul>
+  <li>一個程式的 Control flow graph, G = (N, E)，包含一組節點 N 和一組邊 E</li>
+  <li>每個 Node 都代表一組程式的 Statement，有五種不同的 Node
+    <ul>
+      <li><strong>Entry</strong>: 程式的進入點</li>
+      <li><strong>Exit</strong>: 程式的結束點</li>
+      <li><strong>Statement</strong>: 程式的一般陳述句，不會創建新的分支，如: letExpr</li>
+      <li><strong>Decision</strong>: 包含一個條件陳述，由該條件創建 2 個或以上的分支，如: ifExpr, switchExpr</li>
+      <li><strong>Merge</strong>: 分支的合併點</li>
+    </ul>
+  </li>
+  <li>如果 Control 可以從 N<sub>1</sub> 到 N<sub>2</sub>，則存在一條從 N<sub>1</sub> 到 N<sub>2</sub> 的 Edge</li>
+</ul>
+
+<p><img src="../assets/image/2023-11-25-method_level_structural_unit_testing/1.png" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Test Input</strong></p>
+
+<ul>
+  <li>測試輸入可以由一條 CFG 的完整路徑中得到
+    <ul>
+      <li>完整路徑: 一條從 Entry 到 Exit 的路徑</li>
+    </ul>
+  </li>
+  <li>測試覆蓋標準(Test coverage criterion) 衡量<strong>一組測試輸入</strong>對程式的覆蓋程度</li>
+</ul>
+
+<p><img src="../assets/image/2023-11-25-method_level_structural_unit_testing/2.png" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>假如有一個完整的 CFG 使用 BFS 會找出右邊的路徑，但要注意路徑並不代表一定能找出符合的測試輸入</p>
+</blockquote>
+
+<p><strong>Path Predicate Expression</strong></p>
+
+<ul>
+  <li>Input vector: 是輸入變數的 Vector 相對應的 Tuple of values</li>
+  <li>Complete path: 包含一系列的 Decision Node</li>
+  <li>Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector</li>
+</ul>
+
+<p>簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/3.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/4.png" width="50%" height="50%" />
+</div>
+
+<p><strong>Path Sensitization</strong></p>
+
+<ul>
+  <li>Path sensitization 是尋找 Paht predicate expression 的解集的過程</li>
+  <li>可以使用 Constraint Logic Programming(CLP) predicates 來實現 Path sensitization</li>
+  <li>如果一個 Path sensitization 有解就代表這條路徑是可行的</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/5.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/6.png" width="50%" height="50%" />
+</div>
+
+<p><strong>Test Coverage Criteria</strong></p>
+
+<ul>
+  <li>Statement coverage (SC)</li>
+  <li>Decision coverage (DC)</li>
+  <li>Condition coverage (CC)</li>
+  <li>Decision/condition coverage (D/CC)</li>
+  <li>Multiple condition coverage (MCC)</li>
+  <li>Path coverage (PC)</li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>這幾種 Control flow 的 Test coverage criteria 會在另外一篇做介紹，請參考: <a href="./2023-11-28-test_coverage_criteria.html">Note - Test Coverage Criteria</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="52-cfg-to-clg">5.2 CFG to CLG</h3>
+
+<p>這裡介紹如何將 Control Flow Graph(控制流程圖)傳換成 Constriant Logic Graph(限制邏輯圖)，
+如果能將 CFG 轉換成 CLG 就能更容易地透過 Graph algorithm 來找出 Path predicate expression</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/7.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/8.png" width="50%" height="50%" />
+</div>
+
+<hr />
+
+<h3 id="53-data-flow-testing">5.3 Data Flow Testing</h3>
+
+<p>Data flow testing(資料流程控制)也要使用 Control flow graph(CFG) 來找出 data flow anomalies(資料流異常)，
+資料流異常是基於 value 和 Variable 之間的關聯性來檢測的，例如:</p>
+<ul>
+  <li>Variables are used without being initialized.</li>
+  <li>Initialized variables are not used once.</li>
+</ul>
+
+<p><strong>Definitions and Uses of Variables</strong></p>
+
+<ul>
+  <li><strong>Definition(定義)</strong>:
+    <ul>
+      <li>An occurrence of a variable in the program is a definition of the variable if 
+a value is bound to the variable at that occurrence.</li>
+    </ul>
+  </li>
+  <li><strong>Use(使用)</strong>:
+    <ul>
+      <li>An occurrence of a variable in the program is a use of the variable 
+if the value of the variable is referred at that occurrence.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Predicate Uses and Computation Uses</strong></p>
+
+<ul>
+  <li><strong>Predicate Uses(謂詞使用)</strong>:
+    <ul>
+      <li>A use of a variable is a predicate use <strong>(p-use)</strong> if the variable is in a predicate
+and its value is used to decide an execution path.</li>
+    </ul>
+  </li>
+  <li><strong>Computation Uses(計算使用)</strong>:
+    <ul>
+      <li>A use of a variable is a computation use <strong>(c-use)</strong> if the value of the variable is
+used to compute a value for defining another variable or as an output value.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>如果變數 x 被使用在決策就是 p-use，如果變數 x 被使用在計算就是 c-use</p>
+</blockquote>
+
+<p><strong>Definition Clear Paths</strong></p>
+
+<ul>
+  <li>A path (i, n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>, j) is a definition-clear path
+for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not contain a definition of x.</li>
+</ul>
+
+<blockquote>
+  <p>如果路徑中的 n<sub>1</sub> 到 n<sub>m</sub> 都沒有定義過 x 變數，則這條路徑是一條 definition-clear path</p>
+</blockquote>
+
+<p><strong>Definition-C-Use Associations</strong></p>
+
+<ul>
+  <li>如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>c-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>c-use</sub> 存在一條 definition-clear path，
+則會產生一個 <strong>definition-c-use association</strong>(定義-計算使用關聯)
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, n&lt;sub&gt;c-use&lt;/sub&gt;, x)</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Definition-P-Use Associations</strong></p>
+
+<ul>
+  <li>如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>p-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>p-use</sub> 存在一條 definition-clear path，
+則會產生兩個 <strong>definition-p-use association</strong>(定義-謂詞使用關聯):
+    <ul>
+      <li>True:  <code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, (n&lt;sub&gt;p-use&lt;/sub&gt;, t), x)</code></li>
+      <li>Flase: <code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, (n&lt;sub&gt;p-use&lt;/sub&gt;, f), x)</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Definition-Use paths</strong></p>
+
+<ul>
+  <li><strong>Definition-Use paths(DU-Path, 定義-使用路徑)</strong>:
+    <ul>
+      <li>如果一條 path (n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>) 滿足以下條件則他是變數 x 的 DU-Path:
+        <ul>
+          <li>n<sub>1</sub> 是 x 的 definition</li>
+          <li>n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear simple path(DCSP, 定義-清晰簡單路徑)</li>
+          <li>n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear loop-free path(DCLFP, 定義-清晰無迴圈路徑)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Definition-clear simple path:</strong> 除了 n<sub>1</sub> 和 n<sub>m</sub> 之外的所有 Node 都是不同的，並且 n<sub>m</sub> 是 x 的 definition
+    <ul>
+      <li>n<sub>m</sub> 必需是一個 c-use</li>
+    </ul>
+  </li>
+  <li><strong>Definition-clear loop-free path:</strong> 所有 Node 都是不同的
+    <ul>
+      <li>n<sub>m</sub> 必需是一個 p-use</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../assets/image/2023-11-25-method_level_structural_unit_testing/9.png" alt="" height="75%" width="75%" /></p>
+
+<p>上圖中的 (1, 2, 4) 是一條 DCSP，而 (1, 2, 3, 5) 是一條 DCLFP</p>
+
+<blockquote>
+  <p>(1, 2, 3, 5, 1) 也是一條 DU-Path，因為這是一條 Definition-clear simple path，1 跟 5 都是 x 的 definition</p>
+</blockquote>
+
+<p><strong>Test Coverage Criteria</strong></p>
+
+<ul>
+  <li>All-defs coverage</li>
+  <li>All-c-uses coverage</li>
+  <li>All-c-uses/some-p-uses coverage</li>
+  <li>All-p-uses coverage</li>
+  <li>All-p-uses/some-c-uses coverage</li>
+  <li>All-uses coverage</li>
+  <li>All-du-paths coverage</li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>這些是關於 Data-flow 的覆蓋流程標準同樣在另外一篇做介紹，請參考: <a href="./2023-11-28-test_coverage_criteria.html">Note - Test Coverage Criteria</a></p>
+</blockquote>
+
+<p><strong>Example</strong></p>
+
+<p>下面的例子會說明如何進行 Data-flow testing，假如有一個 Control flow graph 如下:</p>
+<ol>
+  <li>先找出所有 Variable 的 definition, use:
+    <ul>
+      <li>x: <code class="language-plaintext highlighter-rouge">definition: 1, 6</code>, <code class="language-plaintext highlighter-rouge">c-use: 3, 6, 7</code>, <code class="language-plaintext highlighter-rouge">p-use: 2, 4, 5</code></li>
+      <li>a: <code class="language-plaintext highlighter-rouge">definition: 3, 7</code>, <code class="language-plaintext highlighter-rouge">c-use: 8</code>, <code class="language-plaintext highlighter-rouge">p-use: none</code></li>
+    </ul>
+  </li>
+  <li>找出所有的 Associations，一定是從 definition 到 use:
+    <ul>
+      <li><strong>x<sub>1</sub></strong>:
+        <ul>
+          <li>c-use: (1, 3, x), (1, 6, x), <strong>(1, 7, x)</strong></li>
+          <li>p-use: (1, (2, t), x), (1, (2, f), x), (1, (4, t), x), (1, (4, f), x), (1, (5, t), x), <strong>(1, (5, f), x)</strong></li>
+        </ul>
+      </li>
+      <li><strong>x<sub>6</sub></strong>:
+        <ul>
+          <li>c-use: (6, 6, x), <strong>(6, 7, x)</strong></li>
+          <li>p-use: (6, (5, t), x), (6, (5, f), x)</li>
+        </ul>
+      </li>
+      <li><strong>a<sub>3</sub></strong>:
+        <ul>
+          <li>c-use: (3, 8, a)</li>
+        </ul>
+      </li>
+      <li><strong>a<sub>7</sub></strong>:
+        <ul>
+          <li>c-use: (7, 8, a)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>找出可以符合測試覆蓋標準的 DU-Path:
+    <ul>
+      <li>這裡以 All-Uses Coverage 為例，所以要找出可以覆蓋所有 Use 的 DU-Path</li>
+    </ul>
+  </li>
+</ol>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/10.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/11.png" width="50%" height="50%" />
+</div>
+
+<h5 id="data-flow-testing-for-clg">Data flow testing for CLG</h5>
+
+<p>可以發現如果從 Control flow grapg 進行 Data flow testing 在找出 DU-Path 會比較麻煩，因為路徑上還要處理 Decsion Node，
+所以可以先將 Control flow graph 轉換成 Constriant Logic Graph 再進行 Data flow testing，這樣在找尋路徑的時候就只需要處理是否有走過這個 Node 就好。</p>
+
+<ul>
+  <li>x: <code class="language-plaintext highlighter-rouge">definition: 1, 9</code>, <code class="language-plaintext highlighter-rouge">c-use: 4, 9, 10</code>, <code class="language-plaintext highlighter-rouge">p-use: 2, 3, 5, 6, 7, 8</code></li>
+  <li>a: <code class="language-plaintext highlighter-rouge">definition: 4, 10</code>, <code class="language-plaintext highlighter-rouge">c-use: 11</code>, <code class="language-plaintext highlighter-rouge">p-use: none</code></li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/12.png" width="50%" height="50%" />
+    <img src="../assets/image/2023-11-25-method_level_structural_unit_testing/13.png" width="50%" height="50%" />
+</div>
+
+<p>這時候如果是 All-Uses Coverage 的話就只需要找出一條有走過所有 Node 的路徑就可以了。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-25-2023 18:18</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><summary type="html"><![CDATA[Software testing course notes from CCU, lecturer Nai-Wei Lin. 這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入]]></summary></entry><entry><title type="html">OS | Deadlock (Unfinished)</title><link href="https://hotshot824.github.io/jekyll/2023-11-24-deadlock.html" rel="alternate" type="text/html" title="OS | Deadlock (Unfinished)" /><published>2023-11-24T00:00:00+00:00</published><updated>2023-11-24T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/deadlock</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2023-11-24-deadlock.html"><![CDATA[<blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>Liveness 指的是 Task 在執行期間必須滿足的一組屬性，以確保 Task 在執行週期中能不斷進行下去，這裡舉了三種例子導致 Liveness failure 的情況:
+Deadlock, Livelock, Priority inversion，並且會在之後介紹一些預防 Deadlock 的方式。</p>
+
+<ul>
+  <li>What is deadlock?</li>
+  <li>How to prevent deadlock?</li>
+  <li>What is livelock?</li>
+  <li>What is priority inversion?</li>
+  <li>Priority inheritance protocol, priority ceiling protocol</li>
+</ul>
+
+<h3 id="deadlock">Deadlock</h3>
+
+<h5 id="61-what-is-deadlock">6.1 What is deadlock?</h5>
+
+<ul>
+  <li>Deadlock 就是指一群 task 互相等待對方釋放資源，造成所有 task 都無法繼續執行的狀況，例如:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TaskA       TaskB
+1.              lock(y)
+2.  lock(x)
+3.              lock(x)
+4.  lock(y)
+</code></pre></div>    </div>
+  </li>
+  <li>在這種情況下 A 等 B 的 unlock(y)，B 等 A 的 unlock(x)，造成 A 跟 B 都無法繼續執行
+    <ul>
+      <li>要注意並不是每次都會發生 deadlock，只有在上面這樣交錯 lock 的情況才會發生 deadlock</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="../assets/image/2023-11-24-deadlock/1.png" alt="" /></p>
+
+<ul>
+  <li>簡單判別 Dealock 的方式是如上圖，假如一個圖中出現 Cycle，那麼就代表有可能會發生 deadlock。
+    <ul>
+      <li>一種解決方式是索取資源時都按照順序，兩個 Task 都必須先去 lock(x) -&gt; lock(y)，這樣就不會發生 deadlock</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="62-how-to-prevent-deadlock">6.2 How to prevent deadlock?</h5>
+
+<p>要發生 deadlock 必須滿足以下四個條件:</p>
+<ol>
+  <li>Mutual exclusion: 資源不能被同時使用</li>
+  <li>Hold and wait or resource holding: Task 持有一個資源並且等待另一個資源</li>
+  <li>No preemption: OS 無法把分配出去的資源重新分配</li>
+  <li>Circular wait: Resuource allocation graph 中至少有一個 cycle</li>
+</ol>
+
+<blockquote>
+  <p>注意要發生 deadlock 必須滿足以上四個條件，所以只要破壞其中一個條件就可以避免 deadlock 的發生</p>
+</blockquote>
+
+<p><strong>Prevention mutual exclusion</strong></p>
+
+<blockquote class="block-warning">
+  <p>Deadlock 是因為我們想要使用 Critical section，而 Mutual exclusion 是 CS 的主要特性，所以這是很難避免的條件</p>
+</blockquote>
+
+<ul>
+  <li>Mutual exclusion 是 Critical section 的主要功能
+    <ul>
+      <li>通常也是 Resource 的本身特性，例如: 印表機不可能讓兩個 Task 同時使用</li>
+    </ul>
+  </li>
+  <li>在一些情況下可以改寫演算法，讓 Resource 可以 Lock-free，例如: Lock-free concurrent queue
+    <ul>
+      <li>或讓每個 Task 都有自己的 Resource，不需要共用
+        <ul>
+          <li>例如: ptmalloc，每個 task 都有自己的 pool 去分配記憶體，如果不夠再向其他 task 借</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Hold and wait</strong></p>
+
+<p>這個就是可以去避免的條件，這裡講一些避免的方法</p>
+<ol>
+  <li>所有的 Task 在一開始就把所有的資源都 lock 住
+    <ul>
+      <li>造成資源的使用率很低，因為有些資源可能不會被使用到，例如: 要打開 Powerpoint 但是因為 PPT 有可能會使用到印表機，所以要把印表機 lock 住?</li>
+      <li>lock 的時間拉長，從「需求開始 -&gt; 資源使用結束」變成「程式開始 -&gt; 資源使用結束」</li>
+    </ul>
+  </li>
+  <li>如果要使用新的資源，就必須先把手上的資源都釋放掉
+    <ul>
+      <li>看 6.1 的範例，B 要 lock(x)，就必須 unlock(y)，這樣就不會發生 deadlock</li>
+      <li>這樣的缺點是程式碼很難寫，B 會 lock(y) 就是想要使用 y，應該不太可能隨便的去 unlock(y)</li>
+      <li>並且有可能會造成 starvation，想要使用更多資源的 task 會更容易 starvaion</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>No preemption</strong></p>
+
+<blockquote class="block-warning">
+  <p>No preemption 也是 Resource 的本身特性，因為如果讓不能 preempt 的資源，變成 preemptable 代價通常很大</p>
+</blockquote>
+
+<p>印表機原則上是不能被 Preempt 的，例如我要緊急印資料給客戶，此時直接把印表機關機，重開這樣就是一種使印表機 Preemptable 的方法</p>
+
+<ul>
+  <li>有些時候可以使用 rollback 的方式解決
+    <ul>
+      <li>例如: 兩個 task 都去執行，到最後要去 commit 的時候去決定誰要 rollback</li>
+      <li>雖然 rollback 在 worst case 下是很爛的方法，但在一些情況下是可以接受的</li>
+    </ul>
+  </li>
+  <li>也可以用 multi-version 去解決
+    <ul>
+      <li>例如: RCU(Read-Copy-Update)，在更新的時候不會去修改原本的資料，而是複製一份新的資料，並在更新完後再去切換</li>
+    </ul>
+  </li>
+  <li>或者是如果沒辦法立刻 lock 某個資源的話，該 task 就釋放所有的資源(不是去搶別人，就是讓別人搶)</li>
+</ul>
+
+<p><strong>Circular wait</strong></p>
+
+<blockquote class="block-warning">
+  <p>這是最容易避免的條件，只要讓所有的 Task 都按照順序去 lock 資源就可以避免</p>
+</blockquote>
+
+<ul>
+  <li>依照特定順序去 lock 資源，例如: 先 lock(x) 再 lock(y)</li>
+  <li>這樣的方是與資源的特性等等無關，主要與程式碼的撰寫方式有關
+    <ul>
+      <li>例如: lock 的時候依照 memory address 的順序去 lock</li>
+    </ul>
+  </li>
+  <li>但是這樣的缺點是有可能造成資源的使用率偏低
+    <ul>
+      <li>本來是先 lock(b) -&gt; lock(a)，需要的時候才去 lock</li>
+      <li>變成 lock(a), lock(b)，但是在執行 b 的處理的時候可能不會用到 a，造成 a 的使用率偏低</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="63-deadlock-avoidance">6.3 Deadlock avoidance</h5>
+
+<blockquote class="block-warning">
+  <p>之前講的是在使用時避免 deadlock，這裡講的是在設計時就避免 deadlock</p>
+</blockquote>
+
+<p>這裡先介紹兩個著名的 Deadlock avoidance 演算法</p>
+<ul>
+  <li>Priority ceiling protocol(PCP)
+    <ul>
+      <li>可以防止系統進入 deadlock</li>
+      <li>高優先權的 task 等待低優先權的 task 釋放資源，最多等一次</li>
+      <li>是非常有用且知名的 Real-time OS 常用演算法</li>
+      <li>需要搭配 Rate-monotonics scheduling(RMS) 使用
+        <ul>
+          <li>RMS 是 Real-time OS 常用的排程演算法</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Stack resource policy(SRP)
+    <ul>
+      <li>特性上與 PCP 非常相似</li>
+      <li>可以搭配 Earliest deadline first(EDF) 排程演算法使用</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>12-08-2023 16:03</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="OS" /><summary type="html"><![CDATA[Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.]]></summary></entry></feed>
