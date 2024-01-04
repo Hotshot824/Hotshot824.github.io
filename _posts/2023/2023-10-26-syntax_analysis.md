@@ -263,17 +263,20 @@ FIRST(T’) = { *, ε }
 FIRST(F)  = { ( , id }
 ```
 
+> 這裡舉 FIRST(E) 為例子，從 E 開始不斷往下找直到找到 Terminal，E -> T -> F -> { (, id }
+{: .block-warning }
+
 **Follow set**
 
 -   The follow setof a nonterminal A is the set of terminals that can appear immediately to the right of Ain some sentential form, 
 namely, S =>* αA**a**β, a is in the follow set of A.
 
--   如果對 Start symbol 尋找 FOLLOW(S) 要先加入 { $ }
--   如果存在 Production A -> αB
+1.  如果對 Start symbol 尋找 FOLLOW(S) 要先加入 { $ }
+2.  如果存在 Production A -> αB
     -   FOLLOW(B) 包含 FOLLOW(A)
--   如果存在 Production A -> αBβ
+3.  如果存在 Production A -> αBβ
     -   FOLLOW(B) 包含 FIRST(β) - {ε}
--   如果存在 Production A -> αBβ，並且 FIRST(β) 包含 ε
+4.  如果存在 Production A -> αBβ，並且 FIRST(β) 包含 ε
     -   FOLLOW(B) 包含 { FIRST(β) - {ε} } U FOLLOW(A)
 
 > 簡單來說 FOLLOW 就是找出一個 Nonterminal 所有可能的結尾 Terminal
@@ -288,9 +291,15 @@ FOLLOW(T)  = { FIRST(E') – ε } U FOLLOW(E') U FOLLOW(E)
            = { +, $, ) }
 FOLLOW(T') = FOLLOW(T)
            = { +, $ , ) }
-FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
+FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T')
            = { *, +, $, ) }
 ```
+
+> 這裡以 FOLLOW(F) 為例: `T' -> *FT'` 跟 `T -> FT'` 這兩處出現 F，但後面跟著的都是 T'，先做 `T' -> *FT'`
+> -   因此 FIRST(β) = FIRST(T') = { *, ε } 
+>     -   此處出現 ε，因此要依照規則 4 把 FOLLOW(T') 加入 FOLLOW(F)
+> -   因此變成 `{ FIRST(T') - ε } U FOLLOW(T') = { *, +, $, ) }`
+{: .block-warning }
 
 ### 4.5 Bottom-up Parsing
 
@@ -336,6 +345,9 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T') U FOLLOW(T)
 ---
 
 ### 4.6 LR(k) Parsing
+
+[4.6.2 Items and the LR(0) Automaton](#462-items-and-the-lr0-automaton)  
+[4.6.4 SLR Parsing](#464-slr-parsing)  
 
 > 目前流行的 Bottom-UP Parsing 都基於 LR(k) Parsers 的概念，幾乎可以支援所有 CFG，但是建立 Parser 很麻煩，因此通常會使用 Parser generator 來建立 Parser
 {: .block-tip }
@@ -471,11 +483,30 @@ end
     width="50%" height="50%">
 </div>
 
+> 這裡簡單說明上表的範例，以 I2 為例子:
+> -   首先注意 `E -> T•` 代表已經到達 Production 的最後，因此要進行 reduce
+>     -   `FOLLOW(T) = { +, $ ,) }`，因此在這三個欄位填入 r<sub>3</sub>，3 代表使用第三個 Production
+> -   然後這裡還有 `E -> E• * T` 還沒處理，因此要進行 shift，這裡要看之前的狀態圖把 shift + 放入哪個狀態
+>     -   這裡是放入 I7，因此 s<sub>7</sub>
+> 在這個例子裡，沒有 Nonterminal 可以被寫入，因此不會填到 goto 欄位 
+{: .block-warning }
+
+> 另外說明驗證的過程，直接看到 step 6 7 8 9
+> -   Step 6: I6 看到 id，因此 s5 進入 I5
+> -   Step 7: I5 看到 $，r7 變成 F，下個狀態要看 I6 的 goto(F) 是 3
+> -   Step 8: I3 看到 $，r5 變成 T，下個狀態要看 I6 的 goto(T) 是 9
+> -   Step 9: I9 看到 $，r2 變成 E，下個狀態要看 I0 的 goto(E) 是 1   
+> 這裡要注意的是做完 reduce 要注意 stack 中還剩下那些狀態，使用那個狀態的 goto
+{: .block-warning }
+
 > 在同一欄遇到多個 reduce 那就需要進行嘗試，直到出現 Error 或是 Accept
 
 ---
 
 ### 4.7 More Powerful LR Parsers
+
+[4.7.1 LR(1) Parsing Table](#471-lr1-parsing-table-lr1-items)  
+[4.7.2 LALR(1) Parsing Table The Core of LR(1) Items](#472-lalr1-parsing-table-the-core-of-lr1-items)  
 
 SLR(1) 雖然很簡單，但會有很多 Grammar 不能處理，因此有了更強大的 LR(1) 和 LALR(1)。
 
@@ -536,7 +567,14 @@ begin
 end
 ```
 
-Example:
+> 整個 Closure 的算法就是:
+> 1.  (A -> α•Bβ, a) 先找出所有的 B -> •γ
+> 2.  計算 b = FIRST(βa)
+>     -   B 後面的符號加上 a 的 FIRST
+> 3.  之前找出的 B -> •γ 全部都加上 b 作為 lookahead
+{: .block-danger }
+
+**Example:**
 
 ```
 1.  S' -> S
@@ -556,13 +594,13 @@ Example:
 
 1. 首先看 closure({(S' -> •S, $)}):
     1.  首先計算 (S' -> •S, $)
-        -   以 (A -> α•Bβ, a) 來看會等於 A = S', α = ε, B = S, β = ε, a = $
-        -   加入 B -> •γ，也就是 S -> •CC
+        -   以 `(A -> α•Bβ, a)` 來看會等於 A = S', α = ε, B = S, β = ε, a = $
+        -   加入 `B -> •γ`，也就是 S -> •CC
         -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
         -   加入 **(S -> •CC, $)**
     2.  計算 (S -> •CC, $)
-        -   以 (A -> α•Bβ, a) 來看會等於 A = S, α = ε, B = C, β = C, a = $
-        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   以 `(A -> α•Bβ, a)` 來看會等於 A = S, α = ε, B = C, β = C, a = $
+        -   加入 `B -> •γ`，也就是 `C -> •cC`, `C -> •d`
         -   計算 b = FIRST(βa) = FIRST(C$) = { c, d }
         -   加入 (C -> •cC, c), (C -> •cC, d), (C -> •d, c), (C -> •d, d)
         -   簡化為 **(C -> •cC, c/d)**, **(C -> •d, c/d)**
@@ -570,14 +608,14 @@ Example:
 2.  goto(I<sub>0</sub>, S): (S' -> S•, $)
 3.  goto(I<sub>0</sub>, C):
     1.  (S -> C•C, $)
-        -   以 (A -> α•Bβ, a) 來看會等於 A = S, α = C, B = C, β = ε, a = $
-        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   以 `(A -> α•Bβ, a)` 來看會等於 A = S, α = C, B = C, β = ε, a = $
+        -   加入 `B -> •γ`，也就是 `C -> •cC`, `C -> •d`
         -   計算 b = FIRST(βa) = FIRST(ε$) = { $ }
         -   加入 **(C -> •cC, $)**, **(C -> •d, $)**
 4.  goto(I<sub>0</sub>, c)
     1.  (C -> c•C, c/d)
-        -   以 (A -> α•Bβ, a) 來看會等於 A = C, α = c, B = C, β = ε, a = c/d
-        -   加入 B -> •γ，也就是 C -> •cC, C -> •d
+        -   以 ``(A -> α•Bβ, a)`` 來看會等於 A = C, α = c, B = C, β = ε, a = c/d
+        -   加入 `B -> •γ`，也就是 `C -> •cC`, `C -> •d`
         -   計算 b = FIRST(βa) = FIRST(εc/d) = { c/d }
         -   加入 **(C -> •cC, c/d)**, **(C -> •d, c/d)**
 
@@ -585,7 +623,10 @@ Example:
 
 ![](../assets/image/2023-10-26-syntax_analysis/19.png){:height="75%" width="75%"}
 
-##### LALR(1) Parsing Table The Core of LR(1) Items
+> 這張表的寫法基本上跟 SLR(1) 一樣，只是 reduce 的部分變成要看 lookahead(a) 是什麼，而不是 FOLLOW(A)
+{: .block-warning }
+
+##### 4.7.2 LALR(1) Parsing Table The Core of LR(1) Items
 
 -   LALR 透過合併 LR 的狀態來減少狀態數量
     -   將 LR(1) 中 core 相同的狀態合併
@@ -613,9 +654,12 @@ end
 
 -   I<sub>3</sub> 和 I<sub>6</sub> 合併就寫作 I<sub>36</sub>
 -   在合併的同時 Lookahead 也要合併，例如 I<sub>47</sub>
-    -   I<sub>4</sub> 的 Lookahead 是 c/d，I<sub>7</sub> 的 Lookahead 是 $，合併後 Lookahead 就是 c/d/$
+    -   I<sub>4</sub> 的 Lookahead 是 `c/d`，I<sub>7</sub> 的 Lookahead 是 `$`，合併後 Lookahead 就是 `c/d/$`
 
 ![](../assets/image/2023-10-26-syntax_analysis/21.png){:height="75%" width="75%"}
+
+> 這裡可以發現其實直接從 LR(1) 的表格轉換成 LALR(1) 的表格是很簡單的，找到相同的 core 就可以去按照表格合併
+{: .block-warning }
 
 ### 4.8 Using Ambiguous Grammars
 
