@@ -24,7 +24,7 @@ Class level 開始不再把 Method 看作單一的個體，而是以狀態的角
 -   FSM 視為對 Object 的一種局部視圖
 -   每個 Object 都作為一個獨立的實體，透過 Event 與 Action 來做出反應與外部通訊
 
-![](../assets/image/2023-12-09-class_level_testing/1.png){:height="75%" width="75%"}
+![](../assets/image/2023/12-09-class_level_testing/1.png){:height="75%" width="75%"}
 
 ##### 6.1.1 Events
 
@@ -100,7 +100,7 @@ Finit state machine 定義了數個 State，一個 State 可以用三種互補�
 -   Exit activity: that is executed when a state is exited –exit/activity.
 -   Internal activity: that is executed after the entry activity and before the exit activity –e(a:T)[guard]/activity.
 
-![](../assets/image/2023-12-09-class_level_testing/2.png){:height="75%" width="75%"}
+![](../assets/image/2023/12-09-class_level_testing/2.png){:height="75%" width="75%"}
 
 ##### 6.4 State Type
 
@@ -112,9 +112,9 @@ FSM 中的 State 可以分為以下幾類
 -   **Orthogonalstate**: 包含兩個或更多子狀態的複合狀態，狀態活動時代表其中所有子狀態都處於活動狀態
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023-12-09-class_level_testing/3.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/3.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-12-09-class_level_testing/4.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/4.png" 
     width="50%" height="50%">
 </div>
 
@@ -144,9 +144,9 @@ FSM 中的 State 可以分為以下幾類
 -   The set of definition-use pairs includes all the data flow relations.
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023-12-09-class_level_testing/5.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/5.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-12-09-class_level_testing/6.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/6.png" 
     width="50%" height="50%">
 </div>
 
@@ -174,7 +174,7 @@ FSM 中的 State 可以分為以下幾類
 -   如果在第 i 個區域中存在從 x<sub>i1</sub> 到 x<sub>i2</sub> 的轉換，那就存在一個 ( x<sub>1</sub>, ..., x<sub>i1</sub>, x<sub>n</sub> ) 到
 ( x<sub>1</sub>, ..., x<sub>i2</sub>, x<sub>n</sub> ) 的轉換
 
-![](../assets/image/2023-12-09-class_level_testing/7.png){:height="75%" width="75%"}
+![](../assets/image/2023/12-09-class_level_testing/7.png){:height="75%" width="75%"}
 
 上圖將上方的 Orthogonal State 中的所有狀態可能同時發生的情況都列出來，然後組成下方的 Nonorthogonal State
 
@@ -183,9 +183,9 @@ FSM 中的 State 可以分為以下幾類
 如果直接從 State Diagram 來進行走訪與測試的話會需要很多而外的處理，所以更簡單的方式是將 State Diagram 轉換成 Constriant Logic Graph 來進行走訪。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023-12-09-class_level_testing/8.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/8.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-12-09-class_level_testing/9.png" 
+    <img src="../assets/image/2023/12-09-class_level_testing/9.png" 
     width="50%" height="50%">
 </div>
 

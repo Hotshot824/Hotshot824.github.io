@@ -64,27 +64,27 @@ func checkStr(haystack, needle string, index int) bool {
 [Diagram reference]
 
 因此我們可以將暴力解用圖解來展開：  
-![](../assets/image/2023-02-04-algorithm_kmp/naive-expanded.png)
+![](../assets/image/2023/02-04-algorithm_kmp/naive-expanded.png)
 
 那我們就能想像如何減少不必要的搜尋, 首先如下兩張圖: 
 如果右移後的 overlap 都無法比對, 下次比對時我們都可以先跳過這些 overlap.  
 
-![](../assets/image/2023-02-04-algorithm_kmp/explan-kmp-01.png){:height="60%" width="60%"}
+![](../assets/image/2023/02-04-algorithm_kmp/explan-kmp-01.png){:height="60%" width="60%"}
 
 但是看下面這個例子, 這次比對到的目標中含有符合的子串. 因此我們就有必要進一步的比對,  
 
-![](../assets/image/2023-02-04-algorithm_kmp/explan-kmp-03.png){:height="60%" width="60%"}
-![](../assets/image/2023-02-04-algorithm_kmp/explan-kmp-05.png){:height="60%" width="60%"}
+![](../assets/image/2023/02-04-algorithm_kmp/explan-kmp-03.png){:height="60%" width="60%"}
+![](../assets/image/2023/02-04-algorithm_kmp/explan-kmp-05.png){:height="60%" width="60%"}
 
 那這段 overlap 要如何找出來? 假設已經比對成功的部分是 p', 他是 p 的一個子串, 
 那重疊部分就是 p' tail 和右移 p' 的head. 因此我們可以說
 
 
-![](../assets/image/2023-02-04-algorithm_kmp/explan-kmp-06.png){:height="60%" width="60%"}
+![](../assets/image/2023/02-04-algorithm_kmp/explan-kmp-06.png){:height="60%" width="60%"}
 
 結合以上的兩種方式, 我們可以看到這個算法最終的樣子: 
 
-![](../assets/image/2023-02-04-algorithm_kmp/explan-kmp-09.png){:height="60%" width="60%"}
+![](../assets/image/2023/02-04-algorithm_kmp/explan-kmp-09.png){:height="60%" width="60%"}
 
 > ##### Last Edit
 > 04-02-2023 19:28

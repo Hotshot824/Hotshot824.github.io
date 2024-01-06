@@ -38,7 +38,7 @@ const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
 
 下圖是如何透過 Offset 找到 Struct 起始位址的說明:
 
-![](../assets/image/2023-10-17-container_of/1.jpg){:height="75%" width="75%"}
+![](../assets/image/2023/10-17-container_of/1.jpg){:height="75%" width="75%"}
 
 > 延伸閱讀: [Rationale behind the container_of macro in linux/list.h], [What is the purpose of __mptr in latest container_of macro?]
 {: .block-warning }
