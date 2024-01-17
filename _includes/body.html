@@ -7,7 +7,7 @@
     <div class="page-inner">
         <div class="normal">
             {% capture year %}{{ page.date | date: '%Y' }}{% endcapture %}
-            {% if page.date != empty and year != "0000" %}
+            {% if page.date != empty and year != "1970" %}
             <section class="normal">{{ page.date | date: '%B %d, %Y'}} </section>
             {% endif %}
         </div>

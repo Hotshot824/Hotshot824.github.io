@@ -39,7 +39,7 @@ Benson’s Social Media:
         {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
         {% capture nyear %}{{ post.next.date | date: '%Y' }}{% endcapture %}
         {% if year != nyear %}
-            {% if year != "0000" %}
+            {% if year != "1970" %}
                 </ul>
                 <h5>{{ post.date | date: '%Y' }}</h5>
                 <ul>
@@ -50,7 +50,7 @@ Benson’s Social Media:
             {% endif %}
         {% endif %}
       {% endunless %}
-            {% if year != "0000" %}
+            {% if year != "1970" %}
                 <li><time>{{ post.date | date:"%m/%d" }} - </time>
             {% else %}  
                 <li>
