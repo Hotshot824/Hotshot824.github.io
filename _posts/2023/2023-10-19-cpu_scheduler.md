@@ -50,11 +50,11 @@ tags: [OS]
     -   **[Cooperative multitasking]**(Non-preemptive, 協同運作式多工)
     -   **[Preemptable OS]**(Preemptive, 搶占式多任務處理)
 
-![](../assets/image/2023-10-19-cpu_scheduler/1.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/1.png){:height="100%" width="100%"}
 
 ##### 4.2 Scheduler Types
 
-![](../assets/image/2023-10-19-cpu_scheduler/2.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/2.png){:height="100%" width="100%"}
 
 -   **Non-preemptive OS**(△): 就是指只有 Task 自己放棄 CPU 使用權，才會交出 CPU 使用權
     1.  Task 執行結束，這樣當然就交出 CPU 使用權
@@ -93,9 +93,9 @@ tags: [OS]
     -   在 2.6 Kernel 之後，Linux 可以設定為 Preemptable Kernel
     -   當 Task 執行在 Kernel mode 時如果沒有任何的 Lock 就可能發生 Context switch
 
-![](../assets/image/2023-10-19-cpu_scheduler/3.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/3.png){:height="100%" width="100%"}
 
-![](../assets/image/2023-10-19-cpu_scheduler/4.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/4.png){:height="100%" width="100%"}
 
 > 注意如果在 Kernel 中發生 Interrupt，下次 Task A 執行時會直接從 Kernel mode 中繼續執行，
 > 因此在 2.6 Kernel 後編譯時可以選擇 Kernel 注重 throughput 還是 latency，
@@ -137,9 +137,9 @@ tags: [OS]
 
 實際的 CPU 使用率會受到 Task 的高低優先權影響，因此 CPU 使用率會有兩種情況:
 
-![](../assets/image/2023-10-19-cpu_scheduler/5.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/5.png){:height="100%" width="100%"}
 
-![](../assets/image/2023-10-19-cpu_scheduler/6.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/6.png){:height="100%" width="100%"}
 
 > 可以透過軟體的方式對 Lock-Unlock 做最佳化，例如: Intel vtune, kernelshark 之類的視覺化工具
 
@@ -171,7 +171,7 @@ tags: [OS]
 
 **FCFS**
 
-![](../assets/image/2023-10-19-cpu_scheduler/7.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/7.png){:height="100%" width="100%"}
 
 -   Wating time: P1 = 0, P2 = 100, P3 = 150
 -   Average waiting time: (0 + 100 + 150) / 3 = 83.3
@@ -179,7 +179,7 @@ tags: [OS]
 
 **SJF**
 
-![](../assets/image/2023-10-19-cpu_scheduler/8.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/8.png){:height="100%" width="100%"}
 
 -   在 P1 執行中，P2、P3 抵達，放入 Ready Queue，然後依照執行時間排序
 -   Wating time: P1 = 0, P2 = 110, P3 = 100
@@ -187,7 +187,7 @@ tags: [OS]
 
 **Preemptive SJF**
 
-![](../assets/image/2023-10-19-cpu_scheduler/9.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/9.png){:height="100%" width="100%"}
 
 -   只要有工作進入 Ready Queue，或有工作結束就要決定執行的 Task
 -   Wating time: P1 = 60, P2 = 10, P3 = 0
@@ -260,9 +260,9 @@ tags: [OS]
 -   Search: 會依照這個 Task 對這個 CPU 有多適合
 
 <div style="display: flex; justify-content: center;">
-    <img src="../assets/image/2023-10-19-cpu_scheduler/10.png" 
+    <img src="../assets/image/2023/10-19-cpu_scheduler/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-10-19-cpu_scheduler/11.png" 
+    <img src="../assets/image/2023/10-19-cpu_scheduler/11.png" 
     width="50%" height="50%">
 </div>
 
@@ -321,7 +321,7 @@ Linux 傾向於支援 I/O-bound processes，這樣會提供好的 Process respon
 -   在 Linux 2.4 中，time slice 就是 dynamic priority
     -   因此 I/O-bound task 會有較高的 dynamic priority
 
-![](../assets/image/2023-10-19-cpu_scheduler/9.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/9.png){:height="100%" width="100%"}
 
 從上面的圖來看:
 -   Epoch1: CPU bound 都已經用完 time slice，此時剩下 I/O bound slice，必須進入下一個 epoch 否則會進入 idle
@@ -368,7 +368,7 @@ int main() {
 -   即使這樣 CPU 要去 Run queue 拿資料時也要做 Lock & Unlock
 -   因為是 Lock 自己的 Run queue，因此 Lock & Unlock 通常都會成功，不會有競爭的情況發生
 
-![](../assets/image/2023-10-19-cpu_scheduler/13.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/13.png){:height="100%" width="100%"}
 
 當自己有自己的 Run queue 後要考慮的就是 Load balancing(負載平衡)
 -   系統去檢查 Run queue 是否 Loading 過重，如果是就會將 Task 搬移到另一個 Run queue
@@ -457,7 +457,7 @@ struct runqueue {
 
 > 延伸閱讀: [Linux 核心設計: O(1) Scheduler], [Linux 核心設計: 不只挑選任務的排程器: O(1) Scheduler]
 
-![](../assets/image/2023-10-19-cpu_scheduler/14.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/14.png){:height="100%" width="100%"}
 
 -   在這兩個 Queue 中每個 Task 可以拿到的 Time quantum 大約等於 1 / priority
 -   在 Linux 中 Priority 高有兩個好處:
@@ -527,7 +527,7 @@ CFS (Completely Fair Scheduler) 在 2.6.23 之後取代 O(1) Scheduler，但是 
     -   執行完畢後就計加上 delta_exec，然後重新放回紅黑樹中因此 **Time Complexity 為 Θ(log N)**
     -   這樣可以確保每個 Task 都有機會在 rbtree 的最左邊，也就是最優先執行的位置
 
-![](../assets/image/2023-10-19-cpu_scheduler/15.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/15.png){:height="100%" width="100%"}
 
 > 延伸閱讀: [Linux CFS 调度器：原理、设计与内核实现（2023）]
 
@@ -542,7 +542,7 @@ CFS (Completely Fair Scheduler) 在 2.6.23 之後取代 O(1) Scheduler，但是 
 例如下面的例子，如果將 CPU 模擬為 3 個 CPU，分別為 1/2(藍色), 1/4, 1/4 的效能，那麼每次當藍色的 Task 執行完畢後，
 計算出的 vrutime 會比 1/4 的還要小，因此在同一個時間單位內，藍色的 Task 會執行更多次。
 
-![](../assets/image/2023-10-19-cpu_scheduler/16.png){:height="100%" width="100%"}
+![](../assets/image/2023/10-19-cpu_scheduler/16.png){:height="100%" width="100%"}
 
 **CFS - I/O**
 

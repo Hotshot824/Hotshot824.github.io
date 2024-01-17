@@ -66,7 +66,7 @@ Lazăr等人[11]也強調 BDD 在業務領域和軟體開發的交互中的價�
 Cucumber [5,18]、Specflow [14]、RSpec [6,18]、JBehave [4]、MSpec [15]、StoryQ [12]和NBehave [16]。  
 Table 1 簡述了分析的七個工具包與其版本。
 
-![](../assets/image/2023-05-28-characteristics_of_BDD/1.png){:height="100%" width="100%"}
+![](../assets/image/2023/05-28-characteristics_of_BDD/1.png){:height="100%" width="100%"}
 
 文獻回顧和工具包分析將交織再一起進行，回顧研究後確立 BDD *feature sets(特徵集)*，然後逐一分析工具包。當發現一個不在特徵集中的特徵後，會回到文獻中了解他是否可被視為 BDD 特徵，
 直到分析完每個工具包。
@@ -192,11 +192,11 @@ Behaviour Driven at Different Phases(不同階段的行為驅動)，這裡討論
 
 *Table 2 總結了作者分析的七個工具的對於這些特徵的支持情況*
 
-![](../assets/image/2023-05-28-characteristics_of_BDD/2.png){:height="100%" width="100%"}
+![](../assets/image/2023/05-28-characteristics_of_BDD/2.png){:height="100%" width="100%"}
 
 *Fig 1 是一個以 UML class diagram 來呈現的六個特徵之間的概念與關係模型*
 
-![](../assets/image/2023-05-28-characteristics_of_BDD/3.png){:height="100%" width="100%"}
+![](../assets/image/2023/05-28-characteristics_of_BDD/3.png){:height="100%" width="100%"}
 
 ### V. CONCLUSIONS
 

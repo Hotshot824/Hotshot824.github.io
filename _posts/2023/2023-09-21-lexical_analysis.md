@@ -23,7 +23,7 @@ Lexical analyzer(語彙分析器)主要任務就是讀取 Source code 的輸入�
 
 下圖顯示一個 Syntax analyzer(語法分析器)與 Lexical analyzer 互動的過程，呼叫 getNextToken 來使語彙分析器不斷讀取字符，直到識別出下一個 Token 將其返回給語法分析器。
 
-![](../assets/image/2023-09-21-lexical_analysis/1.png){:height="60%" width="60%"}
+![](../assets/image/2023/09-21-lexical_analysis/1.png){:height="60%" width="60%"}
 
 -   語彙分析器可以被劃分為兩個骨牌效應的過程:
     -   掃描不需要轉變為 Token 的部分的過程
@@ -65,7 +65,7 @@ Lexical analyzer(語彙分析器)主要任務就是讀取 Source code 的輸入�
 printf("Total = %d\n", score);
 ```
 
-![](../assets/image/2023-09-21-lexical_analysis/2.png){:height="60%" width="60%"}
+![](../assets/image/2023/09-21-lexical_analysis/2.png){:height="60%" width="60%"}
 
 在很多程式語言設計中，大部分 Token 被分成以下幾類:
 
@@ -126,7 +126,7 @@ a | a*b             the set containing the string a and all strings consisting o
 
 **Algebraic laws:**
 
-![](../assets/image/2023-09-21-lexical_analysis/3.png){:height="60%" width="60%"}
+![](../assets/image/2023/09-21-lexical_analysis/3.png){:height="60%" width="60%"}
 
 ##### 3.3.4 Regular Definitions
 
@@ -193,9 +193,9 @@ An NFA consists of:
 5.  A set of states distinguished as final states
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/4.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/4.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/5.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/5.png" 
     width="50%" height="50%">
 </div>
 
@@ -205,7 +205,7 @@ An NFA consists of:
 
 NFA 可以表示為一張 Transition table(轉換表)，例如:
 
-![](../assets/image/2023-09-21-lexical_analysis/6.png){:height="60%" width="60%"}
+![](../assets/image/2023/09-21-lexical_analysis/6.png){:height="60%" width="60%"}
 
 > 轉換表可以更容易看出 NFA 的狀態轉移，缺點是當 NFA 狀態(Alphabet)很多時，轉換表會變得很大佔用空間
 
@@ -214,9 +214,9 @@ NFA 可以表示為一張 Transition table(轉換表)，例如:
 -   NFA accept 輸入字串 s，如果從 Start state 開始，有一條路徑可以走到 **Final state**，這條路徑的轉移符合這個 Automata 所定義的語言
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/7.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/7.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/8.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/8.png" 
     width="50%" height="50%">
 </div>
 
@@ -246,9 +246,9 @@ end;
 ```
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/13.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/13.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/14.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/14.png" 
     width="50%" height="50%">
 </div>
 
@@ -284,9 +284,9 @@ end;
 > 注意上面的 S 是 NFA state set，而 s 是 NFA state
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/9.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/9.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/10.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/10.png" 
     width="50%" height="50%">
 </div>
 
@@ -319,9 +319,9 @@ end;
 ```
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/11.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/11.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/12.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/12.png" 
     width="50%" height="50%">
 </div>
 
@@ -338,15 +338,15 @@ end;
 使用 [McNaughton-Yamada-Thompson construction algorithm]，可以將 RE 轉換為 NFA。
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/15.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/15.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/16.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/16.png" 
     width="50%" height="50%">
 </div>
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/17.png" width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/21.jpg" width="50%" height="50%">
+    <img src="../assets/image/2023/09-21-lexical_analysis/17.png" width="50%" height="50%">
+    <img src="../assets/image/2023/09-21-lexical_analysis/21.jpg" width="50%" height="50%">
 </div>
 
 > 以上說明了 (ε), (a), (s\|t), (st), (s*), 的轉換過程，跟使用 (a\|b)*abb 作為例子來一步步轉換
@@ -389,16 +389,16 @@ end;
 ```
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/18.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/18.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/19.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/19.png" 
     width="50%" height="50%">
 </div>
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023-09-21-lexical_analysis/11.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/11.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023-09-21-lexical_analysis/20.png" 
+    <img src="../assets/image/2023/09-21-lexical_analysis/20.png" 
     width="50%" height="50%">
 </div>
 

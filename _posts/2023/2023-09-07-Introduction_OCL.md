@@ -17,7 +17,7 @@ tags: [software, tool]
 -   Constraint 是對軟體系統的一個或多個值的限制
 -   Object Constraint Language(OCL) 是一種基於 Text 的語言，用於描述這些 Constraints
 
-![](../assets/image/2023-10-28-method_level_function_unit_testing/8.png){:height="75%" width="75%"}
+![](../assets/image/2023/10-28-method_level_function_unit_testing/8.png){:height="75%" width="75%"}
 
 上圖展示了一個 Flight 的 Class invariant，如果 type == passenger，那麼 airplane.type 也必須為 passenger，同樣的 cargo 也只能對應 cargo
 這意思就如果是客運航班就要對應客機，貨運航班就要對應貨機。
@@ -63,7 +63,7 @@ inv: self.age >= 0
 
 OCL 可以單獨寫在一個文件中，也可以寫在 UML 的 Class diagram 裡面，這些表示方法都是相同的
 
-![](../assets/image/2023-10-28-method_level_function_unit_testing/9.png){:height="75%" width="75%"}
+![](../assets/image/2023/10-28-method_level_function_unit_testing/9.png){:height="75%" width="75%"}
 
 ##### 2.2.4 Elements of an OCL Expression
 

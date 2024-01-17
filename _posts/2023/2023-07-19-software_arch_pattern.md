@@ -58,7 +58,7 @@ View 與 Model 就不要進行通訊了，所有的通訊都基於 Controller，
 MVP 最早的解說來自於，是針對 MVC 再改良出的 Pattern:  
 > Mike Potel, MVP: Model-View-Presenter The Taligent Programming Model for C++ and Java, 1996.
 
-![](../assets/image/2023-07-19-software_arch_pattern/1.png){:height="75%" width="75%"}
+![](../assets/image/2023/07-19-software_arch_pattern/1.png){:height="75%" width="75%"}
 
 可以看出最早的 MVP 其實與我們現在所看到的 MVP 不太一樣，該 MVP 是從**數據管理**與**用戶介面**兩個方向的問題出發，將 Smalltalk 的 MVC 在分解而成，
 多了幾個中間組件: 
