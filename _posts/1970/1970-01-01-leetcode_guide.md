@@ -1,7 +1,7 @@
 ---
 title: "Leetcode | Master Guide"
 author: Benson Hsu
-date: 0000-01-01
+date: 1970-01-01
 category: Jekyll
 layout: post
 tags: [leetcode, algorithm]
