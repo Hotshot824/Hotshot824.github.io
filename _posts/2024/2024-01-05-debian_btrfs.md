@@ -129,7 +129,9 @@ UUID=bf901835-ce39-47cd-a225-d3f9c4b25685 none            swap    sw            
 
 如果想要還原的話也可以反向使用 snapshot 來還原，也就把上面的 `path` 和 `snapshot` 對調並且把 `r` 拿掉就可以。
 
-> 這邊只講了很基礎的 btrfs 建立步驟，實際上 btrfs 還有很多需要調校的地方，例如那些目錄不需要 cow，之類的種種，有機會再來補充。
+> 延伸閱讀: [Btrfs - Arch: Configuring the file system]
+
+> 這邊只講了很基礎的 btrfs 建立步驟，實際上 btrfs 還有很多需要調校的地方，例如: docker container 或是 tmp 這樣會頻繁寫入的地方，是否還需要使用 cow，這些都需要自己去調校，這部分之後要再研究一下。
 {: .block-warning }
 
 > ##### Last Edit
@@ -143,3 +145,5 @@ UUID=bf901835-ce39-47cd-a225-d3f9c4b25685 none            swap    sw            
 [Installing Debian with BTRFS, Snapper backups and GRUB-BTRFS]: https://medium.com/@inatagan/installing-debian-with-btrfs-snapper-backups-and-grub-btrfs-27212644175f
 
 [How to find out if a file on btrfs is copy-on-write?]: https://unix.stackexchange.com/questions/256073/how-to-find-out-if-a-file-on-btrfs-is-copy-on-write
+
+[Btrfs - Arch: Configuring the file system]: https://wiki.archlinux.org/title/btrfs#Configuring_the_file_system
