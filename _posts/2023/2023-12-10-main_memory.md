@@ -133,6 +133,12 @@ bff00000-bfffffff : System RAM      # 1 MB
 
 ### DRAM Main Functions
 
+[7.2 Buffer/Cache](#72-buffercache)  
+[7.3 Program Layout](#73-program-layout)  
+[7.4 Memory Segmentation](#74-memory-segmentation)  
+[7.5 Fragmentation Problem](#75-fragmentation-problem)  
+[7.6 Paging Memory Management](#76-paging-memory-management)  
+
 這裡先介紹 DRAM 的特性:
 -   DRAM 的特性是只要 CPU 開始工作，DRAM 就會全速運轉
     -   即使 DRAM 有多個插槽，OS 會把他們視為一體
@@ -150,7 +156,7 @@ bff00000-bfffffff : System RAM      # 1 MB
     -   充當 Buffer 的角色，再與周邊 Device 溝通時，需要保留一塊 Memory 讓裝置可以存取，例如: DMA
 
 
-**7.2 Buffer/Cache**
+##### 7.2 Buffer/Cache
 
 這裡使用 `top` 查看記憶體使用情況
 -   OS 會盡力把記憶體用完，例如: 拿來當作 Cache, Buffer 讓 I/O 更快
@@ -161,13 +167,56 @@ MiB Mem :   7939.9 total,   7495.9 free,    357.6 used,    314.9 buff/cache
 MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 ```
 
-**7.3 Program Layout**
+##### 7.3 Program Layout
 
-這裡說明 Program 在記憶體中的配置，以及他們的用途這部分就不多做介紹了，可以參考下圖
+這裡說明 Program 在記憶體中的配置，以及他們的用途這部分就不多做介紹了，可以參考下圖。OS 在這裡的任務就是將執行檔從儲存裝置中載入到 Memory 中，配置好執行的環境。
 
 ![](../assets/image/2023/12-10-main_memory/3.png){:height="75%" width="75%"}
 
 > 如果想觀察 Kernel 的 code, data, bss section 可以使用 `cat /proc/kallsyms`，但是需要 root 權限
+
+##### 7.4 Memory Segmentation
+
+記憶體的區段機制([Memory Segmentation])是很直覺以程式的區段作為管理的單度，每個 seg. 都對應到程式的一個邏輯上的 seg.(text, data, bss, heap, stack)，
+通常 seg. 是不可以被拆分，要拆分的話需要硬體支援，有固定的拆分大小。
+
+> 例如: x86 的 ds. fs. gs. 三個 data 的 segmentation，其中 fs. gs. 是額外的 data seg.
+
+![](../assets/image/2023/12-10-main_memory/4.png){:height="75%" width="75%"}
+
+同一個程式的 seg. 可以在 Physical memory 中不連續，這樣可以更有效率的使用記憶體，但是這樣就有可能產生 Fragmentation Problem(碎片化問題)。
+
+**Management of Segmentation**
+
+既然是基於 Segmentation 的管理機制，那麼他所使用的定址方式就會是基於 Base + Offset 的方式(相對定址)。
+-   例如這樣的指令: reg<sub>target</sub> = reg<sub>base</sub> + offset
+    -   這個 reg<sub>base</sub> 是 OS 能夠管理的
+-   例如設計三個 Register 可以分別指向 code, data, stack 的開始位置，這樣就能分開存放這三個 seg.
+
+> 在這種機制下 Context switch 的時候除了切換 general register 以外，還需要切換 base reg. file
+
+這種 base reg. file 的設計同時還要引入 limit(長度)用來限制存取的範圍，如果存取錯誤的記憶體就會觸發 Segmentation Fault。
+以 ARM Cortex-M 為例，[MPU_RBAR] 是用來設定 base address，MPU_RASR 是用來設定 limit。
+
+> MPU: [Memory Protection Unit]
+
+> Memory Segmentation 的機制並不太適合在動態的環境下，要新增程式或減少程式，容易造成碎片化問題，但在靜態的環境下，例如: 嵌入式系統，就很適合使用這種機制
+{: .block-warning }
+
+##### 7.5 Fragmentation Problem
+
+-   **[External Fragmentation](外部碎片)**: 如果一塊記憶體中的 Free space 足夠，但無法滿足程式的需求，這些 Free space 就是 External Fragmentation
+-   **[Internal Fragmentation](內部碎片)**: 因為配置演算法，本來只需要 X size 的記憶體，但是分配了 X + Y size 的記憶體，其中 Y size 就是 Internal Fragmentation
+    -   例如: OS 分配空間時覺得剩下的空間太小了，乾脆把整個空間都分配給程式，那就是 Internal Fragmentation
+
+這裡有一些解決 External Fragmentation 的方法，例如:
+-   Memory Compaction(記憶體壓縮): 搬移記憶體使 Free space 變成連續的，但是成本很高
+-   更好的分配演算法: Best Fit, Worst Fit, First Fit
+
+##### 7.6 Paging Memory Management
+
+> Paging Memory Management 是目前主流的記憶體管理機制，相較於 Segmentation Memory Management，他的管理單位是 Page，而不是 Seg.
+{: .block-tip }
 
 > ##### Last Edit
 > 1-17-2024 15:24
@@ -181,3 +230,11 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 [Kernel/User page tables isolation]: https://en.wikipedia.org/wiki/Kernel_page-table_isolation
 [实模式启动阶段：从bios获取内存信息]: https://zhuanlan.zhihu.com/p/590013141
+
+[Memory Segmentation]: https://en.wikipedia.org/wiki/Memory_segmentation
+
+[External Fragmentation]: https://en.wikipedia.org/wiki/Fragmentation_(computing)#External_fragmentation
+[Internal Fragmentation]: https://en.wikipedia.org/wiki/Fragmentation_(computing)#Internal_fragmentation
+
+[MPU_RBAR]: https://www.keil.com/pack/doc/CMSIS/Core/html/group__mpu8__functions.html#gafe39c2f98058bcac7e7e0501e64e7a9d
+[Memory Protection Unit]: https://en.wikipedia.org/wiki/Memory_protection_unit
