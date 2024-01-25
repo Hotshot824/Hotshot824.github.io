@@ -258,7 +258,16 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 -   在 Pagging 的情況下，由於每個 Page 的大小一致，並且透過 Mapping 的方式使用 Page，所以不會有 External Fragmentation
     -   但因為程式所需要的記憶體大小不會剛好是 Page 的大小，所以會有 Internal Fragmentation
 
+---
+
 ### Memory Paging Hardware
+
+[7.7 MMU and MPU](#77-mmu-and-mpu)  
+[7.8 TLB](#78-tlb)  
+[7.9 TLB Miss](#79-tlb-miss)  
+[7.10 Translation table structure](#710-translation-table-structure)  
+[7.11 Hardware Handling of TLB Miss](#711-hardware-handling-of-tlb-miss)  
+[7.12 Software Handling of TLB Miss](#712-software-handling-of-tlb-miss)  
 
 > 這裡會介紹 Mapping Table 的基本形式，即是 TLB(Translation Lookaside Buffer)，如果 TLB 不夠大要怎麼處理
 {: .block-tip }
@@ -305,9 +314,126 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 ![](../assets/image/2023/12-10-main_memory/7.png){:height="100%" width="100%"}
 
--   p(page number): 在 Logical address 中的 Page number
--   f(frame number): 實際上在 Physical address 中的 Page number
+-   p(page number): 程式在 Logical address 中的 Page number
+-   f(frame number): 實際在 Physical address 中的 Page number
 -   d(displacement, offset): 在 Page 中的 offset
+
+這裡來看一個實際的例子 [Intel Sandy Bridge] 的 TLB 規格:
+
+-   Level 1 TLB
+    -   i-TLB: 72 entries, i means instruction
+    -   d-TLB: 100 entries, d means data
+-   Level 2 TLB (如果在 L1 TLB 中沒有找到，就會到 L2 TLB 中查找)
+    -   1024 entries
+
+**TLB Size**
+
+那麼一個 Page 的大小是 4KB，4KB * 1024 = 4MB，但是一個程式不可能只有 4MB 大小，這裡再看另一個例子，MIPS R8000-style TLB，一共有 384 entries，
+這樣也才 384 * 4KB = 1536KB，都是遠遠小於實際程式需求的。
+
+解決方法:
+-   Hardware: 增加 TLB 的數量，但是這樣會增加硬體成本(CPU 變大，成本變高，搜尋時間變長)
+-   Dynamic: 增加動態載入 TLB 的方式
+
+> 要動態載入 TLB 就要思考這是怎樣的資料結構，同時要硬體支援
+
+##### 7.9 TLB Miss
+
+> TLB 有大小的限制，因此會發生 TLB Miss，當 Miss 發生時就會需要動態載入 TLB
+
+增加 TLB 的大小:
+-   TLB 基本上是一個平行搜尋的硬體
+    -   Page number 會同時與 TLB 中的數百到數千個 entries 做比對
+-   擴充 TLB 會增加硬體成本，例如: 電晶體數量，時脈降低，耗電量增加
+
+> 既然這樣的話增加 Page size 也是一種方法，但是就會降低軟體在管理上的彈性，例如: huge page
+
+**Dynamic Loading TLB entries**
+
+當 MMU 發現某一個 Page number 在 TLB 找不到對應的 entries 時，觸發 TLB Miss 將當下要使用的 TLB 載入，
+Main Memory 足夠放入所有的 TLB entries，但是這部分應該要由 Hardware 來實現還是 Software 來實現?
+
+##### 7.10 Translation table structure
+
+> 這裡介紹如何把 TLB 的 entries 放到 Main Memory 中，使用什麼樣的 Data structure 來管理
+{: .block-tip }
+
+假如我們要把 TLB 的 entries 放到 Main Memory 中，那假設以下情況:
+1.  500MB 的程式，需要 500KB 的記憶體空間放 Page Table
+2.  700MB 的程式，需要 700KB 的記憶體空間放 Page Table
+3.  1500MB 的程式，需要 1500KB 的記憶體空間放 Page Table
+
+以上這些程式一樣會動態載入記憶體，這樣的話久而久之也會造成 External Fragmentation，這樣就反其道而行了，Paging 本來是用來解決 Fragmentation 問題的，
+但是為了這些大小不一的 Page Table，反而造成了 Fragmentation 問題。
+
+**Hierarchical Paging**
+
+這裡就使用一種 Hierarchical Paging(階層式分頁)的方式來解決這個問題，一個 4KB 大小的 Page 可以管理 1024 entries，第二層也是以 4KB 還分層管理，
+這樣兩層就能放入 1024 * 1024 = 1M 個 entries，這樣就能解決上面的問題。
+
+![](../assets/image/2023/12-10-main_memory/8.png){:height="100%" width="100%"}
+
+這樣的話定址的格式就會改成以下的格式:
+
+![](../assets/image/2023/12-10-main_memory/9.png){:height="100%" width="100%"}
+
+-   LV1 PTE(Level 1 Page Table Entry): 第一層的 Page Table Index
+-   LV2 PTE(Level 2 Page Table Entry): 第二層的 Page Table Index
+-   d(displacement, offset): 在 Page 中的 offset
+
+注意到這樣的指令格式剛好是 2<sup>10</sup> x 2<sup>10</sup> x 2<sup>12</sup> = 2<sup>32</sup>，也就是 32-bit 的 CPU 可以使用這樣的指令格式。
+
+> 在這裡 LV1, LV2 在沒有映射出去的時候，會設定為 Invalid bit
+
+##### 7.11 Hardware Handling of TLB Miss
+
+目前大部分的 CPU 都是用硬體來處理 TLB Miss，硬體會透過之前提過的 Hierarchical Paging 的指令方式來查找 Page Table，
+在 Logical address 中會以逗號隔開的方式記錄: `0xpte1, 0xpte2, 0xoffset`
+
+下圖是一個簡單的架構表示如何處理 TLB Miss:
+
+![](../assets/image/2023/12-10-main_memory/10.png){:height="100%" width="100%"}
+
+1.  首先 CPU 會先去 TLB Search，TLB 中沒有的話就會觸發 TLB Miss
+2.  PTBR 會記錄 LV1 Page Table 的 Physical address，以供 CPU 找到 LV1 Page Table
+    -   PTBR(Page Table Base Register): 在 Intel x86 中是 CR3
+3.  找到第二層的 LV2 Page Table，然後在 LV2 Page Table 中找到對應的 Frame number
+4.  將一個 TLB Entry 置換成剛剛找到的 Frame number
+5.  重新啟動 TLB Search，這次就會找到對應的 TLB Entry
+
+##### 7.12 Software Handling of TLB Miss
+
+MIPS 處理器使用了 software-managed TLB，這種方式會比較慢，當 TLB miss 時將會觸發 exception，然後 OS Kernel 會去進行後續處理。
+
+這裡列出三類型的 TLB exception:
+1.  TLB Refill: TLB 中沒有相對應的 entry 時就會發生
+2.  TLB Invalid: Virtual address 使用被設定為 Invalid 的 entry 時就會發生
+3.  TLB Modified: TLB 有對應的 entry，但是該 entry 的權限不符合(No dirty bit)時就會發生
+
+> MIPS 會告知 OS TLB Miss 的原因與位置，並根據 CPU 正在執行哪一個 task 來使用適當的演算法找出對應的 entry
+{: .block-warning }
+
+要注意軟體處理 TLB Miss 有兩種可能:
+-   Real Error: 也就是程式碼出錯，例如: 存取了不該存取的記憶體
+-   TLB Miss: 也就是程式碼沒有出錯，只是 TLB 中沒有對應的 entry
+
+OS Kernel 在這裡可以像硬體一樣去使用 **Paged Page Table**(分頁分頁表)，或使用 **Hash Table** 來管理 TLB entries。
+並且在軟體上會清楚正在執行哪些 Task，所以可以提前把共用的 TLB entries 載入到 TLB 中，這樣就可以減少 TLB Miss 的發生。
+
+-   **Advantages:**
+    -   透過軟體的話，可以更有效的搜尋，甚至修改搜尋演算法
+    -   可以提前載入共用的 TLB entries，減少 TLB Miss 的發生
+-   **Disadvantages:**
+    -   要去執行 Exception 會牽涉到 Mode change，會有額外的成本
+
+> 部分 MIPS 也有硬體機制來走訪 Page Table，部分 SPARC、POWER 處理器允許軟體來處理 TLB Miss
+
+> 填寫 TLB 的功能必須由 Kernel 來做，由 User space 來做的話會有安全性的問題
+{: .block-warning }
+
+---
+
+### Fragmentation
 
 > ##### Last Edit
 > 1-17-2024 15:24
@@ -333,3 +459,5 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 [Page Table]: https://en.wikipedia.org/wiki/Page_table
 
 [Translation Lookaside Buffer]: https://en.wikipedia.org/wiki/Translation_lookaside_buffer
+
+[Intel Sandy Bridge]: https://en.wikipedia.org/wiki/Sandy_Bridge
