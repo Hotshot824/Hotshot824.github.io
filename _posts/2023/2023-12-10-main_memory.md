@@ -1,5 +1,5 @@
 ---
-title: "OS | Main Memory (Unfinished)"
+title: "OS | Main Memory"
 author: Benson Hsu
 date: 2023-12-10
 category: Jekyll
@@ -385,6 +385,8 @@ Main Memory 足夠放入所有的 TLB entries，但是這部分應該要由 Hard
 
 > 在這裡 LV1, LV2 在沒有映射出去的時候，會設定為 Invalid bit
 
+> 延伸閱讀: Andrew S. Tanenbaum, Modern Operating Systems, Chapter 3, 3.3.2 Page Tables 有更多種類的 Page Table 結構可以參, [Marvin Solomon CS 537]
+
 ##### 7.11 Hardware Handling of TLB Miss
 
 目前大部分的 CPU 都是用硬體來處理 TLB Miss，硬體會透過之前提過的 Hierarchical Paging 的指令方式來查找 Page Table，
@@ -435,8 +437,101 @@ OS Kernel 在這裡可以像硬體一樣去使用 **Paged Page Table**(分頁分
 
 ### Fragmentation
 
+Linux Kernel 幾乎不會修改與 Kernel space 相關的 Page Table，因此 Kernel 會盡可能地去使用大的 Page，例如: 1GB，
+來降低對於 TLB entries 的使用，因為在 User space 中 Kernel 的部分是共用的，修改 Kernel 的 Page Table 可能會造成額外的 TLB Miss。
+
+User space 的部分就會使用 4KB 的 Page，這裡要討論的是 malloc 怎麼分配記憶體給 Task 使用，malloc 不會每次都剛好等於 4KB 的倍數，
+硬體上可以解決的是 4KB Page 為單位的 Fragmentation 問題，但是程式自由配置的大小問題還是需要由軟體來解決。
+
+##### 7.13 OS memory allocation architecture
+
+> 下圖展示一個作業系統的記憶體分配架構，怎麼初始化到分配記憶體給 Task 使用
+{: .block-tip }
+
+![](../assets/image/2023/12-10-main_memory/11.png){:height="100%" width="100%"}
+
+在這個架構之下這裡要討論的是:
+1.  Kernel 如何管理分配 Frame
+2.  Kernel lib 會提供 `kmalloc()` 來提供給 Kernel 的 Task 使用
+3.  `libc` 如何實現 `malloc()` 來提供給 User space 的 Task 使用
+    -   這裡雖然記憶體最小的管理單位是 4KB，但是 libc 透過 syscall 來向 Kernel 一次要求多個 page
+        -   例如: sbrk(), brk(), mmap()
+    -   而 malloc() 會在這些 page 中分配記憶體給 Task 使用，以此做到更細微的記憶體分配
+
+##### 7.14 Kernel Management of Frames
+
+Kernel 透過 MMU 的機制，可以把記憶體都視為 4KB 大小的 Page(Frame) 來管理
+
+-   Kernel 將所有的 DRAM 都 Mapping 到 Kernel space
+    -   這代表 Kernel 可以直接存取所有的 DRAM，即使已經分配給 User Task 使用
+    -   因為記憶體幾乎是完全交由 Kernel 來管理，所以 Kernel 內部必須小心地處理記憶體
+-   因此開機系統啟動時會去探測記憶體大小和狀況，這裡會使用 [bootmem]
+    -   bitmap 只會在最初使用，因為在怎麼優化效率都不高
+
+> 延伸閱讀: [Linux 核心設計: 記憶體管理]
+{: .block-warning }
+
+**Buddy system**
+
+> [buddy system] 的目的是更快的搜尋到可以分配的記憶體，並且盡量保持記憶體的連續性
+{: .block-tip }
+
+假設在分配時，kernel 已經知道有一塊 2M 的連續記憶體可以分配，並且 task 也可以用掉這 2M 的記憶體就可以直接分配這 2M 給 task 使用，
+同時保持記憶體的連續性，可以使 MMU 做更有效率的優化。
+
+![](../assets/image/2023/12-10-main_memory/12.png){:height="100%" width="100%"}
+
+在上面這個例子中，我們假設 kernel 已經知道有 32 個 frame 可以分配，藍色的部分代表已經被使用的 frame:
+-   合併的條件是來自相同的 parent
+    -   橘色與黃色的 frame 來自同一個 parent A，所以可以合併
+    -   黃色的 parent 是 A，棕色的 parent 是 B，所以不能合併
+    -   只有橘色與黃色合併後，parent 變為 B，才能與棕色合併
+-   如果某 Kernel task 需要 2 個 page，那麼就優先把 2 個 page 的 leaf 分配給他
+    -   同理如果需要 4 個 page，就優先把 4 個 page 的 leaf 分配給他
+
+> 在 Linux kernel 中實現 buddy system 的方式是透過 bitmap 來實現樹，而不是真的使用一個樹的資料結構
+
+##### 7.15 Slab Allocation
+
+> Linux kernel 中有許多頻繁使用的資料結構，例如: task_struct, file, inode 等等，如果直接使用 buddy system 來分配記憶體，
+> 會很容易造成 Fragmentation，所以使用 slab 來解決這個問題
+{: .block-tip }
+
+雖然 buddy system 可以每次以 page(4KB) 為單位分配記憶體了，但是系統執行時絕大部分的資料結構都是小的，因此 Linux 使用 slab 來解決小物件的分配。
+
+-   slab 會去向 buddy system 要數個 page，在這裡會被稱為 cache(kmem_cache, 並不是指 CPU cache)
+    -   slab 描述 kmem_cache 的定義在 `mm/slab.h`
+    -   `cat /proc/slabinfo` 可以看到目前系統中有哪些 cache
+-   slab allocator 是由很多個不同大小的 cache 組成，這些 cache 通常是為了分配特定 object 的大小
+    -   例如: 在 Linux kernel 中 task_struct 大約只需要 1.7KB 就可以使用一個 cache 來服務這個 object
+
+![](../assets/image/2023/12-10-main_memory/13.png){:height="100%" width="100%"}
+
+-   cache 中使用三種 list 來管理: full, partial, free 
+
+因此 slab 會達到以下的目的:
+1.  可以比 buddy system 分配更小的記憶體
+2.  cache 常用的 object 可以被重複使用，不需要重新分配記憶體(allocating, initialising, destroying)
+3.  把這些常用 object 與 L1 或 L2 cache 對齊，可以更好的利用 hardware cache
+
+這裡可以想像 slab 就是把常用的 object 當成牛奶瓶，cache 就是牛奶箱，牛奶瓶可以重複去牛奶箱中拿取放回。
+
+> 延伸閱讀: [Chapter 8  Slab Allocator], [内存管理 slab 分配器]
+
+##### 7.16 Malloc Allocation
+
+通常程式都會有 heap，而 malloc 幾乎都是從 heap 中分配閒置的記憶體給程式使用。
+
+-   heap 是連續配置的記憶體空間，大小為 page 的倍數
+-   malloc 這裡會使用一些演算法來從 heap 分配記憶體給程式使用
+    -   例如: [ptmalloc]
+
+> 延伸閱讀: [Glibc 内存管理], [Overview of Malloc]
+
+> malloc 實現這邊打算之後另外寫一篇文章，這邊只要知道 task 使用 malloc 也不是直接向 kernel 索要 page 就可以了
+
 > ##### Last Edit
-> 1-17-2024 15:24
+> 1-26-2024 19:15
 {: .block-warning }
 
 [System address map initialization in x86/x64 architecture part 1: PCI-based systems]: https://resources.infosecinstitute.com/topics/hacking/system-address-map-initialization-in-x86x64-architecture-part-1-pci-based-systems/#gref
@@ -457,7 +552,19 @@ OS Kernel 在這裡可以像硬體一樣去使用 **Paged Page Table**(分頁分
 [Memory Protection Unit]: https://en.wikipedia.org/wiki/Memory_protection_unit
 
 [Page Table]: https://en.wikipedia.org/wiki/Page_table
+[Marvin Solomon CS 537]: https://pages.cs.wisc.edu/~solomon/cs537-old/last/paging.html
 
 [Translation Lookaside Buffer]: https://en.wikipedia.org/wiki/Translation_lookaside_buffer
 
 [Intel Sandy Bridge]: https://en.wikipedia.org/wiki/Sandy_Bridge
+
+[bootmem]: https://www.kernel.org/doc/gorman/html/understand/understand022.html
+[buddy system]: https://en.wikipedia.org/wiki/Buddy_memory_allocation
+[Linux 核心設計: 記憶體管理]: https://hackmd.io/@sysprog/linux-memory
+
+[Chapter 8  Slab Allocator]: https://www.kernel.org/doc/gorman/html/understand/understand011.html
+[内存管理 slab 分配器]: https://zhuanlan.zhihu.com/p/358891862
+[ptmalloc]: https://en.wikipedia.org/wiki/C_dynamic_memory_allocation#dlmalloc_and_ptmalloc
+
+[Glibc 内存管理]: https://goo.gl/ALHVoh
+[Overview of Malloc]: https://sourceware.org/glibc/wiki/MallocInternals
