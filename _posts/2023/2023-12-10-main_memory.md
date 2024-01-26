@@ -437,6 +437,11 @@ OS Kernel 在這裡可以像硬體一樣去使用 **Paged Page Table**(分頁分
 
 ### Fragmentation
 
+[7.13 OS memory allocation architecture](#713-os-memory-allocation-architecture)  
+[7.14 Kernel Management of Frames](#714-kernel-management-of-frames)  
+[7.15 Slab Allocation](#715-slab-allocation)  
+[7.16 Malloc](#716-malloc)  
+
 Linux Kernel 幾乎不會修改與 Kernel space 相關的 Page Table，因此 Kernel 會盡可能地去使用大的 Page，例如: 1GB，
 來降低對於 TLB entries 的使用，因為在 User space 中 Kernel 的部分是共用的，修改 Kernel 的 Page Table 可能會造成額外的 TLB Miss。
 
@@ -518,7 +523,7 @@ Kernel 透過 MMU 的機制，可以把記憶體都視為 4KB 大小的 Page(Fra
 
 > 延伸閱讀: [Chapter 8  Slab Allocator], [内存管理 slab 分配器]
 
-##### 7.16 Malloc Allocation
+##### 7.16 Malloc
 
 通常程式都會有 heap，而 malloc 幾乎都是從 heap 中分配閒置的記憶體給程式使用。
 
