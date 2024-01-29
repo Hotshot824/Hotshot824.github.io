@@ -73,7 +73,7 @@ tags: [OS]
 
 但不是將所有程式都放在 Kernel mode，因為只要是程式就會有 Bug，在 Kernel mode 中發生了 Bug 很可能導致整個系統的崩潰。
 
-![](../assets/image/2023/09-12-operating_system_introduction/1.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/1.png){:height="75%" width="75%"}
 
 ##### 1.5 User space/Kernel space
 
@@ -198,7 +198,7 @@ Linux 將主記憶體分為三種主要用途:
 
 Linux 原則上會盡可能的使用掉所有記憶體以加速 I/O，當記憶體不足時 Linux 會釋放 Cache memory 和 Buffer memory。
 
-![](../assets/image/2023/09-12-operating_system_introduction/2.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/2.png){:height="75%" width="75%"}
 
 ##### 1.12 Memory and storage consistency
 
@@ -262,7 +262,7 @@ Computer world 中的權限往往與現實世界的權限不相等
 -   將周邊的控制「暫存器、記憶體」映射到 CPU 的「記憶體映射空間(Memory space)」
 -   例如使用指令: `MOV CX, 0xFFFFFFFF;` 假設 `0xFFFFFFFF` 是裝置記憶體，將 CX register 的值放到位置 `0xFFFFFFFF` 就等於向下儲存資料
 
-![](../assets/image/2023/09-12-operating_system_introduction/3.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/3.png){:height="75%" width="75%"}
 
 > 上圖模擬一個可能的 MMIO，DRAM 與不同的 Device 分別被映射到不同的記憶體區段。裝置有自己的控制暫存器、
 > 去設定讀取的指令來在裝置的晶片上執行，在裝置暫存器讀寫的程式就被稱作**(Device driver)驅動程式**
@@ -276,7 +276,7 @@ Computer world 中的權限往往與現實世界的權限不相等
     -   `out 0x255, AX;` 將 AX register 寫到 0x255 Port，對裝置寫入資料
     -   `in AX, 0x100` 從 0x100 Port 將資料寫到 AX register，將裝置資料取回
 
-![](../assets/image/2023/09-12-operating_system_introduction/4.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/4.png){:height="75%" width="75%"}
 
 > Device、Memory 分別用不同的定址方式，I/O Bus 為 64K 即最多 65536，Memory 則可以到最大 4G，這種架構下指定的速度通常比較慢，因為 MMIO 可以更簡單與直接的進行 I/O。
 
@@ -300,7 +300,7 @@ Computer world 中的權限往往與現實世界的權限不相等
     -   DMA 傳輸的資料的開始及結束位置，通常要和 Cache(Cache line) 和 Memory 的寬度進行對齊
     -   這部分的限制可能來自於 DMA Controller 直接將資料以「固定的大小」更新到 Cache。例如: x86 是 64 個 Byte，那傳輸資料就跟 64 Byte 對齊。*硬體在這裡沒有特別做處理，使得非對齊的資料也可以部份更新*
 
-![](../assets/image/2023/09-12-operating_system_introduction/5.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/5.png){:height="100%" width="100%"}
 
 > Disk 與 DRAM 之間的交換也要使用 buffer 來進行交換，才能避免低速讀寫去占用寶貴的 Bus 資源。當 bufdisk 將資料傳給 bufRAM 後此時要處理的就是 bufcache 與 bufRAM 之間的一致性
 
@@ -325,7 +325,7 @@ Computer world 中的權限往往與現實世界的權限不相等
 
 > 延伸閱讀 [Burst mode]
 
-![](../assets/image/2023/09-12-operating_system_introduction/6.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/6.png){:height="100%" width="100%"}
 
 -   目前在 PCI 上每個 Device 都有自己的 DMA
 -   [Arbiter] 用來分配不同的 Device 的存取權，通常是速度越快的裝置優先權越高
@@ -344,7 +344,7 @@ Computer world 中的權限往往與現實世界的權限不相等
 
 > Access to Shared Caches vs. Traditional methods
 
-![](../assets/image/2023/09-12-operating_system_introduction/7.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/7.png){:height="100%" width="100%"}
 
 ### I/O Subsystem notify the CPU
 
@@ -372,7 +372,7 @@ Interrupt 是一種改變程式正常執行流程的機制，可以由 Device �
     -   所有 Devices 共用一組中斷線路，裝置在中斷線路上寫入自己的中斷編號，就會觸發 CPU 中斷
     -   這樣就類似在一條線上傳輸編碼，經過解碼器後推向 CPU，讓 CPU 對自己送出中斷，例如: PCI 的 MSI-X 支援 2048 個中斷編號
 
-![](../assets/image/2023/09-12-operating_system_introduction/8.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/8.png){:height="100%" width="100%"}
 
 > CPU 會設計好 IVT 的位置，由 OS 放入適當的 ISR 這部分也是驅動程式(Device Drver) 的一部分
 
@@ -386,7 +386,7 @@ Interrupt 是一種改變程式正常執行流程的機制，可以由 Device �
     5.  Restore State: 恢復之前 Process 的執行狀況
         -   這時候不一定恢復原本的 Process，因為 System call 可能改變 Process 的狀態，由 Scheduler 來決定下一個執行的 Process(不一定是原本的 Process)
 
-![](../assets/image/2023/09-12-operating_system_introduction/9.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/9.png){:height="100%" width="100%"}
 
 -   IVT 放置的是 ISR 的開始位置
     -   ISR 開頭都是用組語寫的，如果 C 的執行環境設定好也可以用 C
@@ -412,7 +412,7 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
 -   **Work-queue** 是一種完全不同的機制，work-queue 可以確保同一種類型的 driver 只會在同一個 CPU 上運行
 從效能高低上是從左往右排序，從易寫程度上是從右往左排序
 
-![](../assets/image/2023/09-12-operating_system_introduction/10.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/10.png){:height="100%" width="100%"}
 
 -   理論上這三個都應該由 Kernel thread 來呼叫
     -   如果是 Kernel thread(task) 那就可以 wait()
@@ -463,7 +463,7 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
 2.  read 呼叫後 Kernel 會配置 krl_buf，DMA 傳輸會將資料從 dsk_buf 搬移到 krl_buk
 3.  最後由 Kernel 將資料 Copy 到 Userspace
 
-![](../assets/image/2023/09-12-operating_system_introduction/11.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/11.png){:height="100%" width="100%"}
 
 -   **Kernel bypass**: 是指不需要透過 Linux kernel 的功能，使用自己實現的相同功能的程式碼直接將 Device 的資料 Copy 到 Userspace
     -   這可以幫助解決在高 concurrent 下由於 Interrupt Handling, Memory Copy, Context switch, Locality miss, 
@@ -528,7 +528,7 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
     -   平行運作往往需要軟硬體結合
     -   很多時候，硬體提供「多種選擇」給軟體進行優化
 
-![](../assets/image/2023/09-12-operating_system_introduction/14.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/14.png){:height="100%" width="100%"}
 
 > 寫平行化程式，程式碼每年可以有 23% 的效能提升，否則只有 4.6%
 
@@ -554,7 +554,7 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
 > Intel 宣稱他們實現的 SMT(Hyper-threading) 增加 5% 的晶片面積，可以獲得 15% ~ 30% 的效能提升  
 > AMD 於 2017 推出的 Zen CPU 也實現了 SMT
 
-![](../assets/image/2023/09-12-operating_system_introduction/12.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/12.png){:height="100%" width="100%"}
 
 > 上方右圖有兩個 Instruction flow(Register set) 去競爭資源，例如: Floating point unit, Adder, Loader, Storer  
 > SMT 不是去增加系統的速度，是增加系統的使用率，前提是有足夠的 Task 跟進行的運算可以 [Loop unrolling]，  
@@ -574,7 +574,7 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
     -   雖然 Processor 運算速度不同，但其 Instruction set 相容
     -   OS 可以依照需求使用高效能 Processor(Big) 或省電型 Processor(Little)
 
-![](../assets/image/2023/09-12-operating_system_introduction/13.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/13.png){:height="100%" width="100%"}
 
 > 在 Big.Little 中可以做 Task migration，這部分是 OS 跟 Programmer 需要去考慮的
 
@@ -597,9 +597,9 @@ Bottom half 可以分為三種 softirq, tasklet, work-queue
     -   AMD 的 threadripper 將兩顆 CPU 封裝在一起，threadripper 上可以看到兩個 DRAM 插槽
     -   對 NUMA 來說記憶體分為 Local, Remote，存取 Local 時的速度會較快
 
-![](../assets/image/2023/09-12-operating_system_introduction/15.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/15.png){:height="100%" width="100%"}
 
-![](../assets/image/2023/09-12-operating_system_introduction/16.png){:height="100%" width="100%"}
+![](/image/2023/09-12-operating_system_introduction/16.png){:height="100%" width="100%"}
 
 > 這樣的做法兩邊都會有獨立控制的 Memory bus，避免了部分的記憶體頻寬的效能瓶頸
 
@@ -627,16 +627,16 @@ softirq 在 Kernel 編譯是就已經定義、註冊好，通常是不會去做�
 
 **下面是 Interrupt 離開時觸發 softirq 的流程與程式碼**:
 
-![](../assets/image/2023/09-12-operating_system_introduction/17.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/17.png){:height="75%" width="75%"}
 
 ksoftirq 是在 Kernel thread 會去呼叫 Loop，這個 Loop 會不斷去拿工作來做，這個 Loop 可以被 ISR 或 ksoftirqd 呼叫，
 如果是由 ksoftirqd 呼叫那就可以 sleep，但如果是由 ISR 呼叫 Loop 則是執行在 Interrupt context 那就不能 sleep。
 -   會設計 ISR 可以呼叫 Loop 的原因是 Linux 為了優化，如果 Interrupt 所觸發的工作並不多，就乾脆在 ISR 中處理完
 -   若是由 ksoftirq 呼叫就會讓 Interrupt 先結束，後續讓 Scheduler 來安排 Task 進行工作
 
-![](../assets/image/2023/09-12-operating_system_introduction/18.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/18.png){:height="75%" width="75%"}
 
-![](../assets/image/2023/09-12-operating_system_introduction/19.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/19.png){:height="75%" width="75%"}
 
 -   `invoke_softirq()` 會去 Loop 中拿取工作來執行
     -   `force_irqthreads` 用這個變數來判別是 Interrupt context 呼叫還是 Kernel thread
@@ -647,7 +647,7 @@ ksoftirq 是在 Kernel thread 會去呼叫 Loop，這個 Loop 會不斷去拿工
 
 **相較於 softirq, work-queue 的流程單純很多，不會運行在 Interrupt context:**
 
-![](../assets/image/2023/09-12-operating_system_introduction/20.png){:height="75%" width="75%"}
+![](/image/2023/09-12-operating_system_introduction/20.png){:height="75%" width="75%"}
 
 **General rules for driver writing**
 
@@ -673,7 +673,7 @@ ksoftirq 是在 Kernel thread 會去呼叫 Loop，這個 Loop 會不斷去拿工
 如果沒有軟體驅動的情況下 CPU 無法直接讀取 Disk，因此需要在 PC 架構中在 Boot rom 中放入「BIOS」，
 BIOS 的重要目的就是讀取 Disk 上的 [Boot sector]。
 
-![](../assets/image/2023/09-12-operating_system_introduction/21.png){:height="50%" width="50%"}
+![](/image/2023/09-12-operating_system_introduction/21.png){:height="50%" width="50%"}
 
 **Bootstrap**
 

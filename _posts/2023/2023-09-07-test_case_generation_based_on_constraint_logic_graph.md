@@ -61,7 +61,7 @@ tags: [software, software_qualitiy, generate_test_case]
 就可以使用限制邏輯語言找解器(Constraint logic programming solver)([ECLiPSeclp]) 求出測試資料(測試資料包含測試輸入與預期輸出與系統狀態)，
 最後將測試資料轉換成需要的平台的測試案例，而在本篇論文中可以針對 Java 的平台轉換成 JUnit 測試案例。
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/1.png){:height="75%" width="75%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/1.png){:height="75%" width="75%"}
 
 > 圖二為依照這四個問題所建構的測試工具整體架構，以下說明各個架構的功能
 
@@ -193,7 +193,7 @@ Coverage Criteria(測試覆蓋標準)是用來衡量測試嚴謹的程度，測�
 
 這裡介紹如何將 Method 的 OCL 轉為 CLG，架構圖如下:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/2.png){:height="60%" width="60%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/2.png){:height="60%" width="60%"}
 
 > MUT means Method unit testing
 
@@ -216,7 +216,7 @@ OCL 有三種限制式(invariant, pre, post) 這樣每種情境就要建立一�
 
 AST 的每一個 Node 都代表一個 OCL 的運算式，以下是作者所設計的 Node:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/3.png){:height="75%" width="75%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/3.png){:height="75%" width="75%"}
 
 ```java
 public ASTNode(Constraint obj) {
@@ -276,7 +276,7 @@ IfExp 的抽象語法樹如圖，根節點為IfExp
 -   thenExp：ASTNode 第二個子樹，為then 的運算式
 -   elseExp：ASTNode 第三個子樹，為else 的運算式
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/4.png){:height="65%" width="65%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/4.png){:height="65%" width="65%"}
 
 -   **OperationCallExp**: 
     -   `this.parameters`: 第二個子樹開始，不限個數的參數
@@ -342,7 +342,7 @@ post:
     endif
 ```
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/5.png){:height="75%" width="75%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/5.png){:height="75%" width="75%"}
 
 > 上圖是 Triangle 的 Post 被轉化為 AST 的結果，其他的轉換可以參考論文
 
@@ -364,7 +364,7 @@ post:
 作者認為如果 Function 本身沒有錯誤但跳出 Expection 時，代表 Function 的 Pre-condition 不符合才會造成 Expection 的發生，
 所以就將 Pre-condition 轉換為 **(not, 非前置條件)**，來產生不符合前置條件的 CLG。
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/7.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/7.png){:height="100%" width="100%"}
 
 > 上圖是一個不符合 Pre-condition 的 Triangle，可以看到所有的條件判斷都是相反的
 
@@ -409,14 +409,14 @@ pre:
 **not operation** 則透過 [De Morgan's laws] 來拆解，下表是針對 Operation 而定義出的 DeOperation:
 
 <div align="center">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/11.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/11.png" 
     width="55%" height="55%">
 </div>
 
 如果有 `exp1 and exp2` 做 not 運算，則會變成 `(not (exp1)) or (not (exp2))`，上表的可靠性可以透過真值表來做驗證:
 
 <div align="center">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/12.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/12.png" 
     width="62%" height="62%">
 </div>
 
@@ -450,7 +450,7 @@ pre Constraint_Name_2 :
 
 CLG 的做法就是找出待測 Function 的 Pre/Post-Condition 的集合。
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/8.png){:height="90%" width="90%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/8.png){:height="90%" width="90%"}
 
 ##### 3.4 Definition of Constraint logic graph
 
@@ -473,14 +473,14 @@ CLG 的做法就是找出待測 Function 的 Pre/Post-Condition 的集合。
 如果這顆樹沒有分支就代表該樹下的所有節點都產生在同一個 CLG 限制節點內，如下圖:
 
 <div align="center">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/9.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/9.png" 
     width="35%" height="35%">
 </div>
 
 在這之後的討論會以三種不同的 Covaerage criteria 與會產生分支的運算式來做討論，下表說明什麼運算式會產生分支:
 
 <div align="center">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/6.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/6.png" 
     width="53%" height="53%">
 </div>
 
@@ -521,7 +521,7 @@ ifCLG(
 }
 ```
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/10.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/10.png){:height="100%" width="100%"}
 
 > 上圖是 IfExp AST & CLG 的轉換對照圖
 
@@ -538,7 +538,7 @@ ifCLG(
 
 > 前綴 # 代表是作者創造的變數，後面的數字是為了區分是第幾個 Iterate 的運算式
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/13.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/13.png){:height="100%" width="100%"}
 
 > 上圖是 IterateExp AST & CLG 的轉換對照圖
 
@@ -549,21 +549,21 @@ ifCLG(
 
 以下是一個 Triangle 的前置條件 AST 符合 Pre-Condition CLG 的結果，並且之後的測試覆蓋標準都會以 Triangle 為例:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/14.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/14.png){:height="100%" width="100%"}
 
 以下是符合/不符合 Pre-condition 的兩種 CLG:
 
 DC 中不符合 Pre-condition 的 CLG 會將所有的運算式做 DeOperation，並且在 DC 中不會展開 Boolean(or) 運算式，因此只會有一條路徑:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/15.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/15.png){:height="100%" width="100%"}
 
 而符合 Pre-condition 的 CLG 中 Boolean(and) 在 DC 標準中也不會展開因此只會有 Pre-condition 的限制式與 Post-condition 的限制式:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/16.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/16.png){:height="100%" width="100%"}
 
 Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/17.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/17.png){:height="100%" width="100%"}
 
 ##### 3.5.2 Decision condition coverage
 
@@ -577,9 +577,9 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 並且根據 DCC 的定義，至少有一次的 True 與 False，因此會如下圖所示:
 
 <div style="display: flex; justify-content: center;">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/18.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/18.png" 
     width="35%" height="35%">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/19.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/19.png" 
     width="35%" height="35%">
 </div>
 
@@ -589,9 +589,9 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 -   implies 運算式為 Exp1 implies Exp2，視作 (not exp1) or exp2
 
 <div style="display: flex; justify-content: center;">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/20.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/20.png" 
     width="35%" height="35%">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/21.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/21.png" 
     width="35%" height="35%">
 </div>
 
@@ -599,15 +599,15 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 以下是一個 Triangle 的前置條件 AST 不符合 Pre-Condition CLG 的結果，因為 DCC 需要展開 Boolean(or) 運算式，因此不符合 Pre-condition 的 CLG 需要展開:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/7.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/7.png){:height="100%" width="100%"}
 
 每遇到一次 or 產生一個條件為假其餘為真的路徑，而 AST 共有六個 or 運算式，因此 CLG 會有六條路徑，如下圖:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/22.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/22.png){:height="100%" width="100%"}
 
 而在使用 DCC 時產生的符合 Pre-condition 的 CLG，因為前置條件皆為 and 故只有一條明顯路徑:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/23.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/23.png){:height="100%" width="100%"}
 
 ##### 3.5.3 Multiple condition coverage
 
@@ -618,7 +618,7 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 -   因此在真值表中可以發現 Exp1 or Exp2 一共會有三種可能讓此運算式為真，因此 CLG 會如下圖:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/24.png){:height="85%" width="85%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/24.png){:height="85%" width="85%"}
 
 **DCC Example of Triangle:**
 
@@ -635,7 +635,7 @@ Triangle::category 因為只有 Post-condition 故沒有接其他限制邏輯圖
 
 這裡描述如何將 CLG 中的等價行為做分割，也就是從 CLG 中分割出不同的 Complete Path，產生測試路徑的架構圖如下:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/28.png){:height="85%" width="85%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/28.png){:height="85%" width="85%"}
 
 當滿足以下兩個條件的其中一個，路徑條列就會結束:
 1.  可實行路徑組滿足覆蓋標準
@@ -685,9 +685,9 @@ FeasiblePathFinder(CoverageCriterion criterion, CLGNode graph, Model model)
 透過邊界值理論，對於 Path 中的每個限制式都視做 Domain 的一條邊界，透過呼叫 getBoundaryCombinationVariants() 產生符合的路徑如下:
 
 <div style="display: flex; justify-content: center;">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/29.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/29.png" 
     width="30%" height="30%">
-    <img src="../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/30.png" 
+    <img src="/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/30.png" 
     width="30%" height="30%">
 </div>
 
@@ -715,7 +715,7 @@ self.sideC = self.sideC
 
 因為 CLP 中每個變數都只能有一個值，因此遇到迴圈時就需要另外處理變數名稱，例如以下的例子:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/31.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/31.png){:height="100%" width="100%"}
 
 每次迭代就在後面加上數字代表這次迭代的變數，並將其收集就能知道一次迭代上的所有限制式。
 
@@ -790,7 +790,7 @@ Set<List<CLGNode>> feasible_path; //已走訪過可實行路徑
 
 Triangle 在 DC 測試標準下符合 Pre-condition 的測試資料只有一條，如下:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/16.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/16.png){:height="100%" width="100%"}
 
 | Path | Parameter | Return value | Post-condition |
 | :---: | :---: | :---: | :---: |
@@ -798,7 +798,7 @@ Triangle 在 DC 測試標準下符合 Pre-condition 的測試資料只有一條�
 
 Triangle 在 DC 測試標準下不符合 Pre-condition 的測試資料會有，但是在 Boundary value finder 上會把 or 做展開，因此會有七條路徑，如下:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/15.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/15.png){:height="100%" width="100%"}
 
 | Path | Parameter | Execption |
 | :---: | :---: | :---: |
@@ -834,11 +834,11 @@ Class info 分別代表: Class Num, Association Num, Function Num, Can be excpti
 
 然後分別展示三種 Coverage Criteria 的產生結果，主要分別討論符合/不符合 Pre-condition 的產生結果:
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/25.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/25.png){:height="100%" width="100%"}
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/26.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/26.png){:height="100%" width="100%"}
 
-![](../assets/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/27.png){:height="100%" width="100%"}
+![](/image/2023/09-07-test_case_generation_based_on_constraint_logic_graph/27.png){:height="100%" width="100%"}
 
 就跟預料的一樣所花費時間 DC > DCC > MCC
 -   Date 是花費時間最長的範例，因為 Date 中有更多的 if, or 運算式

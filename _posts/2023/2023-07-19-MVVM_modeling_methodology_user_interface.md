@@ -68,7 +68,7 @@ MDA 將重點放在正向工程(forward engineering)上，從抽象的、人工�
 
 這裡使用該研究方法論步驟來進行論文之研究，其內容為下:
 
-![](../assets/image/2023/07-19-MVVM_modeling_methodology_user_interface/1.png){:height="75%" width="75%"}
+![](/image/2023/07-19-MVVM_modeling_methodology_user_interface/1.png){:height="75%" width="75%"}
 > Peffers, K., Tuunanen, T., Rothenberger, M. A., and Chatterjee, S., A Design Science Research Methodology for Information Systems Research
 
 **3.2 Research Method and Step**

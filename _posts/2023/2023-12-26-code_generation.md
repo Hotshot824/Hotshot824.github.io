@@ -60,7 +60,7 @@ MOV #1, R0      /* 2 words */
 
 假如有一個 a := b + c 的原始碼，這裡有不同種類的指令可以選擇:
 
-![](../assets/image/2023/12-26-code_generation/1.png){:height="100%" width="100%"}
+![](/image/2023/12-26-code_generation/1.png){:height="100%" width="100%"}
 
 1.  搬移到 Reg 再運算，成本是 2 + 2 + 2 = 6
 2.  直接以記憶體地址運算，成本是 3 + 3 = 6
@@ -103,9 +103,9 @@ MOV #1, R0      /* 2 words */
 
 **Example:**
 
-![](../assets/image/2023/12-26-code_generation/2.png){:height="100%" width="100%"}
+![](/image/2023/12-26-code_generation/2.png){:height="100%" width="100%"}
 
-![](../assets/image/2023/12-26-code_generation/3.png){:height="100%" width="100%"}
+![](/image/2023/12-26-code_generation/3.png){:height="100%" width="100%"}
 
 
 

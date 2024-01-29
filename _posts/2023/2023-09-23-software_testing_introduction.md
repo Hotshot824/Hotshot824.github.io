@@ -55,7 +55,7 @@ Software testing 是執行一組測試案例(Test Case) 的行為，以便能夠
 -   每個 Test case 都設計來檢查程序的某種特定功能或行為
 
 <div align="center">
-  <img src="../assets/image/2023/09-23-software_testing_introduction/1.png"  
+  <img src="/image/2023/09-23-software_testing_introduction/1.png"  
   width="75%" height="75%">
 </div>
 
@@ -75,9 +75,9 @@ Carefully made programs have 5 faults per 1000 lines of code (LOC). Windows XP h
 但是在進行 Testing 前應該要先了解 Testing 到底在測試什麼? Test case 理想的狀況下應該是 Specification ∪ Implementation 的範圍，這樣就能找出所有不合規範的 Fault。
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-23-software_testing_introduction/2.png" 
+    <img src="/image/2023/09-23-software_testing_introduction/2.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-23-software_testing_introduction/3.png" 
+    <img src="/image/2023/09-23-software_testing_introduction/3.png" 
     width="50%" height="50%">
 </div>
 
@@ -91,7 +91,7 @@ Carefully made programs have 5 faults per 1000 lines of code (LOC). Windows XP h
 **Test case execution**: 輸入 Input 至 Software 後得到 Expected output 與 Output 進行比對來決定是 Incident/Correct
 
 <div align="center">
-  <img src="../assets/image/2023/09-23-software_testing_introduction/4.png"  
+  <img src="/image/2023/09-23-software_testing_introduction/4.png"  
   width="50%" height="50%">
 </div>
 
@@ -107,9 +107,9 @@ Carefully made programs have 5 faults per 1000 lines of code (LOC). Windows XP h
 -   因此兩種方法都不足夠，只有兩種方法都使用才能盡可能的覆蓋 Specification ∪ Implementation
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-23-software_testing_introduction/5.png" 
+    <img src="/image/2023/09-23-software_testing_introduction/5.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-23-software_testing_introduction/6.png" 
+    <img src="/image/2023/09-23-software_testing_introduction/6.png" 
     width="50%" height="50%">
 </div>
 
@@ -159,7 +159,7 @@ Regression testing 也具有一些挑戰:
 每一個階段都有其特定的目標和重點，且需要根據具體情況來選擇最適合的策略和方法2。
 
 <div align="center">
-  <img src="../assets/image/2023/09-23-software_testing_introduction/7.png"  
+  <img src="/image/2023/09-23-software_testing_introduction/7.png"  
   width="75%" height="75%">
 </div>
 
@@ -179,7 +179,7 @@ Regression testing 也具有一些挑戰:
     -   External failure costs(外部失敗成本): 包括修正客戶或維護團隊在軟體系統安裝後檢測到的所有失敗的成本
 
 <div align="center">
-  <img src="../assets/image/2023/09-23-software_testing_introduction/8.png"  
+  <img src="/image/2023/09-23-software_testing_introduction/8.png"  
   width="75%" height="75%">
 </div>
 

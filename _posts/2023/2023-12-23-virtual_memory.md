@@ -57,7 +57,7 @@ tags: [OS]
 
 > 下圖是 Virtual Memory 中會需要的組件
 
-![](../assets/image/2023/12-23-virtual_memory/1.png){:height="100%" width="100%"}
+![](/image/2023/12-23-virtual_memory/1.png){:height="100%" width="100%"}
 
 -   Hardware table(Page table)
     -   這部分由 OS 來寫入硬體所設計的表格，由 MMU 來讀取，例如: x86 定義表格，Linux 依照 x86 的定義來實作
@@ -74,7 +74,7 @@ tags: [OS]
 
 ##### 8.3 Shard Memory
 
-![](../assets/image/2023/12-23-virtual_memory/2.png){:height="75%" width="75%"}
+![](/image/2023/12-23-virtual_memory/2.png){:height="75%" width="75%"}
 
 -   stack, heap 這部分是程式自己獨有的
 -   黑色的部分是共享的:
@@ -118,7 +118,7 @@ tags: [OS]
 -   除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
     -   例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入
 
-![](../assets/image/2023/12-23-virtual_memory/3.png){:height="75%" width="75%"}
+![](/image/2023/12-23-virtual_memory/3.png){:height="75%" width="75%"}
 
 > ##### Last Edit
 > 12-19-2023 16:03

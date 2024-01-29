@@ -20,9 +20,9 @@ tags: [OS]
 -   在這個過程中如果不確定的選項就直接按 Enter 就好，這樣就會使用預設的選項
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2024/01-05-debian_btrfs/1.png"
+    <img src="/image/2024/01-05-debian_btrfs/1.png"
     width="50%" height="50%">
-    <img src="../assets/image/2024/01-05-debian_btrfs/2.png"
+    <img src="/image/2024/01-05-debian_btrfs/2.png"
     width="50%" height="50%">
 </div>
 
@@ -43,9 +43,9 @@ tags: [OS]
 分割好之後 alt + F2 進入 console，先 df -h 查看一下目前的狀況
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2024/01-05-debian_btrfs/3.png"
+    <img src="/image/2024/01-05-debian_btrfs/3.png"
     width="50%" height="50%">
-    <img src="../assets/image/2024/01-05-debian_btrfs/4.png"
+    <img src="/image/2024/01-05-debian_btrfs/4.png"
     width="50%" height="50%">
 </div>
 

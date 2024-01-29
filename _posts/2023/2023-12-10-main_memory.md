@@ -41,14 +41,14 @@ BIOS 雖然不需要電力就能保存，但是通常速度會比 DRAM 慢，所
 
 > 下圖是如果記憶體只有 256MB 或 512MB 的 Memory Layout，在 32-bit 的 CPU 中，最多只能使用 4G 的定址空間
 
-![](../assets/image/2023/12-10-main_memory/1.png)
+![](/image/2023/12-10-main_memory/1.png)
 
 -   DRAM 之外的空間就是 MMIO，這部分的空間通常只能透過 Kernel 存取
 -   注意到他把 BIOS 映射到最上層的位置，這樣 BIOS 就不會去占用 DRAM 的定址空間
 
 > 延伸閱讀: [System address map initialization in x86/x64 architecture part 1: PCI-based systems]
 
-![](../assets/image/2023/12-10-main_memory/2.png){:height="75%" width="75%"}
+![](/image/2023/12-10-main_memory/2.png){:height="75%" width="75%"}
 
 -   假如一個 4G 定址空間的機器裝上 4G 的 DRAM，那麼扣除 PCI 的空間後，只會剩下 3.25G 的空間可用
 -   最好的解決方式就是邁入 64-bit 的時代，不只解決了 Memory address 的問題，也解決了檔案不能超過 2G 的問題
@@ -171,7 +171,7 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 這裡說明 Program 在記憶體中的配置，以及他們的用途這部分就不多做介紹了，可以參考下圖。OS 在這裡的任務就是將執行檔從儲存裝置中載入到 Memory 中，配置好執行的環境。
 
-![](../assets/image/2023/12-10-main_memory/3.png){:height="75%" width="75%"}
+![](/image/2023/12-10-main_memory/3.png){:height="75%" width="75%"}
 
 > 如果想觀察 Kernel 的 code, data, bss section 可以使用 `cat /proc/kallsyms`，但是需要 root 權限
 
@@ -182,7 +182,7 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 > 例如: x86 的 ds. fs. gs. 三個 data 的 segmentation，其中 fs. gs. 是額外的 data seg.
 
-![](../assets/image/2023/12-10-main_memory/4.png){:height="75%" width="75%"}
+![](/image/2023/12-10-main_memory/4.png){:height="75%" width="75%"}
 
 同一個程式的 seg. 可以在 Physical memory 中不連續，這樣可以更有效率的使用記憶體，但是這樣就有可能產生 Fragmentation Problem(碎片化問題)。
 
@@ -223,7 +223,7 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 > 下圖是一個程式從 CPU 使用 Virtual address 到 Physical address 的過程，其中 OS 會透過 Mapping Table 來做轉換，
 > 實際上這樣的轉換是在 CPU 中完成的，是已經設計好的硬體線路
 
-![](../assets/image/2023/12-10-main_memory/5.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/5.png){:height="100%" width="100%"}
 
 可以看到表格中會有 Vir. address, Phy. address 的對應，與屬性權限等等，如果 Context switch 的時候，OS 只需要切換這個 Page Table 就可以了。
 
@@ -292,7 +292,7 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 實際上 MMU 會建立在 CPU 內部，下面是一個簡單的架構表示 CPU 中 MMU, Address decoder, DRAM 之間的關係:
 
-![](../assets/image/2023/12-10-main_memory/6.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/6.png){:height="100%" width="100%"}
 
 -   L1 Cache 與 MMU 誰在前誰在後，取決於 CPU 的設計
     -   要注意的是 L1 Cache 如果在 MMU 前面 Context switch 的時候，就要把 L1 Cache 清空
@@ -312,7 +312,7 @@ MiB Swap:    953.0 total,    953.0 free,      0.0 used.   7582.3 avail Mem
 
 其實 TLB([Translation Lookaside Buffer]) 就是一個在 CPU 中的高速 Buffer(SRAM)，把 MMU 的 Page Table 存放在 TLB 中，利用這種方式可以加速地址轉換的速度。
 
-![](../assets/image/2023/12-10-main_memory/7.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/7.png){:height="100%" width="100%"}
 
 -   p(page number): 程式在 Logical address 中的 Page number
 -   f(frame number): 實際在 Physical address 中的 Page number
@@ -371,11 +371,11 @@ Main Memory 足夠放入所有的 TLB entries，但是這部分應該要由 Hard
 這裡就使用一種 Hierarchical Paging(階層式分頁)的方式來解決這個問題，一個 4KB 大小的 Page 可以管理 1024 entries，第二層也是以 4KB 還分層管理，
 這樣兩層就能放入 1024 * 1024 = 1M 個 entries，這樣就能解決上面的問題。
 
-![](../assets/image/2023/12-10-main_memory/8.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/8.png){:height="100%" width="100%"}
 
 這樣的話定址的格式就會改成以下的格式:
 
-![](../assets/image/2023/12-10-main_memory/9.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/9.png){:height="100%" width="100%"}
 
 -   LV1 PTE(Level 1 Page Table Entry): 第一層的 Page Table Index
 -   LV2 PTE(Level 2 Page Table Entry): 第二層的 Page Table Index
@@ -394,7 +394,7 @@ Main Memory 足夠放入所有的 TLB entries，但是這部分應該要由 Hard
 
 下圖是一個簡單的架構表示如何處理 TLB Miss:
 
-![](../assets/image/2023/12-10-main_memory/10.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/10.png){:height="100%" width="100%"}
 
 1.  首先 CPU 會先去 TLB Search，TLB 中沒有的話就會觸發 TLB Miss
 2.  PTBR 會記錄 LV1 Page Table 的 Physical address，以供 CPU 找到 LV1 Page Table
@@ -453,7 +453,7 @@ User space 的部分就會使用 4KB 的 Page，這裡要討論的是 malloc 怎
 > 下圖展示一個作業系統的記憶體分配架構，怎麼初始化到分配記憶體給 Task 使用
 {: .block-tip }
 
-![](../assets/image/2023/12-10-main_memory/11.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/11.png){:height="100%" width="100%"}
 
 在這個架構之下這裡要討論的是:
 1.  Kernel 如何管理分配 Frame
@@ -484,7 +484,7 @@ Kernel 透過 MMU 的機制，可以把記憶體都視為 4KB 大小的 Page(Fra
 假設在分配時，kernel 已經知道有一塊 2M 的連續記憶體可以分配，並且 task 也可以用掉這 2M 的記憶體就可以直接分配這 2M 給 task 使用，
 同時保持記憶體的連續性，可以使 MMU 做更有效率的優化。
 
-![](../assets/image/2023/12-10-main_memory/12.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/12.png){:height="100%" width="100%"}
 
 在上面這個例子中，我們假設 kernel 已經知道有 32 個 frame 可以分配，藍色的部分代表已經被使用的 frame:
 -   合併的條件是來自相同的 parent
@@ -510,7 +510,7 @@ Kernel 透過 MMU 的機制，可以把記憶體都視為 4KB 大小的 Page(Fra
 -   slab allocator 是由很多個不同大小的 cache 組成，這些 cache 通常是為了分配特定 object 的大小
     -   例如: 在 Linux kernel 中 task_struct 大約只需要 1.7KB 就可以使用一個 cache 來服務這個 object
 
-![](../assets/image/2023/12-10-main_memory/13.png){:height="100%" width="100%"}
+![](/image/2023/12-10-main_memory/13.png){:height="100%" width="100%"}
 
 -   cache 中使用三種 list 來管理: full, partial, free 
 

@@ -57,14 +57,14 @@ tags: [OS]
         -   讀取 4kb 和讀取 16kb 的速度是一樣的，那乾脆一次從 cache 讀取 16kb
         -   OS 會把相關的資料放在 cache，這樣下次讀取就可以直接從 cache 讀取，而不用再次讀取 Disk
 
-![](../assets/image/2023/10-18-process_thread/1.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/1.png){:height="100%" width="100%"}
 
 **When Multi-Process running, what does the memory look like to users/programmers**
 
 這裡只討論 User space，一次只會執行一個 Process 這三個 Proces 各自有完整的 user space，當 Context switch 時除了 CPU 控制權會被交換外，
 也會重新進行 Memory mapping(修改 MMU 的 mapping table)
 
-![](../assets/image/2023/10-18-process_thread/2.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/2.png){:height="100%" width="100%"}
 
 **Internal memory configuration method of the Process**
 
@@ -76,7 +76,7 @@ tags: [OS]
 -   Dynamic memory allocation: 在 Heap 中分配
 -   Program code: 在 Text section 分配，例如 Main, malloc function 的指令
 
-![](../assets/image/2023/10-18-process_thread/3.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/3.png){:height="100%" width="100%"}
 
 > 通常 OS 一次會給 4096(4K) 大小的 Memory，並且會清空，這樣就不會有安全性問題，但寫程式時最好只預設 BSS 段的值會是 0，例如 Stack 可能會因為因為 Call/Return 的關係，而有一些不可預期的值。
 > 但即使這樣也盡量要給予初始值，例如: int a = 0;，減少不可預期的錯誤發生
@@ -103,7 +103,7 @@ Linux Kernel 透過 task_struct, mm_struct, vm_area_struct 來管理 Process 的
 -   vm_area_struct: 描述該 area 相關的資訊，例如: 該 area 的起始位置、大小、權限等等
     -   例如除了 Text area 是可 Read, Execute(rx)，其他的 area 都是可 Read, Write(rw)
 
-![](../assets/image/2023/10-18-process_thread/4.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/4.png){:height="100%" width="100%"}
 
 **Example: Lab main.c**
 
@@ -132,7 +132,7 @@ a=0x55d00a135010, b=0x55d00a135018, c=0x7ffe4cb7e4b8, d=0x7ffe4cb7e4bc, *e=0x55d
 
 然後在 /proc/<pid>/maps 中可以看到該 Process 的 Memory configuration:
 
-![](../assets/image/2023/10-18-process_thread/5.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/5.png){:height="100%" width="100%"}
 
 **Address space layout randomization**
 
@@ -163,7 +163,7 @@ a=0x55d00a135010, b=0x55d00a135018, c=0x7ffe4cb7e4b8, d=0x7ffe4cb7e4bc, *e=0x55d
 
 下面是一個 Unix Process Life Cycle，但在這裡加入了一些 Linux 的觀念
 
-![](../assets/image/2023/10-18-process_thread/6.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/6.png){:height="100%" width="100%"}
 
 **Parent Process** 通常是 Shell，透過 fork() 產生 Child Process
 1.  **Ready queue**: 當一個新的 Process 產生會進入 Ready Queue，等待 CPU 資源
@@ -235,7 +235,7 @@ Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Sche
 -   **Short-term Scheduler**: CPU Scheduler
     -   大部分的 OS 只有 CPU Scheduler，針對各種事件有專屬的 Waiting Queue，例如: 例如 I/O, Semaphore
 
-![](../assets/image/2023/10-18-process_thread/7.png){:height="75%" width="75%"}
+![](/image/2023/10-18-process_thread/7.png){:height="75%" width="75%"}
 
 > thrashing(輾轉現象) 指的是當虛擬記憶體被使用過度，導致大部分的工作在處理 Page fault 所造成的 Page Replacement，這樣就會造成 CPU 效能下降
 {: .block-tip }
@@ -251,7 +251,7 @@ Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Sche
 3.  載入 TaskB 的資訊
 4.  最後 TaskB Mode change 到 User mode
 
-![](../assets/image/2023/10-18-process_thread/8.png){:height="75%" width="75%"}
+![](/image/2023/10-18-process_thread/8.png){:height="75%" width="75%"}
 
 > Scheduler 也就是策略的部分主要是用 C 寫的，但切換的部分是用 Assembly 寫的，因為要直接操作 Register
 {: .block-tip }
@@ -266,7 +266,7 @@ Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Sche
 -   如果可以選擇的話，讓系統中同時存在 I/O Bound process 與 CPU Bound process，可以讓系統的效率最大化
 -   通常 I/O Bound 的優先權比較高，因為趕快讓 CPU 發出命令給 I/O device，然後就可以去執行其他的 Task
 
-![](../assets/image/2023/10-18-process_thread/9.png){:height="50%" width="50%"}
+![](/image/2023/10-18-process_thread/9.png){:height="50%" width="50%"}
 
 > I/O Bound 通常只需要一小部分的 CPU 資源，如果設定成 CPU Bound 優先權較高，反而會造成 I/O Bound 的 Task 在結束一段 I/O 後還要等待 CPU Bound 的 Task 結束
 > 造成 CPU 使用率下降
@@ -291,7 +291,7 @@ Scheduler 不是只有 CPU Scheduler，還有 Long-term Scheduler, Mid-term Sche
 2.  child process 透過 execve() 去執行 ls
 3.  ls 執行完後，透過 exit() 結束，回到 parent process
 
-![](../assets/image/2023/10-18-process_thread/10.png){:height="50%" width="50%"}
+![](/image/2023/10-18-process_thread/10.png){:height="50%" width="50%"}
 
 ##### 3.9 Process Termination
 
@@ -393,14 +393,14 @@ Feature
 -   要注意這裡是 Physical memory，但在 Process 中是不同的 Logical address
 -   在 Linux 上可以透過 mmap() 來建立 Shared memory
 
-![](../assets/image/2023/10-18-process_thread/11.png){:height="50%" width="50%"}
+![](/image/2023/10-18-process_thread/11.png){:height="50%" width="50%"}
 
 **Message Passing**
 
 -   在 Process A 時呼叫 Kernel copy 資料到 Kernel space
 -   Context switch 到 Process B 時，Kernel 再將資料 copy 到 Process B 的 Memory
 
-![](../assets/image/2023/10-18-process_thread/12.png){:height="50%" width="50%"}
+![](/image/2023/10-18-process_thread/12.png){:height="50%" width="50%"}
 
 ### Producer-Consumer problem
 
@@ -433,7 +433,7 @@ The overhead of context-switch
 -   Cache 是否支援 **ASID** (Address Space Identifier)
     -   在 TLB 中加入一個 Process ID，只有當 ASID 與 Page number 都相同時，才會 Hit
 
-![](../assets/image/2023/10-18-process_thread/13.png){:height="40%" width="40%"}
+![](/image/2023/10-18-process_thread/13.png){:height="40%" width="40%"}
 
 ##### 3.13 Thread memory
 
@@ -446,7 +446,7 @@ The overhead of context-switch
 同樣的 Thread 之間也會有各自的 Local variable，這些 Local variable 會放在 Thread Local Storage 中，
 這是由 Compiler 來設計的，讓每個 TLS 偏移量都不一樣，這樣就能讓 Thread 存取自己的 Local variable。
 
-![](../assets/image/2023/10-18-process_thread/14.png){:height="75%" width="75%"}
+![](/image/2023/10-18-process_thread/14.png){:height="75%" width="75%"}
 
 ##### 3.14 Thread history
 
@@ -459,7 +459,7 @@ The overhead of context-switch
 多對一就是兩個 Thread 共用一個 PCB，這樣的話如果其中一個 Thread 跑去做 I/O 的話，那整個 Process 就會被 Block，這樣就會造成整個 Process 都被 Block。
 同時由於 OS 不會知道 PCB 上的是兩個 Thread，所以無法再多核心上執行，這樣就會造成效能的下降。
 
-![](../assets/image/2023/10-18-process_thread/15.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/15.png){:height="100%" width="100%"}
 
 > **Green thread**
 > Green thread 是為了在底層的 OS 不支援 Thread 的情況下，透過 Library 來模擬 Thread 的行為，但這樣就只能使用 Many to One 的模型，例如: Java 的 Thread
@@ -472,7 +472,7 @@ The overhead of context-switch
 通常是最多 OS 使用的 Model，每個 Thread 都有自己的 PCB，要透過 Memory control block 來判斷是 Thread 還是 Process，
 如果共用 Memory control block 的話，那就判定他是一個 Thread。
 
-![](../assets/image/2023/10-18-process_thread/16.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/16.png){:height="100%" width="100%"}
 
 -   由於每個 Thread 都有自己的 PCB，所以可以在多核心上執行
 -   大部分都是 Non-blocking，所以在處理 Block 的任務上會很有彈性
@@ -482,7 +482,7 @@ The overhead of context-switch
 上面的稱作 User thread，下面稱作 Kernel thread，對應的方式有很多種，例如下圖代表上面的 User thread 可以同時發出同等 Kernel thread 數量的 System call，
 但缺點是非常複雜並寫不好寫，並且不易理解，讓程式設計者很難進行優化。
 
-![](../assets/image/2023/10-18-process_thread/17.png){:height="100%" width="100%"}
+![](/image/2023/10-18-process_thread/17.png){:height="100%" width="100%"}
 
 -   看起來是最有彈性的 Thread
 -   Sun Solaris 9 之前支援 Many to Many Model
