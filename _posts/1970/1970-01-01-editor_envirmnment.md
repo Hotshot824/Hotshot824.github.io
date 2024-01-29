@@ -13,7 +13,7 @@ tags: [tool]
 ##### [VScode for Java]
 
 Add Java jdk in vscode in `setting.json`
-```json
+```
 "java.configuration.runtimes": [
     {
         "name": "JavaSE-17",
@@ -35,7 +35,7 @@ on -> off
 
 -   Install `gdb` in Linux
 
-```json
+```
 {
     "name": "C++ Launch",
     "type": "cppdbg",

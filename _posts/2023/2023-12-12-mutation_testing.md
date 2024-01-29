@@ -21,7 +21,7 @@ tags: [software, software_qualitiy]
 突變測試會去產生一組原程式的缺陷版本，這些缺陷版本被稱為突變體(mutant)，每個突變體都只包含一個簡單的錯誤，
 通常是針對程式的一些運算子做修改，讓他與原程式不同造成錯誤。
 
-![](../assets/image/2023/12-12-mutation_testing/1.png)
+![](/image/2023/12-12-mutation_testing/1.png)
 
 > 上圖是一個突變的範例，把 `>` 改成 `<`, `>=`, `<=`, `==`, `!=` 這樣就產生了五個突變體
 
@@ -146,7 +146,7 @@ UOI: unary operator insertion
 -   N-Selective Mutation(N-選擇性突變): 忽略最常導致突變體產生的 N 個 Operator
     -   像是 Mothra 來說就省略了 SVR、ASR 兩種 Operator
 
-![](../assets/image/2023/12-12-mutation_testing/2.png)
+![](/image/2023/12-12-mutation_testing/2.png)
 
 > SVR、ASR 兩種 Operator 是會產生最多突變體的前兩名 Operator
 
@@ -162,9 +162,9 @@ UOI: unary operator insertion
 來自 [An experimental determination of sufficient mutant operators] 的實驗結果，它們使用多個程式來進行突變，並在之後比較四種不同的突變方法:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/12-12-mutation_testing/3.png" 
+    <img src="/image/2023/12-12-mutation_testing/3.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/12-12-mutation_testing/4.png" 
+    <img src="/image/2023/12-12-mutation_testing/4.png" 
     width="50%" height="50%">
 </div>
 

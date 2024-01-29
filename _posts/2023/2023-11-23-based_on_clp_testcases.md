@@ -45,9 +45,9 @@ post:
 以此建立 OCL 後將會得到以下四條路徑，並收集路徑上的限制式(Constraint)來編寫 CLP:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/10.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/3.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/3.png" 
     width="50%" height="50%">
 </div>
 

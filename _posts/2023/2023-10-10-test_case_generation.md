@@ -58,7 +58,7 @@ $2^{32} + 2^{32} + 2^{32} = 2^{96}$
 -   If an input constraint specifies a range of values (e.g., the count can be from 1 to 999), 
 it identifies one valid equivalence class (1 ≤ count ≤ 999) and two invalid equivalence classes (count < 1 and count > 999)
 
-![](../assets/image/2023/10-10-test_case_generation/1.png){:height="75%" width="75%"}
+![](/image/2023/10-10-test_case_generation/1.png){:height="75%" width="75%"}
 
 ##### 3.1.2 Partitioning Equivalence Classes
 
@@ -68,7 +68,7 @@ it identifies one valid equivalence class (1 ≤ count ≤ 999) and two invalid 
     -   Valid: 我們也可以把 `Y > 65` 跟 `Y <= 65` 區分開來，因為大於 65 歲的退休人士可能有不同的行為
     -   這樣我們就在 Invalid/Valid 中另外劃分了 2 個 Equivalence classes
 
-![](../assets/image/2023/10-10-test_case_generation/2.png){:height="75%" width="75%"}
+![](/image/2023/10-10-test_case_generation/2.png){:height="75%" width="75%"}
 
 **An Example:**
 *回到一元二次方程式為例，方程式的解取決於:*
@@ -78,7 +78,7 @@ $The\;equation\;has\;two\;different\;real\;roots\;if\;d>0$
 $The\;equation\;has\;two\;identical\;real\;roots\;if\;d=0.$  
 $The\;equation\;has\;no\;real\;root\;if\;d<0.$  
 
-![](../assets/image/2023/10-10-test_case_generation/3.png){:height="50%" width="50%"}
+![](/image/2023/10-10-test_case_generation/3.png){:height="50%" width="50%"}
 
 將一元二次方程式依照 Root 的情況劃分為三種 Equivalence class，這樣就能在這三種情況下挑選 `a, b, c` 的代表值
 
@@ -116,7 +116,7 @@ where "<" can also be replaced by other relational operators.
 
 **Test Case Candidates Reduction:** 下圖是一個減少 Test Case 的流程
 
-![](../assets/image/2023/10-10-test_case_generation/4.png){:height="50%" width="50%"}
+![](/image/2023/10-10-test_case_generation/4.png){:height="50%" width="50%"}
 
 ---
 
@@ -199,7 +199,7 @@ Weak N x 1 / 1 x 1 Strategy 都是一種用於邊界測試的策略，這裡會�
     -   0 是 **Close boundary**, Off point -1 位於外側
     -   20 是 **Open boundary**, Off point 20 位於內側
 
-![](../assets/image/2023/10-10-test_case_generation/5.png){:height="75%" width="75%"}
+![](/image/2023/10-10-test_case_generation/5.png){:height="75%" width="75%"}
 
 **Distance of the OFF Points**
 
@@ -236,7 +236,7 @@ Tax Rate:
 30%: x <= 100000000 (100000000~)
 ```
 
-![](../assets/image/2023/10-10-test_case_generation/6.png){:height="75%" width="75%"}
+![](/image/2023/10-10-test_case_generation/6.png){:height="75%" width="75%"}
 
 > 那如果假設一個 2D Sub-domain，並且四個邊都是封閉的，將會是 (2 + 1) * 4 + 1 = 13 個 Test Points，這裡忽略了與旁邊的 Sub-domain 重疊的點
 {: .block-danger }
@@ -257,23 +257,23 @@ Tax Rate:
     -   是否有多餘的邊界
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/7.png" 
+    <img src="/image/2023/10-10-test_case_generation/7.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/8.png" 
-    width="50%" height="50%">
-</div>
-
-<div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/9.png" 
-    width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/10.png" 
+    <img src="/image/2023/10-10-test_case_generation/8.png" 
     width="50%" height="50%">
 </div>
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/11.png" 
+    <img src="/image/2023/10-10-test_case_generation/9.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/12.png" 
+    <img src="/image/2023/10-10-test_case_generation/10.png" 
+    width="50%" height="50%">
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/10-10-test_case_generation/11.png" 
+    width="50%" height="50%">
+    <img src="/image/2023/10-10-test_case_generation/12.png" 
     width="50%" height="50%">
 </div>
 
@@ -288,21 +288,21 @@ Weak 1 x 1 Strategy 在每個邊界上只放置一個 On point 與一個 Off poi
 -   The OFF point is just **ε distance** from the ON point and perpendicular to the boundary.
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/13.png" 
+    <img src="/image/2023/10-10-test_case_generation/13.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/14.png" 
-    width="50%" height="50%">
-</div>
-
-<div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/15.png" 
-    width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/16.png" 
+    <img src="/image/2023/10-10-test_case_generation/14.png" 
     width="50%" height="50%">
 </div>
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/17.png" 
+    <img src="/image/2023/10-10-test_case_generation/15.png" 
+    width="50%" height="50%">
+    <img src="/image/2023/10-10-test_case_generation/16.png" 
+    width="50%" height="50%">
+</div>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/10-10-test_case_generation/17.png" 
     width="50%" height="50%">
 </div>
 
@@ -312,9 +312,9 @@ Weak 1 x 1 Strategy 在每個邊界上只放置一個 On point 與一個 Off poi
 下圖左右分別是 Weak N x 1 Strategy 和 Weak 1 x 1 Strategy:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/20.png" 
+    <img src="/image/2023/10-10-test_case_generation/20.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/21.png" 
+    <img src="/image/2023/10-10-test_case_generation/21.png" 
     width="50%" height="50%">
 </div>
 
@@ -351,9 +351,9 @@ Weak 1 x 1 Strategy 在每個邊界上只放置一個 On point 與一個 Off poi
 -   最常用的方法就是 **Table**(表格)或者 **OutLine**(大綱)
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-10-test_case_generation/18.png" 
+    <img src="/image/2023/10-10-test_case_generation/18.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-10-test_case_generation/19.png" 
+    <img src="/image/2023/10-10-test_case_generation/19.png" 
     width="50%" height="50%">
 </div>
 

@@ -5,7 +5,7 @@ permalink: /
 cover: ./assets/dinosaur.gif
 ---
 
-## Notes |  Software Dev | OS 
+## Notes |  Software Dev | OS
 
 Hi, I'm writing simple study notes here, mainly Golang Python Javascript.  
 Currently, I’m reading materials related to the Linux Kernel, Compiler, and Software testing.  

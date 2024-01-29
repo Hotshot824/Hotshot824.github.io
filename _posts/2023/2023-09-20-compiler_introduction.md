@@ -17,7 +17,7 @@ tags: [Compiler, OS]
 {: .block-danger }
 
 <div align="center">
-  <img src="../assets/image/2023/09-20-compiler_introduction/1.png" />
+  <img src="/image/2023/09-20-compiler_introduction/1.png" />
 </div>
 
 -   Human use **nature languages** to communicate with **each other**
@@ -28,9 +28,9 @@ tags: [Compiler, OS]
 廣義的說 Compiler 就是一個可以將一個 Language 翻譯成另一個 Language 的工具，同時 Compiler 的另一個重要功能是發現翻譯過程中 Original language 的錯誤。
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/2.png" 
+    <img src="/image/2023/09-20-compiler_introduction/2.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/3.png" 
+    <img src="/image/2023/09-20-compiler_introduction/3.png" 
     width="50%" height="50%">
 </div>
 
@@ -47,9 +47,9 @@ tags: [Compiler, OS]
 -	Synthesis(Back-End):  根據 Intermediate code 與 Symbol table 來建立目標程式
 
 <div style="display: flex; flex-direction: row; align-items: flex-end;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/4.png" 
+    <img src="/image/2023/09-20-compiler_introduction/4.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/5.png" 
+    <img src="/image/2023/09-20-compiler_introduction/5.png" 
     width="50%" height="50%">
 </div>
 
@@ -93,9 +93,9 @@ id1 = t3
 -	使用多層的 IR 可以使每層都專注在不同的目標上，這樣可以使編譯過程分隔後更易於模塊化
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/6.png" 
+    <img src="/image/2023/09-20-compiler_introduction/6.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/7.png" 
+    <img src="/image/2023/09-20-compiler_introduction/7.png" 
     width="50%" height="50%">
 </div>
 
@@ -167,9 +167,9 @@ STF id1, R1		// R1 的內容存入 id1 中
 對於 String 與 Language 有以下的基本運算:
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/8.png" 
+    <img src="/image/2023/09-20-compiler_introduction/8.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/9.png" 
+    <img src="/image/2023/09-20-compiler_introduction/9.png" 
     width="50%" height="50%">
 </div>
 
@@ -196,9 +196,9 @@ STF id1, R1		// R1 的內容存入 id1 中
 > 狀態機透過 State, Event, Output, Input 來達成如何精確地描述和處理可能無窮大的信息集合。
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/10.png" 
+    <img src="/image/2023/09-20-compiler_introduction/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/11.png" 
+    <img src="/image/2023/09-20-compiler_introduction/11.png" 
     width="50%" height="50%">
 </div>
 
@@ -226,9 +226,9 @@ STF id1, R1		// R1 的內容存入 id1 中
     -   **[Tree grammars]**: finite tree automata, code generator
 
 <div style="display: flex; flex-direction: row;">
-    <img src="../assets/image/2023/09-20-compiler_introduction/12.png" 
+    <img src="/image/2023/09-20-compiler_introduction/12.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/09-20-compiler_introduction/13.png" 
+    <img src="/image/2023/09-20-compiler_introduction/13.png" 
     width="50%" height="50%">
 </div>
 

@@ -40,7 +40,7 @@ tags: [software, software_qualitiy]
     -   **Merge**: 分支的合併點
 -   如果 Control 可以從 N<sub>1</sub> 到 N<sub>2</sub>，則存在一條從 N<sub>1</sub> 到 N<sub>2</sub> 的 Edge
 
-![](../assets/image/2023/11-25-method_level_structural_unit_testing/1.png){:height="75%" width="75%"}
+![](/image/2023/11-25-method_level_structural_unit_testing/1.png){:height="75%" width="75%"}
 
 **Test Input**
 
@@ -48,7 +48,7 @@ tags: [software, software_qualitiy]
     -   完整路徑: 一條從 Entry 到 Exit 的路徑
 -   測試覆蓋標準(Test coverage criterion) 衡量**一組測試輸入**對程式的覆蓋程度
 
-![](../assets/image/2023/11-25-method_level_structural_unit_testing/2.png){:height="75%" width="75%"}
+![](/image/2023/11-25-method_level_structural_unit_testing/2.png){:height="75%" width="75%"}
 
 > 假如有一個完整的 CFG 使用 BFS 會找出右邊的路徑，但要注意路徑並不代表一定能找出符合的測試輸入
 
@@ -61,9 +61,9 @@ tags: [software, software_qualitiy]
 簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/3.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/3.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/4.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/4.png" 
     width="50%" height="50%">
 </div>
 
@@ -74,9 +74,9 @@ tags: [software, software_qualitiy]
 -   如果一個 Path sensitization 有解就代表這條路徑是可行的
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/5.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/5.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/6.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/6.png" 
     width="50%" height="50%">
 </div>
 
@@ -100,9 +100,9 @@ tags: [software, software_qualitiy]
 如果能將 CFG 轉換成 CLG 就能更容易地透過 Graph algorithm 來找出 Path predicate expression
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/7.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/7.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/8.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/8.png" 
     width="50%" height="50%">
 </div>
 
@@ -169,7 +169,7 @@ for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not conta
 -   **Definition-clear loop-free path:** 所有 Node 都是不同的
     -   n<sub>m</sub> 必需是一個 p-use
 
-![](../assets/image/2023/11-25-method_level_structural_unit_testing/9.png){:height="75%" width="75%"}
+![](/image/2023/11-25-method_level_structural_unit_testing/9.png){:height="75%" width="75%"}
 
 上圖中的 (1, 2, 4) 是一條 DCSP，而 (1, 2, 3, 5) 是一條 DCLFP
 
@@ -209,9 +209,9 @@ for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not conta
     -   這裡以 All-Uses Coverage 為例，所以要找出可以覆蓋所有 Use 的 DU-Path
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/10.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/11.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/11.png" 
     width="50%" height="50%">
 </div>
 
@@ -224,9 +224,9 @@ for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not conta
 -   a: `definition: 4, 10`, `c-use: 11`, `p-use: none`
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/12.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/12.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-25-method_level_structural_unit_testing/13.png" 
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/13.png" 
     width="50%" height="50%">
 </div>
 

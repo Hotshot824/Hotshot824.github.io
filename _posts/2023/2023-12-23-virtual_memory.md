@@ -40,7 +40,8 @@ tags: [OS]
     -   如果我們啟動 Software 此時該 Software 所要存取的 Memory 根本不存在於 DRAM 中，就稱作為 Page fault，例如 Segmentation fault
 -   OS 設計者重新詮釋了 Page fault 的意義，例如:
     -   OS 暫時還沒把該 Page 載入到 DRAM 中，重新載入就好
-        -   例如: Execl 我可以不用一次把所有的功能都載入，等到使用者真的要使用到該功能時，再載入該功能就好
+        -   例如: Execl 假如有 500MB 的資料要放入 DRAM 中以供執行，但硬碟的讀取速度有他的極限例如 20MB/s，不可能每次執行 Execl 都要花 25 秒鐘去讀取資料
+        -   先把必要的程式碼放入 DRAM 就好，等使用者真的需要使用其他功能時再去載入該功能
     -   OS 讓不同的 Process 隱形共用內容相同的 Page
         -   唯讀，不會有任何問題發生，還可以減少記憶體使用量，例如: fork() 使用 Copy-on-write 的技術來實作
         -   寫入，OS 必須確保每個 Process 在邏輯上都有自己的 Page，例如: 即使 fork() 使用同一份 Memory，但是要確保程式的 Logic address 上是不同的
@@ -56,7 +57,7 @@ tags: [OS]
 
 > 下圖是 Virtual Memory 中會需要的組件
 
-![](../assets/image/2023/12-23-virtual_memory/1.png){:height="100%" width="100%"}
+![](/image/2023/12-23-virtual_memory/1.png){:height="100%" width="100%"}
 
 -   Hardware table(Page table)
     -   這部分由 OS 來寫入硬體所設計的表格，由 MMU 來讀取，例如: x86 定義表格，Linux 依照 x86 的定義來實作
@@ -73,7 +74,7 @@ tags: [OS]
 
 ##### 8.3 Shard Memory
 
-![](../assets/image/2023/12-23-virtual_memory/2.png){:height="75%" width="75%"}
+![](/image/2023/12-23-virtual_memory/2.png){:height="75%" width="75%"}
 
 -   stack, heap 這部分是程式自己獨有的
 -   黑色的部分是共享的:
@@ -117,7 +118,7 @@ tags: [OS]
 -   除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
     -   例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入
 
-![](../assets/image/2023/12-23-virtual_memory/3.png){:height="75%" width="75%"}
+![](/image/2023/12-23-virtual_memory/3.png){:height="75%" width="75%"}
 
 > ##### Last Edit
 > 12-19-2023 16:03

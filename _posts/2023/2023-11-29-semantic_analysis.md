@@ -29,7 +29,7 @@ tags: [Compiler]
 -   Interpreation of each construct
 -   Translation of each construct
 
-![](../assets/image/2023/11-29-semantic_analysis/1.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/1.png){:height="100%" width="100%"}
 
 ##### 5.1 Attribute Grammars
 
@@ -53,7 +53,7 @@ F -> digit      {F.val = digit.val}
 
 例如 `E -> E '+' T`，他的 Semantic rules 為 `E.val = E.val + T.val`，其中 `E.val` 與 `T.val` 為 Semantic attributes。
 
-![](../assets/image/2023/11-29-semantic_analysis/2.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/2.png){:height="100%" width="100%"}
 
 > 把 3 * 5 + 4 當作範例化成 Syntax Tree 將會如上圖所示
 
@@ -72,7 +72,7 @@ L -> { L1.in := L.in} L1 ',' id { addtype(id.entry, L1.in) }
 L -> { addtype(id.entry, L.in) }
 ```
 
-![](../assets/image/2023/11-29-semantic_analysis/3.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/3.png){:height="100%" width="100%"}
 
 **S-Attributed Attribute Grammar**  
 -   如果一個 Attribute Grammar 的每個 Attribute 都是 Synthesized attributes，則稱為 S-Attributed Attribute Grammar
@@ -97,7 +97,7 @@ A -> **{ Q.in := q(R.s) }** Q { R.in := r(A.in) } R { A.s := f(Q.s) }
 
 **Attribute Parse Tree**
 
-![](../assets/image/2023/11-29-semantic_analysis/4.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/4.png){:height="100%" width="100%"}
 
 這裡表示一種名為 Attribute Parse Tree(屬性解析樹)的資料結構，虛線的位置表示語意規則，實線的位置解析的語法規則。
 這樣整棵樹就能以一種 Preorder 的方式來計算出所有的 Semantic attributes。
@@ -109,7 +109,7 @@ T -> num **{ T.s := num.val }**
 R -> addop T **{ R<sub>1</sub>.i := R.i addop.lexeme T.s }** R<sub>1</sub> **{ R.s := R<sub>1</sub>.s }**  
 R -> ε **{ R.s := R.i }**  
 
-![](../assets/image/2023/11-29-semantic_analysis/5.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/5.png){:height="100%" width="100%"}
 
 > 上面是一個直譯的例子，最後在 Root 能求出 E.s 的值
 
@@ -169,7 +169,7 @@ Postfix Translation Scheme(後序翻譯方案)是一種用來描述語法規則�
 
 因為在 Bottom-Up 的過程中我們會有一個 Stack 紀錄已經解析過的 Token，因此我們也可以透過這個 Stack 來傳遞 Attribute。
 
-![](../assets/image/2023/11-29-semantic_analysis/8.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/8.png){:height="100%" width="100%"}
 
 -   假如有一個語法規則 A -> XYZ, { A.a := f(X.x, Y.y, Z.z) }
 -   如果要對這個語法規則做 Reduce，那麼 Stack 中必然已經存在依序的 XYZ
@@ -180,14 +180,14 @@ Postfix Translation Scheme(後序翻譯方案)是一種用來描述語法規則�
 
 這裡給出一個例子，實際上在 Bison 中使用時會有一些差異，但是大致上是相同的。
 
-![](../assets/image/2023/11-29-semantic_analysis/9.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/9.png){:height="100%" width="100%"}
 
 下圖是以這個例子來建立的例子
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/11-29-semantic_analysis/10.png"
+    <img src="/image/2023/11-29-semantic_analysis/10.png"
     width="50%" height="50%">
-    <img src="../assets/image/2023/11-29-semantic_analysis/11.png"
+    <img src="/image/2023/11-29-semantic_analysis/11.png"
     width="50%" height="50%">
 </div>
 
@@ -208,7 +208,7 @@ Postfix Translation Scheme(後序翻譯方案)是一種用來描述語法規則�
 而這裡會使用一種 Abstract Syntax Tree(抽象語法樹)來表示語法結構，這是一種 IR(Intermediate Representation, 中間表示法)，
 透過這個資料結構我們就能排除掉 Bottom-up 或 Top-down 的 Parser 的難點。
 
-![](../assets/image/2023/11-29-semantic_analysis/6.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/6.png){:height="100%" width="100%"}
 
 **Syntax Tree for Expression**
 
@@ -219,7 +219,7 @@ Postfix Translation Scheme(後序翻譯方案)是一種用來描述語法規則�
     -   mkleaf(id, entry)
     -   mkleaf(num, value)
 
-![](../assets/image/2023/11-29-semantic_analysis/7.png){:height="100%" width="100%"}
+![](/image/2023/11-29-semantic_analysis/7.png){:height="100%" width="100%"}
 
 > 上圖展示了一個 a - 4 + b 的 AST
 

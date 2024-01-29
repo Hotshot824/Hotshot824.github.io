@@ -149,7 +149,7 @@ NCSU(North Carolina State University) 的研究者在四家不同公司進行了
 -   使用 TDD 進行開發的控制組比對照組多通過 18% - 50% 的外部測試用例。
 -   同時使用 TDD 開發的除錯(debugging) 時間花費更少。
 
-![](../assets/image/2023/04-21-tdd_concepts/1.png){:height="100%" width="100%"}
+![](/image/2023/04-21-tdd_concepts/1.png){:height="100%" width="100%"}
 > Table 1 summarizes these studies and labels each experiment as either a case study or a controlled experiment.
 
 > [8] B. George and L. Williams, “A Structured Experiment of Test-Driven Development,” Information and Software Technology, vol. 46, no. 5, 2004, pp. 337-342.  
@@ -166,7 +166,7 @@ NCSU(North Carolina State University) 的研究者在四家不同公司進行了
 
 以上報告都相對較小，並且沒有或很少有具有 TDD 經驗的開發者參與。
 
-![](../assets/image/2023/04-21-tdd_concepts/2.png){:height="100%" width="100%"}
+![](/image/2023/04-21-tdd_concepts/2.png){:height="100%" width="100%"}
 
 ### Factors in software practice adoption
 

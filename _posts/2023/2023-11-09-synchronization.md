@@ -147,7 +147,7 @@ Race condition(競爭條件)是指軟體系統的行為，當操作是基於無�
     -   如果有一個 Task 想要執行 Critical section，那麼就不能讓這個 Task 被無期限的等待
     -   例如: 有 A, B 兩個 Task，但故意永遠只讓 A 執行 Critical section，這樣 B 就會無限期的等待
 
-![](../assets/image/2023/11-09-synchronization/1.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/1.png){:height="100%" width="100%"}
 
 > libc 其實並沒有滿足 Bounded Waiting 的條件，在某些情況下會造成 starvation
 
@@ -336,7 +336,7 @@ p0: 16768, p1: 16768
         -   在這裡必須假設這個步驟是一次執行完畢，所以不會有其他 task 同時離開 while loop
 -   要注意這裡只是一個定義，而不是實現的方式
 
-![](../assets/image/2023/11-09-synchronization/2.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/2.png){:height="100%" width="100%"}
 
 **Semphore 的實作樣貌:**
 -   wait: 想要進入 CS 的 task 呼叫 wait()
@@ -346,7 +346,7 @@ p0: 16768, p1: 16768
     1.  value++, 如果 value <= 0 代表有 task 在等待
     2.  wakeup(), 從 list 中取出一個 task 並且喚醒從 sleep() 往下執行
 
-![](../assets/image/2023/11-09-synchronization/3.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/3.png){:height="100%" width="100%"}
 
 **Semphore 的使用方式:**
 -   Semphore 的 value 可以是:
@@ -401,7 +401,7 @@ p0: 16768, p1: 16768
     -   有，context switch 的次數變多，因為 q 等不到 p 釋放 lock，所以 q 會去做 context switch
     -   沒有，context switch 的次數變少，因為程式很短，所以 q 會去做 busy waiting 等 p 釋放 lock
 
-![](../assets/image/2023/11-09-synchronization/4.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/4.png){:height="100%" width="100%"}
 
 ```bash
  Performance counter stats for './exam3.exe':
@@ -509,7 +509,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
 
 > 上圖是 Circular queue 的概念，這裡的 in, out 代表的是 index，而不是實際的資料
 
-![](../assets/image/2023/11-09-synchronization/5.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/5.png){:height="100%" width="100%"}
 
 > 以上是一個範例，假設 Producer 是 NIC，Consumer 是 OS
 
@@ -558,7 +558,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
         -   所以執行順序會變成 `rrr` -> `w` -> `rr`
 -   這裡的目標是盡量提高平行度，讓多個 Reader 同時進入 CS
 
-![](../assets/image/2023/11-09-synchronization/6.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/6.png){:height="100%" width="100%"}
 
 假如有以上範例程式:
 -   writer 只需要去 wait(rw_mutex) 也就是 lock，跟 signal(rw_mutex) 也就是 unlock 就可以
@@ -579,7 +579,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
 -   哲學家吃飯時必須拿起左右兩邊的刀叉才能吃飯
 -   有什麼方法讓所有的哲學家都能吃到飯?
 
-![](../assets/image/2023/11-09-synchronization/7.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/7.png){:height="100%" width="100%"}
 
 可能的解決方法:
 1.  所有人都先拿左邊的餐具，再拿右邊的餐具
@@ -591,7 +591,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
 
 **The Dining Philosophers Problem in Linux Kernel**
 
-![](../assets/image/2023/11-09-synchronization/8.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/8.png){:height="100%" width="100%"}
 
 -   每顆 CPU 上都有一個 migration thread，當 CPU 有空閒時，migration thread 會去檢查有沒有 task 想要執行
 -   pull: migration/0 發現我的工作量太少，所以去搬移 migration/3 的工作
@@ -615,7 +615,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
 -   但是實際上這兩次 Task2 最後的結果都是一樣的
 -   因此如果以 Task2 的結果來判斷正確性，那麼可以說這兩次情景是等價的
 
-![](../assets/image/2023/11-09-synchronization/9.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/9.png){:height="100%" width="100%"}
 
 > 是否可以把平行化以後的正確性定義為「其結果等價於某個依序執行的狀況」
 
@@ -637,7 +637,7 @@ long syscall(SYS_futex, uint32_t *uaddr, int futex_op, uint32_t val,
 
 > 在同步機制上，不同的指令會影響到的 CPU 數量不同，所以成本也不同
 
-![](../assets/image/2023/11-09-synchronization/10.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/10.png){:height="100%" width="100%"}
 
 上圖中 L2 cache 之間會有一些同步機制，而 L3 chache 也會有一些同步機制，例如: [SNOOP] + dictionary
 
@@ -652,7 +652,7 @@ Bus 也有各種各樣的類型
 
 這裡以 [Intel® Xeon® Processor Scalable Family Technical Overview] 為例，來了解 Coherence 的代價
 
-![](../assets/image/2023/11-09-synchronization/11.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/11.png){:height="100%" width="100%"}
 
 -   Core 傳遞資料的方式是透過 Mesh，先走 X 再走 Y
     -   CHA(Cache Home Agent): 類似 directory，記錄資料在那些 Core
@@ -663,7 +663,7 @@ Bus 也有各種各樣的類型
 
 **Ultra Path Interconnect(UPI)**
 
-![](../assets/image/2023/11-09-synchronization/12.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/12.png){:height="100%" width="100%"}
 
 -   UPI 是一種擴展系統的一致性協定，讓多個處理器可以共享資料，並且在同一個 Memory space
 -   支援 UPI 的 Intel Xeon 處理器會提供 2~3 個 UPI 通道，來連接到其他 Xeon 處理器
@@ -728,11 +728,11 @@ CPU 必須用一些方法保證所有的 Core 看到的資料都是一致的，�
 
 **Kaby Lake - Microarchitecture Intel**
 
-![](../assets/image/2023/11-09-synchronization/13.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/13.png){:height="100%" width="100%"}
 
 **Load buffer & Store buffer in x86**
 
-![](../assets/image/2023/11-09-synchronization/14.png){:height="100%" width="100%"}
+![](/image/2023/11-09-synchronization/14.png){:height="100%" width="100%"}
 
 ##### 5.18 Atomic operation
 

@@ -29,7 +29,7 @@ tags: [Compiler]
 在編譯器模型中 Systax analysis 從 Lexical analysis 獲取由 Token 所組成的字串，概念上語法分析需要建構一個 Parse tree 傳遞給 Compiler 的其餘部分進行進一步處理，
 但實際上不一定要真的用一個 Data structure 來建構 Parse tree，而是在 Parsing 的過程中進行 Semantic analysis，並將資訊傳遞給 Compiler 的其餘部分。
 
-![](../assets/image/2023/10-26-syntax_analysis/1.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/1.png){:height="75%" width="75%"}
 
 > 不真正建構一個 Parse tree 通常是為了節省記憶體，但缺點就是他使 Debug 變得困難，因為無法查看 Parse tree
 
@@ -127,16 +127,16 @@ and the string aa+a*
 -   Parse Tree 是推導的圖形表示，顯示了從 Start symbol 到衍生 Sentence 的過程，這種方式過濾了選擇 Terminal 進行重寫的順序
 -   因此不管是 Left/Right-most 都應該推導出相同的 Parse tree
 
-![](../assets/image/2023/10-26-syntax_analysis/2.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/2.png){:height="75%" width="75%"}
 
 ##### 4.2.5 Ambiguous Grammar
 
 如果一個 Grammar 可以對同一個 Sentence 產生不同的 Parse tree 那就是 Ambiguous
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/3.png" 
+    <img src="/image/2023/10-26-syntax_analysis/3.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/4.png" 
+    <img src="/image/2023/10-26-syntax_analysis/4.png" 
     width="50%" height="50%">
 </div>
 
@@ -161,7 +161,7 @@ stmt -> if expr then stmt
 
 我們無法確定 else 是對應哪個 then，因此會產生兩個 Parse tree
 
-![](../assets/image/2023/10-26-syntax_analysis/5.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/5.png){:height="75%" width="75%"}
 
 這樣就產生了兩個 Parse tree，因為在語法規則中沒有說明清楚 else 要對應哪個 if，所以可以透過以下方式來消除
 
@@ -221,7 +221,7 @@ CFG 只能處理一個重複的結構，這也涉及到 CFG 的 Automata，但�
 
 -   Top-down Parsing 是從上層的 Root 開始，使用 Leftmost derivation 建構一顆到 Leaf 的 Parse tree
 
-![](../assets/image/2023/10-26-syntax_analysis/10.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/10.png){:height="75%" width="75%"}
 
 **Predictive Parsing**
 
@@ -305,7 +305,7 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T')
 
 -   Bottom Up Parsing 是從底層的 Leaf 開始，使用 Rightmost derivation 建構一顆到 Root 的 Parse tree
 
-![](../assets/image/2023/10-26-syntax_analysis/6.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/6.png){:height="75%" width="75%"}
 
 **Handles**
 
@@ -315,9 +315,9 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T')
 
 > 非正式的講 handle 就是和某個 Production 能匹配的 Substring，對他化簡就代表反向的 Rightmost derivation
 
-![](../assets/image/2023/10-26-syntax_analysis/7.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/7.png){:height="75%" width="75%"}
 
-![](../assets/image/2023/10-26-syntax_analysis/8.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/8.png){:height="75%" width="75%"}
 
 -   The string ω to the right of the handle contains only terminals
 -   Ais the bottommost leftmostinterior node with all its children in the tree
@@ -325,7 +325,7 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T')
 如果有 S =><sup>*</sup> αAω => aβω，那麼緊跟在 a 之後的 Production A -> β 就是 aβω 的一個 Handle，要注意 ω 一定只包含 Terminals，
 如果 grammmr 是 Non-amibiguous，那麼 aβω 只會有一個 rightmost derivation，否則可能會有多個。
 
-![](../assets/image/2023/10-26-syntax_analysis/9.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/9.png){:height="75%" width="75%"}
 
 **Handle pruning:** 就是一個 Parse tree 識別 Handles 並將他們替換為 Nonterminal，到最後的過程
 
@@ -340,7 +340,7 @@ FOLLOW(F)  = { FIRST(T') –  ε } U FOLLOW(T')
 
 例如之前的例子，其實就是一個不斷 Shift 和 Reduce 的過程:
 
-![](../assets/image/2023/10-26-syntax_analysis/11.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/11.png){:height="75%" width="75%"}
 
 ---
 
@@ -377,9 +377,9 @@ LR(k) Parsing:
 這個點代表 Parse 的進度，藉由這些 item 我們可以建立一個 **NPDA**，再透過演算法來轉換成 **DPDA**，這個 DPDA 就是 **LR(0) Automaton**
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/12.png" 
+    <img src="/image/2023/10-26-syntax_analysis/12.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/13.png" 
+    <img src="/image/2023/10-26-syntax_analysis/13.png" 
     width="50%" height="50%">
 </div>
 
@@ -464,7 +464,7 @@ end
 
 透過演算法來找出所有的 Item:
 
-![](../assets/image/2023/10-26-syntax_analysis/14.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/14.png){:height="75%" width="75%"}
 
 之後將找到的 Item 填入表中:
 -   s<sub>n</sub>: 代表 shift 操作，與前往 State n
@@ -477,9 +477,9 @@ end
 再根據 Production 左邊的 Nonterminal 來進行 Goto，所以在 Step 7, 8, 9 是看 State 6 的 goto。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/15.png" 
+    <img src="/image/2023/10-26-syntax_analysis/15.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/16.png" 
+    <img src="/image/2023/10-26-syntax_analysis/16.png" 
     width="50%" height="50%">
 </div>
 
@@ -584,9 +584,9 @@ end
 ```
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/17.png" 
+    <img src="/image/2023/10-26-syntax_analysis/17.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/18.png" 
+    <img src="/image/2023/10-26-syntax_analysis/18.png" 
     width="50%" height="50%">
 </div>
 
@@ -621,7 +621,7 @@ end
 
 之後就依此類推，直到沒有新的 Item 可以加入，最後就會得到以下的 LR(1) Parsing Table:
 
-![](../assets/image/2023/10-26-syntax_analysis/19.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/19.png){:height="75%" width="75%"}
 
 > 這張表的寫法基本上跟 SLR(1) 一樣，只是 reduce 的部分變成要看 lookahead(a) 是什麼，而不是 FOLLOW(A)
 {: .block-warning }
@@ -650,13 +650,13 @@ end
 
 以之前的例子為例，將 Core 相同的狀態合併:
 
-![](../assets/image/2023/10-26-syntax_analysis/20.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/20.png){:height="75%" width="75%"}
 
 -   I<sub>3</sub> 和 I<sub>6</sub> 合併就寫作 I<sub>36</sub>
 -   在合併的同時 Lookahead 也要合併，例如 I<sub>47</sub>
     -   I<sub>4</sub> 的 Lookahead 是 `c/d`，I<sub>7</sub> 的 Lookahead 是 `$`，合併後 Lookahead 就是 `c/d/$`
 
-![](../assets/image/2023/10-26-syntax_analysis/21.png){:height="75%" width="75%"}
+![](/image/2023/10-26-syntax_analysis/21.png){:height="75%" width="75%"}
 
 > 這裡可以發現其實直接從 LR(1) 的表格轉換成 LALR(1) 的表格是很簡單的，找到相同的 core 就可以去按照表格合併
 {: .block-warning }
@@ -692,16 +692,16 @@ FLLOW(A) = { a, c }
 
 將其轉換成 LR(1) 與 SLR(1) 的 DPDA Graph(**Left LR(1); Right SLR(1)**):
 
-![](../assets/image/2023/10-26-syntax_analysis/22.png){:height="100%" width="100%"}
+![](/image/2023/10-26-syntax_analysis/22.png){:height="100%" width="100%"}
 
-![](../assets/image/2023/10-26-syntax_analysis/24.png){:height="50%" width="50%"}
+![](/image/2023/10-26-syntax_analysis/24.png){:height="50%" width="50%"}
 
 > 上圖是 LR(1)/LALR(1) 的 Parsing Table 與 Graph，並沒有 conflict 產生
 
 因為沒有可以合併的 core，所以最後 LALR(1) 將會與 LR(1) 相同，並且 LR(1) 並不會產生 multiply-defined entries，
 所以 LALR(1) 也不會產生 multiply-defined entries，因此這個 Grammar 是 LALR(1)的。
 
-![](../assets/image/2023/10-26-syntax_analysis/23.png){:height="100%" width="100%"}
+![](/image/2023/10-26-syntax_analysis/23.png){:height="100%" width="100%"}
 
 > 上圖是 SLR(1) 的 Graph
 
@@ -715,7 +715,7 @@ FLLOW(A) = { a, c }
 -   Top-Down: LL(k) 相較於 LR(k) 能處理的 grammar 少，但沒辦法和 SLR, LALR 做比較
 -   Bottom-Up: 能處理的 grammar 從多到少依序為，LR(k) > LALR(k) > SLR(1)
 
-![](../assets/image/2023/10-26-syntax_analysis/25.png){:height="50%" width="50%"}
+![](/image/2023/10-26-syntax_analysis/25.png){:height="50%" width="50%"}
 
 接下來就依序解釋為什麼會有這樣的差異
 
@@ -773,18 +773,18 @@ FOLLOW(R) = { =, $ }
 在 I<sub>2</sub> 可以 shift `=`，也可以使用 R -> L 進行 reduce，因為 FOLLOW(R) = { =, $ }。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/26.png" 
+    <img src="/image/2023/10-26-syntax_analysis/26.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/27.png" 
+    <img src="/image/2023/10-26-syntax_analysis/27.png" 
     width="50%" height="50%">
 </div>
 
 在 LALR(1) 因為從 LR(1) 合併而來，因此有 lookahead 的存在，所以即使在 core 相同的時候，也可以透過 lookahead 來區分是否要進行 reduce。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-26-syntax_analysis/28.png" 
+    <img src="/image/2023/10-26-syntax_analysis/28.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-26-syntax_analysis/29.png" 
+    <img src="/image/2023/10-26-syntax_analysis/29.png" 
     width="50%" height="50%">
 </div>
 

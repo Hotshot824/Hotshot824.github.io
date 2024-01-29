@@ -55,9 +55,9 @@ classTriangle
 以這三個條件進行 Combianational 能獲得以下的 Decision table，將這些限制式透過 CLP 求解就能得到右圖的測試資料:
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/1.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/1.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/2.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/2.png" 
     width="50%" height="50%">
 </div>
 
@@ -71,9 +71,9 @@ classTriangle
 關於 category 我們也可以透過 Decision table 來產生測試資料，以下是 category 的 Decision table
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/4.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/4.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/5.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/5.png" 
     width="50%" height="50%">
 </div>
 
@@ -118,9 +118,9 @@ public String category( )
 > 關於類圖可以看之前的筆記，有更詳細的描述 [UML Structure Diagrams Introduction 1.1 Class diagram]
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/6.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/6.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/7.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/7.png" 
     width="50%" height="50%">
 </div>
 
@@ -154,9 +154,9 @@ public String category( )
 反過來說當一個 Function 的 Pre-Conditions 不合法時將會產生 Invalid 的測試資料。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/10.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/3.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/3.png" 
     width="50%" height="50%">
 </div>
 
@@ -213,18 +213,18 @@ endif
 我們依照上面的 Constructor 和 Category 來建立 CLG，得到以下兩張圖，就可以以此來生成測試資料
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/10.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/10.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/11.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/11.png" 
     width="50%" height="50%">
 </div>
 
 例如我們想測試 category，能發現在 CLG 上一共有 5 條不同的路徑，我們把第一條路徑的條件放入 CLP 中求解，就能得到測試第一條路徑的測試資料。
 
 <div style="display: flex; flex-direction: row; align-items: center;">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/12.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/12.png" 
     width="50%" height="50%">
-    <img src="../assets/image/2023/10-28-method_level_function_unit_testing/13.png" 
+    <img src="/image/2023/10-28-method_level_function_unit_testing/13.png" 
     width="50%" height="50%">
 </div>
 
@@ -250,7 +250,7 @@ OCL 支援 Collection，詳細的語法可以參考 [Object Constraint Language 
 -   For unboundedcollections, test instances of size 0, 1, and m (where m > 1).
 -   You can write a CLP predicate to generate these collection instances.
 
-![](../assets/image/2023/10-28-method_level_function_unit_testing/14.png){:height="75%" width="75%"}
+![](/image/2023/10-28-method_level_function_unit_testing/14.png){:height="75%" width="75%"}
 
 ### 4.5 Inheritance of Constraints
 
