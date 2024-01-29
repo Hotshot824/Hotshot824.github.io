@@ -12,7 +12,7 @@ tags: [OS]
 
 想在 debian 上安裝 Btrfs，有很多種方式，這裡紀錄一下怎麼從頭開始安裝 debian，並且使用 Btrfs 作為主要的檔案系統。
 
-### 1. Install Debian
+### Install Debian
 
 在安裝 Debian 的時候要進入 Advanced options，並且選擇 Expert install，這樣才能夠在安裝的時候選擇 Btrfs 作為檔案系統。
 接著就跟標準的安裝方式一樣。
