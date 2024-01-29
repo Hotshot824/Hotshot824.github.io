@@ -62,6 +62,24 @@ docker run \
 - Add date in post: _layout/post.html
 - change sort method: _includes/toc-date.htnl
 
+### Remote theme
+
+如果想要使用其他人在 Github Repository 上的 theme，可以使用 [jekyll-remote-theme] 這個套件，只要在 `_config.yml` 裡面加入以下內容。
+
+```yml
+remote_theme: owner/name
+
+plugins:
+  - jekyll-remote-theme
+```
+
+然後再 `Gemfile` 裡面加入下面，就可以使用遠端模板來進行 Build 了。
+
+```gemfile
+source "https://rubygems.org"
+gem "jekyll-remote-theme"
+```
+
 > ##### NOTE
 >
 > 之後想到要修改的再更新吧，可能加入留言系統、標籤之類的，目前這樣的靜態網頁我就很滿意了。
@@ -72,3 +90,5 @@ docker run \
 [Docker image]: https://hub.docker.com/r/jekyll/jekyll/
 [Github pages publishing source]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
 [bash script]: https://github.com/Hotshot824/Hotshot824.github.io/blob/master/build.sh
+
+[jekyll-remote-theme]: https://github.com/benbalter/jekyll-remote-theme

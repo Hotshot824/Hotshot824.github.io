@@ -18,9 +18,9 @@ System Testing 通常是在 Integration Testing 之後，並且是內部測試�
 
 ### System Testing
 
-[8.2 Performance Testing](./2023-12-20-system_testing.md#82-performance-testing)  
-[8.3 Load Testing](./2023-12-20-system_testing.md#83-load-testing)  
-[8.4 Stress Testing](./2023-12-20-system_testing.md#84-stress-testing)
+[8.2 Performance Testing](#82-performance-testing)  
+[8.3 Load Testing](#83-load-testing)  
+[8.4 Stress Testing](#84-stress-testing)
 
 ##### 8.1 System Testing
 

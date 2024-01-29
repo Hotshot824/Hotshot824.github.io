@@ -136,8 +136,8 @@ bff00000-bfffffff : System RAM      # 1 MB
 [7.2 Buffer/Cache](#72-buffercache)  
 [7.3 Program Layout](#73-program-layout)  
 [7.4 Memory Segmentation](#74-memory-segmentation)  
-[7.5 Memory Paging](#76-memory-paging)  
-[7.6 Fragmentation Problem](#75-fragmentation-problem)  
+[7.5 Memory Paging](#75-memory-paging)  
+[7.6 Fragmentation Problem](#76-fragmentation-problem)  
 
 這裡先介紹 DRAM 的特性:
 -   DRAM 的特性是只要 CPU 開始工作，DRAM 就會全速運轉
