@@ -72,9 +72,17 @@ tags: [OS]
 
 ### Virtual Memory Example
 
+[8.3 Shard Memory](#83-shard-memory)  
+[8.4 Demand Paging](#84-demand-paging)  
+[8.5 Linux Pure Demand Paging](#85-linux-pure-demand-paging)  
+[8.6 Performance of Demand Paging](#86-performance-of-demand-paging)
+[8.7 Copy-on-Write](#87-copy-on-write)  
+[8.8 Kernel same-page merging](#88-kernel-same-page-merging)  
+[8.9 Page Table Entry Attributes](#89-page-table-entry-attributes)
+
 ##### 8.3 Shard Memory
 
-![](/image/2023/12-23-virtual_memory/2.png){:height="75%" width="75%"}
+![](/image/2023/12-23-virtual_memory/2.png){:height="100%" width="100%"}
 
 -   stack, heap 這部分是程式自己獨有的
 -   黑色的部分是共享的:
@@ -113,13 +121,148 @@ tags: [OS]
 
 -   對於 Disk system，Demand paging 雖然減少了讀取的量，但是會引發大量的 Random access
     -   例如: 執行兩個程式，這兩個程式一共 100 MB，OS 可以驅動 Disk 使用兩秒鐘的時間來載入這兩個應用程式。
-    -   如果使用 Pure demand paging，假設只要讀入 10 MB，2560 個 Pages，假如這兩個程式輪流執行，並且執行的程式碼**「隨機散布」**，
+    -   如果使用 Pure demand paging，假設兩個程式輪流執行，一共需要 20 MB 5120 個 pages，並且執行的程式碼**「隨機散布」**，
     目前 Disk 的 IOPS 約為 200，則載入兩個程式的時間變為 25.6 Sec
 -   除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
     -   例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入
 
-![](/image/2023/12-23-virtual_memory/3.png){:height="75%" width="75%"}
+> Random access 對 SSD 的速度大約是 Sequential access 的 1/2 ~ 1/3，HDD 則有可能從 200MB 降低到 1MB
+
+> IOPS: Input/Output Operations Per Second(每秒輸入/輸出次數)
+
+Linux 在這方面的處理方式是假如要 1個 Page，就會一次載入周遭 8 個 Page，因為通常同一個程式會連續使用到相同的 Page，這樣就能減少 Random access 的問題。
+
+![](/image/2023/12-23-virtual_memory/3.png){:height="100%" width="100%"}
+
+上面張圖表示了一個程式配置到 DRAM 的情況
+-   OS 會透過 process 的 kernel mapping table 來看要去哪裡找資料
+    -   code, libc: disk
+    -   stack, mmap, heap: zero-out page pool
+-   zero-out page pool: OS 會維護一個 pool 在這裡面都是已經預先初始化(0)的 page，用來分配給 stack, mmap 使用
+    -   這是為了避免資訊，例如: 上個程式的資料還留在 DRAM 中，下個程式可以從 DRAM 讀取到上個程式的資料
+
+> [Self modifying code]: 程式在執行時會修改自己的程式碼，這樣有可能造成共享的 code 也被修改
+
+**Valid-invalid**
+
+下圖是一個 x86 的 Page table entry，後面的 12 個 bit 就是 attribute
+
+![](/image/2023/12-23-virtual_memory/4.png){:height="100%" width="100%"}
+
+-   Present: 0 的話表示該 Page 不在 DRAM 中，此時可能代表 OS 還沒有將該 page 載入 DRAM 中，或者該 page 本來就不在 DRAM 中(程式寫錯)
+-   不管是在 page table 中的第一層或第二層，只要有一個是 0(invalid)，就會觸發 exception
+-   此時 OS 會去查詢 process 的軟體表格(Linux mm_struct)
+    -   查詢成功: 配置 physical page 給該 address，然後修改 page table 重新執行
+    -   查詢失敗: 程式發生錯誤，例如: pointer 指向錯誤的 address，此時繼續錯誤處理(終止或呼叫 GDB)
+
+> 大部分的 valid-invalid bit 都在 PTE 的最右邊，這是 CPU 設計時如果指向不存在的 page，在此時前變得 bit 都可以任意使用，
+> Linux 就使用這些 bit 來協助解決 backing storage 為 swap space 的 page fult
+
+##### 8.5 Linux Pure Demand Paging
+
+> Pure demand paging 的意思是在執行新的程式時，並不會分配任何 page 給 task，直到該 task 索取
+
+以 Linux 為例子，使用 execve() 將執行檔放入當前 process 的 memory space
+1.  先在該 task 的 mm_struct 中設定 section 映射的資訊
+    -   code, data 對應到執行檔案
+    -   bss section 對應到 zero-out page pool
+    -   lib 對應到相對的 library
+    -   只分配少量的 stack space(8KB) 給該 task
+2.  執行程式
+
+Linux 並沒有分配任何 page 先給該 task，因此是 pure demand paging
+
+##### 8.6 Performance of Demand Paging
+
+怎麼估算 Demand Paging 的效能，如下:
+-   Page fault rate: 0 <= p <= 1
+    -   估算一個 Page fault 發生的機率
+-   Effective Access Time(EAT)
+    $EAT = (1 - p) * memory\,access + p(page\,fault\,overhead + swap\,page\,out + swap\,page\,in + restart\,overhead)$
+    -   swap page out: Free space 不夠就需要將某些 page 從 DRAM 寫入 disk
+        -   優化方式: 無論如何都保持一定的 free space
+    -   swap page in: 當 page fault 發生時，需要將某些 page 從 disk 讀入 DRAM
+        -   常用的 page 就先放入 page cache 中，例如: `ls`
+    -   page fault overhead, restart overhead: 這兩個 overhead 通常是硬體相關的問題，或 ISR 的部分 assembly 寫的夠不夠好
+
+> OS 上主要能優化的就是 swap page out/in 這兩種方式
+
+**Example**
+
+-   Memory access time: 200 nanoseconds
+-   Average page-fault service time: 8 milliseconds
+    -   EAT = (1 - p) * 200 + p(8,000,000)  
+    = 200 + p * 7,999,800
+-   如果每 1000 次 memory access 有 1 次 page fault，那麼速度將變為原本的 1/40
+
+> 以上的例子是說明，在可能的情況下盡量少用 swap space，這樣可能會造成 CPU 大量的時間都在 idle
+
+##### 8.7 Copy-on-Write
+
+在 Physical memory 中也會使用 Copy-on-Write 的技術，例如: 在剛 fork() 出來的 child process，如果 child process 沒有修改任何資料，
+就不會真的複製一份 parent process 的資料，而是共用同一份資料，這樣就能減少記憶體的使用量。
+
+![](/image/2023/12-23-virtual_memory/5.png){:height="100%" width="100%"}
+
+-   通常 fork 之後的 parent 與 child 
+    -   在 register 之外都是一樣的，因此直接 copy parent 的 mm_struct 給 child
+    -   將 parent 與 child 的 page table 都設定為 read-only
+-   在 read-only 之後如果其中一個 task 去作出修改，就會觸發 page fault
+    -   Linux 把造成 page fault 的 page 改成 writeable，並且複製一份 page 給 child
+    -   這樣 parent 與 child 就重新各自擁有一份可 write 的 page
+
+> 這樣的技術也可以用在 File System 上，例如: Linux 的 Btrfs
+
+##### 8.8 Kernel same-page merging
+
+-   Kernel virtual memory(KVM) 中會有許多不同的 VM 都會用到相同的 page
+    -   例如: 都是執行 Win10，那麼這些 VM 中的 OS Kernel 應該都是一樣的
+-   在一般的 OS 也可能會有相同的 Page
+    -   例如: 桌面與登入畫面使用相同的圖片，這樣就會有相同的 Page
+-   上面的情況都比較難有真正的事件發生，因此需要 OS 去主動掃描才能發現共用記憶體，節省記憶體的使用量
+
+##### 8.9 Page Table Entry Attributes
+
+在 Main Memory 中介紹的是 PTE 的前 20 個 bit，這邊會更詳細的說明後 12 個 bit 的意義
+
+![](/image/2023/12-23-virtual_memory/4.png){:height="100%" width="100%"}
+
+-   Present: 是否在 DRAM 中
+-   Read/Write: 0 表示 read-only，1 表示 read/write
+-   User/Supervisor: 表示是否需要 kernel mode 權限才能存取
+-   Write-through: 決定 page 使用的是 write-back 或 write-through
+-   Cache Disable: 如果是 1 則禁止該 page 被 cache
+-   Accessed: 表示該 page 是否被存取過
+-   Dirty: 表示該 page 是否被修改過
+-   Page Table Attribute Index: 跟 Write-through/Cache Disable 有關，可以設置更細緻的 Cache 設定
+-   Global: 表示該 page 是否是 global page，例如: 共享的 library
+-   Available: 這 3 個 bit 可以讓 OS 自由使用
+
+而一個 4KB 的 Page table 可以放入 1024 個 PTE，然後在 Main memory 提過的 Hierarchical pading 在這裡可以更詳細的說明，
+這樣的話架構就會如下:
+
+![](/image/2023/12-23-virtual_memory/6.png){:height="100%" width="100%"}
+
+這樣我們就能把 Page table, TLB, Virtual memory, Physical memory 組合起來，如下:
+
+![](/image/2023/12-23-virtual_memory/7.png){:height="100%" width="100%"}
+
+-   Virtual address 透過 TLB 轉換成 Physical address
+-   TLB 紀錄 virtual address 與 physical address 的 mapping
+    -   attribute 也會紀錄在 TLB 中
+    -   TLB miss 會觸發 page fault，透過 CR3 找到 page table
+-   Page table 紀錄 virtual address 與 physical address 的 mapping
+    -   page table 找到 physical address 後去更新 TLB，然後重新查詢
+    -   如果 PTE 是 invalid，就會觸發 page fault，再去載入該 page 到 DRAM 中
+
+> 到這裡為止就是完整的 Virtual memory 到 Physical memory 的運作方式
+
+---
+
+### Page Replacement
 
 > ##### Last Edit
 > 12-19-2023 16:03
 {: .block-warning }
+
+[Sefl modifying code]: https://en.wikipedia.org/wiki/Self-modifying_code
