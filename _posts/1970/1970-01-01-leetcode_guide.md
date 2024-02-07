@@ -14,7 +14,6 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 
 ### Array
 
-[704. Binary search](https://github.com/Hotshot824/Leetcode/blob/main/Easy/704.Binary_search.md)  
 [35. Search Insert Position](https://github.com/Hotshot824/Leetcode/blob/main/Easy/35.Search_Insert_Position.md)  
 [34. Find First and Last Position of Element in Sorted Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/34.FFLPE_in_Sorted_Array.md)  
 [69. Sqrt(x)](https://github.com/Hotshot824/Leetcode/blob/main/Easy/69.Sqrt.md)  
@@ -28,6 +27,19 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [4. Median of Two Sorted Arrays](https://github.com/Hotshot824/Leetcode/blob/main/Hard/4.median-of-two-sorted-arrays.md)  
 [59. Spiral Matrix II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/59.Spiral_Matrix_II.md)  
 [209. Minimum Size Subarray Sum](https://github.com/Hotshot824/Leetcode/blob/main/Medium/209.Minimum_Size_Subarray_Sum.md)  
+[3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
+[287. Find the Duplicate Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/287.Find_the_Duplicate_Number.md)  
+
+##### Binary Search
+
+[704. Binary search](https://github.com/Hotshot824/Leetcode/blob/main/Easy/704.Binary_search.md)  
+[33. Search in Rotated Sorted Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/33.Search_in_Rotated_Sorted_Array.md)  
+
+##### Sliding Window
+
+[3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
+
+---
 
 ### Linkedlist
 
@@ -45,6 +57,8 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
 [Linkedlist Summarize]
 
+---
+
 ### String
 
 [344. Reverse String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/344.Reverse_String.md)  
@@ -55,9 +69,16 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
 [String Summarize]  
 
+##### Trie
+
+[14. Longest Common Prefix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/14.Longest_Common_Prefix.md)  
+
+---
+
 ### Hash
 
 [242. Valid Anagram](https://github.com/Hotshot824/Leetcode/blob/main/Easy/242.Valid_Anagram.md)  
+[2395. Find Subarrays With Equal Sum](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2395.Find_Subarrays_With_Equal_Sum.md)  
 [1002. Find Common Characters](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1002.Find_Common_Characters.md)  
 [349. Intersection of Two Arrays](https://github.com/Hotshot824/Leetcode/blob/main/Easy/349.Intersection_of_Two_Arrays.md)  
 [202. Happy Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/202.Happy_Number.md)  
@@ -68,6 +89,9 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
 [268. Missing Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/268.missing-number.md)  
 [41. First Missing Positive](https://github.com/Hotshot824/Leetcode/blob/main/Hard/41.first-missing-positive.md)  
+[1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_of_Unique_Integers_after_K_Removals.md)  
+
+---
 
 ### Two Pointer
 
@@ -77,6 +101,9 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [15. 3Sum (E)](https://github.com/Hotshot824/Leetcode/blob/main/Medium/15.3Sum.md)  
 [18. 4Sum (E)](https://github.com/Hotshot824/Leetcode/blob/main/Medium/18.4Sum.md)  
 [42. Trapping Rain Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/42.trapping-rain-water.md)  
+[2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2149.Rearrange_Array_Elements_by_Sign.md)
+
+---
 
 ### Queue & Stack
 
@@ -88,6 +115,13 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [239. Sliding Window Maximum](https://github.com/Hotshot824/Leetcode/blob/main/Hard/239.Sliding_Window_Maximum.md)  
 [347. Top K Frequent Elements](https://github.com/Hotshot824/Leetcode/blob/main/Medium/347.Top_K_Frequent_Elements.md)  
 [Stack&Queue Summarize]  
+
+##### Priority Queue
+
+[1046. Last Stone Weight](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1046.Last_Stone_Weight.md)  
+[1642. Furthest Building You Can Reach](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1642.Furthest_Building_You_Can_Reach.md)  
+
+---
 
 ### Binary Tree
 
@@ -111,6 +145,8 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [112. Path Sum & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Easy/112.path-sum.md)  
 [Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)
 
+---
+
 ### Backtracking
 
 [77. Combinations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/77.combinations.md)  
@@ -124,15 +160,49 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [51. N-Queens](https://github.com/Hotshot824/Leetcode/blob/main/Hard/51.N-Queens.md)  
 [52. N-Queens II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/52.N-Queens_II.md)  
 
+---
+
 ### Greedy Algorithm
 
 [55. Jump Game I & II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/55.jump-game.md)  
 [455. Assign Cookies](https://github.com/Hotshot824/Leetcode/blob/main/Easy/455.Assign_Cookies.md)  
 
+##### Math
+
+[976. Largest Perimeter Triangle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/976.Largest_Perimeter_Triangle.md)  
+[2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leeetcode/blob/main/Easy/2971.Find_Polygon_With_the_Largest_Perimeter.md)  
+
+---
+
 ### Dynamic Programming
 
 [509. Fibonacci Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/509.Fibonacci_Number.md)  
 [70. Climbing Stairs](https://github.com/Hotshot824/Leetcode/blob/main/Easy/70.Climbing_Stairs.md)  
+[746. Min Cost Climbing Stairs](https://github.com/Hotshot824/Leetcode/blob/main/Easy/70.Climbing_Stairs.md)  
+[62. Unique Paths](https://github.com/Hotshot824/Leetcode/blob/main/Medium/62.Unique_Paths.md)  
+[343. Integer Break](https://github.com/Hotshot824/Leetcode/blob/main/Medium/343.Integer_Break.md)  
+[96. Unique Binary Search Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/96.Unique_Binary_Search_Trees.md)  
+
+##### [0/1 Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Knapsack_Problem.md)  
+
+[416. Partition Equal Subset Sum](https://github.com/Hotshot824/Leetcode/blob/main/Medium/416.Partition_Equal_Subset_Sum.md)  
+[1049. Last Stone Weight II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1049.Last_Stone_Weight_II.md)  
+[494. Target Sum](https://github.com/Hotshot824/Leetcode/blob/main/Medium/494.Target_Sum.md)  
+[474. Ones and Zeroes](https://github.com/Hotshot824/Leetcode/blob/main/Medium/474.Ones_and_Zeroes.md)  
+
+##### [Unbounded Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Unbounded_Knapsack_Problem.md)  
+
+[518. Coin Change II & I](https://github.com/Hotshot824/Leetcode/blob/main/Medium/518.Coin_Change_II.md)  
+[377. Combination Sum IV](https://github.com/Hotshot824/Leetcode/blob/main/Medium/377.Combination_Sum_IV.md)  
+[279. Perfect Squares](https://github.com/Hotshot824/Leetcode/blob/main/Medium/279.Perfect_Squares.md)  
+
+---
+
+### [Bit Manipulation](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Bitwise.md)
+
+[201. Bitwise AND of Numbers Range](https://github.com/Hotshot824/Leetcode/blob/main/Medium/201.Bitwise_AND_of_Numbers_Range.md)  
+
+---
 
 ### Other
 
@@ -145,6 +215,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [49. Group Anagrams](https://github.com/Hotshot824/Leetcode/blob/main/Medium/49.Group_Anagrams.md)  
 [50. Pow(x, n)](https://github.com/Hotshot824/Leetcode/blob/main/Medium/50.powx-n.md)  
 [67. Add Binary](https://github.com/Hotshot824/Leetcode/blob/main/Easy/67.add-binary.md)  
+[118. Pascal's Triangle I & II](https://github.com/Hotshot824/Leetcode/blob/main/Easy/118.Pascals_Triangle.md)  
 [989. Add to Array-Form of Integer](https://github.com/Hotshot824/Leetcode/blob/main/Easy/989.add-to-array-form-of-integer.md)  
 [1523. Count Odd Numbers in an Interval Range](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1523.count-odd-numbers-in-an-interval-range.md)  
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.FGCD_of_Array.md)  
