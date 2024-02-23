@@ -14,6 +14,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 
 ### Array
 
+[Easy Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Easy_array.md)  
 [35. Search Insert Position](https://github.com/Hotshot824/Leetcode/blob/main/Easy/35.Search_Insert_Position.md)  
 [34. Find First and Last Position of Element in Sorted Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/34.FFLPE_in_Sorted_Array.md)  
 [69. Sqrt(x)](https://github.com/Hotshot824/Leetcode/blob/main/Easy/69.Sqrt.md)  
@@ -90,6 +91,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [268. Missing Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/268.missing-number.md)  
 [41. First Missing Positive](https://github.com/Hotshot824/Leetcode/blob/main/Hard/41.first-missing-positive.md)  
 [1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_of_Unique_Integers_after_K_Removals.md)  
+[128. Longest Consecutive Sequence](https://github.com/Hotshot824/Leetcode/blob/main/Hard/128.longest-consecutive-sequence.md)  
 
 ---
 
@@ -195,12 +197,20 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [518. Coin Change II & I](https://github.com/Hotshot824/Leetcode/blob/main/Medium/518.Coin_Change_II.md)  
 [377. Combination Sum IV](https://github.com/Hotshot824/Leetcode/blob/main/Medium/377.Combination_Sum_IV.md)  
 [279. Perfect Squares](https://github.com/Hotshot824/Leetcode/blob/main/Medium/279.Perfect_Squares.md)  
+[139. Word Break](https://github.com/Hotshot824/Leetcode/blob/main/Medium/139.Word_Break.md)  
 
 ---
 
 ### [Bit Manipulation](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Bitwise.md)
 
 [201. Bitwise AND of Numbers Range](https://github.com/Hotshot824/Leetcode/blob/main/Medium/201.Bitwise_AND_of_Numbers_Range.md)  
+
+---
+
+### Graph
+
+[787. Cheapest Flights Within K Stops](https://github.com/Hotshot824/Leetcode/blob/main/Medium/787.Cheapest_Flights_Within_K_Stops.md)  
+[2092. Find All People With Secret](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2092.Find_All_People_With_Secret.md)  
 
 ---
 
