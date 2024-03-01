@@ -154,6 +154,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [77. Combinations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/77.combinations.md)  
 [17. Letter Combinations of a Phone Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/17.Letter_Combinations_Phone_Number.md)  
 [39. Combination Sum I & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Medium/39.combination-sum.md)  
+[22. Generate Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/22.Generate_Parentheses.md)  
 [Backtracking Summarize](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201030%E5%9B%9E%E6%BA%AF%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)  
 [131. Palindrome Partitioning](https://github.com/Hotshot824/Leetcode/blob/main/Medium/131.palindrome-partitioning.md)  
 [93. Restore IP Addresses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/93.restore-ip-addresses.md)  
