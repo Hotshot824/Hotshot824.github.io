@@ -40,7 +40,10 @@ File System 是從第零版的 UNIX 手冊就已經包含了檔案系統，而�
 在 Linux 中為了讓不同的 File System 可以共存，所以設計了 VFS(Virtual File System) 這樣的機制，VFS 是一組檔案操作的抽象介面，
 只要依循 VFS 開發的 File System 就可以在執行時期動態的掛載到 Linux 的 Kernel 上。
 
-![](https://developer.ibm.com/developer/default/tutorials/l-linux-filesystem/images/figure1.gif){:height="75%" width="75%"}
+<div align="center">
+    <img src="https://developer.ibm.com/developer/default/tutorials/l-linux-filesystem/images/figure1.gif"
+    width="75%" height="75%">
+</div>
 
 ##### 9.3.1 Directory and File
 
@@ -155,7 +158,7 @@ FAT 就是把 Linked List 的指標直接拿出來放在一個表格，這樣的
 ![](/image/2024/02-03-storage_and_file_system/5.jpg){:height="100%" width="100%"}
 
 i-node 的這個設計在第一代的 UNIX(1960) 就已經使用，這個設計已經沿用了 60 年以上，很難想像一個檔案結構的觀念在這麼長的時間內都沒有被超越。
--   當然 i-node 有一些改善，例如控制權限從 **owner, group, others** 變成了 ACL(Access control list)
+-   當然 i-node 有一些改善，例如控制權限從 **owner, group, others** 變成了 ACL([Access control list])
     -   但是 i-node 的基本結構並沒有改變
 
 i-node 的前 12 個 block 是直接指向 **data block(Direct data block)**，所以不用再去使用第二層的 index-block，這樣如果檔案小於 48KB 就可以直接使用 i-node 來紀錄，
@@ -167,11 +170,86 @@ i-node 的前 12 個 block 是直接指向 **data block(Direct data block)**，�
 </div>
 
 -   一個 i-node 本身通常是 128 bytes，所以一個 block 可以存放 32 個 i-node
+-   除了 Direct data block 之外還有 **Single indirect block** 和 **Double indirect block**
+    -   Single indirect: 就是第二層的 index block 可以指向編號 12 ~ 267 的 block，也就是 256 個 block, 
+    -   Double indirect: 就是第三層的 index block 可以指向編號 268 ~ 65535 的 block，也就是 65536 個 block
+-   因此一共可以定址 12 + 256 + 256^2 + 256^3 = 16843020 個 block，也就是 64.25GB 的檔案
+    -   在此之上還可以使用 Extents 來擴充，這樣就會讓 Data block 的大小變得更大
+
+因此如果假設 data block 是 4KB，要存取某個 block:
+-   當 File size < 48KB 就可以直接使用 i-node 兩次存取到 block
+    -   < 1072KB 使用 Single indirect block，最多三次的 Access
+    -   < 263216 使用 Double indirect block，最多四次的 Access
+    -   < 64.25GB 最多五次的 Access
+
+> 要注意這裡所提的都是最糟情況下，實際上已經存取過的 i-node 或 index 會被放在 DRAM 中，所以實際上的 Access 次數會比較少
+{: .block-warning }
+
+##### 9.4.5 Hole
+
+Hole 是一個很重要的功能，如果一個檔案中並沒有實際的資料，那是否要真的要先分配空間給這個檔案，例如:
+-   VMWare 的虛擬機器通常可能設定了 100GB 的硬碟，但是實際上只有 10GB 的資料，剩下的資料還沒有寫入
+    -   如果沒有 Hole 的機制，就要把這 90GB 的空間都分配出來，全部以某種方式填滿
+    -   再有 Hole 的情況下這些空間都被視為 Logical 0，不占用實際的 Disk
+
+> 延伸閱讀: [Linux 檔案的hole], [Sparse file]
+{: .block-warning }
+
+##### 9.4.6 Free Space Management
+
+空的 block 也需要某種管理機制，讓 OS 能快速的找到空的 block 來分配給檔案，這裡有幾種常見的管理機制:
+-   **Bit Vector** 來管理空間，每個 block 用一個 bit 來表示是否被使用
+    -   這樣的好處是可以直接使用 Bitwise Operation 來操作，並快速的找到連續的空間
+    -   但是操作 Bit Vector 會有一些 overhead，例如: 把 Bit Vector 放在 DRAM 中才能快速的操作，並且 Time Complexity 是 O(n)
+-   **Linked List** 來管理空間，每個 block 會記錄下一個空的 block
+    -   使用 Linked List 來管理的好處是找到空的 block 就放入 Linked List 就好，OS 只要知道 Head 就可以找到所有的空間
+    -   缺點是比較難找到連續的空間
+    -   實際的例子是 ext2, ext3 都是使用 Linked List 來管理空間
+
+**btrfs**
+
+-   在 btrfs 中所有使用中的 block 都由 extent 來管理，因此 btrfs 中的檔案都是由 contiguous block 構成
+-   btrfs 會使用一顆 B-tree 來管理被使用的 block
+    -   這樣也代表沒被放入 B-tree 的 block 就是空的 block
+    -   例如兩個 node 分別記錄 `250~440` 與 `800~1000`，那麼 `441~799` 就是空的 block
+
+---
+
+### Directory Structure
+
+會對 Directory structure 的操作有兩種:
+-   已經給定的 path name，找出相對應的檔案，例如:
+    -   `vim /home/benson/example.txt` 就是在 `/home/benson` 下找出 `example.txt`
+-   列出 Directory 下所有的檔案
+    -   `ls /home/benson` 就是列出 `/home/benson` 下所有的檔案
+
+##### 9.5.1 Unix Directory
+
+-   Directory 是一個特別的檔案
+    -   這個檔案紀錄了這個 Directory 下所有的的東西
+-   Directory 可以用 opendir(), readdir() 操作
+    -   主要包含這些: `name`, `type`, `i-node number`
+
+**Directory Design Method**
+
+-   **Linear List**
+    -   每一個目錄檔案可以視作是一個特殊的文字檔案，裡面紀錄 `name`, `type`, `i-node number`
+    -   這種方式很適合列表功能，例如: `ls`
+-   **Data Structure for Fast Searching**
+    -   可以使用檔案路徑名稱來快速的找到對應的 i-node，例如: hash, b-tree
+    -   這種方式很適合指定路徑名稱的功能，例如: `vim /home/benson/example.txt`
+-   **Mixed**
+    -   這兩種方式可以混合使用，這樣就可以快速列表跟快速搜尋，例如: btrfs
 
 > ##### Last Edit
-> 2-3-2024 18:22
+> 3-6-2024 12:58
 {: .block-warning }
 
 [Linux 核心設計: 作業系統術語及概念]: https://www.youtube.com/watch?v=iWvkoJawxQA&list=PL6ls5wvkiFxwnI39JfI63PbN0bgEGwqPA
 [Linux 核心設計: 檔案系統概念及實作手法]: https://hackmd.io/@sysprog/linux-file-system
+
 [i-node]: https://en.wikipedia.org/wiki/Inode
+[Access control list]: https://en.wikipedia.org/wiki/Access-control_list
+
+[Linux 檔案的hole]: https://wen00072.github.io/blog/2013/12/31/linux-archives-hole/
+[Sparse file]: https://en.wikipedia.org/wiki/Sparse_file
