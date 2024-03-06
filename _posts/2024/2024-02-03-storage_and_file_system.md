@@ -192,6 +192,9 @@ Hole 是一個很重要的功能，如果一個檔案中並沒有實際的資料
     -   如果沒有 Hole 的機制，就要把這 90GB 的空間都分配出來，全部以某種方式填滿
     -   再有 Hole 的情況下這些空間都被視為 Logical 0，不占用實際的 Disk
 
+> 關於 VMWare 的虛擬機器通常會提供 **[Provisioning Policies]**([佈建原則]) 給使用者選擇
+{: .block-warning }
+
 > 延伸閱讀: [Linux 檔案的hole], [Sparse file]
 {: .block-warning }
 
@@ -253,3 +256,6 @@ Hole 是一個很重要的功能，如果一個檔案中並沒有實際的資料
 
 [Linux 檔案的hole]: https://wen00072.github.io/blog/2013/12/31/linux-archives-hole/
 [Sparse file]: https://en.wikipedia.org/wiki/Sparse_file
+
+[Provisioning Policies]: https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-4C0F4D73-82F2-4B81-8AA7-1DD752A8A5AC.html
+[佈建原則]: https://docs.vmware.com/tw/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-4C0F4D73-82F2-4B81-8AA7-1DD752A8A5AC.html
