@@ -40,6 +40,8 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 
+##### [Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)
+
 ---
 
 ### Linkedlist
@@ -48,7 +50,6 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [707. Design Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/707.Design_Linked_List.md)  
 [206. Reverse Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/206.Reverse_Linked_List.md)  
 [24. Swap Nodes in Pairs](https://github.com/Hotshot824/Leetcode/blob/main/Medium/24.Swap_Nodes_in_Pairs.md)  
-[19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/24.Swap_Nodes_in_Pairs.md)  
 [160. Intersection of Two Linked Lists](https://github.com/Hotshot824/Leetcode/blob/main/Easy/160.Intersection_Two_Linked_Lists.md)  
 [141. Linked List Cycle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/141.Linked_List_Cycle.md)  
 [142. Linked List Cycle II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/142.Linked_List_Cycle_II.md)  
@@ -57,6 +58,11 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [25. Reverse Nodes in k-Group](https://github.com/Hotshot824/Leetcode/blob/main/Hard/25.reverse_nodes_in_k_group.md)  
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
 [Linkedlist Summarize]
+
+##### Two Pointers of Linkedlist
+
+[19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/24.Swap_Nodes_in_Pairs.md)  
+[1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_in_a_Linked_List.md)
 
 ---
 
@@ -69,6 +75,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [28. Find the Index of the First Occurrence in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/28.Find_Index_of_First_Occurrence_String.md)  
 [459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
 [String Summarize]  
+[71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
 
 ##### Trie
 
@@ -103,7 +110,8 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [15. 3Sum (E)](https://github.com/Hotshot824/Leetcode/blob/main/Medium/15.3Sum.md)  
 [18. 4Sum (E)](https://github.com/Hotshot824/Leetcode/blob/main/Medium/18.4Sum.md)  
 [42. Trapping Rain Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/42.trapping-rain-water.md)  
-[2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2149.Rearrange_Array_Elements_by_Sign.md)
+[2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2149.Rearrange_Array_Elements_by_Sign.md)  
+[1750. Minimum Length of String After Deleting Similar Ends](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1750.Minimum_Length_of_String_After_Deleting_Similar_Ends.md)  
 
 ---
 
@@ -169,9 +177,11 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 
 [55. Jump Game I & II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/55.jump-game.md)  
 [455. Assign Cookies](https://github.com/Hotshot824/Leetcode/blob/main/Easy/455.Assign_Cookies.md)  
+[948. Bag of Tokens](https://github.com/Hotshot824/Leetcode/blob/main/Medium/948.Bag_of_Tokens.md)  
 
 ##### Math
 
+[43. Multiply Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/43.Multiply_Strings.md)  
 [976. Largest Perimeter Triangle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/976.Largest_Perimeter_Triangle.md)  
 [2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leeetcode/blob/main/Easy/2971.Find_Polygon_With_the_Largest_Perimeter.md)  
 
