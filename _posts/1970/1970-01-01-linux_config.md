@@ -126,6 +126,20 @@ sudo ufw status numbered
 sudo ufw delete <rule-number>
 ```
 
+##### iptables
+
+iptables 是最基本的防火牆工具，並且還可以設定 NAT、Port Forwarding 等功能，這裡有一個基本的腳本可以使用 [iptables-script.sh]。
+-   要保存 iptables 設定的話在 debian 可以使用 `iptables-persistent` 來保存設定
+    -   設定好當前 rules 後 `sudo bash -c iptables-save > /etc/iptables/rules.v4`, `sudo bash -c ip6tables-save > /etc/iptables/rules.v6`
+
+> 延伸閱讀: [DebianFirewall], [iptables-essentials]
+{: .block-warning }
+
+[iptables-essentials]: https://github.com/trimstray/iptables-essentials
+[DebianFirewall]: https://wiki.debian.org/DebianFirewall#Using_iptables_for_IPv4_traffic
+
+[iptables-script.sh]: https://gist.github.com/Hotshot824/5021fca047a65b6ff6df2139e59cf9e4#file-iptables-script-sh
+
 ---
 
 ### Network config

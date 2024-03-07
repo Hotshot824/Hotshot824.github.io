@@ -61,8 +61,9 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 
 ##### Two Pointers of Linkedlist
 
+[Middle Node of Linkedlist](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Middle_Node_of_Linkedlist.md)  
 [19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/24.Swap_Nodes_in_Pairs.md)  
-[1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_in_a_Linked_List.md)
+[1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_in_a_Linked_List.md)  
 
 ---
 
