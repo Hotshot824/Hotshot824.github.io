@@ -10,7 +10,8 @@ tags: [leetcode, algorithm]
 > Notes leetcode problem 
 {: .block-tip }
 
-Reference to the [leetcode-master] guide for the sequence of questions.
+> Reference: [leetcode-master], [Python-LeetCode 581] 從基礎的 Array 到 Dynamic Programming 都有詳細的解釋。
+{: .block-tip }
 
 ### Array
 
@@ -57,6 +58,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [23. Merge k Sorted Lists](https://github.com/Hotshot824/Leetcode/blob/main/Hard/23.merge_k_sorted_lists.md)  
 [25. Reverse Nodes in k-Group](https://github.com/Hotshot824/Leetcode/blob/main/Hard/25.reverse_nodes_in_k_group.md)  
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
+[143. Reorder List](https://github.com/Hotshot824/Leetcode/blob/main/medium/143.Reorder_List.md)  
 [Linkedlist Summarize]
 
 ##### Two Pointers of Linkedlist
@@ -243,10 +245,12 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.FGCD_of_Array.md)  
 
 > ##### Last Edit
-> 10-02-2023 59. Spiral Matrix II.
+> 3-7-2024 17:30
 {: .block-tip }
 
 [leetcode-master]: https://github.com/youngyangyang04/leetcode-master
 [String Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%80%BB%E7%BB%93.md
 [Linkedlist Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93%E7%AF%87.md
 [Stack&Queue Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97%E6%80%BB%E7%BB%93.md
+
+[Python-LeetCode 581]: https://hackmd.io/@bangyewu/ryLbEED23/%2FAXR8NqGRQj2MLo6oCY7DGQ
