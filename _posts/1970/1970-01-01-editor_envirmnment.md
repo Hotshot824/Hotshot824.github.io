@@ -22,6 +22,9 @@ Add Java jdk in vscode in `setting.json`
 ]
 ```
 
+-   Stop Java auto build
+    -   disable `java.autobuild.enabled`
+
 -   Hide **Run | Debug** in editor  
 Editor: Code Lens  
 <input type="checkbox" disabled /> Controls whether the editor shows CodeLens.  

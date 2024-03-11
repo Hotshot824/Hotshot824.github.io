@@ -31,6 +31,7 @@ tags: [leetcode, algorithm]
 [209. Minimum Size Subarray Sum](https://github.com/Hotshot824/Leetcode/blob/main/Medium/209.Minimum_Size_Subarray_Sum.md)  
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 [287. Find the Duplicate Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/287.Find_the_Duplicate_Number.md)  
+[57. Insert Interval](https://github.com/Hotshot824/Leetcode/blob/main/Medium/57.Insert_Interval.md)  
 
 ##### Binary Search
 
@@ -42,6 +43,10 @@ tags: [leetcode, algorithm]
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 
 ##### [Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)
+
+##### Prefix Sum
+
+[525. Contiguous Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/525.Contiguous_Array.md)  
 
 ---
 
@@ -102,6 +107,7 @@ tags: [leetcode, algorithm]
 [41. First Missing Positive](https://github.com/Hotshot824/Leetcode/blob/main/Hard/41.first-missing-positive.md)  
 [1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_of_Unique_Integers_after_K_Removals.md)  
 [128. Longest Consecutive Sequence](https://github.com/Hotshot824/Leetcode/blob/main/Hard/128.longest-consecutive-sequence.md)  
+[791. Custom Sort String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/791.Custom_Sort_String.md)  
 
 ---
 
@@ -179,8 +185,10 @@ tags: [leetcode, algorithm]
 ### Greedy Algorithm
 
 [55. Jump Game I & II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/55.jump-game.md)  
+[452. Minimum Number of Arrows to Burst Balloons](https://github.com/Hotshot824/Leetcode/blob/main/Medium/452.Minimum_Number_of_Arrows_to_Burst_Balloons.md)  
 [455. Assign Cookies](https://github.com/Hotshot824/Leetcode/blob/main/Easy/455.Assign_Cookies.md)  
 [948. Bag of Tokens](https://github.com/Hotshot824/Leetcode/blob/main/Medium/948.Bag_of_Tokens.md)  
+[621. Task Scheduler](https://github.com/Hotshot824/Leetcode/blob/main/Medium/621.Task_Scheduler.md)  
 
 ##### Math
 
