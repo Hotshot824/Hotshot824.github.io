@@ -10,7 +10,8 @@ tags: [leetcode, algorithm]
 > Notes leetcode problem 
 {: .block-tip }
 
-Reference to the [leetcode-master] guide for the sequence of questions.
+> Reference: [leetcode-master], [Python-LeetCode 581] 從基礎的 Array 到 Dynamic Programming 都有詳細的解釋。
+{: .block-tip }
 
 ### Array
 
@@ -30,6 +31,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [209. Minimum Size Subarray Sum](https://github.com/Hotshot824/Leetcode/blob/main/Medium/209.Minimum_Size_Subarray_Sum.md)  
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 [287. Find the Duplicate Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/287.Find_the_Duplicate_Number.md)  
+[57. Insert Interval](https://github.com/Hotshot824/Leetcode/blob/main/Medium/57.Insert_Interval.md)  
 
 ##### Binary Search
 
@@ -41,6 +43,10 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 
 ##### [Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)
+
+##### Prefix Sum
+
+[525. Contiguous Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/525.Contiguous_Array.md)  
 
 ---
 
@@ -57,6 +63,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [23. Merge k Sorted Lists](https://github.com/Hotshot824/Leetcode/blob/main/Hard/23.merge_k_sorted_lists.md)  
 [25. Reverse Nodes in k-Group](https://github.com/Hotshot824/Leetcode/blob/main/Hard/25.reverse_nodes_in_k_group.md)  
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
+[143. Reorder List](https://github.com/Hotshot824/Leetcode/blob/main/medium/143.Reorder_List.md)  
 [Linkedlist Summarize]
 
 ##### Two Pointers of Linkedlist
@@ -100,6 +107,7 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [41. First Missing Positive](https://github.com/Hotshot824/Leetcode/blob/main/Hard/41.first-missing-positive.md)  
 [1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_of_Unique_Integers_after_K_Removals.md)  
 [128. Longest Consecutive Sequence](https://github.com/Hotshot824/Leetcode/blob/main/Hard/128.longest-consecutive-sequence.md)  
+[791. Custom Sort String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/791.Custom_Sort_String.md)  
 
 ---
 
@@ -177,8 +185,10 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 ### Greedy Algorithm
 
 [55. Jump Game I & II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/55.jump-game.md)  
+[452. Minimum Number of Arrows to Burst Balloons](https://github.com/Hotshot824/Leetcode/blob/main/Medium/452.Minimum_Number_of_Arrows_to_Burst_Balloons.md)  
 [455. Assign Cookies](https://github.com/Hotshot824/Leetcode/blob/main/Easy/455.Assign_Cookies.md)  
 [948. Bag of Tokens](https://github.com/Hotshot824/Leetcode/blob/main/Medium/948.Bag_of_Tokens.md)  
+[621. Task Scheduler](https://github.com/Hotshot824/Leetcode/blob/main/Medium/621.Task_Scheduler.md)  
 
 ##### Math
 
@@ -243,10 +253,12 @@ Reference to the [leetcode-master] guide for the sequence of questions.
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.FGCD_of_Array.md)  
 
 > ##### Last Edit
-> 10-02-2023 59. Spiral Matrix II.
+> 3-7-2024 17:30
 {: .block-tip }
 
 [leetcode-master]: https://github.com/youngyangyang04/leetcode-master
 [String Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%80%BB%E7%BB%93.md
 [Linkedlist Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93%E7%AF%87.md
 [Stack&Queue Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97%E6%80%BB%E7%BB%93.md
+
+[Python-LeetCode 581]: https://hackmd.io/@bangyewu/ryLbEED23/%2FAXR8NqGRQj2MLo6oCY7DGQ

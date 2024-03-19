@@ -83,6 +83,7 @@ mount /dev/sda2 /mnt
 </div>
 
 mount 之後操作就跟 Debian 一樣，唯一的差別是 arch 沒有 target 這個目錄，所以把操作的目錄都換成 /mnt 就好。
+-   在最後的時候記得用 `genfstab -U /mnt >> /mnt/etc/fstab` 來生成 fstab
 
 > 延伸閱讀: 可以參考 [Using btrfs on Debian] 來設置 Btrfs，或者官方說明 [Arch - btrfs]
 {: .block-warning }
@@ -120,9 +121,13 @@ mount 之後操作就跟 Debian 一樣，唯一的差別是 arch 沒有 target �
 
 ##### 3.2 Chroot
 
--   chroot 可以讓你進入安裝好的系統，這樣就可以提前進行一些設置
+1.  chroot 可以讓你進入安裝好的系統，這樣就可以提前進行一些設置
     -   如果在 pasctrap 少安裝了一些套件，可以在這邊安裝，例如: `pacman -S openssh`
     -   安裝後記得到 `systemctl enable sshd` 啟動 sshd 服務
+2.  Time Zone
+    -   用 symbolic link 來設置時區，然後用 `hwclock --systohc` 來設置硬體時鐘
+3.  Localization
+4.  Hostname
 
 ```bash
 # Time Zone
@@ -142,6 +147,8 @@ echo ${YOU_HOSTNAME} > /etc/hostname
 ##### 3.5 Network configuration
 
 這邊可以參考 [systemd-networkd] 來設置網路，或者使用其他的套件來設置網路。
+
+-   下面是沿用 [systemd-networkd] 的設置
 
 ```bash
 vim /etc/systemd/network/20-wired.network
