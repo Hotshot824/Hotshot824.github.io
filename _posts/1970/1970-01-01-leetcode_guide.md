@@ -144,6 +144,8 @@ Most string problems are handled similarly to arrays.
 [347. Top K Frequent Elements](https://github.com/Hotshot824/Leetcode/blob/main/Medium/347.Top_K_Frequent_Elements.md)  
 [Stack&Queue Summarize]  
 [1249. Minimum Remove to Make Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1249.Minimum_Remove_to_Make_Valid_Parentheses.md)  
+[1700. Number of Students Unable to Eat Lunch](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1700.Number_of_Students_Unable_to_Eat_Lunch.md)  
+[950. Reveal Cards In Increasing Order](https://github.com/Hotshot824/Leetcode/blob/main/Medium/950.Reveal_Cards_In_Increasing_Order.md)  
 
 ##### Priority Queue
 
@@ -173,6 +175,10 @@ Most string problems are handled similarly to arrays.
 [257. Binary Tree Paths](https://github.com/Hotshot824/Leetcode/blob/main/Easy/257.binary-tree-paths.md)  
 [112. Path Sum & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Easy/112.path-sum.md)  
 [Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)
+
+##### Other Operations
+
+[623. Add One Row to Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/623.Add_One_Row_to_Tree.md)  
 
 ---
 
@@ -244,8 +250,13 @@ Most string problems are handled similarly to arrays.
 
 ### Graph
 
+[1971. Find if Path Exists in Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1971.Find_if_Path_Exists_in_Graph.md)  
 [787. Cheapest Flights Within K Stops](https://github.com/Hotshot824/Leetcode/blob/main/Medium/787.Cheapest_Flights_Within_K_Stops.md)  
 [2092. Find All People With Secret](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2092.Find_All_People_With_Secret.md)  
+
+### Graph Search
+
+[200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_of_Islands.md)  
 
 ---
 
