@@ -13,6 +13,8 @@ tags: [Algorithm]
 Hirschberg's Algorithm 是一種用來解決 Needleman-Wunsch Algorithm 的空間複雜度的演算法，原本的空間複雜度為 O(m*n)。
 在論文的發表時間(1975)，記憶體是一個很昂貴的資源，所以 Hirschberg's Algorithm 的提出是一個很大的突破。
 
+這個問題如果想要實際寫程式的話，可以參考 LeetCode [72. Edit Distance]。
+
 ### Introduction
 
 ##### Edit distance
@@ -105,10 +107,10 @@ $$
 
 ##### Step 5: Traceback
 
-最後我們可以從右下角的位置開始往左上角回溯，這裡我們使用 Min 來作為評分標準，所以在遇到三個方向的時候，我們會選擇最小的值。
--   出現水平的箭頭，代表左側的字串要塞入一個 Gap
--   出現垂直的箭頭，代表上方的字串要塞入一個 Gap
--   出現斜線的箭頭，代表這兩個字元是 Match
+最後我們可以從右下角的位置開始往左上角回溯，因為之前使用的 Scoring System，這裡我們使用 Min trace back:
+-   `⇦` 代表左側的字串要塞入一個 Gap
+-   `⇧` 代表上方的字串要塞入一個 Gap
+-   `⇖` 代表這兩個字元是 Match
 
 ![](/image/2024/04-09-hirschbergs_algorithm/3.jpg)
 
@@ -126,8 +128,14 @@ Ben---
 
 ### Hirschberg's Algorithm
 
-Hirschberg's Algorithm 可以在 Space Complexity O(min(m, n)) 的情況下，計算出 Needleman-Wunsch Algorithm 的結果，
-並且保持 Time Complexity O(mn)。
+Hirschberg's Algorithm 可以在 **Space Complexity O(min(m, n))** 的情況下，計算出 Needleman-Wunsch Algorithm 的結果，
+並且保持 **Time Complexity O(mn)**，並且 Hirschberg's Algorithm 是一個 Divide and Conquer 的演算法。
+
+##### Divide and Conquer
+
+首先要能做到 Divide and Conquer，我們需要確定一個 Base Case 被拆分後還是可以滿足原本的問題。
+
+-   假如有兩個字串 "
 
 > ##### Last Edit
 > 04-21-2024 19:32
@@ -137,3 +145,5 @@ Hirschberg's Algorithm 可以在 Space Complexity O(min(m, n)) 的情況下，�
 [A general method applicable to the search for similarities in the amino acid sequence of two proteins]: https://www.sciencedirect.com/science/article/abs/pii/0022283670900574?via%3Dihub
 
 [Levenshtein distance]: https://en.wikipedia.org/wiki/Levenshtein_distance
+
+[72. Edit Distance]: https://leetcode.com/problems/edit-distance
