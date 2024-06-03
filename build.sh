@@ -12,9 +12,6 @@ function main() {
     b)
       build
       ;;
-    p)
-      push
-      ;;
     h)
       echo "Usage: build.sh [-b] [-p]"
       echo "  -b  build the jekyll project"
@@ -43,13 +40,6 @@ function build() {
     -it jekyll/jekyll \
     jekyll serve 2>/dev/null ||
     docker start jekyll && docker attach jekyll
-}
-
-function push() {
-  LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
-  git add .
-  git commit --amend -m "$LAST_COMMIT_MSG"
-  git push origin master -f
 }
 
 (

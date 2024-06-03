@@ -32,7 +32,7 @@ tags: [leetcode, algorithm]
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 [287. Find the Duplicate Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/287.Find_the_Duplicate_Number.md)  
 [57. Insert Interval](https://github.com/Hotshot824/Leetcode/blob/main/Medium/57.Insert_Interval.md)  
-[1995. Count Special Quadruplets](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1995.Count_Special_Quadruplets.md)
+[1995. Count Special Quadruplets](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1995.Count_Special_Quadruplets.md)  
 
 ##### Binary Search
 
