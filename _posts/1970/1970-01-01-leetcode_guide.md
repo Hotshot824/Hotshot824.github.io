@@ -32,6 +32,7 @@ tags: [leetcode, algorithm]
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 [287. Find the Duplicate Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/287.Find_the_Duplicate_Number.md)  
 [57. Insert Interval](https://github.com/Hotshot824/Leetcode/blob/main/Medium/57.Insert_Interval.md)  
+[1995. Count Special Quadruplets](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1995.Count_Special_Quadruplets.md)  
 
 ##### Binary Search
 
@@ -41,12 +42,40 @@ tags: [leetcode, algorithm]
 ##### Sliding Window
 
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
+[395. Longest Substring with At Least K Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/395.Longest_Substring_with_At_Least_K_Repeating_Characters.md)  
+[2958. Length of Longest Subarray With at Most K Frequency](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2958.Length_of_Longest_Subarray_With_at_Most_K_Frequency.md)  
+[713. Subarray Product Less Than K](https://github.com/Hotshot824/Leetcode/blob/main/Medium/713.Subarray_Product_Less_Than_K.md)  
+[992. Subarrays with K Different Integers](https://github.com/Hotshot824/Leetcode/blob/main/Hard/992.Subarrays_with_K_Different_Integers.md)  
+[2444. Count Subarrays With Fixed Bounds](https://github.com/Hotshot824/Leetcode/blob/main/Hard/2444.Count_Subarrays_With_Fixed_Bounds.md)  
 
 ##### [Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)
+
+[861. Score After Flipping Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/861.Score_After_Flipping_Matrix.md)  
+[36. Valid Sudoku](https://github.com/Hotshot824/Leetcode/blob/main/Medium/36.Valid_Sudoku.md)  
 
 ##### Prefix Sum
 
 [525. Contiguous Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/525.Contiguous_Array.md)  
+
+---
+
+### String
+
+Most string problems are handled similarly to arrays.
+
+[Easy String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Easy_string.md)
+[344. Reverse String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/344.Reverse_String.md)  
+[541. Reverse String II](https://github.com/Hotshot824/Leetcode/blob/main/Easy/541.Reverse_String_II.md)  
+[151. Reverse Words in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/151.Reverse_Words_String.md)  
+[28. Find the Index of the First Occurrence in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/28.Find_Index_of_First_Occurrence_String.md)  
+[459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
+[String Summarize]  
+[71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
+[72. Edit Distance](https://github.com/Hotshot824/Leetcode/blob/main/Medium/72
+
+##### Trie
+
+[14. Longest Common Prefix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/14.Longest_Common_Prefix.md)  
 
 ---
 
@@ -65,29 +94,13 @@ tags: [leetcode, algorithm]
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
 [143. Reorder List](https://github.com/Hotshot824/Leetcode/blob/main/medium/143.Reorder_List.md)  
 [Linkedlist Summarize]
+[2816. Double a Number Represented as a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/medium/2816.Double_a_Number_Represented_as_a_Linked_List.md)  
 
 ##### Two Pointers of Linkedlist
 
 [Middle Node of Linkedlist](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Middle_Node_of_Linkedlist.md)  
 [19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/24.Swap_Nodes_in_Pairs.md)  
 [1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_in_a_Linked_List.md)  
-
----
-
-### String
-
-[344. Reverse String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/344.Reverse_String.md)  
-[541. Reverse String II](https://github.com/Hotshot824/Leetcode/blob/main/Easy/541.Reverse_String_II.md)  
-[151. Reverse Words in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/151.Reverse_Words_String.md)  
-[58. Length of Last Word](https://github.com/Hotshot824/Leetcode/blob/main/Easy/58.Length_Last_Word.md)  
-[28. Find the Index of the First Occurrence in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/28.Find_Index_of_First_Occurrence_String.md)  
-[459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
-[String Summarize]  
-[71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
-
-##### Trie
-
-[14. Longest Common Prefix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/14.Longest_Common_Prefix.md)  
 
 ---
 
@@ -108,6 +121,7 @@ tags: [leetcode, algorithm]
 [1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_of_Unique_Integers_after_K_Removals.md)  
 [128. Longest Consecutive Sequence](https://github.com/Hotshot824/Leetcode/blob/main/Hard/128.longest-consecutive-sequence.md)  
 [791. Custom Sort String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/791.Custom_Sort_String.md)  
+[506. Relative Ranks](https://github.com/Hotshot824/Leetcode/blob/main/Easy/506.Relative_Ranks.md)  
 
 ---
 
@@ -121,6 +135,8 @@ tags: [leetcode, algorithm]
 [42. Trapping Rain Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/42.trapping-rain-water.md)  
 [2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2149.Rearrange_Array_Elements_by_Sign.md)  
 [1750. Minimum Length of String After Deleting Similar Ends](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1750.Minimum_Length_of_String_After_Deleting_Similar_Ends.md)  
+[442. Find All Duplicates in an Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/442.Find_All_Duplicates_in_an_Array.md)
+[881. Boats to Save People](https://github.com/Hotshot824/Leetcode/blob/main/Medium/881.Boats_to_Save_People.md)  
 
 ---
 
@@ -134,6 +150,9 @@ tags: [leetcode, algorithm]
 [239. Sliding Window Maximum](https://github.com/Hotshot824/Leetcode/blob/main/Hard/239.Sliding_Window_Maximum.md)  
 [347. Top K Frequent Elements](https://github.com/Hotshot824/Leetcode/blob/main/Medium/347.Top_K_Frequent_Elements.md)  
 [Stack&Queue Summarize]  
+[1249. Minimum Remove to Make Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1249.Minimum_Remove_to_Make_Valid_Parentheses.md)  
+[1700. Number of Students Unable to Eat Lunch](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1700.Number_of_Students_Unable_to_Eat_Lunch.md)  
+[950. Reveal Cards In Increasing Order](https://github.com/Hotshot824/Leetcode/blob/main/Medium/950.Reveal_Cards_In_Increasing_Order.md)  
 
 ##### Priority Queue
 
@@ -163,12 +182,19 @@ tags: [leetcode, algorithm]
 [257. Binary Tree Paths](https://github.com/Hotshot824/Leetcode/blob/main/Easy/257.binary-tree-paths.md)  
 [112. Path Sum & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Easy/112.path-sum.md)  
 [Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)
+[1325. Delete Leaves With a Given Value](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1325.Delete_Leaves_With_a_Given_Value.md)  
+
+##### Other Operations
+
+[623. Add One Row to Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/623.Add_One_Row_to_Tree.md)  
+[979. Distribute Coins in Binary Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/979.Distribute_Coins_in_Binary_Tree.md)  
 
 ---
 
 ### Backtracking
-
+ 
 [77. Combinations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/77.combinations.md)  
+[79. Word Search](https://github.com/Hotshot824/Leetcode/blob/main/Medium/79.Word_Search.md)  
 [17. Letter Combinations of a Phone Number](https://github.com/Hotshot824/Leetcode/blob/main/Medium/17.Letter_Combinations_Phone_Number.md)  
 [39. Combination Sum I & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Medium/39.combination-sum.md)  
 [22. Generate Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/22.Generate_Parentheses.md)  
@@ -179,6 +205,11 @@ tags: [leetcode, algorithm]
 [Backtracking Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201107%E5%9B%9E%E6%BA%AF%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)  
 [51. N-Queens](https://github.com/Hotshot824/Leetcode/blob/main/Hard/51.N-Queens.md)  
 [52. N-Queens II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/52.N-Queens_II.md)  
+[979. Distribute Coins in Binary Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/979.Distribute_Coins_in_Binary_Tree.md)  
+[37. Sudoku Solver](https://github.com/Hotshot824/Leetcode/blob/main/Hard/37.Sudoku_Solver.md)  
+[46. Permutations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/46.Permutations.md)  
+[2597. The Number of Beautiful Subsets](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2597.The_Number_of_Beautiful_Subsets.md)  
+[1255. Maximum Score Words Formed by Letters](https://github.com/Hotshot824/Leetcode/blob/main/Hard/1255.Maximum_Score_Words_Formed_by_Letters.md)  
 
 ---
 
@@ -189,6 +220,7 @@ tags: [leetcode, algorithm]
 [455. Assign Cookies](https://github.com/Hotshot824/Leetcode/blob/main/Easy/455.Assign_Cookies.md)  
 [948. Bag of Tokens](https://github.com/Hotshot824/Leetcode/blob/main/Medium/948.Bag_of_Tokens.md)  
 [621. Task Scheduler](https://github.com/Hotshot824/Leetcode/blob/main/Medium/621.Task_Scheduler.md)  
+[334. Increasing Triplet Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/334.Increasing_Triplet_Subsequence.md)  
 
 ##### Math
 
@@ -206,6 +238,9 @@ tags: [leetcode, algorithm]
 [62. Unique Paths](https://github.com/Hotshot824/Leetcode/blob/main/Medium/62.Unique_Paths.md)  
 [343. Integer Break](https://github.com/Hotshot824/Leetcode/blob/main/Medium/343.Integer_Break.md)  
 [96. Unique Binary Search Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/96.Unique_Binary_Search_Trees.md)  
+[300. Longest Increasing Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/300.Longest_Increasing_Subsequence.md)  
+[2370. Longest Ideal Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2370.Longest_Ideal_Subsequence.md)  
+[Minimum Falling Path Sum I & II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/1289.Minimum_Falling_Path_Sum.md)  
 
 ##### [0/1 Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Knapsack_Problem.md)  
 
@@ -220,6 +255,7 @@ tags: [leetcode, algorithm]
 [377. Combination Sum IV](https://github.com/Hotshot824/Leetcode/blob/main/Medium/377.Combination_Sum_IV.md)  
 [279. Perfect Squares](https://github.com/Hotshot824/Leetcode/blob/main/Medium/279.Perfect_Squares.md)  
 [139. Word Break](https://github.com/Hotshot824/Leetcode/blob/main/Medium/139.Word_Break.md)  
+[140. Word Break II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/140.Word_Break_II.md)  
 
 ---
 
@@ -231,8 +267,26 @@ tags: [leetcode, algorithm]
 
 ### Graph
 
+[1971. Find if Path Exists in Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1971.Find_if_Path_Exists_in_Graph.md)  
 [787. Cheapest Flights Within K Stops](https://github.com/Hotshot824/Leetcode/blob/main/Medium/787.Cheapest_Flights_Within_K_Stops.md)  
 [2092. Find All People With Secret](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2092.Find_All_People_With_Secret.md)  
+[514. Freedom Trail](https://github.com/Hotshot824/Leetcode/blob/main/Hard/514.Freedom_Trail.md)  
+[2812. Find the Safest Path in a Grid](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2812.Find_the_Safest_Path_in_a_Grid.md)  
+
+### Graph Search
+
+[200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_of_Islands.md)  
+[2368. Reachable Nodes With Restrictions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2368.Reachable_Nodes_With_Restrictions.md)  
+[778. Swim in Rising Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/778.Swim_in_Rising_Water.md)  
+
+### Breadth First Search
+
+[752. Open the Lock](https://github.com/Hotshot824/Leetcode/blob/main/Medium/752.Open_the_Lock.md)  
+[1654. Minimum Jumps to Reach Home](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1654.Minimum_Jumps_to_Reach_Home.md)  
+
+### Topological Sort
+
+[310. Minimum Height Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/310.Minimum_Height_Trees.md)  
 
 ---
 
