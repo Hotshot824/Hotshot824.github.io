@@ -67,7 +67,10 @@ tags: [leetcode, algorithm]
 
 [75. Sort Colors](https://github.com/Hotshot824/Leetcode/blob/Meidum/75.Sort_Colors.md)  
 [1051. Height Checker](https://github.com/Hotshot824/Leetcode/blob/Easy/1051.Height_Checker.md)  
+[1122. Relative Sort Array](https://github.com/Hotshot824/Leetcode/blob/Easy/1122.Relative_Sort_Array.md)  
 [2037. Minimum Number of Moves to Seat Everyone](https://github.com/Hotshot824/Leetcode/blob/Easy/2037.Minimum_Number_of_Moves_to_Seat_Everyone.md)  
+[945. Minimum Increment to Make Array Unique](https://github.com/Hotshot824/Leetcode/blob/Medium/945.Minimum_Increment_to_Make_Array_Unique.md)  
+[2233. Maximum Product After K Increments](https://github.com/Hotshot824/Leetcode/blob/Medium/2233.Maximum_Product_After_K_Increments.md)  
 
 ---
 
@@ -176,6 +179,7 @@ Most string problems are handled similarly to arrays.
 
 [1046. Last Stone Weight](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1046.Last_Stone_Weight.md)  
 [1642. Furthest Building You Can Reach](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1642.Furthest_Building_You_Can_Reach.md)  
+[502. IPO](https://github.com/Hotshot824/Leetcode/blob/main/Hard/502.IPO.md)  
 
 ---
 
@@ -201,6 +205,7 @@ Most string problems are handled similarly to arrays.
 [112. Path Sum & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Easy/112.path-sum.md)  
 [Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)
 [1325. Delete Leaves With a Given Value](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1325.Delete_Leaves_With_a_Given_Value.md)  
+[1038. Binary Search Tree to Greater Sum Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1038.Binary_Search_Tree_to_Greater_Sum_Tree.md)
 
 ##### Other Operations
 
@@ -217,7 +222,7 @@ Most string problems are handled similarly to arrays.
 [39. Combination Sum I & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Medium/39.combination-sum.md)  
 [22. Generate Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/22.Generate_Parentheses.md)  
 [Backtracking Summarize](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201030%E5%9B%9E%E6%BA%AF%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)  
-[131. Palindrome Partitioning](https://github.com/Hotshot824/Leetcode/blob/main/Medium/131.palindrome-partitioning.md)  
+[131. Palindrome Partitioning](https://github.com/Hotshot824/Leetcode/blob/main/Medium/131.Palindrome_Partitioning.md)  
 [93. Restore IP Addresses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/93.restore-ip-addresses.md)  
 [78. Subsets](https://github.com/Hotshot824/Leetcode/blob/main/Medium/78.subsets.md)  
 [Backtracking Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201107%E5%9B%9E%E6%BA%AF%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)  
@@ -293,6 +298,10 @@ Most string problems are handled similarly to arrays.
 [2092. Find All People With Secret](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2092.Find_All_People_With_Secret.md)  
 [514. Freedom Trail](https://github.com/Hotshot824/Leetcode/blob/main/Hard/514.Freedom_Trail.md)  
 [2812. Find the Safest Path in a Grid](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2812.Find_the_Safest_Path_in_a_Grid.md)  
+[1791. Find Center of Star Graph](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1791.Find_Center_of_Star_Graph.md)
+[2497. Maximum Star Sum of a Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2497.Maximum_Star_Sum_of_a_Graph.md)
+[1382. Balance a Binary Search Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1382.Balance_a_Binary_Search_Tree.md)  
+[2285. Maximum Total Importance of Roads](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2285.Maximum_Total_Importance_of_Roads.md)  
 
 ### Graph Search
 
