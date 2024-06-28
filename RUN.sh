@@ -4,26 +4,32 @@
 # Maintainer:
 #       Hotshot824
 # History:
-# 2023/11/04	Hotshot824	0.1.1
+# 2024/06/09	Hotshot824	0.1.3
 
 function main() {
+  build_flag=true
+
   while getopts ":bph" opt; do
     case ${opt} in
     b)
-      build
       ;;
     h)
-      echo "Usage: build.sh [-b] [-p]"
-      echo "  -b  build the jekyll project"
-      echo "  -p  force push to github"
+      echo "Usage: build.sh [-b]"
+      echo "  -b  build the jekyll project (Default)"
       exit 0
-    ;;
+      ;;
     \?)
       echo "Invalid Option: -$OPTARG" 1>&2
+      exit 0
       ;;
     esac
   done
+  
   shift $((OPTIND - 1))
+
+  if [ "$build_flag" = true ]; then
+    build
+  fi
 }
 
 function build() {

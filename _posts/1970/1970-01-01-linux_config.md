@@ -254,6 +254,17 @@ sudo bash -c iptables-save > /etc/iptables/rules.v4
 
 -   Last using `sudo iptables -L -v` to check iptables rules.
 
+**Add Static Route**
+
+> Best to add a static route to the device to be connected to the ZeroTier network.
+{: .block-danger }
+
+要連上 ZeroTier 的裝置加上 Static route 可以讓連線更穩定，不然有時候會發生 ping 不到的情況，
+後來用 traceroute 才發現 ping 的路徑跑到別的網路去了。
+
+-   Windows `route add $PHY_SUB mask $PHY_SUB_MASK $PHY_GATEWAY`
+-   Linux `sudo ip route add $PHY_SUB via $PHY_GATEWAY`
+
 [ZeroTier Route Config]: https://zerotier.atlassian.net/wiki/spaces/SD/pages/224395274/Route+between+ZeroTier+and+Physical+Networks
 
 ---
@@ -267,5 +278,5 @@ sudo bash -c iptables-save > /etc/iptables/rules.v4
     -   [ulimit Man Page](https://ss64.com/bash/ulimit.html)
 
 > ##### Last Edit
-> 30-09-2023 ulimit.
+> 06-11-2024 03:38 Add static route config.
 {: .block-warning }
