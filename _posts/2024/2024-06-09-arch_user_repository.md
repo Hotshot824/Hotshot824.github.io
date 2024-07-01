@@ -141,12 +141,12 @@ AUR Helper 同樣的也不屬於 Arch Linux 的一部分，所以也需要從 AU
 2.  yay 的使用上跟 pacman 很類似，例如以下:
     ```bash
     # Search Package
-    yay package
+    yay $PACKAGE_NAME
     # Install Package
-    yay -S package
+    yay -S $PACKAGE_NAME
     # Remove Package
-    yay -R package
-    # Update Package
+    yay -R $PACKAGE_NAME
+    # Update All Package
     yay -Syy
     yay -Syu 
     ```
