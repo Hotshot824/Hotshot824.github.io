@@ -293,8 +293,11 @@ $$
 \end{aligned}
 $$
 
-詳細的計算過程可以去看 **\[[2]\]** 的 part 3，這裡最後計算完後就能得到 $2H_k - 1$。
-因此透過分析 Marking Algorithm 的 Upper Bound 與 Lower Bound，Competitive Ratio = $2H_k - 1$ 並且是 Tight 的證明。
+-   (1) 是來自於 $\Delta cost$ 的界線以及 $\Phi ,s,s'$ 的定義
+-   (2) $l \leq s$ 並且 $\Phi$ 隨著 $s$ 增加而增加
+-   (3) 因為 $2t - (l+t)H_{l+t} \leq -lH_{l+1}$ 跟 $s' \leq t$
+
+以上就是透過分析 Marking Algorithm 的 Upper/Lower Bound，Competitive Ratio = $2H_k - 1$ 並且是 Tight 的證明。
 
 ---
 
