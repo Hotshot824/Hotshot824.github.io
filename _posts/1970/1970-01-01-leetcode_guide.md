@@ -309,6 +309,7 @@ Most string problems are handled similarly to arrays.
 [2368. Reachable Nodes With Restrictions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2368.Reachable_Nodes_With_Restrictions.md)  
 [778. Swim in Rising Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/778.Swim_in_Rising_Water.md)  
 
+
 ### Breadth First Search
 
 [752. Open the Lock](https://github.com/Hotshot824/Leetcode/blob/main/Medium/752.Open_the_Lock.md)  
@@ -317,6 +318,7 @@ Most string problems are handled similarly to arrays.
 ### Topological Sort
 
 [310. Minimum Height Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/310.Minimum_Height_Trees.md)  
+[2192. All Ancestors of a Node in a Directed Acyclic Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2192.All_Ancestors_of_a_Node_in_a_Directed_Acyclic_Graph.md)
 
 ---
 
