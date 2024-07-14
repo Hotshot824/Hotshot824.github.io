@@ -31,16 +31,12 @@ tags: [Algorithm]
 > 從最開始的 Paging Problem Definition 開始到 Offline Optimal Algorithm, Marking Algorithm 的介紹。
 {: .block-tip }
 
-$$
-\begin{array}{ll}
-\text{Paging Problem Definition:} \\
-\quad \text{1. A two-level memory system, capable of holding } K \text{ items in the Cache.} \\
-\quad \text{2. At each time step, a request to an item is issued.} \\
-\quad \text{3. If the item } p \text{ exists in the Cache, then the cost is } 0. \\
-\quad \text{4. If the item } p \text{ does not exist in the Cache:} \\
-\quad \quad \text{a. Choose an item } q \text{ to replace it, and the cost is } 1.
-\end{array}
-$$
+**Paging Problem Definition:**
+1.  A two-level memory system, capable of holding $K$ items in the Cache.
+2.  At each time step, a request to an item is issued.
+3.  If the item $p$ exists in the Cache, then the cost is 0.
+4.  If the item $p$ does not exist in the Cache:
+    -   Choose an item $q$ to replace it, and the cost is 1.
 
 這個問題是一個 Online Problem，因為沒有辦法知道未來的 Request，所以只能根據目前的 Request 來做決策。
 但是我們可以先從 Offline Algorithm 開始，來了解這個問題的 Optimal。

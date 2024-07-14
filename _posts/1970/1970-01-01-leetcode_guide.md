@@ -109,9 +109,11 @@ Most string problems are handled similarly to arrays.
 [23. Merge k Sorted Lists](https://github.com/Hotshot824/Leetcode/blob/main/Hard/23.merge_k_sorted_lists.md)  
 [25. Reverse Nodes in k-Group](https://github.com/Hotshot824/Leetcode/blob/main/Hard/25.reverse_nodes_in_k_group.md)  
 [83. Remove Duplicates from Sorted List](https://github.com/Hotshot824/Leetcode/blob/main/Easy/83.remove-duplicates-from-sorted-list.md)  
-[143. Reorder List](https://github.com/Hotshot824/Leetcode/blob/main/medium/143.Reorder_List.md)  
+[143. Reorder List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/143.Reorder_List.md)  
 **[Linkedlist Summarize]**  
-[2816. Double a Number Represented as a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/medium/2816.Double_a_Number_Represented_as_a_Linked_List.md)  
+[2816. Double a Number Represented as a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2816.Double_a_Number_Represented_as_a_Linked_List.md)  
+[2181. Merge Nodes in Between Zeros](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2181.Merge_Nodes_in_Between_Zeros.md)  
+[2058. Find the Minimum and Maximum Number of Nodes Between Critical Points](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2058.Find_the_Minimum_and_Maximum_Number_of_Nodes_Between_Critical_Points.md)  
 
 [Linkedlist Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E9%93%BE%E8%A1%A8%E6%80%BB%E7%BB%93%E7%AF%87.md
 
@@ -172,6 +174,9 @@ Most string problems are handled similarly to arrays.
 [1249. Minimum Remove to Make Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1249.Minimum_Remove_to_Make_Valid_Parentheses.md)  
 [1700. Number of Students Unable to Eat Lunch](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1700.Number_of_Students_Unable_to_Eat_Lunch.md)  
 [950. Reveal Cards In Increasing Order](https://github.com/Hotshot824/Leetcode/blob/main/Medium/950.Reveal_Cards_In_Increasing_Order.md)  
+[1190. Reverse Substrings Between Each Pair of Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1190.Reverse_Substrings_Between_Each_Pair_of_Parentheses.md)  
+[1717. Maximum Score From Removing Substrings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1717.Maximum_Score_From_Removing_Substrings.md)  
+[735. Asteroid Collision](https://github.com/Hotshot824/Leetcode/blob/main/Medium/735.Asteroid_Collision.md)  
 
 [Stack&Queue Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E6%A0%88%E4%B8%8E%E9%98%9F%E5%88%97%E6%80%BB%E7%BB%93.md
 
@@ -244,12 +249,14 @@ Most string problems are handled similarly to arrays.
 [948. Bag of Tokens](https://github.com/Hotshot824/Leetcode/blob/main/Medium/948.Bag_of_Tokens.md)  
 [621. Task Scheduler](https://github.com/Hotshot824/Leetcode/blob/main/Medium/621.Task_Scheduler.md)  
 [334. Increasing Triplet Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/334.Increasing_Triplet_Subsequence.md)  
+[1509. Minimum Difference Between Largest and Smallest Value in Three Moves](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1509.Minimum_Difference_Between_Largest_and_Smallest_Value_in_Three_Moves.md)  
 
 ##### Math
 
 [43. Multiply Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/43.Multiply_Strings.md)  
 [976. Largest Perimeter Triangle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/976.Largest_Perimeter_Triangle.md)  
 [2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leeetcode/blob/main/Easy/2971.Find_Polygon_With_the_Largest_Perimeter.md)  
+[1518. Water Bottles](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1518.Water_Bottles.md)  
 
 ---
 
@@ -264,6 +271,7 @@ Most string problems are handled similarly to arrays.
 [300. Longest Increasing Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/300.Longest_Increasing_Subsequence.md)  
 [2370. Longest Ideal Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2370.Longest_Ideal_Subsequence.md)  
 [Minimum Falling Path Sum I & II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/1289.Minimum_Falling_Path_Sum.md)  
+[32. Longest Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Hard/32.Longest_Valid_Parentheses.md)
 
 ##### [0/1 Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Knapsack_Problem.md)  
 
@@ -308,7 +316,6 @@ Most string problems are handled similarly to arrays.
 [200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_of_Islands.md)  
 [2368. Reachable Nodes With Restrictions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2368.Reachable_Nodes_With_Restrictions.md)  
 [778. Swim in Rising Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/778.Swim_in_Rising_Water.md)  
-
 
 ### Breadth First Search
 
