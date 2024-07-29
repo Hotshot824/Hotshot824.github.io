@@ -158,6 +158,7 @@ Most string problems are handled similarly to arrays.
 [1750. Minimum Length of String After Deleting Similar Ends](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1750.Minimum_Length_of_String_After_Deleting_Similar_Ends.md)  
 [442. Find All Duplicates in an Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/442.Find_All_Duplicates_in_an_Array.md)
 [881. Boats to Save People](https://github.com/Hotshot824/Leetcode/blob/main/Medium/881.Boats_to_Save_People.md)  
+[1395. Count Number of Teams](https://github.com/Hotshto824/Leetcode/blob/main/Medium/1395.Count_Number_of_Teams.md)  
 
 ---
 
@@ -213,6 +214,7 @@ Most string problems are handled similarly to arrays.
 [1038. Binary Search Tree to Greater Sum Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1038.Binary_Search_Tree_to_Greater_Sum_Tree.md)  
 [2196. Create Binary Tree From Descriptions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2196.Create_Binary_Tree_From_Descriptions.md)  
 [2096. Step-By-Step Directions From a Binary Tree Node to Another](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2096.Step-By-Step_Directions_From_a_Binary_Tree_Node_to_Another.md)  
+[1530. Number of Good Leaf Nodes Pairs](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1530.Number_of_Good_Leaf_Nodes_Pairs.md)  
 
 ##### Other Operations
 
@@ -318,16 +320,24 @@ Most string problems are handled similarly to arrays.
 [200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_of_Islands.md)  
 [2368. Reachable Nodes With Restrictions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2368.Reachable_Nodes_With_Restrictions.md)  
 [778. Swim in Rising Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/778.Swim_in_Rising_Water.md)  
+[797. All Paths From Source to Target](https://github.com/Hotshot824/Leetcode/blob/main/Medium/797.All_Paths_From_Source_to_Target.md)  
 
 ### Breadth First Search
 
 [752. Open the Lock](https://github.com/Hotshot824/Leetcode/blob/main/Medium/752.Open_the_Lock.md)  
 [1654. Minimum Jumps to Reach Home](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1654.Minimum_Jumps_to_Reach_Home.md)  
+[2045. Second Minimum Time to Reach Destination](https://github.com/Hotshot824/Leetcode/blob/main/Hard/2045.Second_Minimum_Time_to_Reach_Destination.md)  
 
 ### Topological Sort
 
 [310. Minimum Height Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/310.Minimum_Height_Trees.md)  
 [2192. All Ancestors of a Node in a Directed Acyclic Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2192.All_Ancestors_of_a_Node_in_a_Directed_Acyclic_Graph.md)
+
+### Shortest Path
+
+[2976. Minimum Cost to Convert String I](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2976.Minimum_Cost_to_Convert_String_I.md)  
+[743. Network Delay Time](https://github.con/Hotshot824/Leetcode/blob/main/Medium/743.Network_Delay_Time.md)  
+[1976. Number of Ways to Arrive at Destination](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1976.Number_of_Ways_to_Arrive_at_Destination.md)  
 
 ---
 
