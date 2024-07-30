@@ -16,7 +16,7 @@ tags: [leetcode, algorithm]
 [leetcode-master]: https://github.com/youngyangyang04/leetcode-master
 [Python-LeetCode 581]: https://hackmd.io/@bangyewu/ryLbEED23/%2FAXR8NqGRQj2MLo6oCY7DGQ
 
-### Array
+### 1. Array
 
 **[Easy Array]**  
 [35. Search Insert Position](https://github.com/Hotshot824/Leetcode/blob/main/Easy/35.Search_Insert_Position.md)  
@@ -74,7 +74,7 @@ tags: [leetcode, algorithm]
 
 ---
 
-### String
+### 2. String
 
 Most string problems are handled similarly to arrays.
 
@@ -87,6 +87,7 @@ Most string problems are handled similarly to arrays.
 **[String Summarize]**  
 [71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
 [72. Edit Distance](https://github.com/Hotshot824/Leetcode/blob/main/Medium/72.Edit_Distance.md)  
+[1653. Minimum Deletions to Make String Balanced](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1653.Minimum_Deletions_to_Make_String_Balanced.md)  
 
 [String Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%80%BB%E7%BB%93.md
 
@@ -96,7 +97,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Linkedlist
+### 3. Linkedlist
 
 [203. Remove Linked List Elements](https://github.com/Hotshot824/Leetcode/blob/main/Easy/203.Remove_Linked_List_Elements.md)  
 [707. Design Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/707.Design_Linked_List.md)  
@@ -125,7 +126,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Hash
+### 4. Hash
 
 [242. Valid Anagram](https://github.com/Hotshot824/Leetcode/blob/main/Easy/242.Valid_Anagram.md)  
 [2395. Find Subarrays With Equal Sum](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2395.Find_Subarrays_With_Equal_Sum.md)  
@@ -146,7 +147,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Two Pointer
+### 5. Two Pointer
 
 [1365. How Many Numbers Are Smaller Than the Current Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1365.how_many_numbers_are_smaller_than_the_current_number.md)  
 [125. Valid Palindrome](https://github.com/Hotshot824/Leetcode/blob/main/Easy/125.valid-palindrome.md)  
@@ -162,7 +163,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Queue & Stack
+### 6. Queue & Stack
 
 [232. Implement Queue using Stacks](https://github.com/Hotshot824/Leetcode/blob/main/Easy/232.Implement_Queue_using_Stacks.md)  
 [225. Implement Stack using Queues](https://github.com/Hotshot824/Leetcode/blob/main/Easy/225.Implement_Stack_using_Queues.md)  
@@ -189,7 +190,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Binary Tree
+### 7. Binary Tree
 
 [Build Binary Tree for Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Bulid_Binary_Tree_for_Array.md)  
 [Recursion Binary Tree Traversal](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Recursion_Binary_Tree_Traversal.md)  
@@ -223,7 +224,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Backtracking
+### 8. Backtracking
  
 [77. Combinations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/77.combinations.md)  
 [79. Word Search](https://github.com/Hotshot824/Leetcode/blob/main/Medium/79.Word_Search.md)  
@@ -245,7 +246,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Greedy Algorithm
+### 9. Greedy Algorithm
 
 [55. Jump Game I & II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/55.jump-game.md)  
 [452. Minimum Number of Arrows to Burst Balloons](https://github.com/Hotshot824/Leetcode/blob/main/Medium/452.Minimum_Number_of_Arrows_to_Burst_Balloons.md)  
@@ -255,7 +256,9 @@ Most string problems are handled similarly to arrays.
 [334. Increasing Triplet Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/334.Increasing_Triplet_Subsequence.md)  
 [1509. Minimum Difference Between Largest and Smallest Value in Three Moves](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1509.Minimum_Difference_Between_Largest_and_Smallest_Value_in_Three_Moves.md)  
 
-##### Math
+---
+
+### 10. Math
 
 [43. Multiply Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/43.Multiply_Strings.md)  
 [976. Largest Perimeter Triangle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/976.Largest_Perimeter_Triangle.md)  
@@ -264,7 +267,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Dynamic Programming
+### 11. Dynamic Programming
 
 [509. Fibonacci Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/509.Fibonacci_Number.md)  
 [70. Climbing Stairs](https://github.com/Hotshot824/Leetcode/blob/main/Easy/70.Climbing_Stairs.md)  
@@ -294,7 +297,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Bit Manipulation
+### 12. Bit Manipulation
 
 **[Bit Manipulation Summarize]**  
 [201. Bitwise AND of Numbers Range](https://github.com/Hotshot824/Leetcode/blob/main/Medium/201.Bitwise_AND_of_Numbers_Range.md)  
@@ -303,7 +306,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Graph
+### 13. Graph
 
 [1971. Find if Path Exists in Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1971.Find_if_Path_Exists_in_Graph.md)  
 [787. Cheapest Flights Within K Stops](https://github.com/Hotshot824/Leetcode/blob/main/Medium/787.Cheapest_Flights_Within_K_Stops.md)  
@@ -315,25 +318,25 @@ Most string problems are handled similarly to arrays.
 [1382. Balance a Binary Search Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1382.Balance_a_Binary_Search_Tree.md)  
 [2285. Maximum Total Importance of Roads](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2285.Maximum_Total_Importance_of_Roads.md)  
 
-### Graph Search
+##### Graph Search
 
 [200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_of_Islands.md)  
 [2368. Reachable Nodes With Restrictions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2368.Reachable_Nodes_With_Restrictions.md)  
 [778. Swim in Rising Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/778.Swim_in_Rising_Water.md)  
 [797. All Paths From Source to Target](https://github.com/Hotshot824/Leetcode/blob/main/Medium/797.All_Paths_From_Source_to_Target.md)  
 
-### Breadth First Search
+##### Breadth First Search
 
 [752. Open the Lock](https://github.com/Hotshot824/Leetcode/blob/main/Medium/752.Open_the_Lock.md)  
 [1654. Minimum Jumps to Reach Home](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1654.Minimum_Jumps_to_Reach_Home.md)  
 [2045. Second Minimum Time to Reach Destination](https://github.com/Hotshot824/Leetcode/blob/main/Hard/2045.Second_Minimum_Time_to_Reach_Destination.md)  
 
-### Topological Sort
+##### Topological Sort
 
 [310. Minimum Height Trees](https://github.com/Hotshot824/Leetcode/blob/main/Medium/310.Minimum_Height_Trees.md)  
 [2192. All Ancestors of a Node in a Directed Acyclic Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2192.All_Ancestors_of_a_Node_in_a_Directed_Acyclic_Graph.md)
 
-### Shortest Path
+##### Shortest Path
 
 [2976. Minimum Cost to Convert String I](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2976.Minimum_Cost_to_Convert_String_I.md)  
 [743. Network Delay Time](https://github.con/Hotshot824/Leetcode/blob/main/Medium/743.Network_Delay_Time.md)  
@@ -341,7 +344,7 @@ Most string problems are handled similarly to arrays.
 
 ---
 
-### Other
+### 14. Other
 
 [1. Two sum](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1.Two_sum.md)  
 [2. Add Two Numbers](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2.Add_Two_Numbers.md)  

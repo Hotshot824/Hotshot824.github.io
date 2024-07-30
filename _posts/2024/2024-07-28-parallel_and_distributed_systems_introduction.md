@@ -151,12 +151,76 @@ Shared Information Cluster Node (共用資訊叢集節點) 是為了解決資訊
 
 **1.2.4 Microservices**
 
+> 在 Narrowly Distributed Applications 的基礎上，Sub-Application 之間有嚴格的從屬關係，這種關係可能會造成資源的浪費。
+{: .block-tip }
+
+這裡舉個浪費的例子: 存在 Application A, 包含 3 個 Sub-Application: A1, A2, A3，有可能 A 的某個功能只需要 A1, A2，
+但是 A3 就會被閒置，這樣就會造成資源的浪費。
+
+[Microservices] 是一種 Architecture patte，也就是每個 Microservices 都是完備的，可以獨立對外提供服務，
+這樣就可以針對每個 Microservices 進行 Scaling、Resource Allocation。
+
+![](/image/2024/07-28-parallel_and_distributed_systems_introduction/7.jpg)
+
 ---
 
 ### 1.3 Distributed System Introduction 
 
+如果所有的服務都只能作為系統的一部分聯合起來對外提供服務，那麼這樣的系統就是 Narrowly Distributed Applications，
+如果這些服務可以獨立對外提供服務，那麼這樣的系統就是 Microservices。
+
+**1.3.2 Distributed System Consistency Problem**
+
+最簡單的一致性問題如下，假如 Request 是有序的，那麼我們應該要確保 R1 修改完 a 之後 R2 讀取的 a 是修改後的值。
+
+![](/image/2024/07-28-parallel_and_distributed_systems_introduction/8.jpg)
+
+如果一個系統會發生上面的問題，那麼這個系統就是不一致的(至少是線性不一致 Linearizability Inconsistency)，
+關於一致性的分級會在後續章節提到，這裡只是提一下。
+
+**1.3.3 Distributed System Node**
+
+> 在 Distributed System 中，Node 可能是同質的，也可能是異質的。
+
+在同質節點中，當系統發生變更時，所有的節點的變更是一樣的，例如: Zookeeper cluster 收到 Client 發送建立 znode 的請求後，
+每個節點都需要建立 znode。
+
+異質節點中，當應用發生變更時，每個節點的變更是不一樣的，例如: 一個網購平台的系統，訂單節點需要建立訂單，庫存節點需要減少庫存。
+這也是一種 Consistent 的問題，要確保整個系統的 Consistent。
+
+### 1.4 Distributed System Advantages & Disadvantages
+
+**1.4.1 Advantages**
+
+1.  Reduced Cost:
+    -   降低系統的實施成本是分散式系統的發展與最初動力，對於硬體強大的大型主機，可以用多個小型叢集上取代
+2.  Improved Availability:
+    -   提升系統的可用性，即使某個節點失效，也不會影響整個系統
+3.  Improved Performance:
+    -   提升系統的併發與容量，提升系統的性能
+4.  Reduced Maintenance:
+    -   由於分散式系統的多個節點，可以降低系統的維護成本，例如: 可以對某個節點進行維護，而不影響整個系統
+    -   並且因為節點之間是獨立的，可以獨立的平行開發與模組化
+
+**1.4.2 Disadvantages**
+
+1.  Consistency:
+    -   一致性問題是分散式系統的核心問題，要保證系統的一致性是非常困難的，所以在下個章節會先介紹一致性問題
+2.  Node discovery problem:
+    -   在有許多動態變化的節點時，怎麼發現系統中的可用節點是一個問題
+3.  Node call problem:
+    -   當系統中有許多節點時，在節點之間的呼叫是經常發生的，但它們也有與之對應的成本
+
+    ![](/image/2024/07-28-parallel_and_distributed_systems_introduction/9.jpg)
+4.  Node coworking problem:
+    -   當系統中有許多節點時，節點之間的協作是一個問題，例如: 如何在同質節點中保證一個 Task 只被一個節點執行
+    -   異質節點也需要解決 Producer-Consumer 問題，例如: 訂單節點需要建立訂單，庫存節點需要減少庫存
+
+> 這張主要是 Introduction 所以就簡單介紹 Distributed System 的優缺點與發展歷程，後續章節會更深入的介紹 Distributed System。
+{: .block-warning }
+
 > ##### Last Edit
-> 7-28-2024 01:26
+> 7-30-2024 19:48
 {: .block-warning }
 
 [CAP theorem]: https://en.wikipedia.org/wiki/CAP_theorem
@@ -166,3 +230,5 @@ Shared Information Cluster Node (共用資訊叢集節點) 是為了解決資訊
 [Three-phase commit protocol]: https://en.wikipedia.org/wiki/Three-phase_commit_protocol
 
 [Service Discovery]: https://en.wikipedia.org/wiki/Service_discovery
+
+[Microservices]: https://en.wikipedia.org/wiki/Microservices
