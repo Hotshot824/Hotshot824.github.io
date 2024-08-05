@@ -71,6 +71,7 @@ tags: [leetcode, algorithm]
 [2037. Minimum Number of Moves to Seat Everyone](https://github.com/Hotshot824/Leetcode/blob/Easy/2037.Minimum_Number_of_Moves_to_Seat_Everyone.md)  
 [945. Minimum Increment to Make Array Unique](https://github.com/Hotshot824/Leetcode/blob/Medium/945.Minimum_Increment_to_Make_Array_Unique.md)  
 [2233. Maximum Product After K Increments](https://github.com/Hotshot824/Leetcode/blob/Medium/2233.Maximum_Product_After_K_Increments.md)  
+[1508. Range Sum of Sorted Subarray Sums](https://github.com/Hotshot824/Leetcode/blob/Medium/1508.Range_Sum_of_Sorted_Subarray_Sums.md)  
 
 ---
 
@@ -279,6 +280,7 @@ Most string problems are handled similarly to arrays.
 [2370. Longest Ideal Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2370.Longest_Ideal_Subsequence.md)  
 [Minimum Falling Path Sum I & II](https://github.com/Hotshot824/Leetcode/blob/main/Hard/1289.Minimum_Falling_Path_Sum.md)  
 [32. Longest Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/main/Hard/32.Longest_Valid_Parentheses.md)
+[1105. Filling Bookcase Shelves](https://github.com/Hotshot824/Leeetcode/blob/main/Medium/1105.Filling_Bookcase_Shelves.md)  
 
 ##### [0/1 Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Knapsack_Problem.md)  
 
