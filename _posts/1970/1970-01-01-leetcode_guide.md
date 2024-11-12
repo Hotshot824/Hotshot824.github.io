@@ -43,6 +43,8 @@ tags: [leetcode, algorithm]
 
 [704. Binary search](https://github.com/Hotshot824/Leetcode/blob/main/Easy/704.Binary_search.md)  
 [33. Search in Rotated Sorted Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/33.Search_in_Rotated_Sorted_Array.md)  
+[2601. Prime Subtraction Operation](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2601.Prime_Subtraction_Operation.md)  
+[2070. Most Beautiful Item for Each Query](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2070.Most_Beautiful_Item_for_Each_Query.md)  
 
 ##### Sliding Window
 
@@ -52,6 +54,8 @@ tags: [leetcode, algorithm]
 [713. Subarray Product Less Than K](https://github.com/Hotshot824/Leetcode/blob/main/Medium/713.Subarray_Product_Less_Than_K.md)  
 [992. Subarrays with K Different Integers](https://github.com/Hotshot824/Leetcode/blob/main/Hard/992.Subarrays_with_K_Different_Integers.md)  
 [2444. Count Subarrays With Fixed Bounds](https://github.com/Hotshot824/Leetcode/blob/main/Hard/2444.Count_Subarrays_With_Fixed_Bounds.md)  
+[2461. Maximum Sum of Distinct Subarrays With Length K](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2461.Maximum_Sum_of_Distinct_Subarrays_With_Length_K.md)  
+[3254. Find the Power of K-Size Subarrays I](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3254.Find_the_Power_of_K-Size_Subarrays_I.md)  
 
 ##### [Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)
 
@@ -218,7 +222,7 @@ Most string problems are handled similarly to arrays.
 [110. Balanced Binary Tree](https://github.com/Hotshot824/Leetcode/blob/main/Easy/110.balanced-binary-tree.md)  
 [257. Binary Tree Paths](https://github.com/Hotshot824/Leetcode/blob/main/Easy/257.binary-tree-paths.md)  
 [112. Path Sum & II & III](https://github.com/Hotshot824/Leetcode/blob/main/Easy/112.path-sum.md)  
-[Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)
+[Binary Tree Summarize 2](https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%91%A8%E6%80%BB%E7%BB%93/20201003%E4%BA%8C%E5%8F%89%E6%A0%91%E5%91%A8%E6%9C%AB%E6%80%BB%E7%BB%93.md)  
 [1325. Delete Leaves With a Given Value](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1325.Delete_Leaves_With_a_Given_Value.md)  
 [1038. Binary Search Tree to Greater Sum Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1038.Binary_Search_Tree_to_Greater_Sum_Tree.md)  
 [2196. Create Binary Tree From Descriptions](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2196.Create_Binary_Tree_From_Descriptions.md)  
