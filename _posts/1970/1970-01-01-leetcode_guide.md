@@ -93,7 +93,9 @@ Most string problems are handled similarly to arrays.
 [71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
 [72. Edit Distance](https://github.com/Hotshot824/Leetcode/blob/main/Medium/72.Edit_Distance.md)  
 [1653. Minimum Deletions to Make String Balanced](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1653.Minimum_Deletions_to_Make_String_Balanced.md)  
-[539. Minimum Time Difference](https://github.com/Hotshot824/Leetcode/blob/main/Medium/539.Minimum_Time_Difference.md)
+[539. Minimum Time Difference](https://github.com/Hotshot824/Leetcode/blob/main/Medium/539.Minimum_Time_Difference.md)  
+[2109. Adding Spaces to a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2109.Adding_Spaces_to_a_String.md)  
+[1400. Construct K Palindrome Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1400.Construct_K_Palindrome_Strings.md)  
 
 [String Summarize]: https://github.com/youngyangyang04/leetcode-master/blob/master/problems/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%80%BB%E7%BB%93.md
 
@@ -152,6 +154,7 @@ Most string problems are handled similarly to arrays.
 [128. Longest Consecutive Sequence](https://github.com/Hotshot824/Leetcode/blob/main/Hard/128.Longest_Consecutive_Sequence.md)  
 [791. Custom Sort String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/791.Custom_Sort_String.md)  
 [506. Relative Ranks](https://github.com/Hotshot824/Leetcode/blob/main/Easy/506.Relative_Ranks.md)  
+[916. Word Subsets](https://github.com/Hotshot824/Leetcode/blob/main/Medium/916.Word_Subsets.md)  
 
 ---
 
@@ -332,6 +335,7 @@ Most string problems are handled similarly to arrays.
 [2497. Maximum Star Sum of a Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2497.Maximum_Star_Sum_of_a_Graph.md)  
 [1382. Balance a Binary Search Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1382.Balance_a_Binary_Search_Tree.md)  
 [2285. Maximum Total Importance of Roads](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2285.Maximum_Total_Importance_of_Roads.md)  
+[2924. Find Champion II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2924.Find_Champion_II.md)  
 
 ##### Graph Search
 
