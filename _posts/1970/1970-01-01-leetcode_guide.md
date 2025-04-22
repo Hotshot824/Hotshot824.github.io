@@ -68,6 +68,7 @@ tags: [leetcode, algorithm]
 
 [525. Contiguous Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/525.Contiguous_Array.md)  
 [974. Subarray Sums Divisible by K](https://github.com/Hotshot824/Leetcode/blob/main/Medium/974.Subarray_Sums_Divisible_by_K.md)  
+[2145. Count the Hidden Sequences](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2145.Count_the_Hidden_Sequences.md)
 
 ##### Sort
 
