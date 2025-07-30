@@ -337,6 +337,8 @@ Most string problems are handled similarly to arrays.
 **[Bit Manipulation Summarize]**  
 [201. Bitwise AND of Numbers Range](https://github.com/Hotshot824/Leetcode/blob/main/Medium/201.Bitwise_AND_of_Numbers_Range.md)  
 [2429. Minimize XOR](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2429.Minimize_XOR.md)  
+[2411. Smallest Subarrays With Maximum Bitwise OR](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2411.Smallest_Subarrays_With_Maximum_Bitwise_OR.md)  
+[2419. Longest Subarray With Maximum Bitwise AND](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2419.Longest_Subarray_With_Maximum_Bitwise_AND.md)  
 
 [Bit Manipulation Summarize]: https://github.com/Hotshot824/Leetcode/blob/main/Medium/Bitwise.md
 
