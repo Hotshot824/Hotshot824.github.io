@@ -23,6 +23,7 @@ tags: [leetcode, algorithm]
 [704. Binary Search](https://github.com/Hotshot824/Leetcode/blob/main/Easy/704.Binary_Search.md)  
 [2070. Most Beautiful Item for Each Query](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2070.Most_Beautiful_Item_For_Each_Query.md)  
 [2601. Prime Subtraction Operation](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2601.Prime_Subtraction_Operation.md)  
+[Hackerrank. Climbing the Leaderboard](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Hackerrank.Climbing_the_Leaderboard.md)  
 
 **Easy Array**  
 [26. Remove Duplicates from Sorted Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/26.Remove_Duplicates_From_Sorted_Array.md)  
@@ -45,7 +46,6 @@ tags: [leetcode, algorithm]
 [840. Magic Squares In Grid](https://github.com/Hotshot824/Leetcode/blob/main/Medium/840.Magic_Squares_In_Grid.md)  
 [861. Score After Flipping Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/861.Score_After_Flipping_Matrix.md)  
 [2373. Largest Local Values in a Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2373.Largest_Local_Values_In_A_Matrix.md)  
-[Hackerrank. Climbing the Leaderboard](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Hackerrank.Climbing_the_Leaderboard.md)  
 [Hackerrank. Forming a Magic Square](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Hackerrank.Forming_a_Magic_Square.md)  
 [Martix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)  
 
@@ -371,5 +371,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-13 13:53:32
+> Leetcode 2025-09-13 17:08:47
 {: .block-tip }
