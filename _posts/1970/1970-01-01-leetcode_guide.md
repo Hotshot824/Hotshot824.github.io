@@ -45,6 +45,7 @@ tags: [leetcode, algorithm]
 [840. Magic Squares In Grid](https://github.com/Hotshot824/Leetcode/blob/main/Medium/840.Magic_Squares_In_Grid.md)  
 [861. Score After Flipping Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/861.Score_After_Flipping_Matrix.md)  
 [2373. Largest Local Values in a Matrix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2373.Largest_Local_Values_In_A_Matrix.md)  
+[Forming a Magic Square](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Forming_a_Magic_Square.md)  
 [Martix](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Martix.md)  
 
 **Prefix Sum**  
@@ -369,5 +370,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-13 02:36:49
+> Leetcode 2025-09-13 12:54:23
 {: .block-tip }
