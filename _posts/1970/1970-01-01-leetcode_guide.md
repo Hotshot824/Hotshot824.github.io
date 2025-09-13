@@ -115,7 +115,7 @@ tags: [leetcode, algorithm]
 [Iteration Binary Tree Traversal](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Iteration_Binary_Tree_Traversal.md)  
 [Iteration Binary Trees Unified Method](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Iteration_Binary_Trees_Unified_Method.md)  
 
-**binary tree**  
+**Binary tree**  
 [N-ary Tree Traversal](https://github.com/Hotshot824/Leetcode/blob/main/Easy/N-ary_Tree_Traversal.md)  
 [Recursion Binary traversal](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Recursion_Binary_Tree_Traversal.md)  
 
@@ -160,8 +160,6 @@ tags: [leetcode, algorithm]
 [279. Perfect Squares](https://github.com/Hotshot824/Leetcode/blob/main/Medium/279.Perfect_Squares.md)  
 [377. Combination Sum IV](https://github.com/Hotshot824/Leetcode/blob/main/Medium/377.Combination_Sum_Iv.md)  
 [518. Coin Change II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/518.Coin_Change_Ii.md)  
-
-**Unbounded Knapsack Problem**  
 [Unbounded Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/main/Medium/Unbounded_Knapsack_Problem.md)  
 
 ### Graph
@@ -174,6 +172,7 @@ tags: [leetcode, algorithm]
 **Graph**  
 [514. Freedom Trail](https://github.com/Hotshot824/Leetcode/blob/main/Hard/514.Freedom_Trail.md)  
 [787. Cheapest Flights Within K Stops](https://github.com/Hotshot824/Leetcode/blob/main/Medium/787.Cheapest_Flights_Within_K_Stops.md)  
+[1219. Path with Maximum Gold](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1219.Path_With_Maximum_Gold.md)  
 [1382. Balance a Binary Search Tree](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1382.Balance_A_Binary_Search_Tree.md)  
 [1791. Find Center of Star Graph](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1791.Find_Center_Of_Star_Graph.md)  
 [1971. Find if Path Exists in Graph](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1971.Find_If_Path_Exists_In_Graph.md)  
@@ -182,9 +181,6 @@ tags: [leetcode, algorithm]
 [2497. Maximum Star Sum of a Graph](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2497.Maximum_Star_Sum_Of_A_Graph.md)  
 [2812. Find the Safest Path in a Grid](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2812.Find_The_Safest_Path_In_A_Grid.md)  
 [2924. Find Champion II](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2924.Find_Champion_Ii.md)  
-
-**graph**  
-[1219. Path with Maximum Gold](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1219.Path_With_Maximum_Gold.md)  
 
 **Graph Search**  
 [200. Number of Islands](https://github.com/Hotshot824/Leetcode/blob/main/Medium/200.Number_Of_Islands.md)  
@@ -235,6 +231,7 @@ tags: [leetcode, algorithm]
 [2342. Max Sum of a Pair With Equal Sum of Digits](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2342.Max_Sum_Of_A_Pair_With_Equal_Sum_Of_Digits.md)  
 [2395. Find Subarrays With Equal Sum](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2395.Find_Subarrays_With_Equal_Sum.md)  
 [2657. Find the Prefix Common Array of Two Arrays](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2657.Find_The_Prefix_Common_Array_Of_Two_Arrays.md)  
+[3541. Find Most Frequent Vowel and Consonant](https://github.com/Hotshot824/Leetcode/blob/main/Easy/3541.Find_Most_Frequent_Vowel_And_Consonant.md)  
 
 ### Linkedlist
 
@@ -261,14 +258,12 @@ tags: [leetcode, algorithm]
 
 **Math**  
 [43. Multiply Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/43.Multiply_Strings.md)  
+[84. Largest Rectangle in Histogram](https://github.com/Hotshot824/Leetcode/blob/main/Hard/84.Largest_Rectangle_In_Histogram.md)  
 [976. Largest Perimeter Triangle](https://github.com/Hotshot824/Leetcode/blob/main/Easy/976.Largest_Perimeter_Triangle.md)  
 [1518. Water Bottles](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1518.Water_Bottles.md)  
 [2364. Count Number of Bad Pairs](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2364.Count_Number_Of_Bad_Pairs.md)  
 [2579. Count Total Number of Colored Cells](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2579.Count_Total_Number_Of_Colored_Cells.md)  
 [2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2971.Find_Polygon_With_The_Largest_Perimeter.md)  
-
-**math**  
-[84. Largest Rectangle in Histogram](https://github.com/Hotshot824/Leetcode/blob/main/Hard/84.Largest_Rectangle_In_Histogram.md)  
 
 ### Queue & Stack
 
@@ -314,29 +309,25 @@ tags: [leetcode, algorithm]
 
 ### String
 
-**Easy String**  
+**String**  
+[9.Palindrome Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/9.Palindrome_Number.md)  
 [28. Find the Index of the First Occurrence in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/28.Find_Index_Of_First_Occurrence_String.md)  
+[71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
 [151. Reverse Words in a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/151.Reverse_Words_String.md)  
 [344. Reverse String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/344.Reverse_String.md)  
-[541. Reverse String II](https://github.com/Hotshot824/Leetcode/blob/main/Easy/541.Reverse_String_Ii.md)  
-
-**String**  
-[71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/main/Medium/71.Simplify_Path.md)  
 [394. Decode String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/394.Decode_String.md)  
 [459. Repeated Substring Pattern](https://github.com/Hotshot824/Leetcode/blob/main/Easy/459.Repeated_Substring_Pattern.md)  
 [539.Minimum_Time_Difference.md](https://github.com/Hotshot824/Leetcode/blob/main/Medium/539.Minimum_Time_Difference.md)  
+[541. Reverse String II](https://github.com/Hotshot824/Leetcode/blob/main/Easy/541.Reverse_String_Ii.md)  
 [796. Rotate String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/796.Rotate_String.md)  
 [1400. Construct K Palindrome Strings](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1400.Construct_K_Palindrome_Strings.md)  
 [1653. Minimum Deletions to Make String Balanced](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1653.Minimum_Deletions_To_Make_String_Balanced.md)  
 [2108. Find First Palindromic String in the Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2108.Find_First_Palindromic_String_In_The_Array.md)  
 [2109. Adding Spaces to a String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2109.Adding_Spaces_To_A_String.md)  
+[3042. Count Prefix and Suffix Pairs I](https://github.com/Hotshot824/Leetcode/blob/main/Easy/3042.Count_Prefix_And_Suffix_Pairs_I.md)  
 [3223. Minimum Length of String After Operations](https://github.com/Hotshot824/Leetcode/blob/main/Medium/3223.Minimum_Length_Of_String_After_Operations.md)  
 [Easy Hash](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Easy_hash.md)  
 [Easy String](https://github.com/Hotshot824/Leetcode/blob/main/Easy/Easy_string.md)  
-
-**string**  
-[9.Palindrome Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/9.Palindrome_Number.md)  
-[3042. Count Prefix and Suffix Pairs I](https://github.com/Hotshot824/Leetcode/blob/main/Easy/3042.Count_Prefix_And_Suffix_Pairs_I.md)  
 
 **Trie**  
 [14. Longest Common Prefix](https://github.com/Hotshot824/Leetcode/blob/main/Easy/14.Longest_Common_Prefix.md)  
@@ -344,12 +335,9 @@ tags: [leetcode, algorithm]
 
 ### Two Pointer
 
-**Middle Node of Linkedlist**  
-[19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/19.Remove_Nth_Node_From_End_Of_List.md)  
-[1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_In_A_Linked_List.md)  
-
 **Two Pointer**  
 [5. Longest Palindromic Substring](https://github.com/Hotshot824/Leetcode/blob/main/Medium/5.Longest_Palindromic_Substring.md)  
+[19. Remove Nth Node From End of List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/19.Remove_Nth_Node_From_End_Of_List.md)  
 [42. Trapping Rain Water](https://github.com/Hotshot824/Leetcode/blob/main/Hard/42.Trapping_Rain_Water.md)  
 [125. Valid Palindrome](https://github.com/Hotshot824/Leetcode/blob/main/Easy/125.Valid_Palindrome.md)  
 [442. Find All Duplicates in an Array](https://github.com/Hotshot824/Leetcode/blob/main/Medium/442.Find_All_Duplicates_In_An_Array.md)  
@@ -358,6 +346,7 @@ tags: [leetcode, algorithm]
 [1358. Number of Substrings Containing All Three Characters](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1358.Number_Of_Substrings_Containing_All_Three_Characters.md)  
 [1365.How Many Numbers Are Smaller Than The Current Number](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1365.How_Many_Numbers_Are_Smaller_Than_The_Current_Number.md)  
 [1395. Count Number of Teams](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1395.Count_Number_Of_Teams.md)  
+[1721. Swapping Nodes in a Linked List](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1721.Swapping_Nodes_In_A_Linked_List.md)  
 [1750. Minimum Length of String After Deleting Similar Ends](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1750.Minimum_Length_Of_String_After_Deleting_Similar_Ends.md)  
 [2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2149.Rearrange_Array_Elements_By_Sign.md)  
 [2570. Merge Two 2D Arrays by Summing Values](https://github.com/Hotshot824/Leetcode/blob/main/Easy/2570.Merge_Two_2d_Arrays_By_Summing_Values.md)  
@@ -380,5 +369,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-12 14:33:45
+> Leetcode 2025-09-13 02:36:49
 {: .block-tip }
