@@ -228,6 +228,7 @@ tags: [leetcode, algorithm]
 [791. Custom Sort String](https://github.com/Hotshot824/Leetcode/blob/main/Medium/791.Custom_Sort_String.md)  
 [873. Length of Longest Fibonacci Subsequence](https://github.com/Hotshot824/Leetcode/blob/main/Medium/873.Length_Of_Longest_Fibonacci_Subsequence.md)  
 [916. Word Subsets](https://github.com/Hotshot824/Leetcode/blob/main/Medium/916.Word_Subsets.md)  
+[966. Vowel Spellchecker](https://github.com/Hotshot824/Leetcode/blob/main/Medium/966.Vowel_Spellchecker.md)  
 [1002. Find Common Characters](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1002.Find_Common_Characters.md)  
 [1481. Least Number of Unique Integers after K Removals](https://github.com/Hotshot824/Leetcode/blob/main/Medium/1481.Least_Number_Of_Unique_Integers_After_K_Removals.md)  
 [2342. Max Sum of a Pair With Equal Sum of Digits](https://github.com/Hotshot824/Leetcode/blob/main/Medium/2342.Max_Sum_Of_A_Pair_With_Equal_Sum_Of_Digits.md)  
@@ -372,5 +373,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/main/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-14 12:07:45
+> Leetcode 2025-09-14 13:50:20
 {: .block-tip }
