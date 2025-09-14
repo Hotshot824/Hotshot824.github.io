@@ -268,6 +268,7 @@ tags: [leetcode, algorithm]
 [2579. Count Total Number of Colored Cells](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2579.Count_Total_Number_Of_Colored_Cells.md)  
 [2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2971.Find_Polygon_With_The_Largest_Perimeter.md)  
 [Hackerrank. Extra Long Factorials](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Extra_Long_Factorials.md)  
+[Hackerrank. Non-Divisible Subset](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.NonDivisible_Subset.md)  
 
 ### Queue & Stack
 
@@ -373,5 +374,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-14 13:57:48
+> Leetcode 2025-09-14 16:48:28
 {: .block-tip }
