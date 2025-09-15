@@ -47,6 +47,7 @@ tags: [leetcode, algorithm]
 [861. Score After Flipping Matrix](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/861.Score_After_Flipping_Matrix.md)  
 [2373. Largest Local Values in a Matrix](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2373.Largest_Local_Values_In_A_Matrix.md)  
 [Hackerrank. Forming a Magic Square](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Forming_a_Magic_Square.md)  
+[Hackerrank. Queens Attack II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Queens_Attack_II.md)  
 [Martix](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Martix.md)  
 
 **Prefix Sum**  
@@ -375,5 +376,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-14 17:06:48
+> Leetcode 2025-09-15 15:55:25
 {: .block-tip }
