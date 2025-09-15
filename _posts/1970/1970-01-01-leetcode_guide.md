@@ -328,6 +328,7 @@ tags: [leetcode, algorithm]
 [796. Rotate String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/796.Rotate_String.md)  
 [1400. Construct K Palindrome Strings](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1400.Construct_K_Palindrome_Strings.md)  
 [1653. Minimum Deletions to Make String Balanced](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1653.Minimum_Deletions_To_Make_String_Balanced.md)  
+[1935. Maximum Number of Words You Can Type](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1935.Maximum_Number_of_Words_You_Can_Type.md)  
 [2108. Find First Palindromic String in the Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2108.Find_First_Palindromic_String_In_The_Array.md)  
 [2109. Adding Spaces to a String](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2109.Adding_Spaces_To_A_String.md)  
 [3042. Count Prefix and Suffix Pairs I](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3042.Count_Prefix_And_Suffix_Pairs_I.md)  
@@ -376,5 +377,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-15 15:55:25
+> Leetcode 2025-09-15 16:23:16
 {: .block-tip }
