@@ -288,6 +288,9 @@ tags: [leetcode, algorithm]
 [2530. Maximal Score After Applying K Operations](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2530.Maximal_Score_After_Applying_K_Operations.md)  
 [3066. Minimum Operations to Exceed Threshold Value II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3066.Minimum_Operations_To_Exceed_Threshold_Value_Ii.md)  
 
+**Queue & Stack**  
+[2197. Replace Non-Coprime Numbers in Array](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2197. Replace_NonCoprime_Numbers_in_Array.md)  
+
 **Stack & Queue**  
 [20. Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/20.Valid_Parentheses.md)  
 [150. Evaluate Reverse Polish Notation](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/150.Evaluate_Reverse_Polish_Notation.md)  
@@ -387,5 +390,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-16 08:00:30
+> Leetcode 2025-09-16 12:41:55
 {: .block-tip }
