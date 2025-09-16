@@ -304,6 +304,7 @@ tags: [leetcode, algorithm]
 **Sliding Window**  
 [3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
 [395. Longest Substring with At Least K Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/395.Longest_Substring_With_At_Least_K_Repeating_Characters.md)  
+[643. Maximum Average Subarray I](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/643.Maximum_Average_Subarray_I.md)  
 [713. Subarray Product Less Than K](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/713.Subarray_Product_Less_Than_K.md)  
 [992. Subarrays with K Different Integers](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/992.Subarrays_With_K_Different_Integers.md)  
 [1456. Maximum Number of Vowels in a Substring of Given Length](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1456.Maximum_Numberof_Vowels_in_a_Substring_of_Given_Length.md)  
@@ -378,5 +379,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-16 01:15:06
+> Leetcode 2025-09-16 01:42:32
 {: .block-tip }
