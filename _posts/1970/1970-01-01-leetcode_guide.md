@@ -344,6 +344,7 @@ tags: [leetcode, algorithm]
 [3223. Minimum Length of String After Operations](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3223.Minimum_Length_Of_String_After_Operations.md)  
 [Easy Hash](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_hash.md)  
 [Easy String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_string.md)  
+[Hackerrank. Encryption](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Encryption.md)  
 [Hackerrank. Repeated String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Repeated_String.md)  
 
 **Trie**  
@@ -386,5 +387,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-16 07:17:09
+> Leetcode 2025-09-16 08:00:30
 {: .block-tip }
