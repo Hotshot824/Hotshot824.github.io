@@ -1,0 +1,1894 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hotshot824.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hotshot824.github.io/" rel="alternate" type="text/html" /><updated>2025-09-16T12:46:29+00:00</updated><id>https://hotshot824.github.io/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Algorithm | Big Number Multiplication</title><link href="https://hotshot824.github.io/jekyll/2025-09-13-Big_Number_Multiplication.html" rel="alternate" type="text/html" title="Algorithm | Big Number Multiplication" /><published>2025-09-13T00:00:00+00:00</published><updated>2025-09-13T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/Big_Number_Multiplication</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-09-13-Big_Number_Multiplication.html"><![CDATA[<h4 id="algorithm--大數乘法">Algorithm | 大數乘法</h4>
+
+<blockquote class="block-tip">
+  <p>在演算法題目中，「大數乘法（Big Number Multiplication）」一直是經典卻讓人頭痛的練習題。
+雖然數學上的乘法概念人人熟悉，但一旦限制不能用內建的大數類別（像 Java 的 BigInteger 或 Go 的 math/big），就只能乖乖用字串模擬直式乘法。</p>
+</blockquote>
+
+<blockquote>
+  <p>尤其是 LLM 可以使用之後，更沒耐心去寫這種繁瑣的程式碼了，趕快複習一下。</p>
+</blockquote>
+
+<p>實作的題目可以找 <a href="https://www.hackerrank.com/challenges/extra-long-factorials/problem?isFullScreen=true">Hackerrank. Extra Long Factorials</a>, <a href="https://leetcode.com/problems/multiply-strings/description/">43. Multiply Strings</a> 來練習。</p>
+
+<h4 id="why-care-about-big-number-multiplication">Why Care About Big Number Multiplication</h4>
+
+<p>程式語言內建型別有位元上限，面試或競賽題常要求你在不使用內建大數的情況下處理超大整數。
+最基本的做法就是使用直式乘法搬到字串或陣列上來做：用低位對低位、進位處理，最後組合結果。</p>
+
+<blockquote class="block-warning">
+  <p>對於大數乘法有更多的演算法（Karatsuba, Toom-Cook, FFT-based），但這些通常超出面試範圍，且實作複雜。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://blog.csdn.net/u010983881/article/details/77503519">【算法】大数乘法问题及其高效算法</a></p>
+</blockquote>
+
+<h4 id="problem-statement">Problem Statement</h4>
+
+<p>輸入兩個非負整數的字串 num1 和 num2，回傳它們相乘的結果字串。
+不允許使用直接把字串轉成大數、或使用語言提供的大數類別。</p>
+
+<p>限制要點：</p>
+<ul>
+  <li>輸入大小可能超過原生整數範圍</li>
+  <li>要處理零與前導零情況（”0” × 任意 = “0”）</li>
+</ul>
+
+<h4 id="basic-idea">Basic Idea</h4>
+
+<ul>
+  <li>把每個字元轉成整數，從低位（字串尾）開始模擬逐位相乘。</li>
+  <li>兩位數相乘的結果加到對應的結果陣列位置，再處理進位。</li>
+  <li>最後把結果陣列轉回字串並去除前導零。</li>
+</ul>
+
+<p>時間複雜度：O(m * n)，m 和 n 分別為兩個輸入字串長度。<br />
+空間複雜度：O(m + n)（用來存放結果的陣列）。</p>
+
+<h4 id="algorithm-steps">Algorithm Steps</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        23958233
+  ×         5830
+  ———————————————
+        00000000 ( =      23,958,233 × 0) # 1. Multiplying by 0
+       71874699  ( =      23,958,233 × 3) # 2. Multiplying by 3
+     191665864   ( =      23,958,233 × 8) # 3. Multiplying by 8
+  + 119791165    ( =      23,958,233 × 5) # 4. Multiplying by 5
+  ———————————————
+    139676498390 ( = 139,676,498,390        ) # Final result maximum M + N digits
+</code></pre></div></div>
+
+<p>我們以直立式乘法為例，可以看到被拆成以下階段：</p>
+
+<ol>
+  <li>準備乘數與被乘數</li>
+  <li>逐次乘以被乘數的每一位，並將結果依位數對齊
+    <ul>
+      <li>被乘數有 N 位數，就會產生 N 次計算</li>
+    </ul>
+  </li>
+  <li>將所有部分和相加得到最終結果
+    <ul>
+      <li>最後的值會有最多 M + N 位數（需要使用另一個陣列來存放）</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Algorithm:</strong></p>
+
+<ol>
+  <li>若其中一個字串為 “0”，直接回傳 “0”。</li>
+  <li>建立長度為 m + n 的整數陣列 result，初始化為 0。</li>
+  <li>反向遍歷 num1，對每個位 i：
+    <ul>
+      <li>反向遍歷 num2，對每個位 j：
+        <ul>
+          <li>product = (num1[i] - ‘0’) * (num2[j] - ‘0’)</li>
+          <li>sum = product + result[i + j + 1]（+ 可能的進位）</li>
+          <li>result[i + j + 1] = sum % 10</li>
+          <li>result[i + j] += sum / 10</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>把 result 陣列轉成字串，跳過開頭的零，並回傳。</li>
+</ol>
+
+<p>這裡 i + j + 1 與 i + j 的索引對應到「從高位到低位」排列的陣列格局。</p>
+
+<h4 id="pitfalls-and-tips">Pitfalls and Tips</h4>
+
+<ul>
+  <li>索引錯誤（i + j、i + j + 1）是常見 bug 根源。</li>
+  <li>千萬不要把字元直接當數字相加（記得減 ‘0’）。</li>
+  <li>處理前導零：例如 “000123” × “045” 的結果需正確處理。</li>
+  <li>大量的字串拼接會影響效能，使用陣列或 StringBuilder（Java）更好。</li>
+</ul>
+
+<h4 id="implementation-in-python">Implementation in Python</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">num1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">num1</span> <span class="o">==</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="ow">or</span> <span class="n">num2</span> <span class="o">==</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">num1</span><span class="p">),</span> <span class="nf">len</span><span class="p">(</span><span class="n">num2</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">num1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nf">ord</span><span class="p">(</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">num2</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">-</span> <span class="nf">ord</span><span class="p">(</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">)</span>
+            <span class="n">prod</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+            <span class="n">sum_</span> <span class="o">=</span> <span class="n">prod</span> <span class="o">+</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_</span> <span class="o">%</span> <span class="mi">10</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum_</span> <span class="o">//</span> <span class="mi">10</span>
+    <span class="c1"># skip leading zeros
+</span>    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="ow">and</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="sh">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">:])</span> <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="k">else</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>09-14-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="algorithm" /><category term="leetcode" /><summary type="html"><![CDATA[Algorithm | 大數乘法]]></summary></entry><entry><title type="html">Algorithm | Binary Search Tricks and Hacks</title><link href="https://hotshot824.github.io/jekyll/2025-09-12-Binary_Search_Tricks_and_Hacks.html" rel="alternate" type="text/html" title="Algorithm | Binary Search Tricks and Hacks" /><published>2025-09-12T00:00:00+00:00</published><updated>2025-09-12T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/Binary_Search_Tricks_and_Hacks</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-09-12-Binary_Search_Tricks_and_Hacks.html"><![CDATA[<h2 id="algorithm--binary-search-的奇淫巧技">Algorithm | Binary Search 的奇淫巧技</h2>
+
+<blockquote class="block-tip">
+  <p>Binary Search 是一個對於計算機科學學生來說非常基礎的演算法，但是在實際的程式競賽或是面試中，Binary Search 往往會被用在一些比較特別的情境中，
+這些情境往往會讓人感到困惑，這篇文章會介紹一些 Binary Search 的技巧和應用，並且透過一些範例來說明這些技巧和應用。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>09-14-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="algorithm" /><category term="leetcode" /><summary type="html"><![CDATA[Algorithm | Binary Search 的奇淫巧技]]></summary></entry><entry><title type="html">Paper | KLEE: Introducing Symbolic Execution</title><link href="https://hotshot824.github.io/jekyll/2024-10-17-KLEE_symbolic_execution.html" rel="alternate" type="text/html" title="Paper | KLEE: Introducing Symbolic Execution" /><published>2024-10-17T00:00:00+00:00</published><updated>2024-10-17T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/KLEE_symbolic_execution</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2024-10-17-KLEE_symbolic_execution.html"><![CDATA[<blockquote class="block-tip">
+  <p>Cristian Cadar, Daniel Dunbar, and Dawson R. Engler. 2008. KLEE: Unassisted and Automatic Generation of High-Coverage Tests for Complex Systems Programs. In 8th USENIX Symposium on Operating Systems Design and Implementation, OSDI 2008, December 8–10, 2008, San Diego, California, USA, Proceedings, Richard Draves and Robbert van Renesse (Eds.). USENIX Association, 209–224. http://www.usenix.org/events/osdi08/tech/full_papers/cadar/cadar.pdf</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>KLEE 是在符號執行 (Symbolic Execution) 領域中的成功案例，這裡介紹 2008 年 KLEE 的原始論文，以此來了解符號執行的基本概念。</p>
+</blockquote>
+
+<h3 id="1-introduction">1. Introduction</h3>
+
+<p><strong>Program Analysis Tools :</strong></p>
+
+<p>軟體分析工具具體可以分為兩類，Dynamic Analysis 和 Static Analysis，簡單可以理解為：</p>
+<ul>
+  <li>Dynmaic Analysis: 需要具體的執行 Binary code，透過執行過程中的資訊來進行分析
+    <ul>
+      <li>例如：gdb, valgrind</li>
+    </ul>
+  </li>
+  <li>Static Analysis: 只需要具體的 Source code，不需要執行 Binary code
+    <ul>
+      <li>例如：pylint, clang-tidy, clang-format</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Symbolic execution 也是靜態分析的一種，透過對變數的符號化來進行分析該變數的可能值</p>
+</blockquote>
+
+<p><strong>Why we need Symbolic execution?</strong></p>
+
+<p>首先 Testing 對於大部分程式開發過程中都是一個 Pain point，並且編寫 Testcase 相較於 Development 來說往往讓人感到 ennui。
+並且手動測試往往是不夠的，如果一個 Bug 早就已經知道他是存在的，那就應該不叫做 Bug。</p>
+
+<p>即使手動編寫 Unit Test，也往往無法達到足夠的覆蓋率，到目前也沒有一種良好的規範化的方法來產生 Testcase，
+因此我們需要一種 Automation 的方法來產生 Testcase，這就是 Symbolic execution 的目的。</p>
+
+<blockquote>
+  <p>並且在 C 中 assert 往往可能在 -o2 -o3 的編譯器優化中被去除，導致這些 assert 在正式的環境中是無效的</p>
+</blockquote>
+
+<p><strong>Symbolic Execution Advantages:</strong></p>
+
+<ul>
+  <li>對於一個程式覆蓋所有可能的分支路徑</li>
+  <li>檢查可能產生危險操作的分支路徑, e.g. buffer overflow, null pointer dereference</li>
+  <li>自動產生的測試案例</li>
+  <li>不需要實際運行程式</li>
+</ul>
+
+<p><strong>History of Symbolic Execution:</strong></p>
+
+<p><img src="/image/2024/10-17-KLEE_symbolic_execution/1.png" alt="" /></p>
+
+<p>Symbolic execution 這個概念最早是由 King 在 1976 年提出，但當時受限於 SMT Solver 還無法實際應用在實際的程式中。
+直到 2000 年左右各種 SMT Solver 開始發展，Symbolic execution 才開始有了實際的應用。</p>
+
+<p>KLEE 是在 2008 年發表於 OSDI，但在之後的數十年中，KLEE 是在該領域中的一個成功案例，並且舉辦了自己的 Workshop。</p>
+
+<hr />
+
+<h3 id="2-klee-example">2. KLEE Example</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">1</span> <span class="o">:</span> <span class="kt">void</span> <span class="nf">expand</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="n">buffer</span><span class="p">)</span> <span class="p">{</span> <span class="mi">8</span>
+<span class="mi">2</span> <span class="o">:</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">ac</span><span class="p">;</span> <span class="mi">9</span>
+<span class="mi">3</span> <span class="o">:</span> <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span> <span class="p">{</span> <span class="mi">4</span> <span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">==</span> <span class="err">’\\’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">10</span><span class="o">*</span>
+<span class="mi">11</span><span class="o">*</span>
+<span class="mi">5</span> <span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">6</span> <span class="o">:</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ac</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="mi">7</span> <span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">&gt;=</span> <span class="err">’</span><span class="mi">0</span><span class="err">’</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span> <span class="o">&lt;=</span> <span class="err">’</span><span class="mi">7</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">8</span> <span class="o">:</span> <span class="k">do</span> <span class="p">{</span>
+<span class="mi">9</span> <span class="o">:</span> <span class="n">ac</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="err">−</span> <span class="err">’</span><span class="mi">0</span><span class="err">’</span><span class="p">;</span>
+<span class="mi">10</span><span class="o">:</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">11</span><span class="o">:</span> <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span><span class="o">&gt;=</span><span class="err">’</span><span class="mi">0</span><span class="err">’</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span><span class="o">&lt;=</span><span class="err">’</span><span class="mi">7</span><span class="err">’</span><span class="p">);</span>
+<span class="mi">12</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="n">ac</span><span class="p">;</span>
+<span class="mi">13</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">!=</span> <span class="err">’\</span><span class="mi">0</span><span class="err">’</span><span class="p">)</span>
+<span class="mi">14</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">15</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">==</span> <span class="err">’</span><span class="p">[</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">12</span><span class="o">*</span>
+<span class="mi">16</span><span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="mi">13</span>
+<span class="mi">17</span><span class="o">:</span> <span class="n">i</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="mi">14</span>
+<span class="mi">18</span><span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="o">++</span> <span class="o">!=</span> <span class="err">’</span><span class="o">-</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">15</span><span class="o">!</span>
+<span class="mi">19</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="err">’</span><span class="p">[</span><span class="err">’</span><span class="p">;</span>
+<span class="mi">20</span><span class="o">:</span> <span class="n">arg</span><span class="err">−</span><span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="mi">21</span><span class="o">:</span> <span class="k">continue</span><span class="p">;</span>
+<span class="mi">22</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">23</span><span class="o">:</span> <span class="n">ac</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">24</span><span class="o">:</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">ac</span><span class="p">)</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">25</span><span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="cm">/* Skip ’]’ */</span>
+<span class="mi">26</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span>
+<span class="mi">27</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">28</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">29</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">30</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+<span class="mi">31</span><span class="o">:</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[</span> <span class="p">])</span> <span class="p">{</span> <span class="mi">1</span>
+<span class="mi">32</span><span class="o">:</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">2</span>
+<span class="mi">33</span><span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="err">’</span><span class="o">-</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">3</span><span class="o">*</span>
+<span class="mi">34</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="mi">4</span>
+<span class="mi">35</span><span class="o">:</span> <span class="p">}</span> <span class="mi">5</span>
+<span class="mi">36</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="mi">6</span>
+<span class="mi">37</span><span class="o">:</span> <span class="n">expand</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">],</span> <span class="n">index</span><span class="p">);</span> <span class="mi">7</span>
+<span class="mi">38</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+<span class="mi">39</span><span class="o">:</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <p>TBC …</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-26-2024 19:48</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><category term="symbolic_execution" /><summary type="html"><![CDATA[Cristian Cadar, Daniel Dunbar, and Dawson R. Engler. 2008. KLEE: Unassisted and Automatic Generation of High-Coverage Tests for Complex Systems Programs. In 8th USENIX Symposium on Operating Systems Design and Implementation, OSDI 2008, December 8–10, 2008, San Diego, California, USA, Proceedings, Richard Draves and Robbert van Renesse (Eds.). USENIX Association, 209–224. http://www.usenix.org/events/osdi08/tech/full_papers/cadar/cadar.pdf]]></summary></entry><entry><title type="html">PDS | Introduction of Parallel and Distributed Systems</title><link href="https://hotshot824.github.io/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" rel="alternate" type="text/html" title="PDS | Introduction of Parallel and Distributed Systems" /><published>2024-07-28T00:00:00+00:00</published><updated>2024-07-28T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/parallel_and_distributed_systems_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>這邊紀錄一系列的筆記關於 Parallel and Distributed Systems (PDS) 的課程，主要是希望自己更加了解這個領域，並且在暑假期間能做出一個小的 Demo 來練習。</p>
+</blockquote>
+
+<h3 id="1--introduction">1.  Introduction</h3>
+
+<blockquote class="block-tip">
+  <p>分散式系統的具體學習目標，從理論到中間軟體再到實際應用</p>
+</blockquote>
+
+<p>隨著軟體規模、性能需求的提升，透過低成本多節點的方式來提升系統的效能已經成為一個趨勢。並且分散式在降低硬體成本的同時，也提升了軟體的可靠性、擴展性等等，
+但也因此分散式要處裡許多新的技術問題。</p>
+
+<ol>
+  <li>分散式系統需要分散式理論跟演算法作為基礎:
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a></li>
+      <li><a href="Basically Available, Soft state, Eventually consistent">BASE</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Paxos_(computer_science)">Paxos Algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol">Two-phase commit protocol</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Three-phase_commit_protocol">Three-phase commit protocol</a></li>
+      <li>如果不能理解這些基礎的理論，將會對架構跟開發工作帶來困擾</li>
+    </ul>
+  </li>
+  <li>Technical solutions(技術解決方案):
+    <ul>
+      <li>Distributed Lock</li>
+      <li>Distributed Transaction</li>
+      <li><a href="https://en.wikipedia.org/wiki/Service_discovery">Service Discovery</a></li>
+      <li>Service Protection</li>
+      <li>Service Gateway</li>
+    </ul>
+  </li>
+  <li>Middleware(中間軟體):
+    <ul>
+      <li>Distributed Coordination Middleware: Zookeeper, etc.</li>
+      <li>Service Governance Middleware: Dubbo, Eureka, etc.</li>
+      <li>如果對於這些 Middleware(中間軟體)的功能或者實現原理不了解，同樣會增加開發的困難度</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="12--application-history">1.2  Application History</h3>
+
+<p><a href="#121-single-application">1.2.1 Single Application</a><br />
+<a href="#122-cluster-application">1.2.2 Cluster Application</a><br />
+<a href="#123-narrowly-distributed-applications">1.2.3 Narrowly Distributed Applications</a></p>
+
+<h4 id="121-single-application">1.2.1 Single Application</h4>
+
+<p>最初的應用形式即是部屬在一台機器的單一應用，其中可以包含很多很多 Module，內部的 Module 之間是高度耦合的，但在開發、測試、部屬的成本低廉。
+隨著功能與併發數量的提升，通常會帶來兩個挑戰:</p>
+
+<ol>
+  <li>Hardware 上龐大的單體應用需要更多的資源，因此單一主機的成本會提升</li>
+  <li>Software 應用內部的 module 之間耦合度高，隨著功能的增加，會導致開發維護變得困難</li>
+</ol>
+
+<blockquote>
+  <p>因此當應用的功能與併發數量提升到一定程度時，就要考慮拆分應用，就演變成了 Cluster Application。</p>
+</blockquote>
+
+<h4 id="122-cluster-application">1.2.2 Cluster Application</h4>
+
+<blockquote class="block-tip">
+  <p>使用 Cluster 那就要面對在 Cluster 中的節點之間的協作問題，這也是分散式系統的核心問題</p>
+</blockquote>
+
+<p>Cluster Application 可以對應用的併發與容量進行分散，這裡的 Cluster 包含多個「同質」(Homogeneous) 的應用節點，
+這裡會使用「同質」是因為這些節點的功能是一樣的，執行相同的程式、相同的設定，就像是一個副本複製出來的一樣。</p>
+
+<p>例如透過反向代理去做 Load Balance，把外部請求分發到不同的節點上。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/1.jpg" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>上圖是一個 Kubernetes 的架構，透過 Load Balance 來分發請求到不同的 Pod 就可以提升應用的併發量。</p>
+</blockquote>
+
+<p>但 Homogeneous Cluster 帶來最明顯的問題是，同一個使用者發出的請求可能會被不同的節點處理，導致服務可能不連貫。
+為了解決這種問，演化出了幾種方案。</p>
+
+<p><strong>Stateless Cluster Nodes</strong></p>
+
+<p>Stateless cluster nodes(無狀態叢集節點) 是指任何請求的結果都和該節點之前所處理的請求無關。
+例如簡單的 Web Server，每次都回傳相同的 Page，這樣就不需要考慮請求的連貫性，對於使用者來說這個頁面是 stateless。</p>
+
+<p>但是即使是 Stateless 也需要考慮協作，例如: Stateless cluster node 需要每天早上發送一封 Mail 給外部的使用者，
+我們希望的是只有一個節點發送這封 Mail，如果沒有考慮到這個問題，可能會導致每個 Node 都發送一封 Mail 給使用者。</p>
+
+<ul>
+  <li>可能的解法: 設計一個外部的請求，由該外部請求來請求發送，這樣就可以保證只有一個節點被分配到這個任務</li>
+</ul>
+
+<p>Stateless node 設計簡單，可以很方便的擴充，但是也因為要是 Stateless 所以會有很大的侷限性。</p>
+
+<p><strong>Single Cluster Node</strong></p>
+
+<blockquote class="block-tip">
+  <p>雖然 Stateless 很好用，但是畢竟有很多服務是需要狀態的，例如: 聊天室、購物車…</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>Key words: Fixed allocation, Session affinity</p>
+</blockquote>
+
+<p>這些服務在 Single application 是很好實現的，但在 Cluster 中就變得複雜起來，一個最簡單的辦法就是在使用的 Node 和 User 之間建立聯繫。
+User 可以訪問固定的 Node，這樣就可以保證 User 的狀態是連續的。</p>
+
+<ul>
+  <li>任意 User 都有一個對應的 Node，在 Node 上保存使用者的 Context information</li>
+  <li>User 的請求總是被分配到對應的 Node 上</li>
+</ul>
+
+<p>想要實現這些功能的方法有很多，例如: 線上遊戲由使用者自己選擇 Server、透過帳號來分配 Server 等等 …</p>
+
+<blockquote>
+  <p>當然這樣的方法在各個 Node 之間是互相隔離的，因此在容錯上會比較差。</p>
+</blockquote>
+
+<p><strong>Shared Information Cluster Node</strong></p>
+
+<p>Shared Information Cluster Node (共用資訊叢集節點) 是為了解決資訊共享的問題，如果有一個共享的資訊庫，那麼所有的 Node 都可以訪問這個資訊庫，
+這樣就不用去擔心 Node 崩潰後資訊的丟失，例如下圖:</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/2.jpg" alt="" height="75%" width="75%" /></p>
+
+<p>例如: 可以使用 Redis 來做共享記憶體，儲存使用者的 Session 等等。</p>
+
+<blockquote>
+  <p>但是同樣的共享資訊池也會成為一個瓶頸，因為所有的 Node 都要訪問這個資訊池。</p>
+</blockquote>
+
+<p><strong>Consistent Information Cluster Nodes</strong></p>
+
+<p>為了避免資訊池成為瓶僅，那就橫向擴展資訊池，這樣就可以降低資訊池的壓力，但同樣就會有 Consistent(一致性) 的問題，
+例如部分 Node 共用一個 Information Pool，Pool 之間去做一致性。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/3.jpg" alt="" /></p>
+
+<blockquote>
+  <p>部分 Node 共用同個 Pool，或者乾脆 Pool 加入 Node，在 Node 之間做 Consistent</p>
+</blockquote>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/4.jpg" alt="" /></p>
+
+<p>要注意 Consistent 的實施成本非常巨大，你可以想像如果有 1000 個 Pool，那麼每次更新都要通知 1000 個 Pool，這樣的成本是非常高的。
+因此 Information-consistent clusters 適合用在讀多寫少的場景。</p>
+
+<h4 id="123-narrowly-distributed-applications">1.2.3 Narrowly Distributed Applications</h4>
+
+<blockquote>
+  <p>Cluster Application 是為了解決併發數量和使用量，並不能減少程式自身的問題</p>
+</blockquote>
+
+<p>狹義上的分散式系統是指原本是一個 Single application，但是隨著規模的擴大遭遇以下問題:</p>
+<ul>
+  <li>硬體成本, 應用性能, 業務邏輯複雜, 變更維護複雜, 可靠性變差</li>
+</ul>
+
+<p>這些問題都不能透過將 Single application 轉變為 Cluster application 解決時，去把 Single application 拆分成多個獨立的 Sub-application，
+讓每個 Sub-application 都是可以獨立運行的，這樣就把 Single application 變成了 Narrowly distributed applications。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/5.jpg" alt="" /></p>
+
+<blockquote>
+  <p>因此每個 Node 上運行的 Application 都是 Heterogeneous 的，可以獨立的開發、部屬、升級、維護。</p>
+</blockquote>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/6.jpg" alt="" /></p>
+
+<blockquote>
+  <p>把這些 Sub-Application 擴展成 Cluster</p>
+</blockquote>
+
+<p>這樣我們也可以把這些 Sub-Applcation 部署到不同的機器上，擴展成一個更大的 Cluster，也就是 Distrubuted System，
+也可以依照 Sub-Application 的需求進行 Scaling，更為靈活與高效。</p>
+
+<p><strong>1.2.4 Microservices</strong></p>
+
+<blockquote class="block-tip">
+  <p>在 Narrowly Distributed Applications 的基礎上，Sub-Application 之間有嚴格的從屬關係，這種關係可能會造成資源的浪費。</p>
+</blockquote>
+
+<p>這裡舉個浪費的例子: 存在 Application A, 包含 3 個 Sub-Application: A1, A2, A3，有可能 A 的某個功能只需要 A1, A2，
+但是 A3 就會被閒置，這樣就會造成資源的浪費。</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Microservices">Microservices</a> 是一種 Architecture patte，也就是每個 Microservices 都是完備的，可以獨立對外提供服務，
+這樣就可以針對每個 Microservices 進行 Scaling、Resource Allocation。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/7.jpg" alt="" /></p>
+
+<hr />
+
+<h3 id="13-distributed-system-introduction">1.3 Distributed System Introduction</h3>
+
+<p>如果所有的服務都只能作為系統的一部分聯合起來對外提供服務，那麼這樣的系統就是 Narrowly Distributed Applications，
+如果這些服務可以獨立對外提供服務，那麼這樣的系統就是 Microservices。</p>
+
+<p><strong>1.3.2 Distributed System Consistency Problem</strong></p>
+
+<p>最簡單的一致性問題如下，假如 Request 是有序的，那麼我們應該要確保 R1 修改完 a 之後 R2 讀取的 a 是修改後的值。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/8.jpg" alt="" /></p>
+
+<p>如果一個系統會發生上面的問題，那麼這個系統就是不一致的(至少是線性不一致 Linearizability Inconsistency)，
+關於一致性的分級會在後續章節提到，這裡只是提一下。</p>
+
+<p><strong>1.3.3 Distributed System Node</strong></p>
+
+<blockquote>
+  <p>在 Distributed System 中，Node 可能是同質的，也可能是異質的。</p>
+</blockquote>
+
+<p>在同質節點中，當系統發生變更時，所有的節點的變更是一樣的，例如: Zookeeper cluster 收到 Client 發送建立 znode 的請求後，
+每個節點都需要建立 znode。</p>
+
+<p>異質節點中，當應用發生變更時，每個節點的變更是不一樣的，例如: 一個網購平台的系統，訂單節點需要建立訂單，庫存節點需要減少庫存。
+這也是一種 Consistent 的問題，要確保整個系統的 Consistent。</p>
+
+<h3 id="14-distributed-system-advantages--disadvantages">1.4 Distributed System Advantages &amp; Disadvantages</h3>
+
+<p><strong>1.4.1 Advantages</strong></p>
+
+<ol>
+  <li>Reduced Cost:
+    <ul>
+      <li>降低系統的實施成本是分散式系統的發展與最初動力，對於硬體強大的大型主機，可以用多個小型叢集上取代</li>
+    </ul>
+  </li>
+  <li>Improved Availability:
+    <ul>
+      <li>提升系統的可用性，即使某個節點失效，也不會影響整個系統</li>
+    </ul>
+  </li>
+  <li>Improved Performance:
+    <ul>
+      <li>提升系統的併發與容量，提升系統的性能</li>
+    </ul>
+  </li>
+  <li>Reduced Maintenance:
+    <ul>
+      <li>由於分散式系統的多個節點，可以降低系統的維護成本，例如: 可以對某個節點進行維護，而不影響整個系統</li>
+      <li>並且因為節點之間是獨立的，可以獨立的平行開發與模組化</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>1.4.2 Disadvantages</strong></p>
+
+<ol>
+  <li>Consistency:
+    <ul>
+      <li>一致性問題是分散式系統的核心問題，要保證系統的一致性是非常困難的，所以在下個章節會先介紹一致性問題</li>
+    </ul>
+  </li>
+  <li>Node discovery problem:
+    <ul>
+      <li>在有許多動態變化的節點時，怎麼發現系統中的可用節點是一個問題</li>
+    </ul>
+  </li>
+  <li>Node call problem:
+    <ul>
+      <li>當系統中有許多節點時，在節點之間的呼叫是經常發生的，但它們也有與之對應的成本</li>
+    </ul>
+
+    <p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/9.jpg" alt="" /></p>
+  </li>
+  <li>Node coworking problem:
+    <ul>
+      <li>當系統中有許多節點時，節點之間的協作是一個問題，例如: 如何在同質節點中保證一個 Task 只被一個節點執行</li>
+      <li>異質節點也需要解決 Producer-Consumer 問題，例如: 訂單節點需要建立訂單，庫存節點需要減少庫存</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這張主要是 Introduction 所以就簡單介紹 Distributed System 的優缺點與發展歷程，後續章節會更深入的介紹 Distributed System。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>7-30-2024 19:48</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="PDS" /><summary type="html"><![CDATA[這邊紀錄一系列的筆記關於 Parallel and Distributed Systems (PDS) 的課程，主要是希望自己更加了解這個領域，並且在暑假期間能做出一個小的 Demo 來練習。]]></summary></entry><entry><title type="html">Algorithm | Competitive Paging Algorithm</title><link href="https://hotshot824.github.io/jekylls/2024-06-21-competitive_paging_algorithm.html" rel="alternate" type="text/html" title="Algorithm | Competitive Paging Algorithm" /><published>2024-06-21T00:00:00+00:00</published><updated>2024-06-21T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/competitive_paging_algorithm</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-06-21-competitive_paging_algorithm.html"><![CDATA[<blockquote class="block-tip">
+  <p>Notes for <a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm#Marking_algorithms">Marking algorithms</a> Analysis, Reference:
+<strong>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</strong> Fiat, A., Karp, R. M., Luby, M., McGeoch, L. A., Sleator, D. D., &amp; Young, N. E. (1991). Competitive paging algorithms.<br />
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> Achlioptas, D., Chrobak, M., &amp; Noga, J. (2000). Competitive analysis of randomized paging algorithms.</p>
+</blockquote>
+
+<h3 id="1-introduction">1. Introduction</h3>
+
+<p>這篇介紹 Competitive Paging Algorithm，Marking Algorithm 是一種 Online Paging Algorithm，並且是 Randomized Algorithm，
+主要目的是用來說明分析這些 Online Paging Algorithm 的工具。詳細的原始論文可以參考 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 和 [<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]。</p>
+
+<p>所以 Marking Alogrithm 並不是一個實際在 OS 中被廣泛使用的演算法，但透過這對於 Marking Algorithm 的分析，可以更好的了解 Competitive Algorithm 的特性。</p>
+<ul>
+  <li>例如: LRU(Last Recently Used) 就是一種 Marking Algorithm，FIFO(First In First Out) 則不是。</li>
+</ul>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 是首次提出 Competitive Paging Algorithm 與 Marking Algorithm 分析的論文</p>
+</blockquote>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>] 則在前三章有對於 Marking Algorithm 的更詳細與緻密的分析</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-paging-problem">2. Paging Problem</h3>
+
+<blockquote class="block-tip">
+  <p>從最開始的 Paging Problem Definition 開始到 Offline Optimal Algorithm, Marking Algorithm 的介紹。</p>
+</blockquote>
+
+<p><strong>Paging Problem Definition:</strong></p>
+<ol>
+  <li>A two-level memory system, capable of holding $K$ items in the Cache.</li>
+  <li>At each time step, a request to an item is issued.</li>
+  <li>If the item $p$ exists in the Cache, then the cost is 0.</li>
+  <li>If the item $p$ does not exist in the Cache:
+    <ul>
+      <li>Choose an item $q$ to replace it, and the cost is 1.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>這個問題是一個 Online Problem，因為沒有辦法知道未來的 Request，所以只能根據目前的 Request 來做決策。
+但是我們可以先從 Offline Algorithm 開始，來了解這個問題的 Optimal。</p>
+
+<h4 id="21-optimal-algorithm">2.1 Optimal Algorithm</h4>
+
+<ul>
+  <li>目前被證明的 Belady’s Optimal Algorithm 被證明是 Optimal Algorithm
+    <ul>
+      <li>Belady’s Optimal Algorithm 也被稱為 Longest Forward Distance(LFD) Algorithm</li>
+    </ul>
+  </li>
+  <li>簡單來說就是把未來最久才會被 Request 的 Item replace</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/1.jpg" alt="" height="80%" width="80%" /></p>
+
+<blockquote class="block-warning">
+  <p>關於 Optimal Algorithm 的證明可以參考 <a href="https://stackoverflow.com/questions/47642881/proof-for-optimal-page-replacement-opt">stack overflow:Proof for optimal page replacement (OPT)</a>，使用 Contradiction 來證明 Optimal Algorithm 是最佳的。</p>
+</blockquote>
+
+<p>但是在現實中我們無法得知一個 item 多久才會被 Request，這個演算法也被稱為 clairvoyant replacement algorithm，因為要做到 Optimal 需要透視未來的 Request。</p>
+
+<hr />
+
+<h4 id="22-marking-algorithm">2.2 Marking Algorithm</h4>
+
+<p>這邊我們先給出一個基本的 Marking Algorithm，這是從 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 中提出的。</p>
+
+<ul>
+  <li>假設有一個 Cache，跟大小相同的 Marking Bit Array，用來記錄 <strong>p</strong> 是否在 Cache 中</li>
+  <li>發生 Request 時，如果 <strong>p</strong> 已經被 Marked，則 Cost = 0</li>
+  <li>如果 <strong>p</strong> 沒有被 Marked，則 Cost = 1
+    <ul>
+      <li>Total marked item &lt; k，則 Mark <strong>p</strong></li>
+      <li>Total marked item = k，則 Unmark all items，然後再 Mark <strong>p</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/2.jpg" alt="" height="80%" width="80%" /></p>
+
+<p>這個 Seq 是故意設計的最糟情況，可以看到 Marking Algorithm 不斷填滿 Array，然後清空。注意我們的重點在於對 Marking Algorithm 的分析，而不是實際的使用。</p>
+
+<hr />
+
+<h3 id="3-preliminaries">3. Preliminaries</h3>
+
+<blockquote class="block-tip">
+  <p>在分析上會以 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 為主要的論文，相較於 <em>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</em> 在 1991 剛被提出，到了 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 2000 年已經有更多的分析工具。</p>
+</blockquote>
+
+<p>Throughout this node:</p>
+<ul>
+  <li>$k$ denote the size of the cache</li>
+  <li>$ALG(𝛼)$ denote the online algorithm</li>
+</ul>
+
+<p><strong>Definition.</strong> An online algorithm $ALG$ is $c-competitive$ if, for any instance $I$, $ALG(I) \leq c \cdot OPT(I)$.</p>
+
+<ul>
+  <li>先定義 $c-competitive$ 的概念，$OPT(I)$ 是最佳的，而 $ALG(I)$ 是 Online Algorithm
+    <ul>
+      <li>$\text{If c = 1, ALG is equivalent to OPT}$</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="31-bounds-k-competitive">3.1 Bounds k-competitive</h4>
+
+<blockquote class="block-tip">
+  <p>首先我們先證明任何 Online Algorithm 都是 $k-competitive$，證明其最糟情況下至少是 OPT 的 $k$ 倍。</p>
+</blockquote>
+
+<p><strong>Theorem.</strong> For any $k$ and any deterministic online algorithm $ALG$, the competitive ratio of $ALG \geq k$.</p>
+
+<ol>
+  <li>A always request the page that is not currently in the cache, This causes a page fault in every access.</li>
+  <li>The total cost of $ALG$ is $|𝛼|$</li>
+  <li>The total cost of $OPT$ is at most $|𝛼|/k$
+    <ul>
+      <li>Becase $OPT$ can only a single page fault in any $k$ accesses</li>
+    </ul>
+  </li>
+  <li>The base competitive ration is $k$</li>
+</ol>
+
+<p>簡單來說有一個無論如何都會產生 Page fault 的輸入，這樣就可以證明任何 $\text{ALG}$ 最糟情況下都是 $k-competitive$。</p>
+
+<h4 id="32-potential-method">3.2 Potential Method</h4>
+
+<p>在 Randomized online algorithm 的分析中常常會使用 Amortized Analysis，Paging Problem 也是如此，
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中就使用了 Potential Method 來分析 Marking Algorithm 的 Upper Bound。</p>
+
+<ul>
+  <li>Each operation has state $w \text{(work function), } A\text{(ALG conguration), } \text{r(request)}$</li>
+  <li>$Δcost_A$ is the cost of $ALG$</li>
+  <li>$Δopt$ is the cost of $OPT$</li>
+  <li>$Δϕ$ is the potential function change</li>
+</ul>
+
+<p>首先定義每次的操作都會有狀態 $w, A, \text{r}$，然後定義 $Δcost_A, Δopt, Δϕ$ 來分析每次操作的成本。這樣我們就能給出公式:</p>
+
+\[Δcost_A + Δϕ \leq c \cdot Δopt\]
+
+<p>這個公式就是 Competitive Ratio 的定義，每次操作的成本加上 Potential Function 的變化都應該小於等於 $c$ 倍的 $OPT$。</p>
+
+<h4 id="33-work-function">3.3 Work Function</h4>
+
+<blockquote class="block-tip">
+  <p>Work Function 是一個用來描述每次操作的狀態或者是成本的函數，這裡定義 $w(A)$ 來描述 $A$ 的狀態</p>
+</blockquote>
+
+<p><strong>Lemma.</strong> Every offset function is coned up from the set of configurations for which its value is zero.
+Moreover, if $\omega$ is the current offset function and $r$ is the last request,
+then there is a sequence of sets $L_1, L_2, \ldots, L_k$, with $L_1 = r$,
+such that $\omega(X) = 0$ if and only if $|X \cap \bigcup_{i \le j} L_i| \ge j$ for all $1 \le j \le k$.</p>
+
+<p>這裡的 $L$ 代表的是一組 Request 的集合，稱作 Layer，例如: $w(X)=0$ 代表之前的輸入都在 Cache 中，所以 Cost = 0，同樣也有該輸入的 item 數量一定比 $k$ 小。
+這裡定義三種集合:</p>
+
+<ul>
+  <li>$V(w) \text{ is mean valid, no cost occurs so the cost is 0}$</li>
+  <li>$S(w)=⋃_{i \leq j}L_i \text{ is the set of all requests for this work function}$</li>
+  <li>$N(w) \text{ is non-revealed item in } S(w)$</li>
+</ul>
+
+<p><strong>After Request</strong></p>
+
+<p>然後是在 Request 之後的狀態變化，這裡定義 $\omega’$ 來描述 Request 之後的狀態變化。</p>
+
+\[Let \ \omega = (L_1 | \cdots | L_k) \text{, If} \ r \text{ is a new request.}\]
+
+\[\omega' = 
+\begin{cases} 
+(r | L_1 | \cdots | L_{j-1} | L_j \cup L_{j+1} - r | L_{j+2} | \cdots | L_k) &amp; \text{if } r \in L_j \text{ and } j &lt; k, \\
+(r | L_1 | \cdots | L_{k-1}) &amp; \text{if } r \in L_k, \\
+(r | L_1 | L_2 | L_3 | \cdots | L_k) &amp; \text{if } r \notin S(\omega).
+\end{cases}\]
+
+<ul>
+  <li>$r \in L_j$ 中，則將 $r$ 移到最前面，而 $L_j$ 之後的 Layer 都移除 $r$ 並且加入到 $L_{j+1}$</li>
+  <li>$r \in L_k$ 中，則將 $r$ 移到最前面，並且移除 $L_k$</li>
+  <li>$r \notin S(\omega)$，則將 $r$ 移到最前面</li>
+</ul>
+
+<p>在之後的分析中，我們會使用這個 Work Function 來描述每次操作的狀態變化，下面會給出一個例子。</p>
+
+<blockquote>
+  <p>這裡也能看處 Request 實際上就 3 種情況</p>
+</blockquote>
+
+<p><strong>example:</strong></p>
+<ul>
+  <li>$\text{Let } k = 3,\text{ {a,b,c} in cache, Request = {d,e,b}}$</li>
+</ul>
+
+\[(a|b|c) \rightarrow (d|a,b|c) \rightarrow (e|a,b,d|c) \rightarrow (b|e|a,c,d) \\\]
+
+<ul>
+  <li>$\text{The optimal cost is 2.}$</li>
+</ul>
+
+<hr />
+
+<h3 id="4-analysis">4. Analysis</h3>
+
+<p>首先我們已經清楚了 Marking Algorithm 的過程，所以有兩個 $Fact$:</p>
+
+<p><strong>Fact 1.</strong> The cache contains only marked items and active items. All marked items are in the cache. If there are $m$ marked items and $v$ active items then each active item is in the cache with probability $(k-m)/v$.</p>
+
+<p><strong>Fact 2.</strong> Let $w = (L_1|L_2|…|L_k)$ If $L_i$ contains a marked item then all item in $⋃_{j \leq i}L_j$ are marked.</p>
+
+<ul>
+  <li>Fact 1 可以得知 Cache 中的 Active Item 在 Cache 中的機率</li>
+  <li>Fact 2 則是說明如果 Layer 中有 Marked Item，則之後的 Layer 都會有 Marked Item</li>
+</ul>
+
+<p><strong>Theorem 2.</strong> The competitive ratio of the marking algorithm is $2H_k - 1$.</p>
+
+<h4 id="41-lower-bound">4.1 Lower Bound</h4>
+
+<blockquote class="block-danger">
+  <p>透過最糟情況的設計，來證明 Competitive Ratio 的 Lower Bound。</p>
+</blockquote>
+
+<p><strong>Proof.</strong> A cycle of request $k+1$ items, where the optimal cost 1, while the cost on the Marking Algorithm is $2H_k - 1$.</p>
+
+<ol>
+  <li>$w = (x_1|x_2|…|x_k)$, Active set $X = {x_1, x_2, …, x_k}$, Marked set $M = {x_1}$</li>
+  <li>$w^y = (y|x_1, x_2| … |x_k)$, Marked set $M = {y, x_1}$</li>
+  <li>Continuous request $x_2, …, x_{k-1}$
+    <ul>
+      <li>When ends $w^{k-1}=(x_{k-1}|…|x_2|y|x_1,x_k)$</li>
+      <li>Marked set $M = {x_{k-1},…,x_2,x_1,y}$, size $k-1$</li>
+    </ul>
+  </li>
+  <li>Last Request $x_k$
+    <ul>
+      <li>Marked set is full, so unmark all items.</li>
+      <li>The cost must be 1.</li>
+    </ul>
+  </li>
+</ol>
+
+\[1 + \frac{2}{k} + \frac{2}{k-1} + \cdots + \frac{2}{3} + \frac{2}{2} = 2H_k - 1\]
+
+<p>先設計一個 k+1 個 Request，首先 cache 中已經存在 $x_1$。首先 Request $y$ 然後再 Request $x_2, …, x_k$，
+因為是從 $k_2, …, x_k$ 不斷去請求，因此分母會不斷減少，最後一次 Request $x_k$ 則必然會產生 Cost = 1。以此得到以上的公式，是一個 Harmonic Number，
+所以可以得到 $\text{Competitive Ratio} = 2H_k - 1 \approx 2ln(k) - 1$。</p>
+
+<h4 id="42-upper-bound">4.2 Upper Bound</h4>
+
+<blockquote class="block-danger">
+  <p>在 <strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中更使用 Potential Method 來證明 Competitive Ratio 的 Upper Bound，證明了 $2H_k - 1$ 是 Tight</p>
+</blockquote>
+
+<p><strong>Proof.</strong> Prove that Marking Algorithm is $2H_k - 1$ competitive, using Potential Method.</p>
+
+<p>如果當前的 Work Function 有 $s$ 個 Layer，且包含未標記的 Item，則 Potential Function 為:</p>
+<ul>
+  <li><strong>Potential Function</strong> $ϕ(w) = s(H_k - H_s + 1)$
+    <ul>
+      <li>$H_k, H_s$ is Harmonic Number of $k, s$</li>
+      <li>$s$ is the number of layers for work function $w$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>首先把 Request 分成 3 種情況:</p>
+<ul>
+  <li>(a) Request outside the $S(w)$, $t$ is the number of (a)</li>
+  <li>(b) Request in the $S(w)$ but not in the cache, $l$ is the number of (b)</li>
+  <li>(c) Request in the cache</li>
+</ul>
+
+<p>最後是我們證明的目標:</p>
+
+\[Δcost_A + Δϕ \leq (2H_{k-1}) \cdot Δopt\]
+
+<p>完成以上的定義後我們就能來分析 Request 的情況。</p>
+
+<p><strong>Class (a)</strong></p>
+
+<p>$r \notin S(w)$, 這裡給個例子來說明什麼是 Class (a) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b, c}}, \text{Request} = \text{{d}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (d|a,b|c)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡可以看出 (a) 其實就是一定會產生 Cost 的 Request，並且從此我們能看出 $Δopt = t$，實際上 $t$ 就是 OPT 的 Cost。</p>
+
+<p><strong>Class (b)</strong></p>
+
+<p>$r \in S(w), r \notin M(w)$, 同樣用例子來說明 Class (b) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b}}, Request = \text{{c}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (c|a,b|)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡根據 <strong>Fact 2.</strong> Class (b) 可以使 $s$ 減少 1，所以將會有 $l \leq s$。</p>
+
+<p><strong>Class (c)</strong></p>
+
+<p>$r \in S(w), r \in M(w)$, C 是已經被 Marked 的 Item，所以實際上不會有變化。</p>
+<ul>
+  <li>如果出現一個 $\text{Class (c) i}$ Request，則最多會有 $l+t+i-1$ 個 Marked Item
+    <ul>
+      <li>因為 (a), (b) 最多貢獻 $l+t$ 個 Marked Item，而 $i$ 則是 Class (c) 的 Request</li>
+    </ul>
+  </li>
+  <li>同時 Active item 的數量會是 $k-i+1$</li>
+  <li>根據 <strong>Fact 1.</strong> 得出這次請求的 Cost = 1 的機率是 $(l+t+i-1)/(k-i+1) = (l+i)/(k-i+1)$</li>
+</ul>
+
+<p>因為 i 的範圍是從 1 到 $k-l-t$，所以可以得到以下公式:</p>
+
+\[\Delta \text{cost} = \sum_{i=1}^{k-l-t} \frac{l + t}{k - i + 1} = (l + t)(H_k - H_{l+t})\]
+
+<blockquote>
+  <p>上面用 Harmonic Number 來表示，這裡的 $H_k - H_{l+t}$ 是因為 $\sum_{i=1}^{k} \frac{1}{i} = H_k$，所以這裡是 $H_k - H_{l+t}$</p>
+</blockquote>
+
+<p><strong>Upper bound</strong></p>
+
+<p>這樣我們就算出了所有的 Request 的 Cost，然後再加上 Potential Function 的變化，就能得到 $(2H_{k-1}) \cdot Δopt$ 的部分，
+跟以下的不等式:</p>
+
+\[\begin{aligned} 
+\Delta \text{cost} + \Delta \Phi &amp; \leq (l + t)(H_k - H_{l+t}) + s'(H_k - H_{s'} + 1) - s(H_k - H_{s} + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - s(H_k - H_s + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - l(H_k - H_{l+1}) \\
+&amp; = (2H_k - 1)t + 2t - (l + t)H_{l+t} + 1H_{l} - (t - s') H_k \\
+&amp; \leq (2H_k - 1)t \\
+&amp; = (2H_k - 1)\Delta \text{opt}
+\end{aligned}\]
+
+<ul>
+  <li>(1) 是來自於 $\Delta cost$ 的界線以及 $\Phi ,s,s’$ 的定義</li>
+  <li>(2) $l \leq s$ 並且 $\Phi$ 隨著 $s$ 增加而增加</li>
+  <li>(3) 因為 $2t - (l+t)H_{l+t} \leq -lH_{l+1}$ 跟 $s’ \leq t$</li>
+</ul>
+
+<p>以上就是透過分析 Marking Algorithm 的 Upper/Lower Bound，Competitive Ratio = $2H_k - 1$ 並且是 Tight 的證明。</p>
+
+<hr />
+
+<p>這個 Marking Algorithm 只是一個最簡單的例子來說明 Competitive Paging Algorithm 的分析，實際上在 OS 中 Marking Algorithm 還有更多的變化，
+通常更多的透過 Learning strategy 來做決策，例如: Clock-PRO，在分析上大部分是基於實驗的方式。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-21-2024 09:07</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Algorithm" /><summary type="html"><![CDATA[Notes for Marking algorithms Analysis, Reference: [1] Fiat, A., Karp, R. M., Luby, M., McGeoch, L. A., Sleator, D. D., &amp; Young, N. E. (1991). Competitive paging algorithms. [2] Achlioptas, D., Chrobak, M., &amp; Noga, J. (2000). Competitive analysis of randomized paging algorithms.]]></summary></entry><entry><title type="html">Note | Arch User Repository</title><link href="https://hotshot824.github.io/jekylls/2024-06-09-arch_user_repository.html" rel="alternate" type="text/html" title="Note | Arch User Repository" /><published>2024-06-09T00:00:00+00:00</published><updated>2024-06-09T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/arch_user_repository</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-06-09-arch_user_repository.html"><![CDATA[<blockquote class="block-tip">
+  <p>Notes for <a href="AUR">Arch User Repository</a>.</p>
+</blockquote>
+
+<p>透過這篇文章來介紹 AUR 跟使用方式。</p>
+
+<h3 id="introduction">Introduction</h3>
+
+<blockquote class="block-danger">
+  <p>因為是非官方維護的軟體，當然在安全性上的風險要使用者自己負責</p>
+</blockquote>
+
+<p><strong><a href="https://wiki.archlinux.org/title/Arch_User_Repository">Arch User Repository</a></strong>(AUR) 就是 Arch Linux 的第三方軟體庫，這裡的軟體是由社群貢獻者維護的，而不是由 Arch Linux 官方維護的。
+一些在其他常用 distribution 上如 Debain 的軟體 Arch 官方不一定有維護，就需要到 AUR 來尋找。</p>
+
+<p>跟 Debian, Ubuntu 不同可以透過 <code class="language-plaintext highlighter-rouge">/etc/apt/sources.list</code> 來新增 nonfree, universe 這些 Repository，並透過 apt 來管理，
+AUR 是 pacman 無法直接管理的，需要以手動的方式來進行安裝，所以會讓一些初學者感到困惑。</p>
+
+<p><img src="/image/2024/06-09-arch_user_repository/1.jpg" alt="" /></p>
+
+<p>從 <a href="https://aur.archlinux.org/packages">AUR Packages</a> 的網頁可以搜尋到所有在 AUR 上的套件，但是 AUR 其實並不是收錄任何軟體的 Binary 執行檔，
+而是名為 PKGBUILD 的腳本文件，PKGBUILD 本身只有如何安裝該軟體的指令腳本而已。</p>
+
+<p>在 PKGBUILD 中軟體的安裝很隨意，可以用任何方式進行，只要能把軟體安裝到系統，除此之外跟 pacman 幾乎沒有差異，
+最終也會透過 pacman 來安裝與管理。</p>
+
+<h4 id="advantages--disadvantages">Advantages &amp; Disadvantages</h4>
+
+<p><strong>Advantages</strong></p>
+<ul>
+  <li>最大的優點當然是高自由度，從基本的系統程式，到遊戲、Chrome、Vscode 都有人打包</li>
+  <li>安裝中的許多依賴都能依靠 PKGBUILD 內以腳本完成，並且因為是社群驅動的維護因此可以在上面找到最新的版本</li>
+  <li>同時 AUR 比官方的 Repository 大很多，所以 <code class="language-plaintext highlighter-rouge">pacman -Ss package</code> 找不到時，wiki 上都會註明 <code class="language-plaintext highlighter-rouge">you can install it from the AUR.</code></li>
+</ul>
+
+<p><strong>Disadvantages</strong></p>
+<ul>
+  <li>缺點也顯而易見，你不知道這個維護者會不會在其中塞入惡意程式
+    <ul>
+      <li><a href="https://thehackernews.com/2018/07/arch-linux-aur-malware.html?m=1">Malicious Software Packages Found On Arch Linux User Repository</a></li>
+    </ul>
+  </li>
+  <li>這些風險都要依靠用戶自己發覺。</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>為了方便大部分會使用如 yay, paru 這類的 AUR Helper 來管理 AUR 的套件，但是應該要牢記 AUR 的本質，並且官方的安裝方式依然是以手動的方式進行。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="attention">Attention</h3>
+
+<blockquote class="block-tip">
+  <p>在開始使用 AUR 之前最好先了解一下這個 Package 的相關資訊，這樣可以避免一些不必要的風險。</p>
+</blockquote>
+
+<p><img src="/image/2024/06-09-arch_user_repository/2.jpg" alt="" /></p>
+
+<ol>
+  <li>首先檢查該 Package 是由誰 <strong>Maintaniner</strong>, <strong>Licenses</strong> 是開源或者是官方發行，跟底下的用戶留言。
+    <ul>
+      <li>這裡可以看一下軟體的來源是什麼地方</li>
+    </ul>
+  </li>
+  <li>有的 AUR Package 是需要自行編譯的，如果是一些比較大的 Package 可能會需要很多時間
+    <ul>
+      <li>例如上圖是 visual-studio-code-bin，這是一個 -bin 版本的 Package，可以直接安裝不需要編譯</li>
+    </ul>
+  </li>
+  <li>如果是帶有 -git 的 Package，代表他的來源是從最新的 git 上面拉下來的，這樣的 Package 會是最新的版本比較不穩定，
+Package maintainer 可能也沒時間做完整的測試，這樣的 Package 也要小心使用。</li>
+</ol>
+
+<hr />
+
+<h4 id="getting-started">Getting started</h4>
+
+<ol>
+  <li>首先確定 <code class="language-plaintext highlighter-rouge">base-devel</code> 已安裝，他包含了一些基本的編譯工具，如: <code class="language-plaintext highlighter-rouge">gcc</code>, <code class="language-plaintext highlighter-rouge">make</code>, <code class="language-plaintext highlighter-rouge">autoconf</code>…
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">sudo pacman -S base-devel</code></li>
+    </ul>
+  </li>
+  <li>最佳化 <code class="language-plaintext highlighter-rouge">/etc/makepkg.conf</code> 的設定，這裡可以設定一些編譯的參數來加速，詳細可以參考 <a href="https://wiki.archlinux.org/title/Makepkg#Tips_and_tricks">makepkg#Tips and tricks</a></li>
+</ol>
+
+<p><strong>/etc/makepkg.conf</strong></p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">MAKEFLAGS</code> 設定編譯的核心數量，使用全部的核心數量:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">MAKEFLAGS="-j$(nproc)"</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">PKGEXT</code> 可以設定 Compression 的方式，預設是 <code class="language-plaintext highlighter-rouge">.pkg.tar.xz</code>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">PKGEXT='.pkg.tar'</code> 這樣就不會壓縮，<code class="language-plaintext highlighter-rouge">.tar</code> 是單純的打包</li>
+      <li><code class="language-plaintext highlighter-rouge">PKGEXT='.pkg.tar.lz4'</code> 這樣就會使用 <code class="language-plaintext highlighter-rouge">.lz4</code> 算法來進行壓縮</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>/etc/pacman.d/mirrorlist</strong></p>
+<ol>
+  <li>去 <a href="https://archlinux.org/mirrorlist/">Mirrorlist</a> 中找到一個比較快的 Server，這樣可以加速下載的速度</li>
+</ol>
+
+<p>最後記得更新一下 <code class="language-plaintext highlighter-rouge">sudo pacman -Syy</code>。</p>
+
+<hr />
+
+<h3 id="manual-installation">Manual Installation</h3>
+
+<p>整個手動安裝過程可以分為 4 個步驟:</p>
+<ol>
+  <li>Clone the AUR Package git repository.</li>
+  <li>Follow the instructions of the PKGBUILD file.</li>
+  <li>Install additional dependencies via pacman.</li>
+  <li>Build and install the package.</li>
+</ol>
+
+<p>這些過程其實都可以透過 AUR Helper 來完成，但是這裡要介紹的是手動的方式，以 <code class="language-plaintext highlighter-rouge">visual-studio-code-bin</code> 這個 Package 來做為範例。</p>
+<ol>
+  <li>進到 visual-studio-code-bin 的 <a href="https://aur.archlinux.org/packages">AUR Packages</a> 頁面，點選 <code class="language-plaintext highlighter-rouge">Git Clone URL</code> 來 Clone 下來</li>
+  <li>使用 git clone 到本地
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://aur.archlinux.org/visual-studio-code-bin.git
+</code></pre></div>    </div>
+  </li>
+  <li>進到 visual-studio-code-bin 的目錄，查看 PKGBUILD 的內容
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>visual-studio-code-bin
+vim PKGBUILD
+</code></pre></div>    </div>
+  </li>
+  <li>使用 <code class="language-plaintext highlighter-rouge">makepkg -si</code> 來安裝，pacman 會自動安裝相依的套件，並打包成 <code class="language-plaintext highlighter-rouge">.pkg.tar.xz</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">.pkg.tar.xz</code> 是 Arch Linux 的 Package 標準格式</li>
+    </ul>
+  </li>
+  <li>上面的步驟會在打包完成後自動安裝，手動安裝使用 <code class="language-plaintext highlighter-rouge">sudo pacman -U $PACKAGE_NAME</code> 來安裝</li>
+</ol>
+
+<blockquote>
+  <p>如果想查詢哪些 Package 是由 AUR 安裝的，可以使用 <code class="language-plaintext highlighter-rouge">pacman -Qm</code> 來查詢</p>
+</blockquote>
+
+<h4 id="bkgbuild">BKGBUILD</h4>
+
+<blockquote class="block-warning">
+  <p>在進入 PKGBUILD 的時候可以看到他的安裝寫法，這裡可以檢查一下他的安全性，看看是否有一些奇怪的指令或來源</p>
+</blockquote>
+
+<p><img src="/image/2024/06-09-arch_user_repository/3.jpg" alt="" /></p>
+
+<p>這裡看到它 x86 的來源是 <code class="language-plaintext highlighter-rouge">https://update.code.visualstudio.com/${pkgver}/linux-x64/stable</code> 這是 Visual Studio Code 的官方更新來源，
+所以至少它的來源是安全的。</p>
+
+<hr />
+
+<h3 id="aur-helper">AUR Helper</h3>
+
+<p>這裡介紹常見的 AUR Helper: yay，yay 是由 Golang 寫的，把常見的操作都包裝成了一個指令就可以完成。yay 曾經缺乏維護導致被棄用，但是現在已經有人接手維護。
+另外 AUR Helper 還有 <code class="language-plaintext highlighter-rouge">paru</code>, <code class="language-plaintext highlighter-rouge">trizen</code> 等等…</p>
+
+<p>AUR Helper 同樣的也不屬於 Arch Linux 的一部分，所以也需要從 AUR 上面安裝。之前的軼事說明了一件事，AUR Helper 也是由社群維護的，
+需要依賴於社群的力量來維護並不斷發展，所以使用稍舊的版本可能短期內沒有問題，但隨著版本的更新可能會導致他停止工作。</p>
+
+<blockquote>
+  <p>yay 的官方 Github <a href="https://github.com/Jguer/yay">yay’s Github</a></p>
+</blockquote>
+
+<ol>
+  <li>官方的安裝步驟如下:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman <span class="nt">-S</span> <span class="nt">--needed</span> git base-devel
+git clone https://aur.archlinux.org/yay.git
+<span class="nb">cd </span>yay
+makepkg <span class="nt">-si</span>
+</code></pre></div>    </div>
+  </li>
+  <li>yay 的使用上跟 pacman 很類似，例如以下:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Search Package</span>
+yay <span class="nv">$PACKAGE_NAME</span>
+<span class="c"># Install Package</span>
+yay <span class="nt">-S</span> <span class="nv">$PACKAGE_NAME</span>
+<span class="c"># Remove Package</span>
+yay <span class="nt">-R</span> <span class="nv">$PACKAGE_NAME</span>
+<span class="c"># Update All Package</span>
+yay <span class="nt">-Syy</span>
+yay <span class="nt">-Syu</span> 
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>yay 在安裝時對於 dependencies 會自動安裝，並且優先去 Arch Linux 的官方 Repository 找，如果找不到才會去 AUR 上面找，
+並且在安裝過程中會詢問使用者是否要查看 PKGBUILD 的內容，這樣可以避免一些不必要的風險。</p>
+
+<blockquote>
+  <p>yay 會把 Cache 存放在 <code class="language-plaintext highlighter-rouge">~/.cache/yay</code>，如果想要清除 Cache 可以使用 <code class="language-plaintext highlighter-rouge">yay -Sc</code> 來清除</p>
+</blockquote>
+
+<blockquote>
+  <p>透過 yay 安裝的 AUR Package 也可以透過 <code class="language-plaintext highlighter-rouge">pacman -Qm</code> 來查詢</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-12-2024 09:07</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Note" /><summary type="html"><![CDATA[Notes for Arch User Repository.]]></summary></entry><entry><title type="html">Algorithm | Hirschberg’s Algorithm</title><link href="https://hotshot824.github.io/jekylls/2024-04-09-hirschbergs_algorithm.html" rel="alternate" type="text/html" title="Algorithm | Hirschberg’s Algorithm" /><published>2024-04-09T00:00:00+00:00</published><updated>2024-04-09T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/hirschbergs_algorithm</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-04-09-hirschbergs_algorithm.html"><![CDATA[<blockquote class="block-tip">
+  <p>Notes: Hirschberg’s Algorithm, <a href="https://dl.acm.org/doi/10.1145/360825.360861">A Linear Space Algorithm for Computing Maximal Common Subsequences</a>.</p>
+</blockquote>
+
+<p>Hirschberg’s Algorithm 是一種用來解決 Needleman-Wunsch Algorithm 的空間複雜度的演算法，原本的空間複雜度為 O(m*n)。
+在論文的發表時間(1975)，記憶體是一個很昂貴的資源，所以 Hirschberg’s Algorithm 的提出是一個很大的突破。</p>
+
+<p>這個問題如果想要實際寫程式的話，可以參考 LeetCode <a href="https://leetcode.com/problems/edit-distance">72. Edit Distance</a>。</p>
+
+<blockquote class="block-danger">
+  <p>簡單的 Golang 實作，<a href="https://gist.github.com/Hotshot824/888d00c7066b0016c95fc3a1bd441ea9">Golang Implementation</a>.</p>
+</blockquote>
+
+<h3 id="introduction">Introduction</h3>
+
+<h5 id="edit-distance">Edit distance</h5>
+
+<p>Edit distance 是針對兩個 String 之間的差異度的量化測量，可以用來判斷兩個字串之間的相似度，在 DNA 或 Unix 的 diff 等等應用上都有很大的用途。</p>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a> 是指將一個字串變成另一個字串所需要的最少操作次數，操作包括 Insert, Delete, Replace。</p>
+</blockquote>
+
+\[lev(a, b) =
+\left\{
+\begin{aligned}
+&amp; |a|, &amp;&amp; \text{if } |b| = 0 \\
+&amp; |b|, &amp;&amp; \text{if } |a| = 0 \\
+&amp; lev (tail(a), tail(b)), &amp;&amp; \text{if } head(a) = head(b) \\
+&amp; 1 + min \left\{
+    \begin{aligned}
+        &amp; lev(tail(a), b) \\
+        &amp; lev(a, tail(b)) \\
+        &amp; lev(tail(a), tail(b))
+    \end{aligned}
+    \right. &amp;&amp; \text{otherwise}
+\end{aligned}
+\right.\]
+
+<ul>
+  <li>“Benson”, “Ben” 這兩個字串的 Edit distance 為 3
+    <ul>
+      <li>要把 “Benson” 變成 “Ben” 需要做 3 次 Delete 操作</li>
+      <li>要把 “Ben” 變成 “Benson” 需要做 3 次 Insert 操作</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這邊會介紹 Needleman-Wunsch Algorithm 和 Hirschberg’s Algorithm 這兩個演算法，用來計算兩個字串之間的 Edit distance。</p>
+
+<hr />
+
+<h3 id="needleman-wunsch-algorithm">Needleman-Wunsch Algorithm</h3>
+
+<blockquote class="block-tip">
+  <p>Needleman-Wunsch Algorithm, <a href="https://www.sciencedirect.com/science/article/abs/pii/0022283670900574?via%3Dihub">A general method applicable to the search for similarities in the amino acid sequence of two proteins</a>.</p>
+</blockquote>
+
+<p>Needleman-Wunsch Algorithm 是生物資訊中用來比對蛋白質或 DNA 序列的演算法，最早於 1970 年提出。是很標準的 Dynamic Programming 演算法，用來計算兩個序列之間的最佳對齊。</p>
+
+<ul>
+  <li>Time Complexity O(mn), Space Complexity O(mn)</li>
+</ul>
+
+<p>假如我們有兩個字串 <code class="language-plaintext highlighter-rouge">Benson</code> 和 <code class="language-plaintext highlighter-rouge">Ben</code></p>
+
+<h5 id="step-1-create-a-dp-table">Step 1: Create a DP Table</h5>
+
+<p>跟大部分的 DP 演算法一樣，我們需要先建立一個 DP Table，用來存放每個子問題的解，大小為 <code class="language-plaintext highlighter-rouge">(m+1) * (n+1)</code>。</p>
+
+<h5 id="step-2-choose-a-scoring-system">Step 2: Choose a scoring system</h5>
+
+<p>假如兩個字串要做 Align 的話，每個位置只有三種可能的情況 match, mismatch, gap，在 Needleman-Wunsch Algorithm 中有很多種評分標準，
+這裡使用 min 來作為評分方法的話，可以設計以下的 Scoring System:</p>
+
+<ul>
+  <li>Match: 0</li>
+  <li>Mismatch: 1</li>
+  <li>Gap: 1</li>
+</ul>
+
+<h5 id="step-3-initialize-the-dp-table">Step 3: Initialize the DP Table</h5>
+
+<p>現在我們依照 Gap 的評分標準，初始化 DP Table 的第一列和第一行。</p>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/1.jpg" alt="" /></p>
+
+<h5 id="step-4-fill-in-the-dp-table">Step 4: Fill in the DP Table</h5>
+
+<ul>
+  <li><em>Dynamic programming recursive formula:</em></li>
+</ul>
+
+\[dp(i, j) =
+\left\{
+\begin{aligned}
+&amp; dp(i-1, j-1), &amp;&amp; \text{if } x(i) = y(j) \\
+&amp; min \left\{
+    \begin{aligned}
+        dp(i-1, j-1) + 1 \\
+        dp(i-1, j) + 1 \\
+        dp(i, j-1) + 1
+    \end{aligned}
+    \right., &amp;&amp; \text{otherwise}
+\end{aligned}
+\right.\]
+
+<ul>
+  <li>依照上面的 <em>Recursive Formula</em> 依序歷遍整個 DP Table，注意是以 Row-Major 的方式填入 DP Table
+    <ul>
+      <li>如果 <code class="language-plaintext highlighter-rouge">x(i) = y(j)</code>，則 <code class="language-plaintext highlighter-rouge">dp(i, j)</code> 直接取左上角的值</li>
+      <li>否則取 <code class="language-plaintext highlighter-rouge">Left</code>, <code class="language-plaintext highlighter-rouge">Top</code>, <code class="language-plaintext highlighter-rouge">Left-Top</code> + 1 的最小值</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/2.jpg" alt="" /></p>
+
+<h5 id="step-5-traceback">Step 5: Traceback</h5>
+
+<p>最後我們可以從右下角的位置開始往左上角回溯，因為之前使用的 Scoring System，這裡我們使用 Min trace back:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">⇦</code> 代表左側的字串要塞入一個 Gap</li>
+  <li><code class="language-plaintext highlighter-rouge">⇧</code> 代表上方的字串要塞入一個 Gap</li>
+  <li><code class="language-plaintext highlighter-rouge">⇖</code> 代表這兩個字元是 Match</li>
+</ul>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/3.jpg" alt="" /></p>
+
+<p>最後的 Alignment 結果如下，Benson 和 Ben 之間的 Edit distance 為 3:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Benson
+Ben---
+</code></pre></div></div>
+
+<h5 id="prefixes-alignment">Prefixes Alignment</h5>
+
+<p>我們也可以發現在 DP Table 中，每個格子都代表該左側和上方的 Prefix 之間的 Edit distance，例如以下:</p>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/4.jpg" alt="" /></p>
+
+<ul>
+  <li>”s”, “Benso”, Edit distance is 4</li>
+  <li>“so”, “Benso”, Edit distance is 3</li>
+  <li>“son”, “Ben”, Edit distance is 2</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>但是在 DNA 比對中往往資料量很大，所以 Needleman-Wunsch Algorithm 的空間複雜度是 O(mn)，這樣的空間複雜度在當時的記憶體是一個很大的負擔。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="hirschbergs-algorithm">Hirschberg’s Algorithm</h3>
+
+<p>Hirschberg’s Algorithm 可以在 <strong>Space Complexity O(min(m, n))</strong> 的情況下，計算出 Needleman-Wunsch Algorithm 的結果，
+並且保持 <strong>Time Complexity O(mn)</strong>，並且 Hirschberg’s Algorithm 是一個 Divide and Conquer 的演算法。</p>
+
+<h5 id="divide-and-conquer">Divide and Conquer</h5>
+
+<p>首先要能做到 Divide and Conquer，我們需要確定一個 Base Case 被拆分後還是可以滿足原本的問題，所以為什麼可以進行拆分就會是接下來的問題。</p>
+
+<ul>
+  <li>假如有兩個字串 L, R 之間的 Edit-Distance 是 4
+    <ul>
+      <li>Len(L) = 8, Len(R) = 8</li>
+      <li>代表要講 R 修改成 L 需要經歷至少 4 次的操作</li>
+    </ul>
+  </li>
+  <li><strong>假如</strong>我們可以做拆分的話，現在變成四段的字串如下
+    <ul>
+      <li>L<sub>1</sub> = L[1:6], L<sub>2</sub> = L[7:8]</li>
+      <li>R<sub>1</sub> = R[1:4], R<sub>2</sub> = R[5:8]</li>
+    </ul>
+  </li>
+  <li>這裡必須保證 ED(L1, R1) + ED(L2, R2) = ED(L, R) 是相同的，這樣問題就來到我們怎麼找到一個點劃分 R
+    <ul>
+      <li>R 無論如何都會以 Len(R) / 2 作為拆分點</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>L = “CDEFABGH”, R = “ABCDEFGH”，以此為例會得到以下的結果</strong></p>
+
+<blockquote class="block-warning">
+  <p>注意下圖中 “ABCDEFGH” 無論如何都是以中點拆分</p>
+</blockquote>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/5.jpg" alt="" /></p>
+
+<p><strong>Needleman-Wunsch Algorithm</strong></p>
+
+<p>Needleman-Wunsch Algorithm 可以幫助我們找到適合拆分的位置，既然我們知道 R 必須被拆分，那我們就可以用 R<sub>1</sub> 和 R<sub>2</sub> 來計算出 L 適合的拆分點。</p>
+<ul>
+  <li>這裡使用的評分方式跟之前一樣，Match: 0, Mismatch: 1, Gap: 1</li>
+</ul>
+
+<ol>
+  <li>將 L 與 R<sub>1</sub> 進行 Needleman-Wunsch Algorithm，得到 DP Table
+<img src="/image/2024/04-09-hirschbergs_algorithm/6.jpg" alt="" /></li>
+  <li>將 Rev(L) 與 Rev(R<sub>2</sub>) 進行 Needleman-Wunsch Algorithm，得到 DP Table
+    <ul>
+      <li>因為我們要計算從後面往前的 Prefix 的 Edit distance，所以這邊要將字串反轉</li>
+    </ul>
+
+    <p><img src="/image/2024/04-09-hirschbergs_algorithm/7.jpg" alt="" /></p>
+  </li>
+  <li>分別將兩張 DP Table 組合會得到以下的結果
+    <ul>
+      <li>“ABCD” 到 “CDEFABGH” 的最小編輯距離在 “ABCD”, “CD”</li>
+      <li>“HGFE” 到 “HGBAFEDC” 的最小編輯距離在 “HGFE”, “HGBAFE”</li>
+      <li>會發現其實就是取 R<sub>1</sub>, L 和 Rev(R<sub>2</sub>) 與 Rev(L) 的最小編輯距離，以這個點來分割 L 不會造成任何額外的編輯距離</li>
+    </ul>
+
+    <p><img src="/image/2024/04-09-hirschbergs_algorithm/8.jpg" alt="" /></p>
+  </li>
+</ol>
+
+<p>以上的方式就是使用 Needleman-Wunsch Algorithm 來找到適合拆分的點，在這裡我們做些總結</p>
+<ol>
+  <li>將 R 使用 Len(R)/2 分為 R<sub>1</sub> 和 R<sub>2</sub></li>
+  <li>使用 Needleman-Wunsch Algorithm 找到 R<sub>1</sub> 和 L 的最小 Prefix 編輯距離</li>
+  <li>使用 Needleman-Wunsch Algorithm 找到 Rev(R<sub>2</sub>) 和 Rev(L) 的最小 Prefix 編輯距離
+    <ul>
+      <li>Rev 的目的是從後面往前找到 Prefix 的編輯距離</li>
+    </ul>
+  </li>
+  <li>將兩個 DP Table 的最後一列相加，找到各自對 L, Rev(L) 的最小 Prefix 編輯距離，即是 L 的拆分點</li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>時間複雜度不會改變是 O(mn)，但是空間複雜度可以降到 O(m<em>n)，因為需要一個剛好 m</em>n 的 DP Table。</p>
+</blockquote>
+
+<h5 id="optimize-space-complexity">Optimize Space Complexity</h5>
+
+<p>在這裡我們能發現在 Needleman-Wunsch Algorithm 中，我們其實只需要保留兩列的 DP Table(各自的最後一列)，
+因此在 DP Table 的建立過程中並不需要把整個表的空間都保留下來，只需要一個上方列的 1D Array 就可以建立 DP Table。</p>
+
+<ul>
+  <li>這樣的空間複雜度就可以降到 O(min(m, n))</li>
+  <li>在 Divide and Conquer 的第一步我們可以先選擇較小的字串作為 R，這樣可以減少空間的使用</li>
+</ul>
+
+<p><img src="/image/2024/04-09-hirschbergs_algorithm/9.jpg" alt="" /></p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-04-2024 00:43</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Algorithm" /><summary type="html"><![CDATA[Notes: Hirschberg’s Algorithm, A Linear Space Algorithm for Computing Maximal Common Subsequences.]]></summary></entry><entry><title type="html">Compiler | ANTLR Guide</title><link href="https://hotshot824.github.io/jekylls/2024-03-08-ANTLR_guide.html" rel="alternate" type="text/html" title="Compiler | ANTLR Guide" /><published>2024-03-08T00:00:00+00:00</published><updated>2024-03-08T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/ANTLR_guide</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-03-08-ANTLR_guide.html"><![CDATA[<blockquote class="block-tip">
+  <p>ANTLR (ANother Tool for Language Recognition) 是一個強大的 Parser Generator，可以用來產生語法分析器，並且可以用來產生語法分析樹，
+並且在一些商業或開源程式中被使用，例如:</p>
+  <ul>
+    <li>Eclipse Modeling Framework, 就使用 ANTLR 來將程式碼轉換為 OCL (Object Constraint Language)</li>
+    <li>PrestoDB 也使用 ANTLR 來解析 SQL</li>
+  </ul>
+</blockquote>
+
+<h3 id="antlr-in-maven">ANTLR in Maven</h3>
+
+<blockquote>
+  <p><a href="https://www.antlr.org/api/maven-plugin/latest/usage.html">ANTLR v4 Maven</a> 這邊是 ANTLR v4 Maven 的官方文件，可以參考這個文件來使用</p>
+</blockquote>
+
+<p>Maven 中有幾個 ANTLR 相關的 Plugin 可以使用:</p>
+<ul>
+  <li>ANTLR 4 Maven Plugin: 最完整的 ANTLR Maven Plugin，可以在 Maven 中使用 ANTLR4</li>
+  <li>ANTLR 4 Runtime Maven: 只包含 ANTLR 4 Runtime 的部分</li>
+  <li>ANTLR 4 Tool</li>
+</ul>
+
+<p><strong>Maven Configuration:</strong><br />
+下面的範例使用了 ANTLR 4 Maven Plugin，讓 ANTLR 加入到 Maven 的 Build 週期中</p>
+<ul>
+  <li>sourceDirectory: ANTLR 原始檔案的位置</li>
+  <li>outputDirectory: ANTLR 產生的檔案的位置</li>
+  <li>可以輸入 <code class="language-plaintext highlighter-rouge">mvn org.antlr:antlr4-maven-plugin:help -Ddetail=true</code> 來查看 ANTLR 4 Maven Plugin 的詳細資訊
+    <ul>
+      <li>這邊會列出 configuration 的詳細資訊，反而比 antlr4-maven-plugin 官方文件詳細</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;plugins&gt;</span>
+    <span class="nt">&lt;plugin&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.antlr<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>antlr4-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>4.13.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;configuration&gt;</span>
+            <span class="nt">&lt;listener&gt;</span>true<span class="nt">&lt;/listener&gt;</span>
+            <span class="nt">&lt;visitor&gt;</span>true<span class="nt">&lt;/visitor&gt;</span>
+            <span class="nt">&lt;sourceDirectory&gt;</span>src/main/java<span class="nt">&lt;/sourceDirectory&gt;</span>
+            <span class="nt">&lt;outputDirectory&gt;</span>src/main/generated-sources<span class="nt">&lt;/outputDirectory&gt;</span>
+        <span class="nt">&lt;/configuration&gt;</span>
+        <span class="nt">&lt;executions&gt;</span>
+            <span class="nt">&lt;execution&gt;</span>
+                <span class="nt">&lt;id&gt;</span>antlr<span class="nt">&lt;/id&gt;</span>
+                <span class="nt">&lt;goals&gt;</span>
+                    <span class="nt">&lt;goal&gt;</span>antlr4<span class="nt">&lt;/goal&gt;</span>
+                <span class="nt">&lt;/goals&gt;</span>
+            <span class="nt">&lt;/execution&gt;</span>
+        <span class="nt">&lt;/executions&gt;</span>
+    <span class="nt">&lt;/plugin&gt;</span>
+<span class="nt">&lt;/plugins&gt;</span>
+</code></pre></div></div>
+
+<p><strong>ANTLR Command Line Options:</strong></p>
+<ul>
+  <li>如果不使用 Maven 提供的 configuration，可以直接在 pom.xml 中加入 ANTLR4 的參數
+    <ul>
+      <li>這部分就跟 <a href="https://gist.github.com/subchen/464b05ee611bce031984">ANTLR Command Line</a> 的參數輸出一樣，可以直接在這邊輸入</li>
+    </ul>
+
+    <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
+    <span class="nt">&lt;arguments&gt;</span>
+        <span class="nt">&lt;argument&gt;</span>-package<span class="nt">&lt;/argument&gt;</span>
+        <span class="nt">&lt;argument&gt;</span>ocl.runner<span class="nt">&lt;/argument&gt;</span>
+        <span class="nt">&lt;argument&gt;</span>-o<span class="nt">&lt;/argument&gt;</span>
+        <span class="nt">&lt;argument&gt;</span>${project.basedir}/src/generated-sources<span class="nt">&lt;/argument&gt;</span>
+    <span class="nt">&lt;/arguments&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>把上面設定好就可以再 Maven 的建置中使用 ANTLR 產生一個語法分析器了，通常會在 Java 中 import ANTLR 的相關工具，
+所以建議是在 dependency 也加入 <code class="language-plaintext highlighter-rouge">antlr4-maven-plugin</code> 或 <code class="language-plaintext highlighter-rouge">antlr4-runtime</code>。</p>
+
+<hr />
+
+<h3 id="parser-generation-and-execution">Parser Generation and Execution</h3>
+
+<p>通常不會把 ANTLR 產生的檔案與原始檔案放在一起，這樣在管理上會比較麻煩，所以通常會把 ANTLR 產生的檔案放在另一個 Directory。</p>
+<ul>
+  <li>這邊選擇把 ANTLR 產生的檔案放在 java 的同層目錄下的 <code class="language-plaintext highlighter-rouge">generated-sources</code> 中</li>
+  <li>因為多了一個地方存放 Java source code，所以可以使用 <code class="language-plaintext highlighter-rouge">build-helper-maven-plugin</code> 來幫助 Maven 來找到這些 source code</li>
+</ul>
+
+<p>如果這些設定都完成了，就可以在 antlr4 的 sourceDirectory 中加入 grammar file 了，這邊以下面的語法為例:</p>
+
+<pre><code class="language-antlr4">grammar Expr;		
+prog:	expr EOF ;
+expr:	expr ('*'|'/') expr
+    |	expr ('+'|'-') expr
+    |	INT
+    |	'(' expr ')'
+    ;
+NEWLINE : [\r\n]+ -&gt; skip;
+INT     : [0-9]+ ;
+</code></pre>
+
+<blockquote>
+  <p>加入這個 grammar file 到 sourceDirectory 中，然後執行 <code class="language-plaintext highlighter-rouge">mvn clean install</code> 就可以看到 ANTLR 產生的語法分析器了</p>
+</blockquote>
+
+<p>在 java 中添加一個 main function 來測試 ANTLR 產生的語法分析器，如下:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Expr</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span> <span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span>
+    <span class="o">{</span>
+        <span class="nc">CharStream</span> <span class="n">charStream</span> <span class="o">=</span> <span class="nc">CharStreams</span><span class="o">.</span><span class="na">fromString</span><span class="o">(</span><span class="s">"10+20*30"</span><span class="o">);</span>
+
+        <span class="c1">// Make lexer</span>
+        <span class="nc">ExprLexer</span> <span class="n">lexer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ExprLexer</span><span class="o">(</span><span class="n">charStream</span><span class="o">);</span>
+        <span class="c1">// Get a TokenStream on the lexer</span>
+        <span class="nc">CommonTokenStream</span> <span class="n">tokens</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CommonTokenStream</span><span class="o">(</span> <span class="n">lexer</span> <span class="o">);</span>
+        <span class="c1">// Make a parser attached to the token stream</span>
+        <span class="nc">ExprParser</span> <span class="n">parser</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ExprParser</span><span class="o">(</span> <span class="n">tokens</span> <span class="o">);</span>
+        <span class="c1">// Get the top node (the root) of the parse tree then print it</span>
+        <span class="nc">ParseTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">prog</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">tree</span><span class="o">.</span><span class="na">toStringTree</span><span class="o">(</span><span class="n">parser</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>執行 <code class="language-plaintext highlighter-rouge">mvn exec:java -Dexec.mainClass="{YourMainClass}"</code> 就可以看到 ANTLR 產生的語法分析樹了，也可以在 <code class="language-plaintext highlighter-rouge">pom.xml</code> 中加入 <code class="language-plaintext highlighter-rouge">exec-maven-plugin</code> 來執行這個 main function。</p>
+
+<hr />
+
+<h3 id="antlr-command-line">ANTLR Command Line</h3>
+
+<p>ANTLR 也有提供一系列 Command Line 的指令，可以用來進行產生語法分析器跟 GUI 的 Parser Tree，下面是安裝步驟:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://www.antlr.org/download/antlr-4.13.1-complete.jar
+<span class="nb">mv </span>antlr-4.13.1-complete.jar /opt/javalib/
+
+vim ~/.bashrc 
+<span class="c"># Join the following to the .bashrc file</span>
+<span class="c"># export JAVA_HOME=/opt/jdk-17.0.10</span>
+<span class="c"># export PATH=$JAVA_HOME/bin:$PATH</span>
+<span class="c"># export CLASSPATH=/opt/javalib/antlr-4.13.1-complete.jar</span>
+<span class="c"># alias antlr4='java -jar /opt/javalib/antlr-4.13.1-complete.jar'</span>
+<span class="c"># alias grun='java org.antlr.v4.gui.TestRig'</span>
+
+<span class="nb">source</span> ~/.bashrc
+
+antlr4
+<span class="c"># [benson@arch ~]$ antlr4 </span>
+<span class="c"># ANTLR Parser Generator  Version 4.13.1</span>
+<span class="c">#  -o ___              specify output directory where all output is generated</span>
+<span class="c">#  -lib ___            specify location of grammars, tokens files</span>
+<span class="c">#  ...</span>
+<span class="c">#  -Xexact-output-dir  all output goes into -o dir regardless of paths/package</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>03-19-2024 19:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Compiler" /><summary type="html"><![CDATA[ANTLR (ANother Tool for Language Recognition) 是一個強大的 Parser Generator，可以用來產生語法分析器，並且可以用來產生語法分析樹， 並且在一些商業或開源程式中被使用，例如: Eclipse Modeling Framework, 就使用 ANTLR 來將程式碼轉換為 OCL (Object Constraint Language) PrestoDB 也使用 ANTLR 來解析 SQL]]></summary></entry><entry><title type="html">Note | Arch Linux Installation</title><link href="https://hotshot824.github.io/jekylls/2024-03-06-arch_linux_installation.html" rel="alternate" type="text/html" title="Note | Arch Linux Installation" /><published>2024-03-06T00:00:00+00:00</published><updated>2024-03-06T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/arch_linux_installation</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-03-06-arch_linux_installation.html"><![CDATA[<blockquote class="block-tip">
+  <p>Notes how to install Arch Linux</p>
+</blockquote>
+
+<p>紀錄一下怎麼安裝 Arch Linux，非常推薦讀官方的 <a href="https://wiki.archlinux.org/title/Installation_guide">Installation guide</a> 這邊大概就是一個簡化版的安裝流程，不得不說 Arch 的自由度真的很高，
+所以安裝的時候可以根據自己的需求來安裝。</p>
+
+<h3 id="pre-installation">Pre-installation</h3>
+
+<p><a href="#11-connect-to-the-internet">1.1 Connect to the internet</a><br />
+<a href="#12-update-the-system-clock">1.2 Update the system clock</a><br />
+<a href="#13-partition-the-disks">1.3 Partition the disks</a></p>
+
+<h5 id="11-connect-to-the-internet">1.1 Connect to the internet</h5>
+
+<p>這邊會透過 <a href="https://wiki.archlinux.org/title/Systemd-networkd">systemd-networkd</a> 來配置網路，如果要設置 Static IP:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">nano /etc/systemd/network/20-wired.network</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>Match]
+<span class="nv">Name</span><span class="o">=</span>en<span class="k">*</span>
+
+<span class="o">[</span>Network]
+<span class="nv">DHCP</span><span class="o">=</span>no
+<span class="nv">Address</span><span class="o">=</span>10.1.10.9/24
+<span class="nv">Gateway</span><span class="o">=</span>10.1.10.1
+<span class="nv">DNS</span><span class="o">=</span>10.1.10.1
+<span class="c">#DNS=8.8.8.8</span>
+</code></pre></div>    </div>
+  </li>
+  <li>配置後 <code class="language-plaintext highlighter-rouge">systemctl restart systemd-networkd</code> 重啟網路服務
+    <ul>
+      <li>檢查 <code class="language-plaintext highlighter-rouge">ip addr</code> 是否與配置一樣</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="12-update-the-system-clock">1.2 Update the system clock</h5>
+
+<p>使用 <a href="https://man.archlinux.org/man/timedatectl.1">timedatectl</a> 來設置系統時間，首先 <code class="language-plaintext highlighter-rouge">timedatectl set-ntp true</code> 啟動 NTP 服務:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">timedatectl list-timezones | grep Asia/Taipei</code> 查詢時區是否存在</li>
+  <li><code class="language-plaintext highlighter-rouge">timedatectl set-timezone Asia/Taipei</code> 設置時區</li>
+  <li><code class="language-plaintext highlighter-rouge">timedatectl status</code> 查看目前時間是否正確</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@archiso ~ <span class="c"># timedatectl status</span>
+               Local <span class="nb">time</span>: Sun 2024-03-03 15:21:00 CST
+           Universal <span class="nb">time</span>: Sun 2024-03-03 07:21:00 UTC
+                 RTC <span class="nb">time</span>: Sun 2024-03-03 07:21:00
+                Time zone: Asia/Taipei <span class="o">(</span>CST, +0800<span class="o">)</span>
+System clock synchronized: <span class="nb">yes
+              </span>NTP service: active
+          RTC <span class="k">in </span><span class="nb">local </span>TZ: no
+</code></pre></div></div>
+
+<blockquote>
+  <p>設置成功應該會看到以上的訊息</p>
+</blockquote>
+
+<h5 id="13-partition-the-disks">1.3 Partition the disks</h5>
+
+<p><a href="https://wiki.archlinux.org/title/fdisk">fdisk</a> 是一個常用的分割硬碟的工具，這邊會使用 fdisk 來分割硬碟:</p>
+<ol>
+  <li>先使用 <code class="language-plaintext highlighter-rouge">fdisk -l</code> 查看硬碟分割情況</li>
+  <li><code class="language-plaintext highlighter-rouge">fdisk /dev/sda</code> 開始分割硬碟
+    <ul>
+      <li>這邊我只分割一個 SWAP 跟一個主分割區，因為剩下的空間會使用 Btrfs 來管理</li>
+    </ul>
+  </li>
+</ol>
+
+<div align="center">
+    <img src="/image/2024/03-06-arch_linux_installation/1.jpg" width="75%" height="75%" />
+</div>
+
+<ol>
+  <li>使用 mkfs 來格式化分割區
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkswap /dev/sda1
+swapon /dev/sda1
+mkfs.btrfs /dev/sda2
+mount /dev/sda2 /mnt
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<div align="center">
+    <img src="/image/2024/03-06-arch_linux_installation/2.jpg" width="75%" height="75%" />
+</div>
+
+<p>mount 之後操作就跟 Debian 一樣，唯一的差別是 arch 沒有 target 這個目錄，所以把操作的目錄都換成 /mnt 就好。</p>
+<ul>
+  <li>在最後的時候記得用 <code class="language-plaintext highlighter-rouge">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code> 來生成 fstab</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>延伸閱讀: 可以參考 <a href="./2024-01-05-debian_btrfs.html">Using btrfs on Debian</a> 來設置 Btrfs，或者官方說明 <a href="https://wiki.archlinux.org/title/btrfs">Arch - btrfs</a></p>
+</blockquote>
+
+<h3 id="install-linux">Install Linux</h3>
+
+<p><a href="#21-select-the-mirrors">2.1 Select the mirrors</a><br />
+<a href="#22-install-the-base-packages">2.2 Install the base packages</a></p>
+
+<h5 id="21-select-the-mirrors">2.1 Select the mirrors</h5>
+
+<p>這邊要選擇最快的鏡像，可以使用 <code class="language-plaintext highlighter-rouge">reflector</code> 來自動選擇最快的鏡像，或者手動編輯 <code class="language-plaintext highlighter-rouge">/etc/pacman.d/mirrorlist</code> 來選擇鏡像。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">reflector --country Taiwan --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist</code>
+    <ul>
+      <li>選擇最近 12 小時內更新過位於台灣的鏡像，並且排序下載速度排序</li>
+    </ul>
+  </li>
+  <li>官方也有一個提供的 <a href="https://archlinux.org/mirrorlist/">Mirrorlist</a></li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>這步驟也可以在安裝完系統後再執行，最好在進行前備份 <code class="language-plaintext highlighter-rouge">/etc/pacman.d/mirrorlist</code></p>
+</blockquote>
+
+<h5 id="22-install-the-base-packages">2.2 Install the base packages</h5>
+
+<p>使用 pacstrap 來安裝基本的套件，<code class="language-plaintext highlighter-rouge">pacstrap /mnt base linux linux-firmware</code></p>
+<ul>
+  <li>如果想要安裝其他套件可以在後面加上套件名稱，例如: <code class="language-plaintext highlighter-rouge">pacstrap /mnt base linux linux-firmware vim openssh</code></li>
+  <li>先使用 <code class="language-plaintext highlighter-rouge">pacman -Sy</code> 更新套件庫，就可以使用 <code class="language-plaintext highlighter-rouge">pacman -Ss</code> 搜尋套件名稱</li>
+</ul>
+
+<h3 id="configure-the-system">Configure the system</h3>
+
+<p><a href="#32-chroot">3.2 Chroot</a><br />
+<a href="#35-network-configuration">3.5 Network configuration</a><br />
+<a href="#38-install-a-bootloader">3.8 Install a bootloader</a></p>
+
+<p>剩下的部分官方文件都有詳細的說明，這邊就不再贅述，可以參考 <a href="https://wiki.archlinux.org/title/Installation_guide">Installation guide</a> 來進行安裝。</p>
+<ul>
+  <li>fstab 跟官方說明設置就好，然後記得查看是否有錯誤</li>
+</ul>
+
+<h5 id="32-chroot">3.2 Chroot</h5>
+
+<ol>
+  <li>chroot 可以讓你進入安裝好的系統，這樣就可以提前進行一些設置
+    <ul>
+      <li>如果在 pasctrap 少安裝了一些套件，可以在這邊安裝，例如: <code class="language-plaintext highlighter-rouge">pacman -S openssh</code></li>
+      <li>安裝後記得到 <code class="language-plaintext highlighter-rouge">systemctl enable sshd</code> 啟動 sshd 服務</li>
+    </ul>
+  </li>
+  <li>Time Zone
+    <ul>
+      <li>用 symbolic link 來設置時區，然後用 <code class="language-plaintext highlighter-rouge">hwclock --systohc</code> 來設置硬體時鐘</li>
+    </ul>
+  </li>
+  <li>Localization</li>
+  <li>Hostname</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Time Zone</span>
+<span class="nb">ln</span> <span class="nt">-sf</span> /usr/share/zoneinfo/Asia/Taipei /etc/localtime
+hwclock <span class="nt">--systohc</span>
+
+<span class="c"># Localization</span>
+vim /etc/locale.gen
+<span class="c"># Uncomment `en_US.UTF-8 UTF-8` and other needed locales</span>
+locale-gen
+<span class="nb">echo</span> <span class="s2">"LANG=en_US.UTF-8"</span> <span class="o">&gt;</span> /etc/locale.conf
+
+<span class="c"># Hostname</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">YOU_HOSTNAME</span><span class="k">}</span> <span class="o">&gt;</span> /etc/hostname
+</code></pre></div></div>
+
+<h5 id="35-network-configuration">3.5 Network configuration</h5>
+
+<p>這邊可以參考 <a href="https://wiki.archlinux.org/title/Systemd-networkd">systemd-networkd</a> 來設置網路，或者使用其他的套件來設置網路。</p>
+
+<ul>
+  <li>下面是沿用 <a href="https://wiki.archlinux.org/title/Systemd-networkd">systemd-networkd</a> 的設置</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim /etc/systemd/network/20-wired.network
+<span class="c"># Wired network like following:</span>
+<span class="c"># [Match]</span>
+<span class="c"># Name=en*</span>
+
+<span class="c"># [Network]</span>
+<span class="c"># DHCP=no</span>
+<span class="c"># Address=10.1.10.9/24</span>
+<span class="c"># Gateway=10.1.10.1</span>
+<span class="c"># DNS=10.1.10.1</span>
+systemctl <span class="nb">enable </span>systemd-networkd
+</code></pre></div></div>
+
+<h5 id="38-install-a-bootloader">3.8 Install a bootloader</h5>
+
+<blockquote class="block-warning">
+  <p>這一步非常重要，因為如果沒有 bootloader 就無法開機</p>
+</blockquote>
+
+<p>在安裝 bootloader 前先把 initramfs 跟 passwd 設置好，然後再安裝 bootloader。</p>
+<ul>
+  <li>選擇 GRUB 作為 bootloader，Arch 這邊有其他 <a href="https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader">bootloader</a> 的選擇，可以參考官方文件</li>
+  <li>這裡沒有 UEFI 的安裝方式，如果要安裝 UEFI 可以參考官方文件 <a href="https://wiki.archlinux.org/title/GRUB#BIOS_systems">Arch - GRUB</a></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Initramfs</span>
+mkinitcpio <span class="nt">-P</span>
+<span class="c"># Set root password</span>
+passwd
+<span class="c"># Install bootloader, os-prober can detect other OS</span>
+pacman  <span class="nt">-Sy</span> grub efibootmgr os-prober
+grub-install <span class="nt">--target</span><span class="o">=</span>i386-pc /dev/sda
+grub-mkconfig <span class="nt">-o</span> /boot/grub/grub.cfg
+</code></pre></div></div>
+
+<p>這裡可以把剩下的部分都設置好，然後 exit 離開 chroot，官方是建議關機前 <code class="language-plaintext highlighter-rouge">umount -R /mnt</code> 卸載所有的分割區，然後再 <code class="language-plaintext highlighter-rouge">reboot</code>，
+重啟之後如果進入 GRUB 引導到 Arch Linux 就代表安裝成功。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">useradd -m -G wheel,users -s /bin/bash ${USER_NAME}</code> 新增使用者
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">passwd ${USER_NAME}</code> 設置密碼</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="other">Other</h3>
+
+<h5 id="41-firewall">4.1 Firewall</h5>
+
+<p>Arch 通常沒有預設安裝防火牆，並且 iptables 是被 systemd 服務管理的，所以最好開啟 <code class="language-plaintext highlighter-rouge">systemctl enable iptables</code> 來啟動防火牆服務。
+並且要設置好防火牆規則，這裡有一個簡單的腳本 <a href="https://gist.github.com/Hotshot824/5021fca047a65b6ff6df2139e59cf9e4#file-iptables-script-sh">iptables-script.sh</a></p>
+
+<ul>
+  <li>設定完記得保存規則
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables-save <span class="o">&gt;</span> /etc/iptables/iptables.rules
+ip6tables-save <span class="o">&gt;</span> /etc/iptables/ip6tables.rules
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>03-06-2024 15:21</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Note" /><summary type="html"><![CDATA[Notes how to install Arch Linux]]></summary></entry><entry><title type="html">Note | Apache Maven Multi-Module Project Guide</title><link href="https://hotshot824.github.io/jekylls/2024-03-01-maven_multi_module_project.html" rel="alternate" type="text/html" title="Note | Apache Maven Multi-Module Project Guide" /><published>2024-03-01T00:00:00+00:00</published><updated>2024-03-01T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/maven_multi_module_project</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-03-01-maven_multi_module_project.html"><![CDATA[<blockquote class="block-tip">
+  <p>在開發 Java 的時候一定會考量的是如何管理專案的結構，尤其是當專案規模大到一定程度的時候，這裡就是因為遇到了陳年舊 Code 把所有程式塞在同一個專案裡面，
+為了對專案做更好的管理架構，使用 Module 來分割專案是一個不錯的選擇，並且也可以增加代碼的可維護性。</p>
+</blockquote>
+
+<blockquote>
+  <p>Reference: <a href="https://books.sonatype.com/mvnex-book/reference/multimodule.html">Maven by Example - Chapter 6. A Multi-Module Project</a>, <a href="https://maven.apache.org/guides/mini/guide-multiple-modules.html">Guide to Working with Multiple Modules</a></p>
+</blockquote>
+
+<p>其實概念上就是依靠 POM.xml 來管理多個專案，這樣就會有一個頂層的 POM.xml 在此之下會有多個子專案的 POM.xml，這樣就可以透過頂層的 POM.xml 來管理所有的子專案，
+Maven 把這樣的機制稱為 Reactor，Maven 會透過 Reactor 來做以下操作:</p>
+
+<ul>
+  <li>收集所有可用的 Module 來 Build</li>
+  <li>依照 Module 之間的依賴關係跟順序來 Build</li>
+</ul>
+
+<h3 id="parent-pom">Parent POM</h3>
+
+<p>這邊用 Eclipse 來建立一個 Maven Project 把 <code class="language-plaintext highlighter-rouge">POM.xml</code> 中的 <code class="language-plaintext highlighter-rouge">&lt;packaing&gt;</code> 設定為 <code class="language-plaintext highlighter-rouge">pom</code>，這樣就會變成一個 Parent POM，這樣就可以透過這個 POM.xml 來管理所有的子專案。</p>
+
+<ol>
+  <li>建立一個 Maven Project 使用 maven-archetype-quickstart 這個 Archetype</li>
+  <li>把 <code class="language-plaintext highlighter-rouge">POM.xml</code> 中的 <code class="language-plaintext highlighter-rouge">&lt;packaing&gt;</code> 設定為 <code class="language-plaintext highlighter-rouge">pom</code>
+    <ul>
+      <li>設定為 <code class="language-plaintext highlighter-rouge">pom</code> 之後就會變成一個 Parent POM 其他的檔案都可以刪掉了</li>
+      <li>POM.xml 的 artifactId 可以命名為 root</li>
+    </ul>
+  </li>
+  <li>Module 的 dependency 可以放在 Parent POM 中，這樣所有的 Module 都可以共用這些 dependency
+    <ul>
+      <li>如果單獨放在 Module 的 POM.xml 中，那麼就代表是只有這個 Module 可以使用這些 dependency</li>
+      <li>version, groupId 可以在 Parent POM 中設定代表所有的 Module 都共用這些設定</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Parent POM:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;project&gt;</span>
+  <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+
+  <span class="nt">&lt;groupId&gt;</span>com.example.myapp<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>root<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+  <span class="nt">&lt;packaging&gt;</span>pom<span class="nt">&lt;/packaging&gt;</span>
+
+  <span class="nt">&lt;name&gt;</span>root<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
+
+  <span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+  <span class="nt">&lt;/properties&gt;</span>
+
+  <span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>3.8.1<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+  <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<p>Module POM:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;project&gt;</span>
+	<span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+	<span class="nt">&lt;parent&gt;</span>
+		<span class="nt">&lt;groupId&gt;</span>com.example.my<span class="nt">&lt;/groupId&gt;</span>
+		<span class="nt">&lt;artifactId&gt;</span>root<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+	<span class="nt">&lt;/parent&gt;</span>
+
+	<span class="nt">&lt;artifactId&gt;</span>application<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;name&gt;</span>application<span class="nt">&lt;/name&gt;</span>
+	<span class="nt">&lt;url&gt;</span>http://maven.apache.org<span class="nt">&lt;/url&gt;</span>
+
+	<span class="nt">&lt;properties&gt;</span>
+		<span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+	<span class="nt">&lt;/properties&gt;</span>
+
+	<span class="nt">&lt;dependencies&gt;</span>
+	<span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<h3 id="module">Module</h3>
+
+<p>Module 就是一個獨立的專案，跟一般的 Maven Project 一樣，如果 Module 之間有互相 dependency 的關係，
+那就在 POM 加入對該 Module 的 dependency，這樣 Maven 就會依照順序來 Build。</p>
+
+<p>如果 application module 依賴於 data-site 就可以在 application 的 POM.xml 中加入以下的設定:</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.example.my<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>data-site<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<p>全部設定完後使用 <code class="language-plaintext highlighter-rouge">mvn verify</code> 就可以驗證整個專案的 Build，Maven 會依照 Module 之間的依賴關係跟順序來 Build jar。
+如果想要把所有專案的 jar 都打包成一個大的 jar 可以使用一些 Maven Plugin 來達成，例如 <code class="language-plaintext highlighter-rouge">maven-assembly-plugin</code>。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+<span class="o">[</span>INFO] Reactor Summary <span class="k">for </span>root 0.0.1-SNAPSHOT:
+<span class="o">[</span>INFO]
+<span class="o">[</span>INFO] root ............................................... SUCCESS <span class="o">[</span>  0.921 s]
+<span class="o">[</span>INFO] data-site .......................................... SUCCESS <span class="o">[</span>  2.003 s]
+<span class="o">[</span>INFO] application ........................................ SUCCESS <span class="o">[</span>  0.732 s]
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+<span class="o">[</span>INFO] BUILD SUCCESS
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+<span class="o">[</span>INFO] Total <span class="nb">time</span>:  3.793 s
+<span class="o">[</span>INFO] Finished at: 2024-03-01T20:31:18+08:00
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>mvn verify 成功後就會看到類似上面的訊息，代表整個專案都 Build 成功了</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>03-01-2024 15:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="software" /><summary type="html"><![CDATA[在開發 Java 的時候一定會考量的是如何管理專案的結構，尤其是當專案規模大到一定程度的時候，這裡就是因為遇到了陳年舊 Code 把所有程式塞在同一個專案裡面， 為了對專案做更好的管理架構，使用 Module 來分割專案是一個不錯的選擇，並且也可以增加代碼的可維護性。]]></summary></entry></feed>
