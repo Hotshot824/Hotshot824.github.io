@@ -7,14 +7,11 @@ layout: post
 tags: [leetcode, algorithm]
 ---
 
-> Notes leetcode problem 
+> 我的刷題筆記，主要用於記錄自己在刷題過程中遇到的問題與解法。
 {: .block-tip }
 
-> Reference: [leetcode-master], [Python-LeetCode 581], [灵茶山艾府: 如何科学刷题？]
+> Reference: [leetcode-master], [Python-LeetCode 581], [codeforces-go], [灵茶山艾府: 如何科学刷题？]
 {: .block-tip }
-
-> Reference: [codeforces-go], [灵茶山艾府: 如何科学刷题？]
-<{: .block-tip }
 
 > 以上參考從基礎的 Array 到 Dynamic Programming 都有詳細的解釋。
 
@@ -79,6 +76,7 @@ tags: [leetcode, algorithm]
 [2037. Minimum Number of Moves to Seat Everyone](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2037.Minimum_Number_Of_Moves_To_Seat_Everyone.md)  
 [2233. Maximum Product After K Increments](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2233.Maximum_Product_After_K_Increments.md)  
 [2785. Sort Vowels in a String](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2785.Sort_Vowels_in_a_String.md)  
+[Hackerrank. Organizing Containers of Balls](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Organizing_Containers_of_Balls.md)  
 
 **Spiral Matrix**  
 [209. Minimum Size Subarray Sum](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/209.Minimum_Size_Subarray_Sum.md)  
@@ -388,5 +386,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-16 01:53:49
+> Leetcode 2025-09-16 05:09:40
 {: .block-tip }
