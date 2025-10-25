@@ -172,6 +172,11 @@ tags: [leetcode, algorithm]
 [518. Coin Change II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/518.Coin_Change_Ii.md)  
 [Unbounded Knapsack Problem](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Unbounded_Knapsack_Problem.md)  
 
+### Easy
+
+**Math**  
+[1716. Calculate Money in Leetcode Bank](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1716.Calculate_Money_in_Leetcode_Bank.md)  
+
 ### Graph
 
 **Breadth First Search**  
@@ -390,5 +395,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-09-16 12:41:55
+> Leetcode 2025-10-25 03:05:50
 {: .block-tip }
