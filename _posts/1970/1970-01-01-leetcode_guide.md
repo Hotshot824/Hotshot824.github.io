@@ -396,5 +396,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-03 12:09:55
+> Leetcode 2025-12-03 13:00:29
 {: .block-tip }
