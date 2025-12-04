@@ -25,6 +25,9 @@ tags: [leetcode, algorithm]
 
 ### Array
 
+**Array**  
+[Hackerrank. Minimum Distances](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Minimum_Distances.md)  
+
 **Binary Search**  
 [704. Binary Search](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/704.Binary_Search.md)  
 [2070. Most Beautiful Item for Each Query](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2070.Most_Beautiful_Item_For_Each_Query.md)  
@@ -399,5 +402,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-04 11:32:26
+> Leetcode 2025-12-04 13:56:00
 {: .block-tip }
