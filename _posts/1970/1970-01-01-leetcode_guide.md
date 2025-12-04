@@ -355,6 +355,7 @@ tags: [leetcode, algorithm]
 [Easy String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_string.md)  
 [Hackerrank. Bigger is Greater](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Bigger_is_Greater.md)  
 [Hackerrank. Encryption](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Encryption.md)  
+[Hackerrank. Modified Kaprekar Numbers](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Modified_Kaprekar_Numbers.md)  
 [Hackerrank. Repeated String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Repeated_String.md)  
 
 **Trie**  
@@ -397,5 +398,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-04 04:43:10
+> Leetcode 2025-12-04 08:31:18
 {: .block-tip }
