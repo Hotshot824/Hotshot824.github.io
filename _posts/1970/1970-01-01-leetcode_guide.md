@@ -379,6 +379,7 @@ tags: [leetcode, algorithm]
 [1750. Minimum Length of String After Deleting Similar Ends](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1750.Minimum_Length_Of_String_After_Deleting_Similar_Ends.md)  
 [2149. Rearrange Array Elements by Sign](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2149.Rearrange_Array_Elements_By_Sign.md)  
 [2570. Merge Two 2D Arrays by Summing Values](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2570.Merge_Two_2d_Arrays_By_Summing_Values.md)  
+[Hackerrank. Beautiful Triplets](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Beautiful_Triplets.md)  
 
 ### Other
 
@@ -398,5 +399,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-04 08:56:31
+> Leetcode 2025-12-04 11:32:26
 {: .block-tip }
