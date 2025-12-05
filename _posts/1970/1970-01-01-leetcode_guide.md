@@ -359,6 +359,7 @@ tags: [leetcode, algorithm]
 [Hackerrank. Encryption](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Encryption.md)  
 [Hackerrank. Modified Kaprekar Numbers](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Modified_Kaprekar_Numbers.md)  
 [Hackerrank. Repeated String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Repeated_String.md)  
+[Hackerrank. The Time in Words](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.The_Time_in_Words.md)  
 
 **Trie**  
 [14. Longest Common Prefix](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/14.Longest_Common_Prefix.md)  
@@ -401,5 +402,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-05 09:19:16
+> Leetcode 2025-12-05 12:19:39
 {: .block-tip }
