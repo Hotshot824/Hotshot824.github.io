@@ -286,6 +286,7 @@ tags: [leetcode, algorithm]
 [3432. Count Partitions with Even Sum Difference](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3432.Count_Partitions_with_Even_Sum_Difference.md)  
 [Hackerrank. Absolute Permutation](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank. Absolute Permutation.md)  
 [Hackerrank. Extra Long Factorials](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Extra_Long_Factorials.md)  
+[Hackerrank. Grading Students](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Grading_Students.md)  
 [Hackerrank. Non-Divisible Subset](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.NonDivisible_Subset.md)  
 
 ### Sliding Window
@@ -403,5 +404,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-05 12:45:49
+> Leetcode 2025-12-05 13:14:47
 {: .block-tip }
