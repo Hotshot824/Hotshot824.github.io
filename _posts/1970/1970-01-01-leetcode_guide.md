@@ -25,9 +25,6 @@ tags: [leetcode, algorithm]
 
 ### Array
 
-**Array**  
-[Hackerrank. Minimum Distances](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Minimum_Distances.md)  
-
 **Binary Search**  
 [704. Binary Search](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/704.Binary_Search.md)  
 [2070. Most Beautiful Item for Each Query](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2070.Most_Beautiful_Item_For_Each_Query.md)  
@@ -49,6 +46,7 @@ tags: [leetcode, algorithm]
 [1995. Count Special Quadruplets](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1995.Count_Special_Quadruplets.md)  
 [2161. Partition Array According to Given Pivot](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2161.Partition_Array_According_To_Given_Pivot.md)  
 [Easy Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_array.md)  
+[Hackerrank. Minimum Distances](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Minimum_Distances.md)  
 
 **Matrix**  
 [36. Valid Sudoku](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/36.Valid_Sudoku.md)  
@@ -288,7 +286,23 @@ tags: [leetcode, algorithm]
 [Hackerrank. Extra Long Factorials](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Extra_Long_Factorials.md)  
 [Hackerrank. Non-Divisible Subset](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.NonDivisible_Subset.md)  
 
-### Queue & Stack
+### Sliding Window
+
+**Sliding Window**  
+[3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
+[395. Longest Substring with At Least K Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/395.Longest_Substring_With_At_Least_K_Repeating_Characters.md)  
+[643. Maximum Average Subarray I](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/643.Maximum_Average_Subarray_I.md)  
+[713. Subarray Product Less Than K](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/713.Subarray_Product_Less_Than_K.md)  
+[992. Subarrays with K Different Integers](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/992.Subarrays_With_K_Different_Integers.md)  
+[1456. Maximum Number of Vowels in a Substring of Given Length](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1456.Maximum_Numberof_Vowels_in_a_Substring_of_Given_Length.md)  
+[1839. Longest Substring Of All Vowels in Order](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1839.Longest_Substring_Of_All_Vowels_In_Order.md)  
+[2134. Minimum Swaps to Group All 1's Together II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2134.Minimum_Swaps_To_Group_All_1s_Together_Ii.md)  
+[2444. Count Subarrays With Fixed Bounds](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2444.Count_Subarrays_With_Fixed_Bounds.md)  
+[2461. Maximum Sum of Distinct Subarrays With Length K](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2461.Maximum_Sum_Of_Distinct_Subarrays_With_Length_K.md)  
+[2958. Length of Longest Subarray With at Most K Frequency](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2958.Length_Of_Longest_Subarray_With_At_Most_K_Frequency.md)  
+[3254. Find the Power of K-Size Subarrays I](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3254.Find_The_Power_Of_K_Size_Subarrays_I.md)  
+
+### Stack & Queue
 
 **Priority Queue**  
 [502. IPO](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/502.Ipo.md)  
@@ -297,9 +311,6 @@ tags: [leetcode, algorithm]
 [1642. Furthest Building You Can Reach](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1642.Furthest_Building_You_Can_Reach.md)  
 [2530. Maximal Score After Applying K Operations](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2530.Maximal_Score_After_Applying_K_Operations.md)  
 [3066. Minimum Operations to Exceed Threshold Value II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3066.Minimum_Operations_To_Exceed_Threshold_Value_Ii.md)  
-
-**Queue & Stack**  
-[2197. Replace Non-Coprime Numbers in Array](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2197. Replace_NonCoprime_Numbers_in_Array.md)  
 
 **Stack & Queue**  
 [20. Valid Parentheses](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/20.Valid_Parentheses.md)  
@@ -318,22 +329,8 @@ tags: [leetcode, algorithm]
 [1717. Maximum Score From Removing Substrings](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1717.Maximum_Score_From_Removing_Substrings.md)  
 [1910. Remove All Occurrences of a Substring](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1910.Remove_All_Occurrences_Of_A_Substring.md)  
 [2116. Check if a Parentheses String Can Be Valid](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2116.Check_If_A_Parentheses_String_Can_Be_Valid.md)  
-
-### Sliding Window
-
-**Sliding Window**  
-[3. Longest Substring Without Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3.Longest_Substring_Without_Repeating_Characters.md)  
-[395. Longest Substring with At Least K Repeating Characters](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/395.Longest_Substring_With_At_Least_K_Repeating_Characters.md)  
-[643. Maximum Average Subarray I](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/643.Maximum_Average_Subarray_I.md)  
-[713. Subarray Product Less Than K](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/713.Subarray_Product_Less_Than_K.md)  
-[992. Subarrays with K Different Integers](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/992.Subarrays_With_K_Different_Integers.md)  
-[1456. Maximum Number of Vowels in a Substring of Given Length](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1456.Maximum_Numberof_Vowels_in_a_Substring_of_Given_Length.md)  
-[1839. Longest Substring Of All Vowels in Order](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1839.Longest_Substring_Of_All_Vowels_In_Order.md)  
-[2134. Minimum Swaps to Group All 1's Together II](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2134.Minimum_Swaps_To_Group_All_1s_Together_Ii.md)  
-[2444. Count Subarrays With Fixed Bounds](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2444.Count_Subarrays_With_Fixed_Bounds.md)  
-[2461. Maximum Sum of Distinct Subarrays With Length K](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2461.Maximum_Sum_Of_Distinct_Subarrays_With_Length_K.md)  
-[2958. Length of Longest Subarray With at Most K Frequency](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2958.Length_Of_Longest_Subarray_With_At_Most_K_Frequency.md)  
-[3254. Find the Power of K-Size Subarrays I](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3254.Find_The_Power_Of_K_Size_Subarrays_I.md)  
+[2197. Replace Non-Coprime Numbers in Array](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2197. Replace_NonCoprime_Numbers_in_Array.md)  
+[2211. Count Collisions on a Road](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2211.Count_Collisions_on_a_Road.md)  
 
 ### String
 
@@ -403,5 +400,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-04 15:47:01
+> Leetcode 2025-12-05 08:58:43
 {: .block-tip }
