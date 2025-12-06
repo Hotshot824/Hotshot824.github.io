@@ -284,6 +284,7 @@ tags: [leetcode, algorithm]
 [2579. Count Total Number of Colored Cells](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2579.Count_Total_Number_Of_Colored_Cells.md)  
 [2971. Find Polygon With the Largest Perimeter](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2971.Find_Polygon_With_The_Largest_Perimeter.md)  
 [3432. Count Partitions with Even Sum Difference](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3432.Count_Partitions_with_Even_Sum_Difference.md)  
+[Hackerrank. 3D Surface Area](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.3D_Surface_Area.md)  
 [Hackerrank. Absolute Permutation](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank. Absolute Permutation.md)  
 [Hackerrank. Apple and Orange](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Apple_and_Orange.md)  
 [Hackerrank. Extra Long Factorials](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Extra_Long_Factorials.md)  
@@ -405,5 +406,5 @@ tags: [leetcode, algorithm]
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-05 13:29:09
+> Leetcode 2025-12-06 09:37:48
 {: .block-tip }
