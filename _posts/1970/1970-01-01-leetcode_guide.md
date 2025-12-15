@@ -405,6 +405,8 @@ tags: [leetcode, algorithm]
 [1523. Count Odd Numbers in an Interval Range](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1523.Count_Odd_Numbers_In_An_Interval_Range.md)  
 [1979. Find Greatest Common Divisor of Array](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md)  
 
+[135.Candy](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/135.Candy.md)  
+
 > ##### Last Edit
-> Leetcode 2025-12-15 16:18:25
+> Leetcode 2025-12-15 16:27:32
 {: .block-tip }
