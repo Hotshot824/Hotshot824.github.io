@@ -15,4 +15,4 @@ gem "jekyll-remote-theme"
 # gem "rails"
 
 # SSL fix for OpenSSL 3.6 (CRL verification issue)
-gem "openssl", ">= 3.3.2"
+gem "openssl", "~> 3.0"

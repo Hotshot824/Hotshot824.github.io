@@ -5,15 +5,16 @@ permalink: /
 cover: ./assets/dinosaur.gif
 ---
 
-## Notes |  Software Dev | OS
+## Notes |  Software Development 
 
-Hi, I'm writing simple study notes here, mainly Golang Python Javascript.  
-Currently, I’m reading materials related to the Linux Kernel, Compiler, and Software testing.  
-I am a graduate student, welcome to exchange information and cooperate with me.
+> [我為什麼鼓勵工程師寫 blog] by 91
+{: .block-tip }
 
-Hi, 我在這裡寫寫簡單的學習筆記，主要寫 Golang Python Javascript。  
-目前在讀 Linux Kernel, Compiler, Software testing 相關的資料，  
-是一名菸酒生，歡迎與我交換資訊與合作交流。
+[我為什麼鼓勵工程師寫 blog]: https://tdd.best/blog/why-engineers-should-keep-blogging/
+
+Hi, I’m Po-Sheng Hsu (Benson). This blog is a collection of my technical and study notes, mainly focusing on **Software Testing, Compilers, and OS**, and I use Golang, Java, C/C++, and Python for implementation and practice; the purpose of writing is to help me organize my thoughts, build structured knowledge, and internalize what I learn, and I welcome opportunities for information exchange and collaboration.
+
+Hi 我是 Po-Sheng Hsu (許柏勝) Benson，這裡是我的技術與學習筆記，主要關注在**軟體測試、編譯器、作業系統**，並使用 Golang、Java、C/C++、Python 來實作與練習。寫 Blog 的初衷是幫助自己整理思考、建立知識結構並內化理解。歡迎與我交換資訊與合作交流。
 
 Benson’s Social Media:
 - _Email_: pshsu@csie.io
