@@ -342,6 +342,7 @@ tags: [leetcode, algorithm]
 **String**  
 [9.Palindrome Number](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/9.Palindrome_Number.md)  
 [28. Find the Index of the First Occurrence in a String](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/28.Find_Index_Of_First_Occurrence_String.md)  
+[Leetcode. Text Justification](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/68.Text_Justification.md)  
 [71. Simplify Path](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/71.Simplify_Path.md)  
 [151. Reverse Words in a String](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/151.Reverse_Words_String.md)  
 [344. Reverse String](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/344.Reverse_String.md)  
@@ -408,5 +409,5 @@ tags: [leetcode, algorithm]
 [135.Candy](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/135.Candy.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-15 16:27:32
+> Leetcode 2025-12-17 12:57:21
 {: .block-tip }
