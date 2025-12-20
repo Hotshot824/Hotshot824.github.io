@@ -107,6 +107,7 @@ tags: [leetcode, algorithm]
 **Binary Tree**  
 [100. Same Tree](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/100.Same_Tree.md)  
 [101. Symmetric Tree](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/101.Symmetric_Tree.md)  
+[105. Construct Binary Tree from Preorder and Inorder Traversal](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/105.Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal.md)  
 [110. Balanced Binary Tree](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/110.Balanced_Binary_Tree.md)  
 [112. Path Sum](https://github.com/Hotshot824/Leetcode/blob/publish/Easy/112.Path_Sum.md)  
 [222. Count Complete Tree Nodes](https://github.com/Hotshot824/Leetcode/blob/publish/Medium/222.Count_Complete_Tree_Nodes.md)  
@@ -409,5 +410,5 @@ tags: [leetcode, algorithm]
 [135.Candy](https://github.com/Hotshot824/Leetcode/blob/publish/Hard/135.Candy.md)  
 
 > ##### Last Edit
-> Leetcode 2025-12-17 12:57:21
+> Leetcode 2025-12-18 12:25:30
 {: .block-tip }
