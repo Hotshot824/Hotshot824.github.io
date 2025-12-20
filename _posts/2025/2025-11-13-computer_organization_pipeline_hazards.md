@@ -1,7 +1,7 @@
 ---
 title: "Computer Organization | Pipelines Hazards"
 author: Benson Hsu
-date: 2024-11-14
+date: 2025-11-14
 category: Jekyll
 layout: post
 tags: [computer_organization, pipelines]
@@ -10,7 +10,7 @@ tags: [computer_organization, pipelines]
 > 雖然 Pipeline 可以提升指令吞吐量，但在實作上會遇到各種 hazards 問題，必須透過硬體與編譯器的合作來解決這些問題，才能真正發揮 Pipeline 的效能。
 {: .block-tip }
 
-> 這篇文章是從 Organization 的角度去思考 Pipeline Hazards，因此著重在硬體層面的解決方法，而從軟體的角度來思考則可以從 Arc
+> 這篇文章是從 Organization 的角度去思考 Pipeline Hazards，因此著重在硬體層面的解決方法。
 
 ### 1.4 Overview of Hazards
 
@@ -67,12 +67,12 @@ Example:
 4 sd      x15, 100(x2)    // Index(x2) set by sub
 ```
 
-![](/image/2024/11-13-computer_organization_pipeline_hazards/1.png)
+![](/image/2025/11-13-computer_organization_pipeline_hazards/1.png)
 
 -   以上的問題出在 sub 指令在 CC 5 才會將 x2 的結果寫回 x2，如果未使用任何解決方法則所有要使用 x2 的指令都必須在 CC 6 之後才能執行
 -   這裡的解決方式是使用 Forwarding，將 ALU 的結果直接 Forward 給需要的指令，避免等待寫回 Register 的時間，這樣 and, or, add 三個使用 x2 的指令就可以在 CC 6, 7, 8 執行，而不需要等待到 CC 5 之後才能執行
 
-![](/image/2024/11-13-computer_organization_pipeline_hazards/2.png)
+![](/image/2025/11-13-computer_organization_pipeline_hazards/2.png)
 
 ---
 
@@ -106,3 +106,92 @@ x2 這個硬體資源，導致 Structural Hazard 的發生。在某一個 clock 
 ---
 
 ### 1.7 Control Hazards
+
+**Definition:**
+Control Hazards 發生在 Branch Instructions 的執行期間，因為在 Branch 指令執行期間，處理器無法確定下一條要執行的指令是哪一條。
+
+Control Hazards 是 Pipeline 中最難解決的問題之一，因為它涉及到指令流的改變，這會影響到整個 Pipeline 的運作。
+
+Branch 的問題在於我們無法知道哪一種結果會發生，直到 Branch condition 被計算完成，並且往往 Branch 指令會依賴前面的指令結果，這使得預測變得更加困難。
+
+主要有四種策略來處理 Control Hazards：
+
+##### 1.7.1 Assume Branch Not Taken
+
+這個策略就是無論如何都假設 Branch 不會發生，繼續往下執行下一條指令。如果 Branch 最終被採取，則必須清除 Pipeline 中已經載入的錯誤指令，並重新載入正確的指令。
+很顯而易見的這樣的策略就是 50% 的機率會成功，另外 50% 的機率會失敗，失敗的代價是清除 Pipeline 中的錯誤指令，並重新載入正確的指令，這會導致 Pipeline Stalls。
+
+##### 1.7.2 Reducing Branch Delay
+
+另一種策略是將 Branch condition 的計算提前，例如在 ID 階段就計算 Branch condition，這樣已經跑入 ID 之後階段的 Instructions 被 Flush 的指令數量就可以減少。
+
+以下圖為例，假如我們要到 WB 才寫回 Register，那麼在 CC 5 時才知道 Branch 的結果，這樣至少要有 4 個 Stalls 才能重新載入正確的指令。
+
+| Cycle | IF        | ID        | EXE       | MEM       | WB        |
+|------:|-----------|-----------|-----------|-----------|-----------|
+| CC1   | beq       |           |           |           |           |
+| CC2   | stall₁    | **beq**   |           |           |           |
+| CC3   | stall₂    | stall₁    | beq       |           |           |
+| CC4   | stall₃    | stall₂    | stall₁    | beq       |           |
+| CC5   | add       |           |           |           | **beq**   |
+
+-   這裡把 **beq** 提前到 ID 階段就計算 Branch condition，這樣就可以提前知道 Branch 的結果，減少 Stalls 的數量。
+-   以 **beq** 為例只要加入 XOR 與 Zero 檢測器就可以在 ID 階段計算 Branch condition，這樣在 CC 3 時就可以知道 Branch 的結果，減少 Stalls 的數量。
+    -   A xor B -> if Zero -> Branch Taken else Branch Not Taken
+    -   只加入專用的硬體來計算 Branch condition，不需要完整的 ALU 來計算
+
+> Xor 為零代表兩個輸入相等，因此 Branch condition 為真，Branch Taken
+
+> 這種方法需要再 ID 加入一些額外的硬體來計算 Branch condition，但可以顯著減少 Control Hazards 的影響。
+{: .block-tip }
+
+即使有可能 Branch 的值須要其他 Instruction 的結果才能計算出來，這樣我們就有可能造成 Data Hazard，但將 Branch condition 提前到 ID 階段計算，依然是一種改進。
+
+##### 1.7.3 Dynamic Branch Prediction
+
+如果可以預測大多數 Branch 是 Taken 或 Not Taken，將會很有幫助。這可以透過 Software ( Compiler )，也可以在 Runtime ( Hardware ) 進行。這邊會先看軟體的方法，因為軟體方法實作成本相當低。
+
+```rsicv
+0   add x5, x5, x6          # One of the registers used in the beq comparison is modified here
+1   sub x4, x3, x6          # Nothing important to the branch here
+2   and x7, x8, x6          # Nothing important to the branch here
+3   and x9, x6, x6          # Nothing important to the branch here
+4   beq x5, x6, target      # Branch compares the updated x5 with x6
+```
+
+**Pre-executing the branch condition**
+
+Branch 會比較 x5, x6 的值，但這兩個 Register 最後一次修改是在 add 指令中，因此可以事先計算 sub x10, x5, x6 並檢查 x10 是否為零，來預測 Branch 的結果。
+
+**History-based prediction**
+
+這種作法的一種實作方式，是 branch prediction buffer 或 branch history table，這是一個小型的 Cache，記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。通常會使用 Branch Instruction 的低位元作為 index 去查詢 Branch History Table，並根據歷史結果來預測 Branch 的結果。
+
+> 這個 cache 通常稱為 Branch History Table (BHT)，它會記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。
+{: .block-tip }
+
+這種預測方式當然有可能遇到該 Bit 是由另一個相同低位元的 Branch 指令所更新，但 Prediction 只是希望去猜測 Branch 的結果，如果該次錯誤刪除預測並更新 BHT 即可，這樣保證長期來看 BHT 的準確率會提升。
+
+算盤本上會介紹 1-bit predictor 與 2-bit predictor:
+
+-   1-bit predictor: 
+    -   使用一個 Bit 來記錄上一次 Branch 的結果，0 代表 Not Taken，1 代表 Taken。每次 Branch 執行後，根據實際結果更新該 Bit。
+    -   優點是實作很簡單
+    -   缺點是容易受到單一錯誤預測的影響，導致連續錯誤預測
+-   2-bit predictor:
+    -   使用兩個 Bit 來記錄 Branch 的歷史結果，形成四個狀態:
+        -   00: Strongly Not Taken
+        -   01: Weakly Not Taken
+        -   10: Weakly Taken
+        -   11: Strongly Taken
+    -   2-bit 可以讓預測器在遇到單一錯誤預測時不會立即改變預測結果，必須連續兩次錯誤預測才會改變狀態，這樣可以減少錯誤預測的影響，並且成本不會比 1-bit predictor 高太多。
+
+![](/image/2025/11-13-computer_organization_pipeline_hazards/3.png)
+
+>   尤其是在 Loop 結構中，往往 Branch 會連續多次被採取直到 Loop 結束，Dynamic Branch Prediction 可以有效提升這類情況的預測準確率。
+{: .block-tip }
+
+> ##### Last Edit
+> 剩下 Exception Hazards 的部分之後再補充，Hazards 的內容先 focus 在 Compiler 比較關注的部分。  
+> 11-14-2025 00:42
+{: .block-warning }

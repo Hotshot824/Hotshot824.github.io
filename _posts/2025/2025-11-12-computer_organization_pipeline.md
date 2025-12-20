@@ -1,7 +1,7 @@
 ---
 title: "Computer Organization | Pipelines"
 author: Benson Hsu
-date: 2024-11-12
+date: 2025-11-12
 category: Jekyll
 layout: post
 tags: [computer_organization, pipelines]
@@ -15,7 +15,7 @@ tags: [computer_organization, pipelines]
 Pipelines 是現代處理器中常用的一種技術，用來提高指令的執行效率。透過將指令的執行過程分成多個階段，處理器可以同時處理多條指令，從而提升整體的吞吐量。
 這樣的好處是減少閒置，讓多條指令可以同時在不同的階段進行處理。
 
-![](/image/2024/11-12-computer_organization_pipeline/1.png)
+![](/image/2025/11-12-computer_organization_pipeline/1.png)
 
 **Pipeline 總是拿 Laundry 的例子來說明** 如果 A, B, C, D 四個人都分別做洗衣、烘乾、摺衣服、收納將會花費 12 time units、但如果使用 Pipeline 的方式，四個人可以同時進行不同的工作，總共只需要 7 time units 就能完成所有人的工作。
 
@@ -38,7 +38,7 @@ Pipelines 是現代處理器中常用的一種技術，用來提高指令的執�
     -   Memory Access (MEM) : access an operand in data memory
     -   Write Back (WB) : write the result back to a register
 
-![](/image/2024/11-12-computer_organization_pipeline/2.png)
+![](/image/2025/11-12-computer_organization_pipeline/2.png)
 
 上面的圖是很理想的 Pipeline 狀況，每個 Stage 都剛好在一個 Clock Cycle 內完成工作。
 
@@ -64,7 +64,7 @@ Pipelines 是現代處理器中常用的一種技術，用來提高指令的執�
 
 Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 stage 的輸出資料與對應的控制資訊，並在下一個 cycle 將這些穩定的值提供給下一個 stage 使用。藉由這種「先存、再用」的機制，多條指令才能在同一條 datapath 上同時處於不同 stages，讓 pipeline 在時間上並行運作，而結果仍然正確。
 
-![](/image/2024/11-12-computer_organization_pipeline/3.png)
+![](/image/2025/11-12-computer_organization_pipeline/3.png)
 
 ---
 
@@ -73,7 +73,7 @@ Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 sta
 > Pipeline control 的作用，是把「這條指令未來每個 stage 要做什麼」的控制決策，在 ID 階段產生後隨指令一起經由 Pipeline registers 傳遞
 {: .block-tip }
 
-![](/image/2024/11-12-computer_organization_pipeline/4.png)
+![](/image/2025/11-12-computer_organization_pipeline/4.png)
 
 同樣的我們也需要 Control Unit 來產生控制訊號，這些控制訊號會被傳遞到各個 Stage 的控制邏輯中，確保每個 Stage 都能正確地執行其功能。
 
@@ -95,7 +95,7 @@ Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 sta
   - Buffer 並執行 WB 階段的控制
   - 決定要寫回 register file 的資料來源
 
-![](/image/2024/11-12-computer_organization_pipeline/5.png)
+![](/image/2025/11-12-computer_organization_pipeline/5.png)
 
 ---
 
@@ -103,5 +103,5 @@ Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 sta
 {: .block-warning }
 
 > ##### Last Edit
-> 11-12-2024 01:50
+> 11-12-2025 01:50
 {: .block-warning }
