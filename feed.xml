@@ -1,0 +1,3456 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hotshot824.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hotshot824.github.io/" rel="alternate" type="text/html" /><updated>2026-01-06T09:21:03+00:00</updated><id>https://hotshot824.github.io/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">LLVM | CPU0 Create Backend Machine</title><link href="https://hotshot824.github.io/jekyll/2025-11-21-llvm_cpu0_create_backend.html" rel="alternate" type="text/html" title="LLVM | CPU0 Create Backend Machine" /><published>2025-11-21T00:00:00+00:00</published><updated>2025-11-21T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/llvm_cpu0_create_backend</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-21-llvm_cpu0_create_backend.html"><![CDATA[<blockquote class="block-tip">
+  <p>CPU0 是一個 LLVM 教學用的目標架構，主要用來展示 LLVM 從中間表示（IR）到目標機器碼的轉換過程。在這篇文章中，我們將介紹如何為 CPU0 架構創建 LLVM 後端。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://jonathan2251.github.io/lbd/index.html#">Tutorial: Creating an LLVM Backend for the Cpu0 Architecture</a></p>
+</blockquote>
+
+<h3 id="11-introduction">1.1 Introduction</h3>
+
+<p>在 LLVM IR 之前，不管什麼語言都將轉換成 LLVM IR，然後再 LLVM IR 階段會進行與目標無關的最佳化，這些階段的輸入輸出都是 LLVM IR。在進入 Codegen 階段之後，就開始目標相關的最佳化。這個最佳化的過程我們可以簡單分成幾個步驟:</p>
+
+<ol>
+  <li>Selection DAG Lowering
+    <ul>
+      <li>將 LLVM IR 轉換成 SelectionDAG</li>
+      <li>每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Selection
+    <ul>
+      <li>對於 IR 中的每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling
+    <ul>
+      <li>在 2 的階段 SelectionDAG 會被轉換成 MachineInstr</li>
+      <li>在此階段 Physical Register 仍未分配，可以做 Pre-RA Scheduling</li>
+    </ul>
+  </li>
+  <li>Register Allocation
+    <ul>
+      <li>將 Virtual Register 分配到 Physical Register</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling (Again)
+    <ul>
+      <li>在 Register Allocation 後，會再次進行 Instruction Scheduling</li>
+      <li>此處才能根據 Pipeline 的特性來進行 Scheduling</li>
+    </ul>
+  </li>
+  <li>Code Emission
+    <ul>
+      <li>此處將 MachineInstr 轉換 MCInst</li>
+      <li>最後將 MCInst 轉換成 Assembly Code 或 Machine Code</li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="/image/2025/11-20-llvm_cpu0_instructionSelect/1.png" alt="" /></p>
+
+<p><strong>CPU0</strong></p>
+
+<p>CPU0 是一個 32bit 的 RISC 架構，具有簡單的指令集和固定長度的指令格式。詳細的 CPU0 架構規格可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html">CPU0 Architecture</a>。主要有三種指令類型，分別是 R-Type、I-Type 和 J-Type 指令。</p>
+
+<ul>
+  <li>L-type instructions: Primarily used for memory operations.</li>
+  <li>A-type instructions: Designed for arithmetic operations.</li>
+  <li>J-type instructions: Typically used for altering control flow (e.g., jumps).</li>
+</ul>
+
+<hr />
+
+<h3 id="12-cpu0-backend-machine-id-and-relocation-records">1.2 Cpu0 Backend Machine ID and Relocation Records</h3>
+
+<blockquote class="block-tip">
+  <p>這些修改的目的是讓 LLVM 認識 CPU0 架構，並能夠正確處理與 CPU0 相關的機器碼和重定位資訊</p>
+</blockquote>
+
+<p>在 CPU0 的教學中，首先要為 CPU0 定義 Backend Machine ID 和 Relocation Records。這些檔案位於 <code class="language-plaintext highlighter-rouge">lbdex/llvm/modify</code> 在編譯過程中會直接替換 LLVM Source Code 中對應的檔案。其中包含以下檔案：</p>
+
+<ul>
+  <li>llvm/config-ix.cmake
+    <ul>
+      <li>LLVM Cmake 的配置檔案，負責 LLVM_NATIVE_ARCH 依照 Host 的系統來設定在什麼架構下編譯</li>
+      <li>它決定了 LLVM 自己在建置階段該使用哪個目標架構，例如啟用哪些最佳化或平台特定的邏輯</li>
+      <li>此設定只影響 LLVM 本身的建置行為，不影響 LLVM 是否支援其它平台</li>
+    </ul>
+  </li>
+  <li>llvm/CMakeLists.txt
+    <ul>
+      <li>LLVM 的主要 CMake 配置檔案，負責定義 LLVM 的建置過程和模組</li>
+      <li>將 <code class="language-plaintext highlighter-rouge">Cpu0</code> 加入 <code class="language-plaintext highlighter-rouge">LLVM_ALL_TARGETS</code> 列表後，才會觸發編譯 <code class="language-plaintext highlighter-rouge">lib/Target/Cpu0</code> 目錄下的後端模組</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/ADT/Triple.h
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Triple</code> 是 LLVM 中用來表示<strong>目標平台</strong>的標準格式，格式為 <code class="language-plaintext highlighter-rouge">arch-vendor-os-abi</code>
+        <ul>
+          <li>x86_64-pc-linux-gnu</li>
+          <li>cpu0-unknown-none</li>
+        </ul>
+      </li>
+      <li>LLVM 會依照 Triple 來選擇合適的 TargetMachine、TargetLowering、TargetInstrInfo 等元件</li>
+    </ul>
+  </li>
+  <li>llvm/lib/Support/Triple.cpp
+    <ul>
+      <li>實作 Triple 的 string, enum 的查詢邏輯</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELF.h
+    <ul>
+      <li>這裡說明了 CPU0 的 ELF 中的 Machine ID, e_flags, relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELFRelocs/Cpu0.def
+    <ul>
+      <li>定義 CPU0 架構的 ELF 重定位類型，例如:
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_32</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_LO16</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Object/ELFObjectFile.h
+    <ul>
+      <li>定義解析 ELF object file 的功能，例如:
+        <ul>
+          <li>getArch() 透過 ELF header 取得 Machine ID</li>
+          <li>getFileFormatName() 取得 ELF file format name
+            <ul>
+              <li>輸出像 <code class="language-plaintext highlighter-rouge">"ELF32-cpu0"</code> 的格式名</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/lib/Object/ELF.cpp
+    <ul>
+      <li>實作 ELF relocation 的編號與名稱對應邏輯</li>
+      <li>在 CPU0 中這裡是在 switch case 中 include Cpu0.def 來處理 CPU0 的 relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/MCSubtargetInfo.cpp
+    <ul>
+      <li>處理 subtarget 的 CPU 名稱與 feature string 的對應</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/SubtargetFeature.cpp
+    <ul>
+      <li>實作了 LLVM SubtargetFeature 的 string 處理邏輯</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>完整的修改可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html#cpu0-backend-machine-id-and-relocation-records">Cpu0 Backend Machine ID and Relocation Records</a></p>
+</blockquote>
+
+<p>這個階段的修改目標是讓 LLVM 能識別 Cpu0 架構，必須做到以下幾點:</p>
+<ol>
+  <li>註冊 triple 名稱 <code class="language-plaintext highlighter-rouge">cpu0-unknown-none</code></li>
+  <li>註冊它的 ELF Machine ID (EM_CPU0) 與 Relocation 類型</li>
+  <li>支援 llvm-objdump, llvm-mc 等工具能正確處理 ELF32-cpu0 格式
+    <ul>
+      <li>否則只會出現 “unknown file format” 的錯誤訊息</li>
+    </ul>
+  </li>
+  <li>避免報錯（例如 feature string 沒定義時跳出 unrecognized 警告）</li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這些修改在目前的階段只要完全照著做就可以了，如果想要深入這部分的研究，要補充 ELF format、LLVM Triple、LLVM MC layer、Relocation types 等相關知識</p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-cpu0td-files">1.3 Cpu0.td Files</h3>
+
+<p><strong>LLVM’s Target Description Files: .td</strong></p>
+
+<blockquote>
+  <p><a href="https://llvm.org/docs/TableGen/">TableGen Overview</a> 官方的文件介紹了 TableGen 的基本概念</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>詳細的 TableGen 介紹可以參考 <a href="./2025-11-20-tablegen_introduction">TableGen Introduction</a></p>
+</blockquote>
+
+<p>LLVM 使用 TableGen (.td) 文件來描述目標架構的指令集、寄存器和其他相關資訊。這些文件定義了 CPU0 的指令格式、操作數類型以及指令的語義。這些描述檔案通常放在 LLVM 的目標目錄下，在 <code class="language-plaintext highlighter-rouge">llvm-project/llvm/lib/Target</code> 下，我們可以找到這些不同目標的檔案，如 <code class="language-plaintext highlighter-rouge">RISCV</code>, <code class="language-plaintext highlighter-rouge">ARM</code>, <code class="language-plaintext highlighter-rouge">X86</code> 等等。實際上要在 LLVM 中新增一個目標架構，主要就是撰寫這些 TableGen 檔案。</p>
+
+<p>CPU0 td 檔案的主要入口是 <code class="language-plaintext highlighter-rouge">Cpu0Other.td</code>，在此之前需要先完成 CmakeLists.txt 的設定，讓 LLVM 能夠編譯 Cpu0 後端模組。CPU0 是一個章節式的教學範例，可以透過更改 <code class="language-plaintext highlighter-rouge">Cpu0SetChapter.h</code> 中的 <code class="language-plaintext highlighter-rouge">#define CH       CH2</code> 來選擇哪個章節的功能要被編譯進去，更改完後重新編譯 LLVM。</p>
+
+<h4 id="131-cpu0td">1.3.1 Cpu0.td</h4>
+
+<blockquote class="block-danger">
+  <p>完整的程式碼請參考 CPU0 Cpu0 Architecture and LLVM Structure 章節，接下來逐小節說明該檔案的內容</p>
+</blockquote>
+
+<p><strong>SubtargetFeature</strong></p>
+
+<pre><code class="language-td">def FeatureChapter3_1  : SubtargetFeature&lt;"ch3_1", "HasChapterDummy","true", "Enable Chapter instructions."&gt;;
+</code></pre>
+
+<ul>
+  <li>SubtargetFeature: 是 LLVM TableGen 中用來定義子目標特性的類型
+    <ul>
+      <li>這些特性可以用來描述目標架構的不同變體或功能</li>
+      <li>例如，某些 CPU 可能支援特定的指令集擴展，這些擴展可以透過 SubtargetFeature 來表示</li>
+    </ul>
+  </li>
+  <li>SubtargetFeature 的格式在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中、是字串形式的表格
+    <pre><code class="language-td">class SubtargetFeature&lt;string n, string f, string v, string d, list&lt;SubtargetFeature&gt; i = []&gt; {
+    string Name = n;
+    string FieldName = f;
+    string Value = v;
+    string Desc = d;
+    list&lt;SubtargetFeature&gt; Implies = i;
+}
+</code></pre>
+  </li>
+  <li>CPU0 透過 SubtargetFeature 來定義不同功能的開啟與關閉，例如:
+    <pre><code class="language-td">def FeatureCmp         : SubtargetFeature&lt;"cmp", "HasCmp", "true",
+                            "Enable 'cmp' instructions."&gt;;
+...
+def FeatureCpu032II    : SubtargetFeature&lt;"cpu032II", "Cpu0ArchVersion",                      
+                        "Cpu032II", "Cpu032II ISA Support (slt)",
+                            [FeatureCmp, FeatureSlt, FeatureChapterAll]&gt;;
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCmp</code>: 啟用 cmp 指令</li>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCpu032II</code>: 啟用所有章節的內容與 Cmp、Slt 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Processor</strong></p>
+
+<pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Processor</code> 是 LLVM TableGen 中用來定義處理器的類型
+    <ul>
+      <li>它描述了一個具體的處理器模型，包含其名稱、行程安排、子目標特性、微架構最佳化特性</li>
+      <li><code class="language-plaintext highlighter-rouge">class Processor&lt;string n, ProcessorItineraries pi, list&lt;SubtargetFeature&gt; f,list&lt;SubtargetFeature&gt; tunef = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>CPU0 定義了兩個 Processor，並加入 <code class="language-plaintext highlighter-rouge">Cpu0GenericItineraries</code> Pipelines:
+    <pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+
+def : Proc&lt;"cpu032I",  [FeatureCpu032I]&gt;;
+def : Proc&lt;"cpu032II", [FeatureCpu032II]&gt;;
+</code></pre>
+  </li>
+</ul>
+
+<p><strong>Target</strong></p>
+
+<pre><code class="language-td">def Cpu0 : Target {
+  let InstructionSet = Cpu0InstrInfo;
+}
+</code></pre>
+
+<ul>
+  <li>最後 CPU0 定義了 Target，並指定它的 InstructionSet 為 <code class="language-plaintext highlighter-rouge">Cpu0InstrInfo</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Target</code> 是 LLVM TableGen 中用來定義目標架構的類型，其中包含以下欄位:
+    <ul>
+      <li>InstructionSet: 指定該 Target 使用哪個 InstructionInfo</li>
+      <li>AssemblyParsers: 指定該 Target 使用哪個 Assembly Parser
+        <ul>
+          <li>通常預留 DefaultAsmParser</li>
+        </ul>
+      </li>
+      <li>AssemblyParserVariants: 支援哪幾種 Assembly 變體如: AT&amp;T, Intel Style</li>
+      <li>AsmWriters: 此 Target 對應的 Assembly Writer 變體，用於 Assembly Code 的輸出</li>
+      <li>AllowRegisterRenaming: 是否允許 Register Renaming，Default 為 0</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以上的 <code class="language-plaintext highlighter-rouge">SubtargetFeature</code>、<code class="language-plaintext highlighter-rouge">Processor</code>、<code class="language-plaintext highlighter-rouge">Target</code> 都位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，可以參考該檔案了解更多細節。</p>
+
+<h3 id="14-cpu0-register">1.4 Cpu0 Register</h3>
+
+<h4 id="141-cpu0registerinfotd">1.4.1 Cpu0RegisterInfo.td</h4>
+
+<p><strong>Register</strong></p>
+
+<blockquote class="block-tip">
+  <p>Cpu0RegisterInfo.td 定義了 CPU0 架構的 Register Set 和 Register Classes</p>
+</blockquote>
+
+<pre><code class="language-td">// We have banks of 16 registers each.
+class Cpu0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Register&lt;n&gt; {
+  // For tablegen(... -gen-emitter)  in CMakeLists.txt
+  let HWEncoding = Enc;
+  
+  let Namespace = "Cpu0";
+}
+
+// Cpu0 CPU Registers
+class Cpu0GPRReg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+
+// Co-processor 0 Registers
+class Cpu0C0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+</code></pre>
+
+<ul>
+  <li>在 CPU0 中定義了兩種 Register 類型:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0GPRReg</code>: General Purpose Registers (GPRs)
+        <ul>
+          <li>R0 ~ R15 共 16 個通用暫存器</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0C0Reg</code>: Co-processor 0 Registers (C0Rs)
+        <ul>
+          <li>PC, EPC 協處理器暫存器</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Register</code> 是 LLVM TableGen 中用來定義寄存器的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Register&lt;string n, list&lt;string&gt; altNames = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>位址同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，其包含以下重要欄位:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">string namespace</code>: 命名空間
+        <ul>
+          <li>“Cpu0”, “X86”</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">list&lt;string&gt; AltNames</code>: 別名清單
+        <ul>
+          <li>MIPS <code class="language-plaintext highlighter-rouge">a0, r4</code></li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">AsmName</code>: 實際在 Assembly code 中使用的名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">bits&lt;16&gt; HWEncoding</code>: 此 Register 在機器碼中的硬體編碼，
+        <ul>
+          <li>RISC-V 為 5 bits</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">DwarfNumbers</code>: DWARF Debugging 用的 Register 編號</li>
+      <li><code class="language-plaintext highlighter-rouge">CostPerUse</code>: 指令使用該 Register 的額外代價，與 Codesize 有關、影響 Register Allocation</li>
+      <li><code class="language-plaintext highlighter-rouge">isArtificial</code>: 若表示為 true，表示此 Register 是虛擬的、非實體存在的
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">EFLAGS</code>、<code class="language-plaintext highlighter-rouge">RIP</code> 等特殊用途的 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegs</code>: 定義此 Register 的子 Register
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 有 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 等子 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegIndices</code>: 對應 <code class="language-plaintext highlighter-rouge">SubRegs</code> 的 Index
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">sub_16bit_hi</code>, <code class="language-plaintext highlighter-rouge">sub_lo</code> 等</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Aliases</code>: 與此 Register 記憶體位置相同的其他 Register
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">SP</code> 可能 alias 某個 General Purpose Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">CoveredBySubRegs</code>: 若為 true，表示此 Register 的值完全由其 sub-registers 決定
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 為 true，因為其值由 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 決定</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-td">// The register string, such as "9" or "gp" will show on "llvm-objdump -d"
+//@ All registers definition
+let Namespace = "Cpu0" in {
+  //@ General Purpose Registers
+  def ZERO : Cpu0GPRReg&lt;0,  "zero"&gt;, DwarfRegNum&lt;[0]&gt;;
+  def AT   : Cpu0GPRReg&lt;1,  "1"&gt;,    DwarfRegNum&lt;[1]&gt;;
+  def V0   : Cpu0GPRReg&lt;2,  "2"&gt;,    DwarfRegNum&lt;[2]&gt;;
+  def V1   : Cpu0GPRReg&lt;3,  "3"&gt;,    DwarfRegNum&lt;[3]&gt;;
+  def A0   : Cpu0GPRReg&lt;4,  "4"&gt;,    DwarfRegNum&lt;[4]&gt;;
+  def A1   : Cpu0GPRReg&lt;5,  "5"&gt;,    DwarfRegNum&lt;[5]&gt;;
+  def T9   : Cpu0GPRReg&lt;6,  "t9"&gt;,   DwarfRegNum&lt;[6]&gt;;
+  def T0   : Cpu0GPRReg&lt;7,  "7"&gt;,    DwarfRegNum&lt;[7]&gt;;
+  def T1   : Cpu0GPRReg&lt;8,  "8"&gt;,    DwarfRegNum&lt;[8]&gt;;
+  def S0   : Cpu0GPRReg&lt;9,  "9"&gt;,    DwarfRegNum&lt;[9]&gt;;
+  def S1   : Cpu0GPRReg&lt;10, "10"&gt;,   DwarfRegNum&lt;[10]&gt;;
+  def GP   : Cpu0GPRReg&lt;11, "gp"&gt;,   DwarfRegNum&lt;[11]&gt;;
+  def FP   : Cpu0GPRReg&lt;12, "fp"&gt;,   DwarfRegNum&lt;[12]&gt;;
+  def SP   : Cpu0GPRReg&lt;13, "sp"&gt;,   DwarfRegNum&lt;[13]&gt;;
+  def LR   : Cpu0GPRReg&lt;14, "lr"&gt;,   DwarfRegNum&lt;[14]&gt;;
+  def SW   : Cpu0GPRReg&lt;15, "sw"&gt;,   DwarfRegNum&lt;[15]&gt;;
+  def PC   : Cpu0C0Reg&lt;0, "pc"&gt;,  DwarfRegNum&lt;[20]&gt;;
+  def EPC  : Cpu0C0Reg&lt;1, "epc"&gt;, DwarfRegNum&lt;[21]&gt;;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>Register 命名原則幾乎與 MIPS 相同，因為 CPU0 是基於 MIPS 架構設計的。</p>
+</blockquote>
+
+<blockquote>
+  <p>AT = Assembler Temporary, V = Value registers, A = Argument registers, T = Temporary registers, S = Saved registers, GP = Global Pointer, FP = Frame Pointer, SP = Stack Pointer, LR = Link Register, SW = Status Word</p>
+</blockquote>
+
+<p><strong>DwarfRegNum</strong></p>
+
+<ul>
+  <li>CPU0 的 Register 同時繼承了 <code class="language-plaintext highlighter-rouge">DwarfRegNum</code>，用來指定 DWARF Debugging 中的 Register 編號
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">ZERO</code> Register 在 DWARF 中的編號為 0</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">DwarfRegNum</code> 定義在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class DwarfRegNum&lt;list&lt;int&gt; Numbers&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/DWARF">DWARF</a> 是一套廣泛使用的除錯資訊格式標準，用於在 object/executable 中描述符號、型別、source line、變數位置等除錯所需資訊。</p>
+</blockquote>
+
+<p><strong>RegisterClass</strong></p>
+
+<pre><code class="language-td">def CPURegs : RegisterClass&lt;"Cpu0", [i32], 32, (add
+  // Reserved
+  ZERO, AT, 
+  // Return Values and Arguments
+  V0, V1, A0, A1, 
+  // Not preserved across procedure calls
+  T9, T0, T1,
+  // Callee save
+  S0, S1,
+  // Reserved
+  GP, FP, 
+  SP, LR, SW)&gt;;
+
+//@Status Registers class
+def SR     : RegisterClass&lt;"Cpu0", [i32], 32, (add SW)&gt;;
+
+//@Co-processor 0 Registers class
+def C0Regs : RegisterClass&lt;"Cpu0", [i32], 32, (add PC, EPC)&gt;;
+</code></pre>
+
+<ul>
+  <li>RegisterClass 用於分類和組織 Register Set</li>
+  <li>其定義同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <pre><code class="language-td">class RegisterClass&lt;
+    string namespace, 
+    list&lt;ValueType&gt; regTypes, 
+    int alignment, 
+    dag regList, 
+    RegAltNameIndex idx = NoRegAltName
+    &gt; : DAGOperand
+</code></pre>
+  </li>
+  <li>Cpu0RegisterInfo.td 定義了三個 RegisterClass:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 包含所有通用暫存器</li>
+      <li><code class="language-plaintext highlighter-rouge">SR</code>: 包含狀態暫存器 SW</li>
+      <li><code class="language-plaintext highlighter-rouge">C0Regs</code>: 包含協處理器 0 的暫存器 PC 和 EPC</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>以上就是 Cpu0RegisterInfo.td 的主要內容，這些定義讓 LLVM 能夠識別和操作 CPU0 架構的 Register</p>
+</blockquote>
+
+<hr />
+
+<h4 id="142-cpu0registerinfogproutforothertd">1.4.2 Cpu0RegisterInfoGPROutForOther.td</h4>
+
+<blockquote class="block-tip">
+  <p>同一個 Register 可以有多個 RegisterClass 的定義</p>
+</blockquote>
+
+<p>其中，GPROut 這個 Register Class 定義於 Cpu0RegisterInfoGPROutForOther.td，其內容包含 CPURegs 中除了 SW 以外的所有暫存器。這樣的設計可確保在 Register Allocation 階段中，SW 不會被配置為輸出暫存器（ output register ）。</p>
+
+<pre><code class="language-td">def GPROut : RegisterClass&lt;"Cpu0", [i32], 32, (add (sub CPURegs, SW))&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sub</code>: is subtraction operation for DAG or list</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: is addition operation for DAG or list</li>
+</ul>
+
+<p>SW 通常不是作為顯式的 Register 使用，而是用於保存 CPU 狀態的特殊 Register。因此，在某些情況下，我們希望避免將 SW 分配為輸出暫存器，以防止不必要的干擾或錯誤。</p>
+
+<pre><code class="language-mips">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+ADD  r3, r4     ; explicit-def r3, implicit-def SW
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>SW 通常是與 ALU 操作相關聯的，因此更接近於 GPR 而不是 C0Reg (Co-processor 0 Register)</p>
+</blockquote>
+
+<hr />
+
+<h3 id="15-cpu0-instruction">1.5 Cpu0 Instruction</h3>
+
+<h4 id="151-cpu0instrformatstd">1.5.1 Cpu0InstrFormats.td</h4>
+
+<p>首先第一步要定義的是 CPU0 的指令格式 (Instruction Formats)，這些格式定義了每種指令的結構和操作數類型。CPU0 有三種主要的指令格式: R-type、I-type 和 J-type。</p>
+
+<p><strong>Custom Format</strong></p>
+
+<pre><code class="language-td">// Format specifies the encoding used by the instruction.  This is part of the
+// ad-hoc solution used to emit machine instruction encodings by our machine
+// code emitter.
+class Format&lt;bits&lt;4&gt; val&gt; {
+  bits&lt;4&gt; Value = val;
+}
+
+def Pseudo    : Format&lt;0&gt;;
+def FrmA      : Format&lt;1&gt;;
+def FrmL      : Format&lt;2&gt;;
+def FrmJ      : Format&lt;3&gt;;
+def FrmOther  : Format&lt;4&gt;; // Instruction w/ a custom format
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Format</code> 是 Cpu0 自訂義的欄位，用來表示指令的格式類型
+    <ul>
+      <li>利用該欄位可以在指令編碼和解碼時區分不同的指令格式</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Instruction</strong></p>
+
+<blockquote class="block-tip">
+  <p>一條具體的 Instruction 是從上自下從 Base Class -&gt; Instruction Type -&gt; Instruction 來繼承實現的</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Instruction</code> 位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 欄位眾多，此處直接講解 Cpu0Inst 設計</li>
+</ul>
+
+<pre><code class="language-td">// Generic Cpu0 Format
+class Cpu0Inst&lt;dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+               InstrItinClass itin, Format f&gt;: Instruction
+{
+  // Inst and Size: for tablegen(... -gen-emitter) and 
+  // tablegen(... -gen-disassembler) in CMakeLists.txt
+  field bits&lt;32&gt; Inst;
+  Format Form = f;
+
+  let Namespace = "Cpu0";
+
+  let Size = 4;
+
+  bits&lt;8&gt; Opcode = 0;
+
+  // Top 8 bits are the 'opcode' field
+  let Inst{31-24} = Opcode;
+
+  let OutOperandList = outs;
+  let InOperandList  = ins;
+
+  let AsmString   = asmstr;
+  let Pattern     = pattern;
+  let Itinerary   = itin;
+
+  //
+  // Attributes specific to Cpu0 instructions...
+  //
+  bits&lt;4&gt; FormBits = Form.Value;
+
+  // TSFlags layout should be kept in sync with Cpu0InstrInfo.h.
+  let TSFlags{3-0}   = FormBits;
+
+  let DecoderNamespace = "Cpu0";
+
+  field bits&lt;32&gt; SoftFail = 0;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>field 是 TableGen 中的可變欄位，可以被多次修改與覆蓋</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Cpu0Inst</code> 是所有 CPU0 指令的基類，定義了指令的基本結構和屬性
+    <ul>
+      <li>包含輸入輸出操作數、組合語言表示、指令模式、行程安排類別和格式等欄位</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; Inst;</code>: 定義 Instruction 的 32 位元編碼
+    <ul>
+      <li>LLVM 沒有內建 Inst 這樣的欄位，並不會刻意提供 Instruction 的 bit layout 這種欄位，
+因為 LLVM 必須支援任何 ISA 的形狀</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Format Form = f;</code>: 指定指令的格式類型，此為 Cpu0 自訂義的欄位</li>
+  <li><code class="language-plaintext highlighter-rouge">let Size = 4;</code>: 定義指令的大小為 4 bytes</li>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; Opcode = 0;</code>: 定義指令的 Opcode 欄位為 8 bits</li>
+  <li><code class="language-plaintext highlighter-rouge">let Inst{31-24} = Opcode;</code>: 指定 Opcode 在指令編碼中的位置，這裡是最高的 8 位元</li>
+  <li><code class="language-plaintext highlighter-rouge">let OutOperandList = outs;</code> 定義指令的輸出操作數列表，也就是 Register Class
+    <ul>
+      <li>常見寫法如: <code class="language-plaintext highlighter-rouge">(outs R32:$rd, R32:$rs)</code>，表示 $dst 必須從 GPROut 類別挑 physical reg</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let InOperandList  = ins;</code> 定義指令的輸入操作數列表，也是 Register Class</li>
+  <li><code class="language-plaintext highlighter-rouge">let AsmString   = asmstr;</code> 指定指令的組合語言表示</li>
+  <li><code class="language-plaintext highlighter-rouge">let Pattern     = pattern;</code> 定義指令的模式，用於指令選擇和生成
+    <ul>
+      <li>在 Instruction Selection 階段會用到</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let Itinerary   = itin;</code> 指定指令的行程安排類別，用於指令調度</li>
+  <li><code class="language-plaintext highlighter-rouge">let TSFlags{3-0}   = FormBits;</code> 定義指令的目標特定標誌，這裡用於存儲指令格式資訊
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Target-Specific Flags</code> 是每條指令可以攜帶的額外資訊，LLVM 並不了解這些標誌的意義</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; SoftFail = 0;</code> 定義一個可變欄位，用於指示指令是否允許軟失敗</li>
+</ul>
+
+<p>以上定義了 Cpu0Inst 的基本結構，接下來可以基於此類別定義 Instruction Type</p>
+
+<blockquote>
+  <p>SoftFail 是提供給 disassembler 使用的機制，用於標示「編碼合法，但語意或 operand 組合不完全合法」的情況，不影響執行階段行為，也不涉及程式是否崩潰</p>
+</blockquote>
+
+<p><strong>Instruction Type</strong></p>
+
+<blockquote class="block-tip">
+  <p>此處僅以 Type A 為例，其他 Type 類似</p>
+</blockquote>
+
+<pre><code class="language-td">class FA&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr,
+         list&lt;dag&gt; pattern, InstrItinClass itin&gt;:
+      Cpu0Inst&lt;outs, ins, asmstr, pattern, itin, FrmA&gt;
+{
+  bits&lt;4&gt;  ra;
+  bits&lt;4&gt;  rb;
+  bits&lt;4&gt;  rc;
+  bits&lt;12&gt; shamt;
+
+  let Opcode = op;
+
+  let Inst{23-20} = ra;
+  let Inst{19-16} = rb;
+  let Inst{15-12} = rc;
+  let Inst{11-0}  = shamt;
+}
+</code></pre>
+
+<p>A-type (Arithmetic type) 指令格式，主要用於算術運算指令。以 3 地址運算的指令模板，
+同時包含一個 shift amount 欄位 (shift amount)。其餘 L-type、J-type 都是類似的定義方式。</p>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; margin: auto; text-align: center;">
+  <thead>
+    <tr>
+      <th rowspan="2">Type</th>
+      <th colspan="6">Instruction Encoding (Bits)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- A-type -->
+    <tr>
+      <td rowspan="2"><b>A-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td>Rc</td>
+      <td>Shamt</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td>15–12</td>
+      <td>11–0</td>
+    </tr>
+
+    <!-- L-type -->
+    <tr>
+      <td rowspan="2"><b>L-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td colspan="3">Cx (16 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td colspan="3">15–0</td>
+    </tr>
+
+    <!-- J-type -->
+    <tr>
+      <td rowspan="2"><b>J-type</b></td>
+      <td>Op</td>
+      <td colspan="5">Cx (24 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td colspan="5">23–0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<blockquote>
+  <p>透過上述定義，我們定義了 Cpu0 指令的格式和結構，這些定義將用於後續的指令實現和編碼過程中</p>
+</blockquote>
+
+<h4 id="152-cpu0instrinfotd">1.5.2 Cpu0InstrInfo.td</h4>
+
+<p class="block-tip">Cpu0InstrInfo.td 定義了 CPU0 架構的具體指令</p>
+
+<p><strong>SDTypeProfile</strong></p>
+
+<pre><code class="language-td">def SDT_Cpu0Ret          : SDTypeProfile&lt;0, 1, [SDTCisInt&lt;0&gt;]&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTypeProfile</code> 的作用是在 SelectionDAG 層級檢查 SDNode 的型別與結構是否合法</li>
+  <li>其定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>
+    <pre><code class="language-td">// SDTypeProfile - This profile describes the type requirements of a Selection
+// DAG node.
+class SDTypeProfile&lt;int numresults, int numoperands,
+                    list&lt;SDTypeConstraint&gt; constraints&gt; {
+int NumResults = numresults;
+int NumOperands = numoperands;
+list&lt;SDTypeConstraint&gt; Constraints = constraints;
+}
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">numresults</code>: 指定 SDNode 的 Result 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">numoperands</code>: 指定 SDNode 的 Operand 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTypeConstraint</code>: 是用於描述每個 Result 和 Operand 的型別約束</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>在 CPU0 雖然定義了 SDTypeProfile，但目前並沒有實際應用在指令定義中，後續將使用 SDTNone 來跳過檢查</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTNone</code>: 是一個特殊的 SDTypeProfile，表示不對 SDNode 的型別和結構進行任何檢查
+    <pre><code class="language-td">def SDTNone : SDTypeProfile&lt;0, 0, []&gt;;
+</code></pre>
+  </li>
+  <li>在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code> 中有許多預設的 SDTypeProfile，例如:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">SDTisInt</code>: 用於表示整數型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisFloat</code>: 用於表示浮點型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisVector</code>: 用於表示向量型別的 SDNode</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>SDNodeProperty</strong></p>
+
+<p>SDNodeProperty 是用來描述 SDNode 行為的 flag，是 SDNode 的第三個參數。例如:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDNPHasChain</code>: 表示該 SDNode 有 chain 輸入輸出、不能被重新排序
+    <ul>
+      <li>常見於 load, store, call, ret 或具有 branch with side effect 的指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">SDNPInGlue</code>: 表示該 SDNode 有 glue 輸入輸出，用於指令調度階段的依賴管理
+    <ul>
+      <li>常見於需要緊密相鄰執行的指令，例如 compare 與 branch 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如以下的指令:</p>
+<pre><code class="language-MIPS">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+</code></pre>
+
+<p>如果只有 chain 而沒有 Glue 則只能保證 BEQ 在 CMP 之後執行，但無法保證 BEQ 一定要在 CMP 之後的下一個指令執行，可能會被插入其他的指令。因此要加入表示 <code class="language-plaintext highlighter-rouge">CMP -- glue --&gt; BEQ</code> 來確保 BEQ 一定緊接在 CMP 之後執行。</p>
+
+<blockquote>
+  <p>branch with side effect 代表這個 branch 不只是「決定控制流往哪走」，它本身還具有可觀察的副作用。例如會影響 Memory 中的值，因此不能隨意移動、排序或者刪除</p>
+</blockquote>
+
+<p><strong>SDNode</strong></p>
+
+<blockquote>
+  <p>之後會另外寫一篇專門介紹 SDNode 的文章，再詳細說明 SDNodeProperty 的使用，可以先參考 <a href="https://zhuanlan.zhihu.com/p/649629353">LLVM后端技术浅谈-自定义SDNode</a></p>
+</blockquote>
+
+<pre><code class="language-td">def Cpu0Ret : SDNode&lt;"Cpu0ISD::Ret", SDTNone,
+                     [SDNPHasChain, SDNPOptInGlue, SDNPVariadic]&gt;;
+</code></pre>
+
+<p>此處定義了 Cpu0Ret 的 SDNode，表示 CPU0 的返回 SDNode。大多數 ISA 都會自訂義 Ret SDNode 來表示函式返回，而不是使用預設的 ISD::RET。因為 Ret 幾乎完全是 ABI 相關的行為，不同架構的 Ret 行為差異很大，因此 <code class="language-plaintext highlighter-rouge">ISD::RET</code> 很少被直接使用。</p>
+
+<blockquote>
+  <p>Ret 通常涉及 Return address、Calling convention、Delay slot、Stack adjustment 等等，這些都是與 ABI 密切相關的行為</p>
+</blockquote>
+
+<p><strong>Operand</strong></p>
+
+<blockquote class="block-tip">
+  <p>Operand 用於定義 Instruction 的操作數 (Operand) 類型</p>
+</blockquote>
+
+<p>操作數 (Operand) 是指令中的參數，可以是寄存器、
+立即數 (immediate) 或記憶體地址 (memory address) 等，
+但 Register 已經由 RegisterClass 隱式提供，
+因此在 Operand 中需要額外定義的是立即數和記憶體地址。</p>
+
+<pre><code class="language-td">// Signed Operand
+def simm16      : Operand&lt;i32&gt; {
+  let DecoderMethod= "DecodeSimm16";
+}
+
+// Address operand
+def mem : Operand&lt;iPTR&gt; {
+  let PrintMethod = "printMemOperand";
+  let MIOperandInfo = (ops GPROut, simm16);
+  let EncoderMethod = "getMemEncoding";
+}
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Operand</code> 是 LLVM TableGen 中用來定義指令操作數的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Operand&lt;ValueType ty&gt; : DAGOperand</code></li>
+      <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code></li>
+    </ul>
+  </li>
+  <li>此處介紹在 CPU0 中所使用到的 field:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">PrintMethod</code>: 指定用於打印操作數的函式名稱
+        <ul>
+          <li>例如 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 用於打印記憶體操作數</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">MIOperandInfo</code>: 定義操作數的組成部分，例如記憶體操作數由 GPROut 和 simm16 組成</li>
+      <li><code class="language-plaintext highlighter-rouge">DecoderMethod</code>: 指定用於解碼操作數的函式名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">EncoderMethod</code>: 指定用於編碼操作數的函式名稱</li>
+    </ul>
+  </li>
+</ul>
+
+<p>在 Cpu0 中定義了兩個額外的 Operand:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 定義了一個 16 位元的有號立即數操作數
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">DecodeSimm16</code> 函式來解碼該操作數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mem</code>: 定義了一個記憶體地址操作數，由 GPROut 和 simm16 組成
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 函式來打印該操作數</li>
+      <li>由 GPROut 和 simm16 組成
+        <ul>
+          <li>代表該記憶體地址是由一個 GRPOut Register 和一個 16 位元的有號立即數偏移量組成</li>
+        </ul>
+      </li>
+      <li>使用 <code class="language-plaintext highlighter-rouge">getMemEncoding</code> 函式來編碼該操作數</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>Zero 同樣包含在 GPROut 中，並且可以被用於記憶體地址計算，代表從地址 0 開始偏移，通常使用於絕對地址存取</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatLeaf</strong></p>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 用於在 Instruction Selection 階段中 DAG pattern matching 時的過濾條件</p>
+</blockquote>
+
+<pre><code class="language-td">// Node immediate fits as 16-bit sign extended on target immediate.
+// e.g. addi, andi
+def immSExt16  : PatLeaf&lt;(imm), [{ return isInt&lt;16&gt;(N-&gt;getSExtValue()); }]&gt;;
+</code></pre>
+
+<p>PatLeaf 是用於在 Instruction Selection 階段中表示指令操作數的類型。這裡將 <code class="language-plaintext highlighter-rouge">imm</code> 作為過濾條件，</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">imm</code> 是 SelectionDAG 中的 Immediate 節點
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">def imm : SDNode&lt;"ISD::Constant", SDTIntLeaf, [], "ConstantSDNode"&gt;;</code></li>
+    </ul>
+  </li>
+  <li>其位置於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code></li>
+</ul>
+
+<p>因此 immSExt16 的作用是在 imm 上進行過濾，<code class="language-plaintext highlighter-rouge">isInt&lt;N&gt;</code> 是 LLVM 的輔助 Template 函數，
+用於檢查一個整數值是否能夠被表示為 N 位元的有號整數。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/llvm/include/llvm/Support/MathExtras.h</code> 中定義了這個函式:
+    <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// Checks if an integer fits into the given bit width.</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">unsigned</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isInt</span><span class="p">(</span><span class="kt">int64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">N</span> <span class="o">&gt;=</span> <span class="mi">64</span> <span class="o">||</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">getSExtValue()</code> 是 <code class="language-plaintext highlighter-rouge">ConstantSDNode</code> 的成員函式，用於取得該節點的有號擴展值</li>
+</ul>
+
+<p>因此 immSExt16 定義表示，檢查一個 Immediate 節點的值是否能夠被表示為 16 位元的有號整數。</p>
+
+<hr />
+
+<p><strong>ComplexPattern</strong></p>
+
+<blockquote class="block-tip">
+  <p>在 PatLeaf 處理時通常只看 SDNode，但在 ComplexPattern 中則需要去顯式聲明 SDNode 的內部欄位</p>
+</blockquote>
+
+<pre><code class="language-to">def addr : ComplexPattern&lt;iPTR, 2, "SelectAddr", [frameindex], [SDNPWantParent]&gt;;
+</code></pre>
+
+<ul>
+  <li>ComplexPattern 用於處理更複雜的情況，先觀察 ComplexPattern 的定義:</li>
+  <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">// Complex pattern definitions.
+//
+
+// Complex patterns, e.g. X86 addressing mode, requires pattern matching code
+// in C++. NumOperands is the number of operands returned by the select function;
+// SelectFunc is the name of the function used to pattern match the max. pattern;
+// RootNodes are the list of possible root nodes of the sub-dags to match.
+// e.g. X86 addressing mode - def addr : ComplexPattern&lt;4, "SelectAddr", [add]&gt;;
+//
+class ComplexPattern&lt;ValueType ty, int numops, string fn,
+                    list&lt;SDNode&gt; roots = [], list&lt;SDNodeProperty&gt; props = [],
+                    int complexity = -1&gt; {
+ValueType Ty = ty;
+int NumOperands = numops;
+string SelectFunc = fn;
+list&lt;SDNode&gt; RootNodes = roots;
+list&lt;SDNodeProperty&gt; Properties = props;
+int Complexity = complexity;
+}
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">ValueType ty</code>: 這個 Pattern 所期待的結果型別</li>
+  <li><code class="language-plaintext highlighter-rouge">int numops</code>: 該 Pattern 所產生的 Operand 數量
+    <ul>
+      <li>CPU0 address 為 base + offset = 2</li>
+      <li>X86 address 為 base + index * scale + displacement = 4</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">string fn</code>: 真正進行 Pattern match 後的處理函式名稱
+    <ul>
+      <li>這個函式會在 C++ 端實作，這裡會呼叫該函式來進行匹配</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNode&gt; roots</code>: 允許的根節點類型列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[add, frameindex]</code>，該 SDNode opcode 必須是 add 或 frameindex</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNodeProperty&gt; props</code>: 該 Pattern 所需的 SDNodeProperty 列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>，代表 fn 函式需要父節點作為額外參數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int complexity</code>: 多個 ComplexPattern 時的優先順序，數值越小優先匹配
+    <ul>
+      <li>同一個根節點可能會有多個 ComplexPattern，透過 complexity 來決定優先匹配哪一個</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這樣我們回頭去看 Cpu0 中的 addr ComplexPattern:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">iPTR</code>: 表示該 SDNode 的 ValueType 為指標型別</li>
+  <li><code class="language-plaintext highlighter-rouge">2</code>: 該 Pattern 處理後會產生兩個 Operand (base, offset)</li>
+  <li><code class="language-plaintext highlighter-rouge">"SelectAddr"</code>: 用於處理該 Pattern 的函式名稱</li>
+  <li><code class="language-plaintext highlighter-rouge">[frameindex]</code>: 只允許根節點為 frameindex 的 SDNode</li>
+  <li><code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>: 將父節點傳遞給 SelectAddr 函式</li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 和 ComplexPattern 都是用於 Instruction Selection 階段的 Pattern matching，但 PatLeaf 通常用於較簡單的過濾條件，而 ComplexPattern 則用於處理更複雜的情況</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatFrag</strong></p>
+
+<pre><code class="language-td">class AlignedLoad&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$ptr), (Node node:$ptr), [{
+  LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);
+  return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();
+}]&gt;;
+
+class AlignedStore&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$val, node:$ptr), (Node node:$val, node:$ptr), [{
+  StoreSDNode *SD = cast&lt;StoreSDNode&gt;(N);
+  return SD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= SD-&gt;getAlignment();
+}]&gt;;
+
+// Load/Store PatFrags.
+def load_a          : AlignedLoad&lt;load&gt;;
+def store_a         : AlignedStore&lt;store&gt;;
+</code></pre>
+
+<p>要理解這段 TableGen 代碼，首先需要了解 PatFrag 的概念。PatFrag 是用於定義可重用的模式片段 (pattern fragments)，這些片段可以在多個指令定義中被引用，以避免重複定義相同的模式。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">PatFrag</code> 的定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">class PatFrag&lt;dag ops, dag frag, code pred = [{}], SDNodeXForm xform = NOOP_SDNodeXForm&gt;
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">dag ops</code>: 定義該 PatFrag 將會有哪些參數</li>
+  <li><code class="language-plaintext highlighter-rouge">dag frag</code>: 該 PatFrag 應該匹配的模式</li>
+  <li><code class="language-plaintext highlighter-rouge">code pred</code>: 一個可選的條件，用於在匹配後以 C++ 代碼做進一步的過濾</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNodeXForm xform</code>: 用於在匹配後對 SDNode 進行轉換的函式</li>
+</ul>
+
+<p>這樣我們先回頭看 Cpu0 中的 AlignedLoad:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">(ops node:$ptr)</code>: 定義了該 PatFrag 接受一個參數 node，名稱為 $ptr</li>
+  <li><code class="language-plaintext highlighter-rouge">(Node node:$ptr)</code>: 定義了該 PatFrag 應該匹配的模式，這裡是匹配由使用者傳入的 PatFrag Node</li>
+  <li><code class="language-plaintext highlighter-rouge">[{ ... }]</code>: 這段 C++ 代碼用於在匹配後進行進一步的過濾
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);</code>
+        <ul>
+          <li>將匹配到的 SDNode N 強制轉換為 LoadSDNode</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();</code>
+        <ul>
+          <li>檢查該 Load 指令的記憶體型別大小是否小於等於其對齊要求</li>
+          <li>例如左側為 load i32 (4 bytes), 則右側的記憶體對齊至少也要 4 bytes</li>
+          <li>存取大小 &lt;= 對齊要求，表示該 Load 是對齊的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>因為 LLVM IR 的 Load/Store 包含多種存取/對齊方式，因此需要在 PatFrag 中進行過濾，確保只匹配符合對齊要求的 Load/Store 指令</p>
+</blockquote>
+
+<blockquote>
+  <p>SD 基本上與 LD 是相同的，差別是 SD 在 DAG 中是有兩個 Operand (val, ptr) 所以需要兩個參數，而 LD 只有一個參數 (ptr) 剩下的是 Result</p>
+</blockquote>
+
+<hr />
+
+<h3 id="16-instructions-specific-format">1.6 Instructions Specific Format</h3>
+
+<p>在完成了上述基礎設置後，接下來定義的是指令的具體格式，雖然指令可以被分為 R-type、I-type 和 J-type，但還是有許多指令具有特殊的格式需求，因此需要進一步細分成更具體可重用的格式。</p>
+
+<p><strong>Arithmetic &amp; Logical</strong></p>
+
+<p>算數和邏輯指令的模板，使用之前定義好的 FL 來定義算術和邏輯指令的模板:</p>
+
+<pre><code class="language-td">// Arithmetic and logical instructions with 2 register operands.
+class ArithLogicI&lt;bits&lt;8&gt; op, string instr_asm, SDNode OpNode,
+                  Operand Od, PatLeaf imm_type, RegisterClass RC&gt; :
+  FL&lt;op, (outs GPROut:$ra), (ins RC:$rb, Od:$imm16),
+     !strconcat(instr_asm, "\t$ra, $rb, $imm16"),
+     [(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))], IIAlu&gt; {
+  let isReMaterializable = 1;
+}
+
+/// Arithmetic Instructions (ALU Immediate)
+// IR "add" defined in include/llvm/Target/TargetSelectionDAG.td, line 315 (def add).
+def ADDiu   : ArithLogicI&lt;0x09, "addiu", add, simm16, immSExt16, CPURegs&gt;;
+</code></pre>
+
+<p>ArithLogicI 相對來說比較簡單，我們觀察 ArithLogicI 的設計一共有六個參數:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; op</code>: 指令的 Opcode</li>
+  <li><code class="language-plaintext highlighter-rouge">string instr_asm</code>: 指令的組合語言表示，以 String 形式傳入</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNode OpNode</code>: 指令對應的 SDNode，用於指令選擇階段</li>
+  <li><code class="language-plaintext highlighter-rouge">Operand Od</code>: 立即值運算元的 Operand 類型，用於在 MachineInstr 中表示立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">PatLeaf imm_type</code>: 立即值的 PatLeaf 類型，用於在 Instruction Selection 階段過濾立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">RegisterClass RC</code>: 來源暫存器所屬的暫存器類別</li>
+</ol>
+
+<p>在 ArithLogicI 的定義中:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FL&lt;...&gt;</code>: 繼承自之前定義的 FL (Format L-type)</li>
+  <li><code class="language-plaintext highlighter-rouge">(outs GPROut:$ra)</code>: 定義指令的輸出操作數為 GPROut 類別的暫存器 $ra</li>
+  <li><code class="language-plaintext highlighter-rouge">(ins RC:$rb, Od:$imm16)</code>: 定義指令的輸入操作數為 RC 類別的暫存器 $rb 和 Od 類別的立即值 $imm16</li>
+  <li><code class="language-plaintext highlighter-rouge">!strconcat(instr_asm, "\t$ra, $rb, $imm16")</code>:
+    <ul>
+      <li>傳入的 instr_asm 格式化輸出為 <code class="language-plaintext highlighter-rouge">instr_asm $ra, $rb, $imm16</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">[(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))]</code>: 匹配模式</li>
+  <li><code class="language-plaintext highlighter-rouge">IIAlu</code>: 指令的行程安排類別，在之後小節會介紹</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReMaterializable = 1;</code>: 指示該指令是可重構的 (rematerializable)，表示該指令的結果可以在需要時重新計算，而不需要保存到暫存器或記憶體中</li>
+</ul>
+
+<blockquote>
+  <p>rematerialization 代表如果這個值在之後很長一段時間沒有被使用到，compiler 可以選擇不保留這個值，而是在之後需要使用的時候重新計算它，這樣可以節省 register 或 memory 的使用。但如果是 side-effect 指令 (例如 store)，就不能 rematerialize，因為它改變了程式的狀態必須透過保存來維持正確性</p>
+</blockquote>
+
+<p>這樣我們來看 ADDiu 的定義:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">0x09</code>: 指令的 Opcode 為 0x09</li>
+  <li><code class="language-plaintext highlighter-rouge">"addiu"</code>: 指令的組合語言表示為 “addiu”</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: 指令對應的 SDNode 為 ISD::ADD</li>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 立即值運算元的 Operand 要透過 simm16 來表示在 MachineInstr 中</li>
+  <li><code class="language-plaintext highlighter-rouge">immSExt16</code>: 立即值的 PatLeaf 類型為 immSExt16，用於過濾 16 位元有號立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 來源暫存器所屬的暫存器類別為 CPURegs</li>
+</ul>
+
+<p><strong>Load &amp; Store</strong></p>
+
+<pre><code class="language-td">class FMem&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+          InstrItinClass itin&gt;: FL&lt;op, outs, ins, asmstr, pattern, itin&gt; {
+  bits&lt;20&gt; addr;
+  let Inst{19-16} = addr{19-16};
+  let Inst{15-0}  = addr{15-0};
+  let DecoderMethod = "DecodeMem";
+}
+
+// Memory Load/Store
+let canFoldAsLoad = 1 in
+class LoadM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+            Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs RC:$ra), (ins MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(set RC:$ra, (OpNode addr:$addr))], IILoad&gt; {
+  let isPseudo = Pseudo;
+}
+
+class StoreM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+             Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs), (ins RC:$ra, MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(OpNode RC:$ra, addr:$addr)], IIStore&gt; {
+  let isPseudo = Pseudo;
+}
+
+//@ 32-bit load.
+class LoadM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                   bit Pseudo = 0&gt;
+  : LoadM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+// 32-bit store.
+class StoreM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                    bit Pseudo = 0&gt;
+  : StoreM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+/// Load and Store Instructions
+///  aligned
+def LD     : LoadM32&lt;0x01,  "ld",  load_a&gt;;
+def ST     : StoreM32&lt;0x02, "st",  store_a&gt;;
+</code></pre>
+
+<p>這裡定義了多層次的 Load 和 Store 指令模板，首先是 FMem 類別，然後是 LoadM 和 StoreM 類別，最後是 LoadM32 和 StoreM32 類別。</p>
+
+<ol>
+  <li>FMem (Load/Store Memory 的基礎類別):
+    <ul>
+      <li>繼承自之前定義的 FL (Format L-type)</li>
+      <li>定義了記憶體地址欄位 addr，並指定其在指令編碼中的位置</li>
+      <li><code class="language-plaintext highlighter-rouge">let DecoderMethod = "DecodeMem";</code>: 指定用於解碼記憶體操作數的函式名稱</li>
+    </ul>
+  </li>
+  <li>LoadM (Load 指令模板):
+    <ul>
+      <li>繼承自 FMem，定義了 Load 指令的模板</li>
+      <li>定義了輸出操作數為 RC 類別的暫存器 $ra，輸入操作數為 MemOpnd 類別的記憶體地址 $addr</li>
+      <li><code class="language-plaintext highlighter-rouge">let isPseudo = Pseudo;</code>: 指示該指令是否為偽指令</li>
+      <li><code class="language-plaintext highlighter-rouge">let canFoldAsLoad = 1;</code>: 指示該 Load 指令可以被折疊 (folded) 成其他指令
+        <ul>
+          <li>例如如果 addiu 支援記憶體存取，則可以將 load + addiu 折疊成一條 addiu 指令</li>
+          <li><code class="language-plaintext highlighter-rouge">addiu $rd, 0($addr), imm</code> 直接從記憶體做加法運算，省略 load 指令</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>LoadM32 (32 位元 Load 指令模板):
+    <ul>
+      <li>繼承自 LoadM，專門用於 32 位元的 Load 指令</li>
+      <li>預設使用 GPROut 作為暫存器類別，mem 作為記憶體操作數類別</li>
+    </ul>
+  </li>
+  <li>最後定義了具體的 Load 指令 LD:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">0x01</code>: 指令的 Opcode 為 0x01</li>
+      <li><code class="language-plaintext highlighter-rouge">"ld"</code>: 指令的組合語言表示為 “ld”</li>
+      <li><code class="language-plaintext highlighter-rouge">load_a</code>: 使用之前定義的 load_a PatFrag 來過濾記憶體地址模式</li>
+    </ul>
+  </li>
+</ol>
+
+<p>設計多層次的 Load 和 Store 指令模板，其目的是為了提高指令定義的靈活性和可重用性。通過這種方式，可以透過更改 RegisterClass 或 Operand 類型來輕鬆定義不同變體的 Load 和 Store 指令，而不需要重複定義相同的指令結構。</p>
+
+<blockquote>
+  <p>例如要擴展為 i8 load/store，只要改變以下定義: 1. 定義新的 memory Operand (例如 mem8) 2. 重新定義對應的 PatFrag 3. 建立新的 LoadM8/StoreM8 類別繼承自 LoadM/StoreM 4. 定義具體的 LB/ SB 指令</p>
+</blockquote>
+
+<p>這種設計的好處是最後的具體指令定義變得非常簡潔，只需要指定 Opcode、組合語言表示和 PatFrag。</p>
+
+<p><strong>Jump</strong></p>
+
+<pre><code class="language-td">//@JumpFR {
+let isBranch=1, isTerminator=1, isBarrier=1, imm16=0, hasDelaySlot = 1,
+    isIndirectBranch = 1 in
+class JumpFR&lt;bits&lt;8&gt; op, string instr_asm, RegisterClass RC&gt;:
+  FL&lt;op, (outs), (ins RC:$ra),
+     !strconcat(instr_asm, "\t$ra"), [(brind RC:$ra)], IIBranch&gt; {
+  let rb = 0;
+  let imm16 = 0;
+}
+//@JumpFR }
+
+def JR      : JumpFR&lt;0x3c, "jr", GPROut&gt;;
+</code></pre>
+
+<p>Jump 雖然是 FL 但通常只使用一個 Register 作為目標地址，因此定義了一個 JumpFR 類別來表示這種情況。</p>
+<ul>
+  <li>以下是 TableGen Instruction 的欄位:
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">isBranch=1</code>: 指示該指令是一個分支指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isTerminator=1</code>: 指示該指令是一個 Basic Block 的終止指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isBarrier=1</code>: 指示該指令是一個屏障指令，在此之後的指令不會被執行到</li>
+      <li><code class="language-plaintext highlighter-rouge">hasDelaySlot = 1</code>: 指示該指令具有延遲槽 (delay slot)</li>
+      <li><code class="language-plaintext highlighter-rouge">isIndirectBranch = 1</code>: 指示該指令是一個間接分支指令，跳轉地址由 Register 提供</li>
+    </ol>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">imm16</code>, <code class="language-plaintext highlighter-rouge">rb</code> 是在 FL 中定義的欄位，這裡將它們設為 0，因為 JumpFR 不需要這些欄位</li>
+  <li>最後定義 JR 指令: <code class="language-plaintext highlighter-rouge">0x3c</code>, <code class="language-plaintext highlighter-rouge">"jr"</code>, <code class="language-plaintext highlighter-rouge">GPROut</code></li>
+</ul>
+
+<blockquote>
+  <p>delay slot 是允許執行在分支指令之後的下一條指令，無論分支是否被採取都會執行該指令，如果要跳轉則直接改變 PC，否則繼續執行下一條指令</p>
+</blockquote>
+
+<p><strong>Return</strong></p>
+
+<pre><code class="language-td">// Return instruction
+class RetBase&lt;RegisterClass RC&gt;: JumpFR&lt;0x3c, "ret", RC&gt; {
+  let isReturn = 1;
+  let isCodeGenOnly = 1;
+  let hasCtrlDep = 1;
+  let hasExtraSrcRegAllocReq = 1;
+}
+
+def RET : RetBase&lt;GPROut&gt;;
+</code></pre>
+
+<ul>
+  <li>定義了一個 RetBase 類別，繼承自 JumpFR，表示返回指令的基類</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReturn = 1;</code>: 指示該指令是一個返回指令</li>
+  <li><code class="language-plaintext highlighter-rouge">let isCodeGenOnly = 1;</code>: 指示該指令僅在程式碼生成階段使用，最終的 ASM 不會包含該指令
+    <ul>
+      <li>例如直接以 <code class="language-plaintext highlighter-rouge">jr $ra</code> 來實現返回，而不需要額外的 RET 指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let hasCtrlDep = 1;</code>: 指示該指令具有控制依賴</li>
+  <li><code class="language-plaintext highlighter-rouge">let hasExtraSrcRegAllocReq = 1;</code>: 指示該指令在暫存器分配階段有額外的來源暫存器需求</li>
+  <li>最後定義 RET 指令，使用 GPROut 作為暫存器類別</li>
+</ul>
+
+<p><strong>No Operation (NOP)</strong></p>
+
+<pre><code class="language-td">/// No operation
+let addr=0 in
+  def NOP   : FJ&lt;0, (outs), (ins), "nop", [], IIAlu&gt;;
+</code></pre>
+
+<p>空操作指令 (NOP) 的定義非常簡單，使用 FJ 類別來表示沒有任何操作的指令。</p>
+
+<p><strong>Pat</strong></p>
+
+<pre><code class="language-td">def : Pat&lt;(i32 immSExt16:$in),
+          (ADDiu ZERO, imm:$in)&gt;;
+</code></pre>
+
+<p>最後這段用於定義一個 Pat (Pattern)，表示將一個 16 位元有號立即值的 i32 型別映射到 ADDiu 指令，並將結果存入 ZERO 寄存器。因為 CPU0 沒有設計專門的 load immediate 指令，因此使用 ADDiu ZERO, imm 來實現載入立即值的功能。</p>
+
+<hr />
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-21-2025 22:13</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="llvm" /><category term="backend" /><category term="cpu0" /><summary type="html"><![CDATA[CPU0 是一個 LLVM 教學用的目標架構，主要用來展示 LLVM 從中間表示（IR）到目標機器碼的轉換過程。在這篇文章中，我們將介紹如何為 CPU0 架構創建 LLVM 後端。]]></summary></entry><entry><title type="html">LLVM | TableGen Introduction</title><link href="https://hotshot824.github.io/jekyll/2025-11-20-tablegen_introduction.html" rel="alternate" type="text/html" title="LLVM | TableGen Introduction" /><published>2025-11-20T00:00:00+00:00</published><updated>2025-11-20T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/tablegen_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-20-tablegen_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>TableGen 是一個 DSL (Domain-Specific Language)，廣泛用於 LLVM 的編譯器開發中。</p>
+</blockquote>
+
+<ul>
+  <li>TableGen 使用類似於 C++ 的語法，描述資料、資料結構</li>
+  <li>用於自動化產生減少重複性高的程式碼
+    <ul>
+      <li>例如：Register definitions、Instruction definitions、Intrinsic definitions…</li>
+    </ul>
+  </li>
+  <li>TableGen 檔案通常以 .td 為副檔名</li>
+</ul>
+
+<p>目前 llvm-project 中包含的 tablegen 有四種：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">llvm-tblgen</code>
+    <ul>
+      <li>在 LLVM Codegen 中用於描述 Target</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">lldb-tblgen</code></li>
+  <li><code class="language-plaintext highlighter-rouge">clang-tblgen</code></li>
+  <li><code class="language-plaintext highlighter-rouge">mlir-tblgen</code>
+    <ul>
+      <li>用於描述 MLIR Dialects</li>
+    </ul>
+  </li>
+</ul>
+
+<p>TableGen 通常輸出 .inc 後綴的 C++ 檔案。並且 TableGen 本身也是前後端分離的結構設計。</p>
+
+<blockquote class="block-tip">
+  <p>後端不同 Target 盡管有不同 Register, Instruction 等定義，但演算法上大同小異</p>
+</blockquote>
+
+<h3 id="11-tablegen-language-basics">1.1 TableGen Language Basics</h3>
+
+<blockquote class="block-warning">
+  <p>TableGen 的型別類似於 C++，但並不完全相同</p>
+</blockquote>
+
+<p><strong>class</strong></p>
+
+<p>class 是用於定義資料結構的 fields，也可以進行 Inheritance，Override。
+透過 def 來實例化 class，let 用於設定 field 的值。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stuff {
+    string Name;
+    int Quantity;
+    string Description;
+}
+
+def water_bottle : Stuff {
+    let Name = "Water Bottle";
+    let Quantity = 1;
+    let Description = "A bottle of water.";
+}
+</code></pre></div></div>
+
+<p>例如 CPU0 Target 的 Register，透過 <code class="language-plaintext highlighter-rouge">llvm-tblgen Cpu0Other.td -I ${LLVM_SRC_DIR}/llvm/include -print-enums -class=Register</code> 可以把 CPU0 中所有的 Register 都列印出來。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># LLVM_SRC_DIR point to the root of llvm-project</span>
+<span class="nv">$ </span>llvm-tblgen Cpu0Other.td <span class="nt">-I</span> <span class="k">${</span><span class="nv">LLVM_SRC_DIR</span><span class="k">}</span>/llvm/include <span class="nt">-print-enums</span> <span class="nt">-class</span><span class="o">=</span>Register
+A0, A1, AT, EPC, FP, GP, LR, PC, S0, S1, SP, SW, T0, T1, T9, V0, V1, ZERO, 
+</code></pre></div></div>
+
+<p><strong>let … in</strong></p>
+
+<blockquote class="block-tip">
+  <p>let … in 用於在區塊中定義變數，並且只在該區塊內有效</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Without let ... in
+def R0 : Cpu0GPRReg&lt;0, "r0"&gt; { let Namespace = "Cpu0"; }
+def R1 : Cpu0GPRReg&lt;1, "r1"&gt; { let Namespace = "Cpu0"; }
+def R2 : Cpu0GPRReg&lt;2, "r2"&gt; { let Namespace = "Cpu0"; }
+
+// With let ... in
+let Namespace = "Cpu0" in {
+  def R0 : Cpu0GPRReg&lt;0, "r0"&gt;;
+  def R1 : Cpu0GPRReg&lt;1, "r1"&gt;;
+  def R2 : Cpu0GPRReg&lt;2, "r2"&gt;;
+}
+</code></pre></div></div>
+
+<p>如果不使用 let … in，必須在每個 def 中重複設定 Namespace，
+使用 let … in 可以讓程式碼更簡潔。</p>
+
+<p><strong>types</strong></p>
+
+<p>TableGen 支援以下 Primitive Types：</p>
+<ul>
+  <li>bit
+    <ul>
+      <li>Single bit value (0 or 1)</li>
+      <li>bit truebit = 1;</li>
+    </ul>
+  </li>
+  <li>bits<N>
+</N>    <ul>
+      <li>N-bit wide value</li>
+      <li>bits&lt;8&gt; byteValue = 0xFF;</li>
+      <li>bits&lt;16&gt; Enc = 16; // Enc = 0x0010</li>
+    </ul>
+  </li>
+  <li>int
+    <ul>
+      <li>Integer value</li>
+    </ul>
+  </li>
+  <li>string
+    <ul>
+      <li>String value</li>
+    </ul>
+  </li>
+  <li>code
+    <ul>
+      <li>Code fragment</li>
+      <li>let ParserMethod = [{…}];</li>
+    </ul>
+  </li>
+  <li>dag
+    <ul>
+      <li>Directed Acyclic Graph</li>
+      <li>Used for pattern matching in instruction selection</li>
+      <li>dag (add R1, R2)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Composite Types：</p>
+<ul>
+  <li>list<type>
+</type>    <ul>
+      <li>List of elements of specified type</li>
+      <li>list<int> RegList = [1, 2, 3, 4];</int></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>更多 TableGen Language Basics 可以參考官方文件: <a href="https://llvm.org/docs/TableGen/ProgRef.html#types">1.4 Types</a></p>
+</blockquote>
+
+<p><strong>multiclass with defm</strong></p>
+
+<blockquote class="block-tip">
+  <p>multiclass 可以用來定義一組相關的 class，並且可以透過 defm 來實例化多個物件</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://llvm.org/docs/TableGen/ProgRef.html#multiclass-define-multiple-records">1.6.5 multiclass — define multiple records</a></p>
+</blockquote>
+
+<p>例如同時要定義 rr, ri 兩種 format 的 instruction，可以使用 multiclass 來定義共用的部分。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def ops;
+def GPR;
+def Imm;
+class inst &lt;int opc, string asmstr, dag operandlist&gt;;
+
+multiclass ri_inst &lt;int opc, string asmstr&gt; {
+  def _rr : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+                   (ops GPR:$dst, GPR:$src1, GPR:$src2)&gt;;
+  def _ri : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+                   (ops GPR:$dst, GPR:$src1, Imm:$src2)&gt;;
+}
+
+// Define records for each instruction in the RR and RI formats.
+defm ADD : ri_inst&lt;0b111, "add"&gt;;
+defm SUB : ri_inst&lt;0b101, "sub"&gt;;
+defm MUL : ri_inst&lt;0b100, "mul"&gt;;
+</code></pre></div></div>
+
+<p>如果不使用 multiclass，必須分別定義 rr 與 ri 兩種 format 的 instruction，
+然後重複 def 相同的部分。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def ops;
+def GPR;
+def Imm;
+class inst &lt;int opc, string asmstr, dag operandlist&gt;;
+
+class rrinst &lt;int opc, string asmstr&gt;
+  : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+           (ops GPR:$dst, GPR:$src1, GPR:$src2)&gt;;
+
+class riinst &lt;int opc, string asmstr&gt;
+  : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+           (ops GPR:$dst, GPR:$src1, Imm:$src2)&gt;;
+
+// Define records for each instruction in the RR and RI formats.
+def ADD_rr : rrinst&lt;0b111, "add"&gt;;
+def ADD_ri : riinst&lt;0b111, "add"&gt;;
+def SUB_rr : rrinst&lt;0b101, "sub"&gt;;
+def SUB_ri : riinst&lt;0b101, "sub"&gt;;
+def MUL_rr : rrinst&lt;0b100, "mul"&gt;;
+def MUL_ri : riinst&lt;0b100, "mul"&gt;;
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="12-bang--operator">1.2 bang (!) operator</h3>
+
+<blockquote class="block-tip">
+  <p>Bang Operator 都是在編譯期執行的，在最終的 .inc 中不會看到相關的程式碼</p>
+</blockquote>
+
+<p>Bang Operator 是 TableGen 中提供的 <strong>編譯期運算 (Compile-time operation)</strong>，
+因為 TableGen 是在編譯期執行的，所以無法使用一般程式語言的運算符號。
+可以用來進行條件判斷、數值計算、字串處理與 list 操作等。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BangOperator ::=  one of
+                  !add         !and         !cast         !con         !dag
+                  !div         !empty       !eq           !exists      !filter
+                  !find        !foldl       !foreach      !ge          !getdagarg
+                  !getdagname  !getdagop    !getdagopname !gt          !head
+                  !if          !initialized !instances    !interleave  !isa
+                  !le          !listconcat  !listflatten  !listremove  !listsplat
+                  !logtwo      !lt          !match        !mul         !ne
+                  !not         !or          !range        !repr        !setdagarg
+                  !setdagname  !setdagop    !setdagopname !shl         !size
+                  !sra         !srl         !strconcat    !sub         !subst
+                  !substr      !tail        !tolower      !toupper     !xor
+</code></pre></div></div>
+
+<blockquote>
+  <p>完整的 Bang Operator 列表可以參考官方文件: <a href="https://llvm.org/docs/TableGen/ProgRef.html#bang-operators">1.3.3 Bang operators</a>, <a href="https://llvm.org/docs/TableGen/ProgRef.html#appendix-a-bang-operators">1.10 Appendix A: Bang Operators</a></p>
+</blockquote>
+
+<h3 id="13-tablegen-file-structure">1.3 TableGen File Structure</h3>
+
+<blockquote class="block-tip">
+  <p>同樣的 TableGen 通常是由多個 .td 檔案組成，一般來說會有一個主要入口將其他檔案 include 進來</p>
+</blockquote>
+
+<p>在 TableGen 中，可以使用 <code class="language-plaintext highlighter-rouge">include</code> 指令來包含其他 TableGen 檔案，但只需要在主要檔案入口 include，
+其他檔案中不需要重複 include。LLVM 中對於 target-independent interfaces 的定義在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/</code> 目錄下。在定義 backend 時會使用這些 interfaces 來實作 target-specific 的內容。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~/llvm/test/llvm/include/llvm/Target<span class="nv">$ </span><span class="nb">ls
+</span>CGPassBuilderOption.h  GenericOpcodes.td  TargetCallingConv.td     TargetIntrinsicInfo.h  TargetLoweringObjectFile.h  TargetOptions.h       TargetSchedule.td      Target.td
+CodeGenCWrappers.h     GlobalISel         TargetInstrPredicate.td  TargetItinerary.td     TargetMachine.h             TargetPfmCounters.td  TargetSelectionDAG.td
+~/llvm/test/llvm/include/llvm/Target<span class="nv">$ </span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>更多詳細的 TableGen 後端開發可以參考這份投影片 <a href="https://llvm.org/devmtg/2021-11/slides/2021-how-to-write-a-tablegen-backend.pdf">How to write a TableGen backend</a>，與官方文件，
+到目前為止應該足夠去閱讀 CPU0 Target 的 TableGen 檔案了
+11-20-2025 23:42</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="llvm" /><category term="tablegen" /><summary type="html"><![CDATA[TableGen 是一個 DSL (Domain-Specific Language)，廣泛用於 LLVM 的編譯器開發中。]]></summary></entry><entry><title type="html">Computer Organization | Pipelines Hazards</title><link href="https://hotshot824.github.io/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" rel="alternate" type="text/html" title="Computer Organization | Pipelines Hazards" /><published>2025-11-14T00:00:00+00:00</published><updated>2025-11-14T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/computer_organization_pipeline_hazards</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-14-computer_organization_pipeline_hazards.html"><![CDATA[<blockquote class="block-tip">
+  <p>雖然 Pipeline 可以提升指令吞吐量，但在實作上會遇到各種 hazards 問題，必須透過硬體與編譯器的合作來解決這些問題，才能真正發揮 Pipeline 的效能。</p>
+</blockquote>
+
+<blockquote>
+  <p>這篇文章是從 Organization 的角度去思考 Pipeline Hazards，因此著重在硬體層面的解決方法。</p>
+</blockquote>
+
+<h3 id="14-overview-of-hazards">1.4 Overview of Hazards</h3>
+
+<p>Pipeline processors 在控制指令於 pipeline 上順暢且高效率地執行時，會遇到數種相關問題。這些問題通常統稱為 hazards，主要可分為以下三種類型:</p>
+
+<ol>
+  <li>Structural Hazards
+    <ul>
+      <li>不同指令在 Pipeline 的同一 Segment 需要使用相同的硬體資源，導致衝突</li>
+      <li>此類 hazard 可以透過發生衝突的 Segments 中配置重複的硬體資源來緩解</li>
+      <li>也可以透過插入 Stalls 或 Re-Ordering 指令來避免衝突</li>
+    </ul>
+  </li>
+  <li>Data Hazards
+    <ul>
+      <li>指令之間存在資料相依性，導致後續指令需要等待前一指令完成才能繼續執行</li>
+      <li>最簡單的解決方式是在執行序列中插入 Stalls (但會降低效能)</li>
+      <li>另一種方法是使用 Forwarding (Bypassing)，提前將 ALU 的結果 Forward 給需要的指令，避免等待</li>
+      <li>在特定情況下可以 Re-Ordering 指令順序以避免 Data Hazards</li>
+    </ul>
+  </li>
+  <li>Control Hazards
+    <ul>
+      <li>Control Hazards 通常由 Branch instructions 引起，因為在 Branch 指令執行期間，處理器無法確定下一條要執行的指令是哪一條</li>
+      <li>最簡單的解決方式是在 Branch 指令後插入 Stalls，做局部的等待事件直到 Branch 結果確定 (但會降低效能)</li>
+      <li>另一種方法是使用 Branch Prediction，預測 Branch 的結果並提前載入預測的指令 (但實作上相當困難)</li>
+      <li>或者 Delay Branch，將 Branch 指令的效果延後到後續的指令執行完畢後再決定 (需要編譯器支援)</li>
+    </ul>
+  </li>
+</ol>
+
+<p>接下來我門會針對每一種 Hazard 類型進行詳細說明，並介紹相應的解決方法。</p>
+
+<blockquote class="block-tip">
+  <p>在上述的三種 Hazards 中，Data Hazards 是最常見且影響最大的，因為指令之間的資料相依性非常普遍，而有效地解決 Data Hazards 可以顯著提升 Pipeline 的效能。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>而從編譯器的角度來看實際上可以處裡的只有 Data Hazards 與 Control Hazards，Structural Hazards 通常需要硬體層面的支援來解決。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="15-data-hazards">1.5 Data Hazards</h3>
+
+<p><strong>Definition:</strong><br />
+如果我們需要前一條指令的結果，但 Pipeline 中沒有足夠的 Segments 能在目前 Instruction 讀取該結果之前完成計算並寫回 Register，就會發生 Data Hazard。</p>
+
+<p>通常使用以下三種方式來解決 Data Hazards：</p>
+
+<ol>
+  <li>Forwarding (Bypassing)
+    <ul>
+      <li>為了處理 Dependency Hazard，可以在 Pipeline 中加入特殊電路，由 wires 與 switches 組成，將所需要的值 Forward 給該值進行計算的 Pipeline Segment。但這會增加硬體與控制電路的複雜度，但此方法有效，時間上遠小於完成 Pipeline 所需的時間。</li>
+    </ul>
+  </li>
+  <li>Code Re-Ordering
+    <ul>
+      <li>由 Compiler 來重新排序 Source code 的 Statements，或者由 Assembler 重新排序 Object code。將一條或多條 Instruction 插入到兩條有 Data Hazard 的 Instruction 之間，讓 Pipeline 有足夠的時間完成前一條 Instruction 的計算並寫回 Register，避免 Data Hazard 的發生。</li>
+      <li>這需要一個強大的 compiler 或 assembler，其必須具備 pipeline 結構與時序的詳細資訊，才能判斷 data hazard 可能發生的位置。我們將這類軟體稱為 hardware-dependent compiler。</li>
+    </ul>
+  </li>
+  <li>Stalls
+    <ul>
+      <li>最簡單的解決方式是在發生 Data Hazard 的地方插入 NOP 指令，讓 Pipeline 有足夠的時間完成前一條 Instruction 的計算並寫回 Register，避免 Data Hazard 的發生。但這會降低 Pipeline 的效能。</li>
+      <li>這種方法是最後手段，只有 Compiler 無法處理或者 Hardware/Software 不支援 Forwarding 時才會使用。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Example:</p>
+
+<pre><code class="language-riscv">0 sub     x2,  x1,  x3    // Register x2 set by sub
+1 and     x12, x2,  x5    // 1st operand(z2) set by sub
+2 or      x13, x6,  x2    // 2nd operand(x2) set by sub
+3 add     x14, x2,  x2    // 1st(x2) &amp; 2nd(x2) set by sub
+4 sd      x15, 100(x2)    // Index(x2) set by sub
+</code></pre>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/1.png" alt="" /></p>
+
+<ul>
+  <li>以上的問題出在 sub 指令在 CC 5 才會將 x2 的結果寫回 x2，如果未使用任何解決方法則所有要使用 x2 的指令都必須在 CC 6 之後才能執行</li>
+  <li>這裡的解決方式是使用 Forwarding，將 ALU 的結果直接 Forward 給需要的指令，避免等待寫回 Register 的時間，這樣 and, or, add 三個使用 x2 的指令就可以在 CC 6, 7, 8 執行，而不需要等待到 CC 5 之後才能執行</li>
+</ul>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/2.png" alt="" /></p>
+
+<hr />
+
+<h3 id="16-structural-hazards">1.6 Structural Hazards</h3>
+
+<p><strong>Definition:</strong>
+在某一個 Pipeline Segment 中，如果有兩條或以上的指令同時需要使用同一個硬體資源，就會發生 Structural Hazard。</p>
+
+<p>這裡我們使用相同的程式碼來說明 Structural Hazard 的問題：</p>
+<ul>
+  <li>在 0 sub x2, x1, x3 指令的 CC 5 時間需要將結果寫回 Register</li>
+  <li>在 3 add x14, x2, x2 指令的 CC 5 時間也需要從 Register 讀取 x2 的值</li>
+</ul>
+
+<p>也就是說在 CC 5 的時間點，write back 與 read 兩個動作同時需要使用 Register
+x2 這個硬體資源，導致 Structural Hazard 的發生。在某一個 clock cycle 中，Register 可能產生不同的值，這種不一致是不可以被接受的。</p>
+
+<ol>
+  <li>修改 Register File 的設計，例如在 clock cycle 的前半段進行讀取，後半段進行寫入，這樣就可以避免 read 與 write 同時發生的問題。但這會增加 Register File 的複雜度與成本。
+    <ul>
+      <li>硬體設計者有時會在 write 與 read 之間插入相對於 clock cycle 很短的延遲，以確保 write 完成後 read 才會發生</li>
+    </ul>
+  </li>
+  <li>另一種 Hazard 可能發生在 Branch Instructions 的執行期間，例如只有一個 ALU 但必須同時進行 BTA (Branch Target Address) 計算與條件判斷。這必須要至少有兩個 adder 才有辦法解決這個問題。( 新增硬體資源 )</li>
+  <li>同樣的如果 instruct 與 data 共用同一個 memory，可能會發生 Instruction Fetch 與 Data Memory Access 同時需要使用 memory 的情況。
+    <ul>
+      <li>第一種方法是跟 1 的解決方式類似，在同一個 clock cycle 中分開進行 read 與 write，讓 read 與 write 可以在一個 clock cycle 中分別完成。</li>
+      <li>第二種方法是使用兩個 High speed Cache，一個用於 instruction，一個用於 data，兩者都存取同一個 Memory。</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>第三種作法就是 I-Cache 與 D-Cache 分開設計，這樣就可以避免 Instruction Fetch 與 Data Memory Access 同時需要使用同一個 memory 的問題。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>現代計算機的處理方式大多是後者，CPU 使用兩種 <a href="https://en.wikipedia.org/wiki/CPU_cache">Cache</a> 來分別處理 Instruction 與 Data，這樣可以大幅提升記憶體存取的效率，並且避免 Structural Hazards 的發生。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="17-control-hazards">1.7 Control Hazards</h3>
+
+<p><strong>Definition:</strong>
+Control Hazards 發生在 Branch Instructions 的執行期間，因為在 Branch 指令執行期間，處理器無法確定下一條要執行的指令是哪一條。</p>
+
+<p>Control Hazards 是 Pipeline 中最難解決的問題之一，因為它涉及到指令流的改變，這會影響到整個 Pipeline 的運作。</p>
+
+<p>Branch 的問題在於我們無法知道哪一種結果會發生，直到 Branch condition 被計算完成，並且往往 Branch 指令會依賴前面的指令結果，這使得預測變得更加困難。</p>
+
+<p>主要有四種策略來處理 Control Hazards：</p>
+
+<h5 id="171-assume-branch-not-taken">1.7.1 Assume Branch Not Taken</h5>
+
+<p>這個策略就是無論如何都假設 Branch 不會發生，繼續往下執行下一條指令。如果 Branch 最終被採取，則必須清除 Pipeline 中已經載入的錯誤指令，並重新載入正確的指令。
+很顯而易見的這樣的策略就是 50% 的機率會成功，另外 50% 的機率會失敗，失敗的代價是清除 Pipeline 中的錯誤指令，並重新載入正確的指令，這會導致 Pipeline Stalls。</p>
+
+<h5 id="172-reducing-branch-delay">1.7.2 Reducing Branch Delay</h5>
+
+<p>另一種策略是將 Branch condition 的計算提前，例如在 ID 階段就計算 Branch condition，這樣已經跑入 ID 之後階段的 Instructions 被 Flush 的指令數量就可以減少。</p>
+
+<p>以下圖為例，假如我們要到 WB 才寫回 Register，那麼在 CC 5 時才知道 Branch 的結果，這樣至少要有 4 個 Stalls 才能重新載入正確的指令。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Cycle</th>
+      <th>IF</th>
+      <th>ID</th>
+      <th>EXE</th>
+      <th>MEM</th>
+      <th>WB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">CC1</td>
+      <td>beq</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC2</td>
+      <td>stall₁</td>
+      <td><strong>beq</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC3</td>
+      <td>stall₂</td>
+      <td>stall₁</td>
+      <td>beq</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC4</td>
+      <td>stall₃</td>
+      <td>stall₂</td>
+      <td>stall₁</td>
+      <td>beq</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC5</td>
+      <td>add</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td><strong>beq</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>這裡把 <strong>beq</strong> 提前到 ID 階段就計算 Branch condition，這樣就可以提前知道 Branch 的結果，減少 Stalls 的數量。</li>
+  <li>以 <strong>beq</strong> 為例只要加入 XOR 與 Zero 檢測器就可以在 ID 階段計算 Branch condition，這樣在 CC 3 時就可以知道 Branch 的結果，減少 Stalls 的數量。
+    <ul>
+      <li>A xor B -&gt; if Zero -&gt; Branch Taken else Branch Not Taken</li>
+      <li>只加入專用的硬體來計算 Branch condition，不需要完整的 ALU 來計算</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Xor 為零代表兩個輸入相等，因此 Branch condition 為真，Branch Taken</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>這種方法需要再 ID 加入一些額外的硬體來計算 Branch condition，但可以顯著減少 Control Hazards 的影響。</p>
+</blockquote>
+
+<p>即使有可能 Branch 的值須要其他 Instruction 的結果才能計算出來，這樣我們就有可能造成 Data Hazard，但將 Branch condition 提前到 ID 階段計算，依然是一種改進。</p>
+
+<h5 id="173-dynamic-branch-prediction">1.7.3 Dynamic Branch Prediction</h5>
+
+<p>如果可以預測大多數 Branch 是 Taken 或 Not Taken，將會很有幫助。這可以透過 Software ( Compiler )，也可以在 Runtime ( Hardware ) 進行。這邊會先看軟體的方法，因為軟體方法實作成本相當低。</p>
+
+<pre><code class="language-rsicv">0   add x5, x5, x6          # One of the registers used in the beq comparison is modified here
+1   sub x4, x3, x6          # Nothing important to the branch here
+2   and x7, x8, x6          # Nothing important to the branch here
+3   and x9, x6, x6          # Nothing important to the branch here
+4   beq x5, x6, target      # Branch compares the updated x5 with x6
+</code></pre>
+
+<p><strong>Pre-executing the branch condition</strong></p>
+
+<p>Branch 會比較 x5, x6 的值，但這兩個 Register 最後一次修改是在 add 指令中，因此可以事先計算 sub x10, x5, x6 並檢查 x10 是否為零，來預測 Branch 的結果。</p>
+
+<p><strong>History-based prediction</strong></p>
+
+<p>這種作法的一種實作方式，是 branch prediction buffer 或 branch history table，這是一個小型的 Cache，記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。通常會使用 Branch Instruction 的低位元作為 index 去查詢 Branch History Table，並根據歷史結果來預測 Branch 的結果。</p>
+
+<blockquote class="block-tip">
+  <p>這個 cache 通常稱為 Branch History Table (BHT)，它會記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。</p>
+</blockquote>
+
+<p>這種預測方式當然有可能遇到該 Bit 是由另一個相同低位元的 Branch 指令所更新，但 Prediction 只是希望去猜測 Branch 的結果，如果該次錯誤刪除預測並更新 BHT 即可，這樣保證長期來看 BHT 的準確率會提升。</p>
+
+<p>算盤本上會介紹 1-bit predictor 與 2-bit predictor:</p>
+
+<ul>
+  <li>1-bit predictor:
+    <ul>
+      <li>使用一個 Bit 來記錄上一次 Branch 的結果，0 代表 Not Taken，1 代表 Taken。每次 Branch 執行後，根據實際結果更新該 Bit。</li>
+      <li>優點是實作很簡單</li>
+      <li>缺點是容易受到單一錯誤預測的影響，導致連續錯誤預測</li>
+    </ul>
+  </li>
+  <li>2-bit predictor:
+    <ul>
+      <li>使用兩個 Bit 來記錄 Branch 的歷史結果，形成四個狀態:
+        <ul>
+          <li>00: Strongly Not Taken</li>
+          <li>01: Weakly Not Taken</li>
+          <li>10: Weakly Taken</li>
+          <li>11: Strongly Taken</li>
+        </ul>
+      </li>
+      <li>2-bit 可以讓預測器在遇到單一錯誤預測時不會立即改變預測結果，必須連續兩次錯誤預測才會改變狀態，這樣可以減少錯誤預測的影響，並且成本不會比 1-bit predictor 高太多。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/3.png" alt="" /></p>
+
+<blockquote class="block-tip">
+  <p>尤其是在 Loop 結構中，往往 Branch 會連續多次被採取直到 Loop 結束，Dynamic Branch Prediction 可以有效提升這類情況的預測準確率。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>剩下 Exception Hazards 的部分之後再補充，Hazards 的內容先 focus 在 Compiler 比較關注的部分。<br />
+11-14-2025 00:42</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="computer_organization" /><category term="pipelines" /><summary type="html"><![CDATA[雖然 Pipeline 可以提升指令吞吐量，但在實作上會遇到各種 hazards 問題，必須透過硬體與編譯器的合作來解決這些問題，才能真正發揮 Pipeline 的效能。]]></summary></entry><entry><title type="html">Computer Organization | Pipelines</title><link href="https://hotshot824.github.io/jekyll/2025-11-12-computer_organization_pipeline.html" rel="alternate" type="text/html" title="Computer Organization | Pipelines" /><published>2025-11-12T00:00:00+00:00</published><updated>2025-11-12T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/computer_organization_pipeline</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-12-computer_organization_pipeline.html"><![CDATA[<h3 id="11-pipelines-overview">1.1 Pipelines Overview</h3>
+
+<blockquote class="block-tip">
+  <p>Pipeline 是現代 CPU 提升指令吞吐量的核心機制，而編譯器則必須透過指令排程與最佳化來配合 pipeline，避免 hazards，才能真正發揮硬體效能。</p>
+</blockquote>
+
+<p>Pipelines 是現代處理器中常用的一種技術，用來提高指令的執行效率。透過將指令的執行過程分成多個階段，處理器可以同時處理多條指令，從而提升整體的吞吐量。
+這樣的好處是減少閒置，讓多條指令可以同時在不同的階段進行處理。</p>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/1.png" alt="" /></p>
+
+<p><strong>Pipeline 總是拿 Laundry 的例子來說明</strong> 如果 A, B, C, D 四個人都分別做洗衣、烘乾、摺衣服、收納將會花費 12 time units、但如果使用 Pipeline 的方式，四個人可以同時進行不同的工作，總共只需要 7 time units 就能完成所有人的工作。</p>
+
+<p>因此在 Pipeline 中主要有三點要注意：</p>
+<ol>
+  <li>The work (in a computer, the ISA) is divided up into pieces that more or less fit into the segments alloted for them.</li>
+  <li>This implies that in order for the pipeline to work efficiently and smoothly, the work partitions must each take about the same time to complete.</li>
+  <li>In order for the pipeline to work smoothly, there must be few (if any) exceptions or hazards that cause errors or delays within the pipeline.</li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>Pipeline 是增加 Throughput 的一種技術，對 Latency 沒有幫助</p>
+</blockquote>
+
+<hr />
+
+<h3 id="12-work-partitioning">1.2 Work Partitioning</h3>
+
+<ul>
+  <li>Pipeline 可以被分為主個 Stages：
+    <ul>
+      <li>Instruction Fetch (IF) : fetch instruction from memory</li>
+      <li>Instruction Decode (ID) : decode instruction and read registers</li>
+      <li>Execute (EX) : execute the operation or calculate address</li>
+      <li>Memory Access (MEM) : access an operand in data memory</li>
+      <li>Write Back (WB) : write the result back to a register</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/2.png" alt="" /></p>
+
+<p>上面的圖是很理想的 Pipeline 狀況，每個 Stage 都剛好在一個 Clock Cycle 內完成工作。</p>
+
+<p>複習一下 Single-Cycle Processor 的工作流程：</p>
+
+<ul>
+  <li>IF:
+    <ul>
+      <li>階段透過 MUX 選擇下一個指令的位置，由 Program Counter (PC) 指向下一個指令的位址</li>
+      <li>從 Instruction Memory 中讀取指令，並將 PC 加 4 指向下一個指令或者跳轉位置</li>
+    </ul>
+  </li>
+  <li>ID:
+    <ul>
+      <li>將指令解碼，並從 Register File 中讀取所需的 Read Registers / Write Registers</li>
+      <li>讀取 Register 中的資料由 Read Data 1 / Read Data 2 輸出</li>
+      <li>imm Generator 會根據指令類型產生立即數 (32-bit / 64-bit)</li>
+    </ul>
+  </li>
+  <li>EX:
+    <ul>
+      <li>ALU 根據 ALU Control 的控制，對 Read Data 1 / Read Data 2 或立即數進行運算</li>
+    </ul>
+  </li>
+  <li>MEM:
+    <ul>
+      <li>根據指令類型，決定是否要對 Data Memory 進行讀取或寫入</li>
+    </ul>
+  </li>
+  <li>WB:
+    <ul>
+      <li>將結果寫回 Register File</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pipeline registers</strong></p>
+
+<p>為了確保 Single-Cycle Processor 符合每個 Stage 都在一個 Clock Cycle 內完成工作，我們需要在每個 Stage 之間加入 Pipeline registers，這些 Buffer 用來暫存每個 Stage 的輸出，並在下一個 Clock Cycle 開始時提供給下一個 Stage 使用。</p>
+
+<p>Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 stage 的輸出資料與對應的控制資訊，並在下一個 cycle 將這些穩定的值提供給下一個 stage 使用。藉由這種「先存、再用」的機制，多條指令才能在同一條 datapath 上同時處於不同 stages，讓 pipeline 在時間上並行運作，而結果仍然正確。</p>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/3.png" alt="" /></p>
+
+<hr />
+
+<h3 id="13-pipeline-control">1.3 Pipeline Control</h3>
+
+<blockquote class="block-tip">
+  <p>Pipeline control 的作用，是把「這條指令未來每個 stage 要做什麼」的控制決策，在 ID 階段產生後隨指令一起經由 Pipeline registers 傳遞</p>
+</blockquote>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/4.png" alt="" /></p>
+
+<p>同樣的我們也需要 Control Unit 來產生控制訊號，這些控制訊號會被傳遞到各個 Stage 的控制邏輯中，確保每個 Stage 都能正確地執行其功能。</p>
+
+<ul>
+  <li>IF/ID:
+    <ul>
+      <li>將指令的 rs、rt、rd 欄位，以及 opcode、funct 欄位傳遞給 control circuitry</li>
+      <li>用於初始化該指令後續所需的控制資訊</li>
+    </ul>
+  </li>
+  <li>ID/EX:
+    <ul>
+      <li>Buffer EX、MEM、WB 三個階段的控制訊號</li>
+      <li>同時執行 EX 階段的控制</li>
+      <li>決定 ALU 的輸入 operand、ALU operation 類型</li>
+      <li>根據 ALU 的 Zero 輸出判斷是否進行 branch</li>
+    </ul>
+  </li>
+  <li>EX/MEM:
+    <ul>
+      <li>Buffer MEM、WB 階段的控制訊號</li>
+      <li>同時執行 MEM 階段的控制</li>
+      <li>設定 memory read / write</li>
+      <li>決定寫入 memory 的資料來源</li>
+      <li>包含 branch control logic</li>
+    </ul>
+  </li>
+  <li>MEM/WB:
+    <ul>
+      <li>Buffer 並執行 WB 階段的控制</li>
+      <li>決定要寫回 register file 的資料來源</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/5.png" alt="" /></p>
+
+<hr />
+
+<blockquote class="block-warning">
+  <p>上面說的是理想狀況下的 Pipeline 運作方式，但實際上在 Pipeline 運作過程中會遇到各種問題，這些問題會導致 Pipeline 無法順利運作，這些問題稱為 Hazards，下一篇文章將介紹 Pipeline 中常見的 Hazards 以及解決方法。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-12-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="computer_organization" /><category term="pipelines" /><summary type="html"><![CDATA[1.1 Pipelines Overview]]></summary></entry><entry><title type="html">C++ | Resource Acquisition Is Initialization (RAII)</title><link href="https://hotshot824.github.io/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" rel="alternate" type="text/html" title="C++ | Resource Acquisition Is Initialization (RAII)" /><published>2025-09-21T00:00:00+00:00</published><updated>2025-09-21T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/Resource_Acquisition_Is_Initialization</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html"><![CDATA[<blockquote class="block-tip">
+  <p>在 C++ 中開發者需要自己設計記憶體資源的管理機制，但是往往無法保證所有資源都被正常釋放，因此導致 Memory Leak。RAII 是一種 Design Pattern，可以確保資源在不需要時自動釋放，避免記憶體洩漏問題。</p>
+</blockquote>
+
+<h3 id="11-what-is-raii">1.1 What is RAII</h3>
+
+<blockquote>
+  <p><a href="https://en.cppreference.com/w/cpp/language/raii.html">RAII</a> in cppreference.com</p>
+</blockquote>
+
+<p>Resource Acquisition Is Initialization 中文是 <strong>資源取得即初始化</strong>，聽起來很抽象，其實本質上是由 C++ 的物件生命週期所衍生出來的設計模式。RAII 的核心概念是將資源的取得和釋放綁定在物件的生命週期中，當物件被建立時，資源被取得；當物件被銷毀時，資源被釋放。</p>
+
+<blockquote class="block-warning">
+  <p>直白一點就是一個資源的取得要在 Constructor 裡面完成，而釋放則是在 Destructor 裡面完成</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>在 Stack 上生命週期的管理是自動的，而在 Heap 上生命週期的管理則需要開發者手動管理。RAII 的設計也可以說是將 Heap 上的綁定在 Stack 上，讓資源的管理變得自動化。</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">m</span><span class="p">;</span>
+ 
+<span class="kt">void</span> <span class="nf">bad</span><span class="p">()</span> 
+<span class="p">{</span>
+    <span class="n">m</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>               <span class="c1">// acquire the mutex</span>
+    <span class="n">f</span><span class="p">();</span>                    <span class="c1">// if f() throws an exception, the mutex is never released</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">everything_ok</span><span class="p">())</span>
+        <span class="k">return</span><span class="p">;</span>             <span class="c1">// early return, the mutex is never released</span>
+    <span class="n">m</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>             <span class="c1">// if bad() reaches this statement, the mutex is released</span>
+<span class="p">}</span>
+ 
+<span class="kt">void</span> <span class="nf">good</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lk</span><span class="p">(</span><span class="n">m</span><span class="p">);</span> <span class="c1">// RAII class: mutex acquisition is initialization</span>
+    <span class="n">f</span><span class="p">();</span>                               <span class="c1">// if f() throws an exception, the mutex is released</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">everything_ok</span><span class="p">())</span>
+        <span class="k">return</span><span class="p">;</span>                        <span class="c1">// early return, the mutex is released</span>
+<span class="p">}</span>                                      <span class="c1">// if good() returns normally, the mutex is released</span>
+</code></pre></div></div>
+
+<p>在 bad() 函數中，如果 f() 拋出 Exception 或者提前 return，mutex 永遠不會被釋放，導致死鎖。在接下來的程式中 m 會一直被鎖定，無法再被其他執行緒使用。而 good() 函數中使用了 std::lock_guard 這個 RAII 類別來管理 mutex 的生命週期，確保如果 good() 結束時，std::lock_guard 物件將會進入 Destructor，因此自動釋放 mutex。</p>
+
+<hr />
+
+<h3 id="12-stack-unwinding">1.2 Stack Unwinding</h3>
+
+<blockquote class="block-tip">
+  <p>When an exception is thrown and control passes from a try block to a handler, the C++ runtime calls destructors for all automatic objects constructed since the beginning of the try block. This process is called <a href="https://www.ibm.com/docs/en/i/7.4.0?topic=only-stack-unwinding-c">Stack Unwinding</a>.</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://en.cppreference.com/w/cpp/language/throw.html">Throwing exceptions</a> in cppreference.com</p>
+</blockquote>
+
+<p>這個機制的過程是由於 C++ 嚴格遵守 Object Lifetime 規範以及 Stack Unwinding 機制所導致的。當 Exception 被拋出時，C++ 會自動呼叫所有在 try block 中建立的物件的 Destructor，這個過程稱為 Stack Unwinding。</p>
+
+<p>當一個函數因為以下原因離開 Scope 時：</p>
+<ol>
+  <li>執行到函數結尾</li>
+  <li>執行到 return 返回</li>
+  <li>發生 Exception 被拋出、並開始 Exception Progagation</li>
+</ol>
+
+<p>所有位於 Stack 上的未見都會依照建立的<strong>反向順序</strong>被銷毀，呼叫 Destructor。</p>
+
+<blockquote>
+  <p>Exception Progagation: 如果 Function 本身沒有處理 Exception，就會沿著 Call Stack 向上傳遞直到被處理</p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-constructor--destructor">1.3 Constructor &amp; Destructor</h3>
+
+<p>因此 RAII 的實現關鍵在於 Constructor 和 Destructor 的設計。當物件被建立時，Constructor 負責取得資源；當物件被銷毀時，Destructor 負責釋放資源。這樣我們在編寫 C++ 程式時需要注意一些壞習慣，例如在 Constructor 之外取得資源，或者在 Destructor 之外釋放資源，這樣都會破壞 RAII 的原則，導致資源無法被正確管理。</p>
+
+<p>注意以下四點新手常犯的錯誤：</p>
+
+<p><strong>1.</strong>  在 Class attribute 直接取得資源
+    -   盡量在 Constructor 裡面取得資源，保持 Code Style 一致性</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bad</span> <span class="p">{</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">"data.txt"</span><span class="p">,</span> <span class="s">"r"</span><span class="p">);</span> <span class="c1">// bad: resource acquisition outside</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>2.</strong>  使用 raw pointer 管理資源
+    -   使用 smart pointer 來管理動態記憶體，避免記憶體洩漏
+    -   raw pointer 並無法表達 ownership 的概念，因此指向的資源有可能無法被正確釋放</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bad</span> <span class="p">{</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Good</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>3.</strong>  在 Destructor 裡面手動寫大量 Cleanup Code
+    -   A well-designed destructor should usually be empty.
+    -   將 Cleanup Code 包裝在專門的 RAII 類別中，讓 Destructor 只負責呼叫這些類別的 Destructor
+    -   降低維護成本，否則 Destructor 會變得非常複雜</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bad</span> <span class="p">{</span>
+    <span class="kt">FILE</span><span class="o">*</span> <span class="n">f</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">buf</span><span class="p">;</span>
+    <span class="n">Mutex</span><span class="o">*</span> <span class="n">m</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="o">~</span><span class="n">Bad</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buf</span><span class="p">)</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">buf</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="n">m</span><span class="o">-&gt;</span><span class="n">unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Good</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">file</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">buf</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span> <span class="n">lock</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p><strong>4.</strong>  重複包裝 RAII 類別
+    -   避免不必要的包裝，直接使用標準庫提供的 RAII 類別
+    -   延後或者提前釋放由 Smart Pointer 來負責管理</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Bad</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;*</span> <span class="n">v</span><span class="p">;</span>
+<span class="nl">public:</span>
+    <span class="n">Bad</span><span class="p">()</span> <span class="p">{</span> <span class="n">v</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span> <span class="p">}</span>
+    <span class="o">~</span><span class="n">Bad</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span> <span class="n">v</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Good</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Good</span> <span class="p">{</span>
+    <span class="c1">// Use smart pointer because dynamic lifetime is needed.</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="14-smart-pointer">1.4 Smart Pointer</h3>
+
+<p>Smart Pointer 是 C++11 正式被標準化引入語言核心的，在此之前期待 new / delete 的管理方式非常容易出錯。
+在下面的範例中，任何 do_something() 內部發生的 Exception 都會導致 delete ptr 永遠不會被呼叫，造成 Memory Leak。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ResourceType</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ResourceType</span><span class="p">();</span> <span class="c1">// acquire resource</span>
+
+<span class="n">ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
+
+<span class="k">delete</span> <span class="n">ptr</span><span class="p">;</span> <span class="c1">// release resource</span>
+</code></pre></div></div>
+
+<p><strong>std::unique_ptr</strong> 是一種 Smart Pointer，當 unique_ptr 被銷毀時會自動去將指向的資源釋放掉，避免記憶體洩漏問題。而現代 C++ 更推薦使用 <strong>std::make_unique</strong> 來建立 unique_ptr，這樣可以避免在 new 過程中發生 Exception 時導致的資源洩漏問題。</p>
+
+<blockquote>
+  <p>std::make_unique 是 C++14 引入的 std::unique_ptr 的 factor method，推薦使用它來建立 unique_ptr</p>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">MyObject</span><span class="o">&gt;</span> <span class="n">ptr</span><span class="p">{</span><span class="k">new</span> <span class="n">MyObject</span><span class="p">()};</span>
+    <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">MyObject</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>要注意的是 smart pointer 應該要存在於 Stack 上才能確保，當它離開 Scope 時會自動呼叫 Destructor 釋放資源。如果 smart pointer 本身存在於 Heap 上，那就失去了 RAII 的意義。這樣的話使用的是 unique_ptr 來管理另一個 unique_ptr，反而增加了複雜度。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">bad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// bad: unique_ptr itself is allocated on the heap</span>
+    <span class="k">auto</span> <span class="n">ptr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">MyObject</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">MyObject</span><span class="p">());</span>
+    <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="15-common-smart-pointer-types">1.5 Common Smart Pointer Types</h3>
+
+<p>接下來接紹 C++ 中常見的 smart pointer 類型:</p>
+
+<p><strong>1.5.1 std::unique_ptr&lt;T&gt;</strong></p>
+
+<ul>
+  <li>Unuque Owner 獨佔擁有權的指標，只能有一個 unique_ptr 指向同一個資源</li>
+  <li>不可以被複製 (copy)，只能被移動 (move)</li>
+  <li>預設首選的 smart pointer 類型</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span> <span class="c1">// ownership transfer</span>
+</code></pre></div></div>
+
+<p><strong>1.5.2 std::shared_ptr&lt;T&gt;</strong></p>
+
+<ul>
+  <li>Shared Ownership 將共享擁有權的指標，可以有多個 shared_ptr 指向同一個資源</li>
+  <li>使用 reference counting 來追蹤有多少個 shared_ptr 指向同一個資源</li>
+  <li>當最後一個 shared_ptr 被銷毀時，資源才會被釋放</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span> <span class="c1">// shared ownership</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <p>有額外的效能開銷 atomic reference count，並且使用上要注意循環參考 (circular reference) 問題</p>
+</blockquote>
+
+<p>如果 A 指向 B，B 也指向 A，這樣兩個物件都無法被釋放，導致記憶體洩漏。可以使用 std::weak_ptr 來解決這個問題。在下面的範例中，A 持有 B 的 shared_ptr，而 B 持有 A 的 shared_ptr，這樣就會導致循環參考問題。</p>
+
+<p>即使 a, b 都被銷毀，但是 A, B 依然持有對方的 shared_ptr，導致記憶體無法被釋放。同時 A, B 存在於 Heap 上，無法利用 Stack Unwinding 來自動釋放資源。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span><span class="p">();</span> 
+<span class="k">auto</span> <span class="n">b</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span><span class="p">();</span> 
+<span class="n">a</span><span class="o">-&gt;</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span> <span class="c1">// make A hold B</span>
+<span class="n">b</span><span class="o">-&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// make B hold A (causes circular reference)</span>
+</code></pre></div></div>
+
+<p><img src="/image/2025/09-21-Resource_Acquisition_Is_Initialization/1.png" alt="" /></p>
+
+<p><strong>1.5.3 std::weak_ptr&lt;T&gt;</strong></p>
+
+<ul>
+  <li>需要解決 <strong>std::shared_ptr</strong> 的循環參考問題，因此引入了 weak_ptr</li>
+  <li>weak_ptr 不擁有資源的所有權，不會影響 reference count</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="nc">A</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">B</span><span class="o">&gt;</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="nc">B</span> <span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">A</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">;</span> <span class="c1">// use weak_ptr to break circular reference</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li>需要透過 lock() 方法轉換成 shared_ptr 才能擁有資源的存取權
+    <ul>
+      <li>因為 weak_ptr 不擁有資源的所有權，資源可能已經被釋放</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">wp</span> <span class="o">=</span> <span class="p">...;</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">auto</span> <span class="n">sp</span> <span class="o">=</span> <span class="n">wp</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span> <span class="p">{</span> <span class="c1">// try to get a shared_ptr</span>
+    <span class="n">sp</span><span class="o">-&gt;</span><span class="n">do_something</span><span class="p">();</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// resource has been released</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>最後總結一下三種常見的 smart pointer 類型及其適用場景：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Smart Pointer Type</th>
+      <th>Ownership Model</th>
+      <th>Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>std::unique_ptr<T></T></td>
+      <td>Unique Ownership</td>
+      <td>Default choice for exclusive ownership</td>
+    </tr>
+    <tr>
+      <td>std::shared_ptr<T></T></td>
+      <td>Shared Ownership</td>
+      <td>When multiple owners are needed</td>
+    </tr>
+    <tr>
+      <td>std::weak_ptr<T></T></td>
+      <td>Non-owning Reference</td>
+      <td>To break circular references in shared ownership scenarios</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<p><strong>C-Style Array with Smart Pointer</strong></p>
+
+<p>要注意在 C++ 中對於 Array 的最佳實踐是使用 container class (e.g., std::vector) 來管理動態陣列，而不是使用 raw pointer 或 smart pointer 來管理 C-Style Array。</p>
+
+<p>例如 C API 固定為 T** 才不得已使用 smart pointer 來管理 C-Style Array：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[]</span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*</span><span class="p">[]</span><span class="o">&gt;</span> <span class="n">rows_ptr</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">T</span><span class="o">*</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rows</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rows</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">rows_ptr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">cols</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">c_api_function</span><span class="p">(</span><span class="n">rows_ptr</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>這樣至少確保 data 和 rows_ptr 都會在離開 Scope 時自動釋放，避免記憶體洩漏問題。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-12-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="C++" /><category term="RAII" /><summary type="html"><![CDATA[在 C++ 中開發者需要自己設計記憶體資源的管理機制，但是往往無法保證所有資源都被正常釋放，因此導致 Memory Leak。RAII 是一種 Design Pattern，可以確保資源在不需要時自動釋放，避免記憶體洩漏問題。]]></summary></entry><entry><title type="html">Algorithm | Big Number Multiplication</title><link href="https://hotshot824.github.io/jekyll/2025-09-13-Big_Number_Multiplication.html" rel="alternate" type="text/html" title="Algorithm | Big Number Multiplication" /><published>2025-09-13T00:00:00+00:00</published><updated>2025-09-13T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/Big_Number_Multiplication</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-09-13-Big_Number_Multiplication.html"><![CDATA[<h4 id="algorithm--大數乘法">Algorithm | 大數乘法</h4>
+
+<blockquote class="block-tip">
+  <p>在演算法題目中，「大數乘法（Big Number Multiplication）」一直是經典卻讓人頭痛的練習題。
+雖然數學上的乘法概念人人熟悉，但一旦限制不能用內建的大數類別（像 Java 的 BigInteger 或 Go 的 math/big），就只能乖乖用字串模擬直式乘法。</p>
+</blockquote>
+
+<blockquote>
+  <p>尤其是 LLM 可以使用之後，更沒耐心去寫這種繁瑣的程式碼了，趕快複習一下。</p>
+</blockquote>
+
+<p>實作的題目可以找 <a href="https://www.hackerrank.com/challenges/extra-long-factorials/problem?isFullScreen=true">Hackerrank. Extra Long Factorials</a>, <a href="https://leetcode.com/problems/multiply-strings/description/">43. Multiply Strings</a> 來練習。</p>
+
+<h4 id="why-care-about-big-number-multiplication">Why Care About Big Number Multiplication</h4>
+
+<p>程式語言內建型別有位元上限，面試或競賽題常要求你在不使用內建大數的情況下處理超大整數。
+最基本的做法就是使用直式乘法搬到字串或陣列上來做：用低位對低位、進位處理，最後組合結果。</p>
+
+<blockquote class="block-warning">
+  <p>對於大數乘法有更多的演算法（Karatsuba, Toom-Cook, FFT-based），但這些通常超出面試範圍，且實作複雜。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://blog.csdn.net/u010983881/article/details/77503519">【算法】大数乘法问题及其高效算法</a></p>
+</blockquote>
+
+<h4 id="problem-statement">Problem Statement</h4>
+
+<p>輸入兩個非負整數的字串 num1 和 num2，回傳它們相乘的結果字串。
+不允許使用直接把字串轉成大數、或使用語言提供的大數類別。</p>
+
+<p>限制要點：</p>
+<ul>
+  <li>輸入大小可能超過原生整數範圍</li>
+  <li>要處理零與前導零情況（”0” × 任意 = “0”）</li>
+</ul>
+
+<h4 id="basic-idea">Basic Idea</h4>
+
+<ul>
+  <li>把每個字元轉成整數，從低位（字串尾）開始模擬逐位相乘。</li>
+  <li>兩位數相乘的結果加到對應的結果陣列位置，再處理進位。</li>
+  <li>最後把結果陣列轉回字串並去除前導零。</li>
+</ul>
+
+<p>時間複雜度：O(m * n)，m 和 n 分別為兩個輸入字串長度。<br />
+空間複雜度：O(m + n)（用來存放結果的陣列）。</p>
+
+<h4 id="algorithm-steps">Algorithm Steps</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        23958233
+  ×         5830
+  ———————————————
+        00000000 ( =      23,958,233 × 0) # 1. Multiplying by 0
+       71874699  ( =      23,958,233 × 3) # 2. Multiplying by 3
+     191665864   ( =      23,958,233 × 8) # 3. Multiplying by 8
+  + 119791165    ( =      23,958,233 × 5) # 4. Multiplying by 5
+  ———————————————
+    139676498390 ( = 139,676,498,390        ) # Final result maximum M + N digits
+</code></pre></div></div>
+
+<p>我們以直立式乘法為例，可以看到被拆成以下階段：</p>
+
+<ol>
+  <li>準備乘數與被乘數</li>
+  <li>逐次乘以被乘數的每一位，並將結果依位數對齊
+    <ul>
+      <li>被乘數有 N 位數，就會產生 N 次計算</li>
+    </ul>
+  </li>
+  <li>將所有部分和相加得到最終結果
+    <ul>
+      <li>最後的值會有最多 M + N 位數（需要使用另一個陣列來存放）</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Algorithm:</strong></p>
+
+<ol>
+  <li>若其中一個字串為 “0”，直接回傳 “0”。</li>
+  <li>建立長度為 m + n 的整數陣列 result，初始化為 0。</li>
+  <li>反向遍歷 num1，對每個位 i：
+    <ul>
+      <li>反向遍歷 num2，對每個位 j：
+        <ul>
+          <li>product = (num1[i] - ‘0’) * (num2[j] - ‘0’)</li>
+          <li>sum = product + result[i + j + 1]（+ 可能的進位）</li>
+          <li>result[i + j + 1] = sum % 10</li>
+          <li>result[i + j] += sum / 10</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>把 result 陣列轉成字串，跳過開頭的零，並回傳。</li>
+</ol>
+
+<p>這裡 i + j + 1 與 i + j 的索引對應到「從高位到低位」排列的陣列格局。</p>
+
+<h4 id="pitfalls-and-tips">Pitfalls and Tips</h4>
+
+<ul>
+  <li>索引錯誤（i + j、i + j + 1）是常見 bug 根源。</li>
+  <li>千萬不要把字元直接當數字相加（記得減 ‘0’）。</li>
+  <li>處理前導零：例如 “000123” × “045” 的結果需正確處理。</li>
+  <li>大量的字串拼接會影響效能，使用陣列或 StringBuilder（Java）更好。</li>
+</ul>
+
+<h4 id="implementation-in-python">Implementation in Python</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">num1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">num1</span> <span class="o">==</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span> <span class="ow">or</span> <span class="n">num2</span> <span class="o">==</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">num1</span><span class="p">),</span> <span class="nf">len</span><span class="p">(</span><span class="n">num2</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">num1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nf">ord</span><span class="p">(</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="nf">ord</span><span class="p">(</span><span class="n">num2</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">-</span> <span class="nf">ord</span><span class="p">(</span><span class="sh">'</span><span class="s">0</span><span class="sh">'</span><span class="p">)</span>
+            <span class="n">prod</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+            <span class="n">sum_</span> <span class="o">=</span> <span class="n">prod</span> <span class="o">+</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sum_</span> <span class="o">%</span> <span class="mi">10</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum_</span> <span class="o">//</span> <span class="mi">10</span>
+    <span class="c1"># skip leading zeros
+</span>    <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="ow">and</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="sh">''</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">idx</span><span class="p">:])</span> <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nf">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="k">else</span> <span class="sh">"</span><span class="s">0</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>09-14-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="algorithm" /><category term="leetcode" /><summary type="html"><![CDATA[Algorithm | 大數乘法]]></summary></entry><entry><title type="html">C++ | How C++ Compiler Generates Executable File</title><link href="https://hotshot824.github.io/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" rel="alternate" type="text/html" title="C++ | How C++ Compiler Generates Executable File" /><published>2025-08-09T00:00:00+00:00</published><updated>2025-08-09T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/how_do_cpp_compiler_gen_exe_file</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html"><![CDATA[<blockquote class="block-tip">
+  <p>這篇文章的目的是系統性的整理一下 C++ 編譯器將原始碼轉換成可執行檔的過程，雖然學 CS 的學生大多都應該清楚這個過程，但這裡可以做一個系統性的整理。</p>
+</blockquote>
+
+<h3 id="11-translation-units">1.1 Translation Units</h3>
+
+<p>在 C++ 中是以 Translation Unit 為單位來進行編譯的，一個 Translation Unit 是由一個原始碼檔案（.cpp）以及它所包含的所有標頭檔案（.h）所組成的。每個 Translation Unit 都會被獨立編譯成目標檔案（.o 或 .obj）。</p>
+
+<ul>
+  <li>Translation Unit 由 .cpp 檔案及其包含的 .h 檔案組成</li>
+  <li>每個 Translation Unit 獨立編譯成目標檔案
+    <ul>
+      <li>在此期間 Trnaslation Unit 並不知道其他 Trnaslation Unit 的存在</li>
+      <li>只能透過 .h 來得知其他 Trnaslation Unit 的 Signature</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>總結就是一個 .c/.cpp 檔案及其包含的所有 .h 檔案會被視為一個整體來進行編譯，這個整體就稱為 Translation Unit。</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>而跨檔案的函數呼叫則透過 .h 來進行 Signature 的宣告，讓編譯器知道該函數的存在及其參數與回傳值型別。</p>
+</blockquote>
+
+<p><img src="/image/2025/08-09-how_do_cpp_compiler_gen_exe_file/1.png" alt="" /></p>
+
+<blockquote>
+  <p>上圖展示了一個編譯過程中不同階段的概覽，從原始碼到最終的可執行檔案，每個階段都有其特定的任務與輸出。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="12-preprocessing">1.2 Preprocessing</h3>
+
+<p>Preprocessing 是編譯過程中的第一個階段，主要負責處理原始碼中的預處理指令（以 <code class="language-plaintext highlighter-rouge">#</code> 開頭的指令），例如 <code class="language-plaintext highlighter-rouge">#include</code>、<code class="language-plaintext highlighter-rouge">#define</code>、<code class="language-plaintext highlighter-rouge">#ifdef</code> 等。Preprocessing 的階段並不會有 Syntax analysis / Semantic analysis，而是單純地將這些指令以 Text Substitution 的方式來處理。</p>
+
+<p>這裡我們觀察一個簡單的 C++ 專案結構：</p>
+
+<p><strong>add.h</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#ifndef ADD_H
+#define ADD_H
+</span>
+<span class="c1">// object-like macro</span>
+<span class="cp">#define DEFAULT_VALUE 10
+</span>
+<span class="c1">// function-like macro</span>
+<span class="cp">#define ADD_MACRO(a, b) ((a) + (b))
+</span>
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+
+<span class="cp">#endif // ADD_H
+</span></code></pre></div></div>
+
+<p><strong>add.cpp</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"add.h"</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">ADD_MACRO</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">DEFAULT_VALUE</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>main.cpp</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"add.h"</span><span class="cp">
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>使用 <code class="language-plaintext highlighter-rouge">clang++ -E -I. main.cpp -o main.i &amp;&amp; clang++ -E -I. add.cpp -o add.i</code> 可以看到 Preprocessing 後的結果：</p>
+
+<p><strong>add.i</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp"># 1 "add.cpp"
+# 1 "&lt;built-in&gt;" 1
+# 1 "&lt;built-in&gt;" 3
+# 468 "&lt;built-in&gt;" 3
+# 1 "&lt;command line&gt;" 1
+# 1 "&lt;built-in&gt;" 2
+# 1 "add.cpp" 2
+# 1 "./add.h" 1
+# 10 "./add.h"
+</span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+<span class="cp"># 2 "add.cpp" 2
+</span>
+<span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Macro Expansion：所有的 Macro 都會被展開成對應的內容
+    <ul>
+      <li>原本的 <code class="language-plaintext highlighter-rouge">ADD_MACRO(a, b)</code> 被展開成 <code class="language-plaintext highlighter-rouge">((a) + (b))</code></li>
+    </ul>
+  </li>
+  <li>Define Substitution：所有的定義都會被替換成對應的值
+    <ul>
+      <li>原本的 <code class="language-plaintext highlighter-rouge">DEFAULT_VALUE</code> 被替換成 <code class="language-plaintext highlighter-rouge">10</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>main.i</strong></p>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp"># 1 "main.cpp"
+# 1 "&lt;built-in&gt;" 1
+# 1 "&lt;built-in&gt;" 3
+# 468 "&lt;built-in&gt;" 3
+# 1 "&lt;command line&gt;" 1
+# 1 "&lt;built-in&gt;" 2
+# 1 "main.cpp" 2
+# 1 "./add.h" 1
+# 10 "./add.h"
+</span><span class="kt">int</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+<span class="cp"># 2 "main.cpp" 2
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge"># 1 "./add.h" 1</code>
+    <ul>
+      <li>表示從 <code class="language-plaintext highlighter-rouge">add.h</code> 開始包含</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge"># 10 "./add.h"</code>
+    <ul>
+      <li>表示目前處理到 <code class="language-plaintext highlighter-rouge">add.h</code> 的第 10 行</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>這些數字是用來追蹤原始碼位置的，方便在後續的編譯階段中進行錯誤報告與調試，這邊就不多介紹這些數字的 flag 代表什麼意義</p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-compilation-assembly-and-linking">1.3 Compilation, Assembly, and Linking</h3>
+
+<blockquote class="block-tip">
+  <p>接下來就是 Compilation、Assembly、Linking 三個階段，這三個階段會將 Preprocessing 後的程式碼轉換成最終的可執行檔案。</p>
+</blockquote>
+
+<blockquote>
+  <p>這裡不會詳細去講編譯器的內部運作原理，主要簡單介紹流程，重點放在 .o 之後的連結階段</p>
+</blockquote>
+
+<ul>
+  <li>Compilation：將 Preprocessing 後的程式碼轉換成中間表示（IR），並進行優化</li>
+  <li>Assembly：將中間表示轉換成目標機器碼，並產生目標檔案（.o 或 .obj）</li>
+  <li>Linking：將多個目標檔案連結成最終的可執行檔案</li>
+</ul>
+
+<p><strong>Relocatable Object File (.o/.obj)</strong></p>
+
+<p>在這個階段程式碼已經是 Assembly code 轉換成的機器碼了，但還不是最終的可執行檔案，因為這些目標檔案中可能還包含未定義的符號（例如函數呼叫），這些符號需要在 Linking 階段被解析。</p>
+
+<p>我們用 <code class="language-plaintext highlighter-rouge">clang++ -S -O0 --target=riscv64 main.cpp -o main.s &amp;&amp; clang++ -c --target=riscv64 add.cpp -o add.o</code> 來觀察 asmembly code 的內容：</p>
+
+<p><strong>main.s</strong></p>
+<pre><code class="language-riscv">    .text
+    ...
+main:
+    ...
+    li   a0, 3      // first argument
+    li   a1, 4      // second argument    
+    call _Z3addii   // call add(int, int)
+    ...
+    ret
+</code></pre>
+
+<p><strong>add.s</strong></p>
+<pre><code class="language-riscv">    .text
+    ...
+_Z3addii:
+    ...
+	lw	a0, -20(s0)         // load first argument
+	lw	a1, -24(s0)         // load second argument
+addw	a0, a0, a1          // perform addition
+	addiw	a0, a0, 10      // add DEFAULT_VALUE
+    ...
+    ret
+</code></pre>
+
+<p>這裡可以看到 <code class="language-plaintext highlighter-rouge">main.s</code> 與 <code class="language-plaintext highlighter-rouge">add.s</code> 中的函數呼叫與定義，參數傳遞會透過 ABI 規範來進行，而 <code class="language-plaintext highlighter-rouge">call _Z3addii</code> 則是呼叫 <code class="language-plaintext highlighter-rouge">add(int, int)</code> 函數。</p>
+
+<blockquote class="block-tip">
+  <p>ABI（Application Binary Interface）定義了 ISA（Instruction Set Architecture）之上的函數呼叫約定、資料型別大小與對齊方式等規範，確保不同編譯器產生的程式碼能夠互相呼叫與操作資料。</p>
+</blockquote>
+
+<p>這裡繼續觀察 <code class="language-plaintext highlighter-rouge">main.o</code> 使用 <code class="language-plaintext highlighter-rouge">clang -target riscv64-linux-gnu -c main.s -o main.o</code> 轉換為 obj 檔案。然後使用 <code class="language-plaintext highlighter-rouge">llvm-objdump -d main.o</code> 來觀察目標檔案的內容：</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>main.o: file format elf64-littleriscv
+
+Disassembly of section .text:
+
+0000000000000000 <span class="nt">&lt;main&gt;</span>:
+      ...
+       e: 450d          li      a0, 0x3
+      10: 4591          li      a1, 0x4
+      12: 00000097      auipc   ra, 0x0
+      16: 000080e7      jalr    ra <span class="nt">&lt;main</span><span class="err">+0</span><span class="na">x12</span><span class="nt">&gt;</span>
+      ...
+</code></pre></div></div>
+
+<p>在相對地址 e ~ 16 可以看到與 asmembly code 相對應的機器碼，而 _Z3addii 則是未定義的符號，所以使用 <code class="language-plaintext highlighter-rouge">00000097 auipc ra, 0x0</code> 與 <code class="language-plaintext highlighter-rouge">000080e7 jalr ra &lt;main+0x12&gt;</code> 來進行跳轉。</p>
+
+<blockquote class="block-tip">
+  <p>在這裡 main 中還沒有 add 的實際地址，所以會使用相對地址來進行跳轉，這個地址會在 Linking 階段被解析。</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>實際的地址要在 ELF relocation table 中進行解析，這個表格會告訴 Linker 如何將未定義的符號替換成實際的地址。</p>
+</blockquote>
+
+<p><strong>Executable File (.exe/.out)</strong></p>
+
+<p>最後一步我們把 <code class="language-plaintext highlighter-rouge">main.o</code> 與 <code class="language-plaintext highlighter-rouge">add.o</code> 連結成最終的可執行檔案，使用 <code class="language-plaintext highlighter-rouge">clang++ -target riscv64-linux-gnu main.o add.o -o main.out</code> 來進行連結。然後使用 <code class="language-plaintext highlighter-rouge">llvm-objdump -d main.out</code> 來觀察最終的可執行檔案內容：</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0000000000011194 <span class="nt">&lt;main&gt;</span>:
+   11194: 1101          addi    sp, sp, -0x20
+   11196: ec06          sd      ra, 0x18(sp)
+   11198: e822          sd      s0, 0x10(sp)
+   1119a: 1000          addi    s0, sp, 0x20
+   1119c: 4501          li      a0, 0x0
+   1119e: fea42623      sw      a0, -0x14(s0)
+   111a2: 450d          li      a0, 0x3
+   111a4: 4591          li      a1, 0x4
+   111a6: 00c000ef      jal     0x111b2 <span class="nt">&lt;_Z3addii&gt;</span>
+   111aa: 60e2          ld      ra, 0x18(sp)
+   111ac: 6442          ld      s0, 0x10(sp)
+   111ae: 6105          addi    sp, sp, 0x20
+   111b0: 8082          ret
+
+00000000000111b2 <span class="nt">&lt;_Z3addii&gt;</span>:
+   111b2: 1101          addi    sp, sp, -0x20
+   111b4: ec06          sd      ra, 0x18(sp)
+   111b6: e822          sd      s0, 0x10(sp)
+   111b8: 1000          addi    s0, sp, 0x20
+   111ba: fea42623      sw      a0, -0x14(s0)
+   111be: feb42423      sw      a1, -0x18(s0)
+   111c2: fec42503      lw      a0, -0x14(s0)
+   111c6: fe842583      lw      a1, -0x18(s0)
+   111ca: 9d2d          addw    a0, a0, a1
+   111cc: 2529          addiw   a0, a0, 0xa
+   111ce: 60e2          ld      ra, 0x18(sp)
+   111d0: 6442          ld      s0, 0x10(sp)
+   111d2: 6105          addi    sp, sp, 0x20
+   111d4: 8082          ret
+</code></pre></div></div>
+
+<ul>
+  <li>在最終的可執行檔案中，<code class="language-plaintext highlighter-rouge">main</code> 與 <code class="language-plaintext highlighter-rouge">_Z3addii</code> 都有了實際的地址</li>
+  <li><code class="language-plaintext highlighter-rouge">jal 0x111b2 &lt;_Z3addii&gt;</code> 現在指向了 <code class="language-plaintext highlighter-rouge">_Z3addii</code> 的實際地址 <code class="language-plaintext highlighter-rouge">0x111b2</code></li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>不要把這個地址誤會成記憶體中的絕對地址，這只是 ELF 檔案中的一個偏移量，實際載入到記憶體中的地址會根據作業系統的載入機制有所不同。</p>
+</blockquote>
+
+<p>以上就說明了 C++ 編譯器將原始碼轉換成可執行檔案的整個過程，從 Preprocessing、Compilation、Assembly 到 Linking，每個階段都有其特定的任務與輸出，最終產生的可執行檔案可以在目標平台上運行。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-02-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="c++" /><category term="compiler" /><category term="executable" /><summary type="html"><![CDATA[這篇文章的目的是系統性的整理一下 C++ 編譯器將原始碼轉換成可執行檔的過程，雖然學 CS 的學生大多都應該清楚這個過程，但這裡可以做一個系統性的整理。]]></summary></entry><entry><title type="html">Paper | KLEE: Introducing Symbolic Execution</title><link href="https://hotshot824.github.io/jekyll/2024-10-17-KLEE_symbolic_execution.html" rel="alternate" type="text/html" title="Paper | KLEE: Introducing Symbolic Execution" /><published>2024-10-17T00:00:00+00:00</published><updated>2024-10-17T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/KLEE_symbolic_execution</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2024-10-17-KLEE_symbolic_execution.html"><![CDATA[<blockquote class="block-tip">
+  <p>Cristian Cadar, Daniel Dunbar, and Dawson R. Engler. 2008. KLEE: Unassisted and Automatic Generation of High-Coverage Tests for Complex Systems Programs. In 8th USENIX Symposium on Operating Systems Design and Implementation, OSDI 2008, December 8–10, 2008, San Diego, California, USA, Proceedings, Richard Draves and Robbert van Renesse (Eds.). USENIX Association, 209–224. http://www.usenix.org/events/osdi08/tech/full_papers/cadar/cadar.pdf</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>KLEE 是在符號執行 (Symbolic Execution) 領域中的成功案例，這裡介紹 2008 年 KLEE 的原始論文，以此來了解符號執行的基本概念。</p>
+</blockquote>
+
+<h3 id="1-introduction">1. Introduction</h3>
+
+<p><strong>Program Analysis Tools :</strong></p>
+
+<p>軟體分析工具具體可以分為兩類，Dynamic Analysis 和 Static Analysis，簡單可以理解為：</p>
+<ul>
+  <li>Dynmaic Analysis: 需要具體的執行 Binary code，透過執行過程中的資訊來進行分析
+    <ul>
+      <li>例如：gdb, valgrind</li>
+    </ul>
+  </li>
+  <li>Static Analysis: 只需要具體的 Source code，不需要執行 Binary code
+    <ul>
+      <li>例如：pylint, clang-tidy, clang-format</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Symbolic execution 也是靜態分析的一種，透過對變數的符號化來進行分析該變數的可能值</p>
+</blockquote>
+
+<p><strong>Why we need Symbolic execution?</strong></p>
+
+<p>首先 Testing 對於大部分程式開發過程中都是一個 Pain point，並且編寫 Testcase 相較於 Development 來說往往讓人感到 ennui。
+並且手動測試往往是不夠的，如果一個 Bug 早就已經知道他是存在的，那就應該不叫做 Bug。</p>
+
+<p>即使手動編寫 Unit Test，也往往無法達到足夠的覆蓋率，到目前也沒有一種良好的規範化的方法來產生 Testcase，
+因此我們需要一種 Automation 的方法來產生 Testcase，這就是 Symbolic execution 的目的。</p>
+
+<blockquote>
+  <p>並且在 C 中 assert 往往可能在 -o2 -o3 的編譯器優化中被去除，導致這些 assert 在正式的環境中是無效的</p>
+</blockquote>
+
+<p><strong>Symbolic Execution Advantages:</strong></p>
+
+<ul>
+  <li>對於一個程式覆蓋所有可能的分支路徑</li>
+  <li>檢查可能產生危險操作的分支路徑, e.g. buffer overflow, null pointer dereference</li>
+  <li>自動產生的測試案例</li>
+  <li>不需要實際運行程式</li>
+</ul>
+
+<p><strong>History of Symbolic Execution:</strong></p>
+
+<p><img src="/image/2024/10-17-KLEE_symbolic_execution/1.png" alt="" /></p>
+
+<p>Symbolic execution 這個概念最早是由 King 在 1976 年提出，但當時受限於 SMT Solver 還無法實際應用在實際的程式中。
+直到 2000 年左右各種 SMT Solver 開始發展，Symbolic execution 才開始有了實際的應用。</p>
+
+<p>KLEE 是在 2008 年發表於 OSDI，但在之後的數十年中，KLEE 是在該領域中的一個成功案例，並且舉辦了自己的 Workshop。</p>
+
+<hr />
+
+<h3 id="2-klee-example">2. KLEE Example</h3>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">1</span> <span class="o">:</span> <span class="kt">void</span> <span class="nf">expand</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span><span class="n">buffer</span><span class="p">)</span> <span class="p">{</span> <span class="mi">8</span>
+<span class="mi">2</span> <span class="o">:</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">ac</span><span class="p">;</span> <span class="mi">9</span>
+<span class="mi">3</span> <span class="o">:</span> <span class="k">while</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="p">)</span> <span class="p">{</span> <span class="mi">4</span> <span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">==</span> <span class="err">’\\’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">10</span><span class="o">*</span>
+<span class="mi">11</span><span class="o">*</span>
+<span class="mi">5</span> <span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">6</span> <span class="o">:</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ac</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="mi">7</span> <span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">&gt;=</span> <span class="err">’</span><span class="mi">0</span><span class="err">’</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span> <span class="o">&lt;=</span> <span class="err">’</span><span class="mi">7</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span>
+<span class="mi">8</span> <span class="o">:</span> <span class="k">do</span> <span class="p">{</span>
+<span class="mi">9</span> <span class="o">:</span> <span class="n">ac</span> <span class="o">=</span> <span class="p">(</span><span class="n">ac</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="err">−</span> <span class="err">’</span><span class="mi">0</span><span class="err">’</span><span class="p">;</span>
+<span class="mi">10</span><span class="o">:</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">11</span><span class="o">:</span> <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span><span class="o">&gt;=</span><span class="err">’</span><span class="mi">0</span><span class="err">’</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">arg</span><span class="o">&lt;=</span><span class="err">’</span><span class="mi">7</span><span class="err">’</span><span class="p">);</span>
+<span class="mi">12</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="n">ac</span><span class="p">;</span>
+<span class="mi">13</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">!=</span> <span class="err">’\</span><span class="mi">0</span><span class="err">’</span><span class="p">)</span>
+<span class="mi">14</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">15</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span> <span class="o">==</span> <span class="err">’</span><span class="p">[</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">12</span><span class="o">*</span>
+<span class="mi">16</span><span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="mi">13</span>
+<span class="mi">17</span><span class="o">:</span> <span class="n">i</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="mi">14</span>
+<span class="mi">18</span><span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">arg</span><span class="o">++</span> <span class="o">!=</span> <span class="err">’</span><span class="o">-</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">15</span><span class="o">!</span>
+<span class="mi">19</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="err">’</span><span class="p">[</span><span class="err">’</span><span class="p">;</span>
+<span class="mi">20</span><span class="o">:</span> <span class="n">arg</span><span class="err">−</span><span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="mi">21</span><span class="o">:</span> <span class="k">continue</span><span class="p">;</span>
+<span class="mi">22</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">23</span><span class="o">:</span> <span class="n">ac</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">24</span><span class="o">:</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">ac</span><span class="p">)</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">25</span><span class="o">:</span> <span class="n">arg</span><span class="o">++</span><span class="p">;</span> <span class="cm">/* Skip ’]’ */</span>
+<span class="mi">26</span><span class="o">:</span> <span class="p">}</span> <span class="k">else</span>
+<span class="mi">27</span><span class="o">:</span> <span class="o">*</span><span class="n">buffer</span><span class="o">++</span> <span class="o">=</span> <span class="o">*</span><span class="n">arg</span><span class="o">++</span><span class="p">;</span>
+<span class="mi">28</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">29</span><span class="o">:</span> <span class="p">}</span>
+<span class="mi">30</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+<span class="mi">31</span><span class="o">:</span> <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[</span> <span class="p">])</span> <span class="p">{</span> <span class="mi">1</span>
+<span class="mi">32</span><span class="o">:</span> <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">2</span>
+<span class="mi">33</span><span class="o">:</span> <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span><span class="err">’</span><span class="o">-</span><span class="err">’</span><span class="p">)</span> <span class="p">{</span> <span class="mi">3</span><span class="o">*</span>
+<span class="mi">34</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="mi">4</span>
+<span class="mi">35</span><span class="o">:</span> <span class="p">}</span> <span class="mi">5</span>
+<span class="mi">36</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="mi">6</span>
+<span class="mi">37</span><span class="o">:</span> <span class="n">expand</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">],</span> <span class="n">index</span><span class="p">);</span> <span class="mi">7</span>
+<span class="mi">38</span><span class="o">:</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span>
+<span class="mi">39</span><span class="o">:</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <p>TBC …</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>10-26-2024 19:48</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="software_qualitiy" /><category term="symbolic_execution" /><summary type="html"><![CDATA[Cristian Cadar, Daniel Dunbar, and Dawson R. Engler. 2008. KLEE: Unassisted and Automatic Generation of High-Coverage Tests for Complex Systems Programs. In 8th USENIX Symposium on Operating Systems Design and Implementation, OSDI 2008, December 8–10, 2008, San Diego, California, USA, Proceedings, Richard Draves and Robbert van Renesse (Eds.). USENIX Association, 209–224. http://www.usenix.org/events/osdi08/tech/full_papers/cadar/cadar.pdf]]></summary></entry><entry><title type="html">PDS | Introduction of Parallel and Distributed Systems</title><link href="https://hotshot824.github.io/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" rel="alternate" type="text/html" title="PDS | Introduction of Parallel and Distributed Systems" /><published>2024-07-28T00:00:00+00:00</published><updated>2024-07-28T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/parallel_and_distributed_systems_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>這邊紀錄一系列的筆記關於 Parallel and Distributed Systems (PDS) 的課程，主要是希望自己更加了解這個領域，並且在暑假期間能做出一個小的 Demo 來練習。</p>
+</blockquote>
+
+<h3 id="1--introduction">1.  Introduction</h3>
+
+<blockquote class="block-tip">
+  <p>分散式系統的具體學習目標，從理論到中間軟體再到實際應用</p>
+</blockquote>
+
+<p>隨著軟體規模、性能需求的提升，透過低成本多節點的方式來提升系統的效能已經成為一個趨勢。並且分散式在降低硬體成本的同時，也提升了軟體的可靠性、擴展性等等，
+但也因此分散式要處裡許多新的技術問題。</p>
+
+<ol>
+  <li>分散式系統需要分散式理論跟演算法作為基礎:
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP theorem</a></li>
+      <li><a href="Basically Available, Soft state, Eventually consistent">BASE</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Paxos_(computer_science)">Paxos Algorithm</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol">Two-phase commit protocol</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Three-phase_commit_protocol">Three-phase commit protocol</a></li>
+      <li>如果不能理解這些基礎的理論，將會對架構跟開發工作帶來困擾</li>
+    </ul>
+  </li>
+  <li>Technical solutions(技術解決方案):
+    <ul>
+      <li>Distributed Lock</li>
+      <li>Distributed Transaction</li>
+      <li><a href="https://en.wikipedia.org/wiki/Service_discovery">Service Discovery</a></li>
+      <li>Service Protection</li>
+      <li>Service Gateway</li>
+    </ul>
+  </li>
+  <li>Middleware(中間軟體):
+    <ul>
+      <li>Distributed Coordination Middleware: Zookeeper, etc.</li>
+      <li>Service Governance Middleware: Dubbo, Eureka, etc.</li>
+      <li>如果對於這些 Middleware(中間軟體)的功能或者實現原理不了解，同樣會增加開發的困難度</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="12--application-history">1.2  Application History</h3>
+
+<p><a href="#121-single-application">1.2.1 Single Application</a><br />
+<a href="#122-cluster-application">1.2.2 Cluster Application</a><br />
+<a href="#123-narrowly-distributed-applications">1.2.3 Narrowly Distributed Applications</a></p>
+
+<h4 id="121-single-application">1.2.1 Single Application</h4>
+
+<p>最初的應用形式即是部屬在一台機器的單一應用，其中可以包含很多很多 Module，內部的 Module 之間是高度耦合的，但在開發、測試、部屬的成本低廉。
+隨著功能與併發數量的提升，通常會帶來兩個挑戰:</p>
+
+<ol>
+  <li>Hardware 上龐大的單體應用需要更多的資源，因此單一主機的成本會提升</li>
+  <li>Software 應用內部的 module 之間耦合度高，隨著功能的增加，會導致開發維護變得困難</li>
+</ol>
+
+<blockquote>
+  <p>因此當應用的功能與併發數量提升到一定程度時，就要考慮拆分應用，就演變成了 Cluster Application。</p>
+</blockquote>
+
+<h4 id="122-cluster-application">1.2.2 Cluster Application</h4>
+
+<blockquote class="block-tip">
+  <p>使用 Cluster 那就要面對在 Cluster 中的節點之間的協作問題，這也是分散式系統的核心問題</p>
+</blockquote>
+
+<p>Cluster Application 可以對應用的併發與容量進行分散，這裡的 Cluster 包含多個「同質」(Homogeneous) 的應用節點，
+這裡會使用「同質」是因為這些節點的功能是一樣的，執行相同的程式、相同的設定，就像是一個副本複製出來的一樣。</p>
+
+<p>例如透過反向代理去做 Load Balance，把外部請求分發到不同的節點上。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/1.jpg" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>上圖是一個 Kubernetes 的架構，透過 Load Balance 來分發請求到不同的 Pod 就可以提升應用的併發量。</p>
+</blockquote>
+
+<p>但 Homogeneous Cluster 帶來最明顯的問題是，同一個使用者發出的請求可能會被不同的節點處理，導致服務可能不連貫。
+為了解決這種問，演化出了幾種方案。</p>
+
+<p><strong>Stateless Cluster Nodes</strong></p>
+
+<p>Stateless cluster nodes(無狀態叢集節點) 是指任何請求的結果都和該節點之前所處理的請求無關。
+例如簡單的 Web Server，每次都回傳相同的 Page，這樣就不需要考慮請求的連貫性，對於使用者來說這個頁面是 stateless。</p>
+
+<p>但是即使是 Stateless 也需要考慮協作，例如: Stateless cluster node 需要每天早上發送一封 Mail 給外部的使用者，
+我們希望的是只有一個節點發送這封 Mail，如果沒有考慮到這個問題，可能會導致每個 Node 都發送一封 Mail 給使用者。</p>
+
+<ul>
+  <li>可能的解法: 設計一個外部的請求，由該外部請求來請求發送，這樣就可以保證只有一個節點被分配到這個任務</li>
+</ul>
+
+<p>Stateless node 設計簡單，可以很方便的擴充，但是也因為要是 Stateless 所以會有很大的侷限性。</p>
+
+<p><strong>Single Cluster Node</strong></p>
+
+<blockquote class="block-tip">
+  <p>雖然 Stateless 很好用，但是畢竟有很多服務是需要狀態的，例如: 聊天室、購物車…</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>Key words: Fixed allocation, Session affinity</p>
+</blockquote>
+
+<p>這些服務在 Single application 是很好實現的，但在 Cluster 中就變得複雜起來，一個最簡單的辦法就是在使用的 Node 和 User 之間建立聯繫。
+User 可以訪問固定的 Node，這樣就可以保證 User 的狀態是連續的。</p>
+
+<ul>
+  <li>任意 User 都有一個對應的 Node，在 Node 上保存使用者的 Context information</li>
+  <li>User 的請求總是被分配到對應的 Node 上</li>
+</ul>
+
+<p>想要實現這些功能的方法有很多，例如: 線上遊戲由使用者自己選擇 Server、透過帳號來分配 Server 等等 …</p>
+
+<blockquote>
+  <p>當然這樣的方法在各個 Node 之間是互相隔離的，因此在容錯上會比較差。</p>
+</blockquote>
+
+<p><strong>Shared Information Cluster Node</strong></p>
+
+<p>Shared Information Cluster Node (共用資訊叢集節點) 是為了解決資訊共享的問題，如果有一個共享的資訊庫，那麼所有的 Node 都可以訪問這個資訊庫，
+這樣就不用去擔心 Node 崩潰後資訊的丟失，例如下圖:</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/2.jpg" alt="" height="75%" width="75%" /></p>
+
+<p>例如: 可以使用 Redis 來做共享記憶體，儲存使用者的 Session 等等。</p>
+
+<blockquote>
+  <p>但是同樣的共享資訊池也會成為一個瓶頸，因為所有的 Node 都要訪問這個資訊池。</p>
+</blockquote>
+
+<p><strong>Consistent Information Cluster Nodes</strong></p>
+
+<p>為了避免資訊池成為瓶僅，那就橫向擴展資訊池，這樣就可以降低資訊池的壓力，但同樣就會有 Consistent(一致性) 的問題，
+例如部分 Node 共用一個 Information Pool，Pool 之間去做一致性。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/3.jpg" alt="" /></p>
+
+<blockquote>
+  <p>部分 Node 共用同個 Pool，或者乾脆 Pool 加入 Node，在 Node 之間做 Consistent</p>
+</blockquote>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/4.jpg" alt="" /></p>
+
+<p>要注意 Consistent 的實施成本非常巨大，你可以想像如果有 1000 個 Pool，那麼每次更新都要通知 1000 個 Pool，這樣的成本是非常高的。
+因此 Information-consistent clusters 適合用在讀多寫少的場景。</p>
+
+<h4 id="123-narrowly-distributed-applications">1.2.3 Narrowly Distributed Applications</h4>
+
+<blockquote>
+  <p>Cluster Application 是為了解決併發數量和使用量，並不能減少程式自身的問題</p>
+</blockquote>
+
+<p>狹義上的分散式系統是指原本是一個 Single application，但是隨著規模的擴大遭遇以下問題:</p>
+<ul>
+  <li>硬體成本, 應用性能, 業務邏輯複雜, 變更維護複雜, 可靠性變差</li>
+</ul>
+
+<p>這些問題都不能透過將 Single application 轉變為 Cluster application 解決時，去把 Single application 拆分成多個獨立的 Sub-application，
+讓每個 Sub-application 都是可以獨立運行的，這樣就把 Single application 變成了 Narrowly distributed applications。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/5.jpg" alt="" /></p>
+
+<blockquote>
+  <p>因此每個 Node 上運行的 Application 都是 Heterogeneous 的，可以獨立的開發、部屬、升級、維護。</p>
+</blockquote>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/6.jpg" alt="" /></p>
+
+<blockquote>
+  <p>把這些 Sub-Application 擴展成 Cluster</p>
+</blockquote>
+
+<p>這樣我們也可以把這些 Sub-Applcation 部署到不同的機器上，擴展成一個更大的 Cluster，也就是 Distrubuted System，
+也可以依照 Sub-Application 的需求進行 Scaling，更為靈活與高效。</p>
+
+<p><strong>1.2.4 Microservices</strong></p>
+
+<blockquote class="block-tip">
+  <p>在 Narrowly Distributed Applications 的基礎上，Sub-Application 之間有嚴格的從屬關係，這種關係可能會造成資源的浪費。</p>
+</blockquote>
+
+<p>這裡舉個浪費的例子: 存在 Application A, 包含 3 個 Sub-Application: A1, A2, A3，有可能 A 的某個功能只需要 A1, A2，
+但是 A3 就會被閒置，這樣就會造成資源的浪費。</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Microservices">Microservices</a> 是一種 Architecture patte，也就是每個 Microservices 都是完備的，可以獨立對外提供服務，
+這樣就可以針對每個 Microservices 進行 Scaling、Resource Allocation。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/7.jpg" alt="" /></p>
+
+<hr />
+
+<h3 id="13-distributed-system-introduction">1.3 Distributed System Introduction</h3>
+
+<p>如果所有的服務都只能作為系統的一部分聯合起來對外提供服務，那麼這樣的系統就是 Narrowly Distributed Applications，
+如果這些服務可以獨立對外提供服務，那麼這樣的系統就是 Microservices。</p>
+
+<p><strong>1.3.2 Distributed System Consistency Problem</strong></p>
+
+<p>最簡單的一致性問題如下，假如 Request 是有序的，那麼我們應該要確保 R1 修改完 a 之後 R2 讀取的 a 是修改後的值。</p>
+
+<p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/8.jpg" alt="" /></p>
+
+<p>如果一個系統會發生上面的問題，那麼這個系統就是不一致的(至少是線性不一致 Linearizability Inconsistency)，
+關於一致性的分級會在後續章節提到，這裡只是提一下。</p>
+
+<p><strong>1.3.3 Distributed System Node</strong></p>
+
+<blockquote>
+  <p>在 Distributed System 中，Node 可能是同質的，也可能是異質的。</p>
+</blockquote>
+
+<p>在同質節點中，當系統發生變更時，所有的節點的變更是一樣的，例如: Zookeeper cluster 收到 Client 發送建立 znode 的請求後，
+每個節點都需要建立 znode。</p>
+
+<p>異質節點中，當應用發生變更時，每個節點的變更是不一樣的，例如: 一個網購平台的系統，訂單節點需要建立訂單，庫存節點需要減少庫存。
+這也是一種 Consistent 的問題，要確保整個系統的 Consistent。</p>
+
+<h3 id="14-distributed-system-advantages--disadvantages">1.4 Distributed System Advantages &amp; Disadvantages</h3>
+
+<p><strong>1.4.1 Advantages</strong></p>
+
+<ol>
+  <li>Reduced Cost:
+    <ul>
+      <li>降低系統的實施成本是分散式系統的發展與最初動力，對於硬體強大的大型主機，可以用多個小型叢集上取代</li>
+    </ul>
+  </li>
+  <li>Improved Availability:
+    <ul>
+      <li>提升系統的可用性，即使某個節點失效，也不會影響整個系統</li>
+    </ul>
+  </li>
+  <li>Improved Performance:
+    <ul>
+      <li>提升系統的併發與容量，提升系統的性能</li>
+    </ul>
+  </li>
+  <li>Reduced Maintenance:
+    <ul>
+      <li>由於分散式系統的多個節點，可以降低系統的維護成本，例如: 可以對某個節點進行維護，而不影響整個系統</li>
+      <li>並且因為節點之間是獨立的，可以獨立的平行開發與模組化</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>1.4.2 Disadvantages</strong></p>
+
+<ol>
+  <li>Consistency:
+    <ul>
+      <li>一致性問題是分散式系統的核心問題，要保證系統的一致性是非常困難的，所以在下個章節會先介紹一致性問題</li>
+    </ul>
+  </li>
+  <li>Node discovery problem:
+    <ul>
+      <li>在有許多動態變化的節點時，怎麼發現系統中的可用節點是一個問題</li>
+    </ul>
+  </li>
+  <li>Node call problem:
+    <ul>
+      <li>當系統中有許多節點時，在節點之間的呼叫是經常發生的，但它們也有與之對應的成本</li>
+    </ul>
+
+    <p><img src="/image/2024/07-28-parallel_and_distributed_systems_introduction/9.jpg" alt="" /></p>
+  </li>
+  <li>Node coworking problem:
+    <ul>
+      <li>當系統中有許多節點時，節點之間的協作是一個問題，例如: 如何在同質節點中保證一個 Task 只被一個節點執行</li>
+      <li>異質節點也需要解決 Producer-Consumer 問題，例如: 訂單節點需要建立訂單，庫存節點需要減少庫存</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這張主要是 Introduction 所以就簡單介紹 Distributed System 的優缺點與發展歷程，後續章節會更深入的介紹 Distributed System。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>7-30-2024 19:48</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="PDS" /><summary type="html"><![CDATA[這邊紀錄一系列的筆記關於 Parallel and Distributed Systems (PDS) 的課程，主要是希望自己更加了解這個領域，並且在暑假期間能做出一個小的 Demo 來練習。]]></summary></entry><entry><title type="html">Algorithm | Competitive Paging Algorithm</title><link href="https://hotshot824.github.io/jekylls/2024-06-21-competitive_paging_algorithm.html" rel="alternate" type="text/html" title="Algorithm | Competitive Paging Algorithm" /><published>2024-06-21T00:00:00+00:00</published><updated>2024-06-21T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekylls/competitive_paging_algorithm</id><content type="html" xml:base="https://hotshot824.github.io/jekylls/2024-06-21-competitive_paging_algorithm.html"><![CDATA[<blockquote class="block-tip">
+  <p>Notes for <a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm#Marking_algorithms">Marking algorithms</a> Analysis, Reference:
+<strong>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</strong> Fiat, A., Karp, R. M., Luby, M., McGeoch, L. A., Sleator, D. D., &amp; Young, N. E. (1991). Competitive paging algorithms.<br />
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> Achlioptas, D., Chrobak, M., &amp; Noga, J. (2000). Competitive analysis of randomized paging algorithms.</p>
+</blockquote>
+
+<h3 id="1-introduction">1. Introduction</h3>
+
+<p>這篇介紹 Competitive Paging Algorithm，Marking Algorithm 是一種 Online Paging Algorithm，並且是 Randomized Algorithm，
+主要目的是用來說明分析這些 Online Paging Algorithm 的工具。詳細的原始論文可以參考 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 和 [<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]。</p>
+
+<p>所以 Marking Alogrithm 並不是一個實際在 OS 中被廣泛使用的演算法，但透過這對於 Marking Algorithm 的分析，可以更好的了解 Competitive Algorithm 的特性。</p>
+<ul>
+  <li>例如: LRU(Last Recently Used) 就是一種 Marking Algorithm，FIFO(First In First Out) 則不是。</li>
+</ul>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 是首次提出 Competitive Paging Algorithm 與 Marking Algorithm 分析的論文</p>
+</blockquote>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>] 則在前三章有對於 Marking Algorithm 的更詳細與緻密的分析</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-paging-problem">2. Paging Problem</h3>
+
+<blockquote class="block-tip">
+  <p>從最開始的 Paging Problem Definition 開始到 Offline Optimal Algorithm, Marking Algorithm 的介紹。</p>
+</blockquote>
+
+<p><strong>Paging Problem Definition:</strong></p>
+<ol>
+  <li>A two-level memory system, capable of holding $K$ items in the Cache.</li>
+  <li>At each time step, a request to an item is issued.</li>
+  <li>If the item $p$ exists in the Cache, then the cost is 0.</li>
+  <li>If the item $p$ does not exist in the Cache:
+    <ul>
+      <li>Choose an item $q$ to replace it, and the cost is 1.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>這個問題是一個 Online Problem，因為沒有辦法知道未來的 Request，所以只能根據目前的 Request 來做決策。
+但是我們可以先從 Offline Algorithm 開始，來了解這個問題的 Optimal。</p>
+
+<h4 id="21-optimal-algorithm">2.1 Optimal Algorithm</h4>
+
+<ul>
+  <li>目前被證明的 Belady’s Optimal Algorithm 被證明是 Optimal Algorithm
+    <ul>
+      <li>Belady’s Optimal Algorithm 也被稱為 Longest Forward Distance(LFD) Algorithm</li>
+    </ul>
+  </li>
+  <li>簡單來說就是把未來最久才會被 Request 的 Item replace</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/1.jpg" alt="" height="80%" width="80%" /></p>
+
+<blockquote class="block-warning">
+  <p>關於 Optimal Algorithm 的證明可以參考 <a href="https://stackoverflow.com/questions/47642881/proof-for-optimal-page-replacement-opt">stack overflow:Proof for optimal page replacement (OPT)</a>，使用 Contradiction 來證明 Optimal Algorithm 是最佳的。</p>
+</blockquote>
+
+<p>但是在現實中我們無法得知一個 item 多久才會被 Request，這個演算法也被稱為 clairvoyant replacement algorithm，因為要做到 Optimal 需要透視未來的 Request。</p>
+
+<hr />
+
+<h4 id="22-marking-algorithm">2.2 Marking Algorithm</h4>
+
+<p>這邊我們先給出一個基本的 Marking Algorithm，這是從 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 中提出的。</p>
+
+<ul>
+  <li>假設有一個 Cache，跟大小相同的 Marking Bit Array，用來記錄 <strong>p</strong> 是否在 Cache 中</li>
+  <li>發生 Request 時，如果 <strong>p</strong> 已經被 Marked，則 Cost = 0</li>
+  <li>如果 <strong>p</strong> 沒有被 Marked，則 Cost = 1
+    <ul>
+      <li>Total marked item &lt; k，則 Mark <strong>p</strong></li>
+      <li>Total marked item = k，則 Unmark all items，然後再 Mark <strong>p</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/2.jpg" alt="" height="80%" width="80%" /></p>
+
+<p>這個 Seq 是故意設計的最糟情況，可以看到 Marking Algorithm 不斷填滿 Array，然後清空。注意我們的重點在於對 Marking Algorithm 的分析，而不是實際的使用。</p>
+
+<hr />
+
+<h3 id="3-preliminaries">3. Preliminaries</h3>
+
+<blockquote class="block-tip">
+  <p>在分析上會以 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 為主要的論文，相較於 <em>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</em> 在 1991 剛被提出，到了 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 2000 年已經有更多的分析工具。</p>
+</blockquote>
+
+<p>Throughout this node:</p>
+<ul>
+  <li>$k$ denote the size of the cache</li>
+  <li>$ALG(𝛼)$ denote the online algorithm</li>
+</ul>
+
+<p><strong>Definition.</strong> An online algorithm $ALG$ is $c-competitive$ if, for any instance $I$, $ALG(I) \leq c \cdot OPT(I)$.</p>
+
+<ul>
+  <li>先定義 $c-competitive$ 的概念，$OPT(I)$ 是最佳的，而 $ALG(I)$ 是 Online Algorithm
+    <ul>
+      <li>$\text{If c = 1, ALG is equivalent to OPT}$</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="31-bounds-k-competitive">3.1 Bounds k-competitive</h4>
+
+<blockquote class="block-tip">
+  <p>首先我們先證明任何 Online Algorithm 都是 $k-competitive$，證明其最糟情況下至少是 OPT 的 $k$ 倍。</p>
+</blockquote>
+
+<p><strong>Theorem.</strong> For any $k$ and any deterministic online algorithm $ALG$, the competitive ratio of $ALG \geq k$.</p>
+
+<ol>
+  <li>A always request the page that is not currently in the cache, This causes a page fault in every access.</li>
+  <li>The total cost of $ALG$ is $|𝛼|$</li>
+  <li>The total cost of $OPT$ is at most $|𝛼|/k$
+    <ul>
+      <li>Becase $OPT$ can only a single page fault in any $k$ accesses</li>
+    </ul>
+  </li>
+  <li>The base competitive ration is $k$</li>
+</ol>
+
+<p>簡單來說有一個無論如何都會產生 Page fault 的輸入，這樣就可以證明任何 $\text{ALG}$ 最糟情況下都是 $k-competitive$。</p>
+
+<h4 id="32-potential-method">3.2 Potential Method</h4>
+
+<p>在 Randomized online algorithm 的分析中常常會使用 Amortized Analysis，Paging Problem 也是如此，
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中就使用了 Potential Method 來分析 Marking Algorithm 的 Upper Bound。</p>
+
+<ul>
+  <li>Each operation has state $w \text{(work function), } A\text{(ALG conguration), } \text{r(request)}$</li>
+  <li>$Δcost_A$ is the cost of $ALG$</li>
+  <li>$Δopt$ is the cost of $OPT$</li>
+  <li>$Δϕ$ is the potential function change</li>
+</ul>
+
+<p>首先定義每次的操作都會有狀態 $w, A, \text{r}$，然後定義 $Δcost_A, Δopt, Δϕ$ 來分析每次操作的成本。這樣我們就能給出公式:</p>
+
+\[Δcost_A + Δϕ \leq c \cdot Δopt\]
+
+<p>這個公式就是 Competitive Ratio 的定義，每次操作的成本加上 Potential Function 的變化都應該小於等於 $c$ 倍的 $OPT$。</p>
+
+<h4 id="33-work-function">3.3 Work Function</h4>
+
+<blockquote class="block-tip">
+  <p>Work Function 是一個用來描述每次操作的狀態或者是成本的函數，這裡定義 $w(A)$ 來描述 $A$ 的狀態</p>
+</blockquote>
+
+<p><strong>Lemma.</strong> Every offset function is coned up from the set of configurations for which its value is zero.
+Moreover, if $\omega$ is the current offset function and $r$ is the last request,
+then there is a sequence of sets $L_1, L_2, \ldots, L_k$, with $L_1 = r$,
+such that $\omega(X) = 0$ if and only if $|X \cap \bigcup_{i \le j} L_i| \ge j$ for all $1 \le j \le k$.</p>
+
+<p>這裡的 $L$ 代表的是一組 Request 的集合，稱作 Layer，例如: $w(X)=0$ 代表之前的輸入都在 Cache 中，所以 Cost = 0，同樣也有該輸入的 item 數量一定比 $k$ 小。
+這裡定義三種集合:</p>
+
+<ul>
+  <li>$V(w) \text{ is mean valid, no cost occurs so the cost is 0}$</li>
+  <li>$S(w)=⋃_{i \leq j}L_i \text{ is the set of all requests for this work function}$</li>
+  <li>$N(w) \text{ is non-revealed item in } S(w)$</li>
+</ul>
+
+<p><strong>After Request</strong></p>
+
+<p>然後是在 Request 之後的狀態變化，這裡定義 $\omega’$ 來描述 Request 之後的狀態變化。</p>
+
+\[Let \ \omega = (L_1 | \cdots | L_k) \text{, If} \ r \text{ is a new request.}\]
+
+\[\omega' = 
+\begin{cases} 
+(r | L_1 | \cdots | L_{j-1} | L_j \cup L_{j+1} - r | L_{j+2} | \cdots | L_k) &amp; \text{if } r \in L_j \text{ and } j &lt; k, \\
+(r | L_1 | \cdots | L_{k-1}) &amp; \text{if } r \in L_k, \\
+(r | L_1 | L_2 | L_3 | \cdots | L_k) &amp; \text{if } r \notin S(\omega).
+\end{cases}\]
+
+<ul>
+  <li>$r \in L_j$ 中，則將 $r$ 移到最前面，而 $L_j$ 之後的 Layer 都移除 $r$ 並且加入到 $L_{j+1}$</li>
+  <li>$r \in L_k$ 中，則將 $r$ 移到最前面，並且移除 $L_k$</li>
+  <li>$r \notin S(\omega)$，則將 $r$ 移到最前面</li>
+</ul>
+
+<p>在之後的分析中，我們會使用這個 Work Function 來描述每次操作的狀態變化，下面會給出一個例子。</p>
+
+<blockquote>
+  <p>這裡也能看處 Request 實際上就 3 種情況</p>
+</blockquote>
+
+<p><strong>example:</strong></p>
+<ul>
+  <li>$\text{Let } k = 3,\text{ {a,b,c} in cache, Request = {d,e,b}}$</li>
+</ul>
+
+\[(a|b|c) \rightarrow (d|a,b|c) \rightarrow (e|a,b,d|c) \rightarrow (b|e|a,c,d) \\\]
+
+<ul>
+  <li>$\text{The optimal cost is 2.}$</li>
+</ul>
+
+<hr />
+
+<h3 id="4-analysis">4. Analysis</h3>
+
+<p>首先我們已經清楚了 Marking Algorithm 的過程，所以有兩個 $Fact$:</p>
+
+<p><strong>Fact 1.</strong> The cache contains only marked items and active items. All marked items are in the cache. If there are $m$ marked items and $v$ active items then each active item is in the cache with probability $(k-m)/v$.</p>
+
+<p><strong>Fact 2.</strong> Let $w = (L_1|L_2|…|L_k)$ If $L_i$ contains a marked item then all item in $⋃_{j \leq i}L_j$ are marked.</p>
+
+<ul>
+  <li>Fact 1 可以得知 Cache 中的 Active Item 在 Cache 中的機率</li>
+  <li>Fact 2 則是說明如果 Layer 中有 Marked Item，則之後的 Layer 都會有 Marked Item</li>
+</ul>
+
+<p><strong>Theorem 2.</strong> The competitive ratio of the marking algorithm is $2H_k - 1$.</p>
+
+<h4 id="41-lower-bound">4.1 Lower Bound</h4>
+
+<blockquote class="block-danger">
+  <p>透過最糟情況的設計，來證明 Competitive Ratio 的 Lower Bound。</p>
+</blockquote>
+
+<p><strong>Proof.</strong> A cycle of request $k+1$ items, where the optimal cost 1, while the cost on the Marking Algorithm is $2H_k - 1$.</p>
+
+<ol>
+  <li>$w = (x_1|x_2|…|x_k)$, Active set $X = {x_1, x_2, …, x_k}$, Marked set $M = {x_1}$</li>
+  <li>$w^y = (y|x_1, x_2| … |x_k)$, Marked set $M = {y, x_1}$</li>
+  <li>Continuous request $x_2, …, x_{k-1}$
+    <ul>
+      <li>When ends $w^{k-1}=(x_{k-1}|…|x_2|y|x_1,x_k)$</li>
+      <li>Marked set $M = {x_{k-1},…,x_2,x_1,y}$, size $k-1$</li>
+    </ul>
+  </li>
+  <li>Last Request $x_k$
+    <ul>
+      <li>Marked set is full, so unmark all items.</li>
+      <li>The cost must be 1.</li>
+    </ul>
+  </li>
+</ol>
+
+\[1 + \frac{2}{k} + \frac{2}{k-1} + \cdots + \frac{2}{3} + \frac{2}{2} = 2H_k - 1\]
+
+<p>先設計一個 k+1 個 Request，首先 cache 中已經存在 $x_1$。首先 Request $y$ 然後再 Request $x_2, …, x_k$，
+因為是從 $k_2, …, x_k$ 不斷去請求，因此分母會不斷減少，最後一次 Request $x_k$ 則必然會產生 Cost = 1。以此得到以上的公式，是一個 Harmonic Number，
+所以可以得到 $\text{Competitive Ratio} = 2H_k - 1 \approx 2ln(k) - 1$。</p>
+
+<h4 id="42-upper-bound">4.2 Upper Bound</h4>
+
+<blockquote class="block-danger">
+  <p>在 <strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中更使用 Potential Method 來證明 Competitive Ratio 的 Upper Bound，證明了 $2H_k - 1$ 是 Tight</p>
+</blockquote>
+
+<p><strong>Proof.</strong> Prove that Marking Algorithm is $2H_k - 1$ competitive, using Potential Method.</p>
+
+<p>如果當前的 Work Function 有 $s$ 個 Layer，且包含未標記的 Item，則 Potential Function 為:</p>
+<ul>
+  <li><strong>Potential Function</strong> $ϕ(w) = s(H_k - H_s + 1)$
+    <ul>
+      <li>$H_k, H_s$ is Harmonic Number of $k, s$</li>
+      <li>$s$ is the number of layers for work function $w$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>首先把 Request 分成 3 種情況:</p>
+<ul>
+  <li>(a) Request outside the $S(w)$, $t$ is the number of (a)</li>
+  <li>(b) Request in the $S(w)$ but not in the cache, $l$ is the number of (b)</li>
+  <li>(c) Request in the cache</li>
+</ul>
+
+<p>最後是我們證明的目標:</p>
+
+\[Δcost_A + Δϕ \leq (2H_{k-1}) \cdot Δopt\]
+
+<p>完成以上的定義後我們就能來分析 Request 的情況。</p>
+
+<p><strong>Class (a)</strong></p>
+
+<p>$r \notin S(w)$, 這裡給個例子來說明什麼是 Class (a) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b, c}}, \text{Request} = \text{{d}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (d|a,b|c)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡可以看出 (a) 其實就是一定會產生 Cost 的 Request，並且從此我們能看出 $Δopt = t$，實際上 $t$ 就是 OPT 的 Cost。</p>
+
+<p><strong>Class (b)</strong></p>
+
+<p>$r \in S(w), r \notin M(w)$, 同樣用例子來說明 Class (b) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b}}, Request = \text{{c}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (c|a,b|)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡根據 <strong>Fact 2.</strong> Class (b) 可以使 $s$ 減少 1，所以將會有 $l \leq s$。</p>
+
+<p><strong>Class (c)</strong></p>
+
+<p>$r \in S(w), r \in M(w)$, C 是已經被 Marked 的 Item，所以實際上不會有變化。</p>
+<ul>
+  <li>如果出現一個 $\text{Class (c) i}$ Request，則最多會有 $l+t+i-1$ 個 Marked Item
+    <ul>
+      <li>因為 (a), (b) 最多貢獻 $l+t$ 個 Marked Item，而 $i$ 則是 Class (c) 的 Request</li>
+    </ul>
+  </li>
+  <li>同時 Active item 的數量會是 $k-i+1$</li>
+  <li>根據 <strong>Fact 1.</strong> 得出這次請求的 Cost = 1 的機率是 $(l+t+i-1)/(k-i+1) = (l+i)/(k-i+1)$</li>
+</ul>
+
+<p>因為 i 的範圍是從 1 到 $k-l-t$，所以可以得到以下公式:</p>
+
+\[\Delta \text{cost} = \sum_{i=1}^{k-l-t} \frac{l + t}{k - i + 1} = (l + t)(H_k - H_{l+t})\]
+
+<blockquote>
+  <p>上面用 Harmonic Number 來表示，這裡的 $H_k - H_{l+t}$ 是因為 $\sum_{i=1}^{k} \frac{1}{i} = H_k$，所以這裡是 $H_k - H_{l+t}$</p>
+</blockquote>
+
+<p><strong>Upper bound</strong></p>
+
+<p>這樣我們就算出了所有的 Request 的 Cost，然後再加上 Potential Function 的變化，就能得到 $(2H_{k-1}) \cdot Δopt$ 的部分，
+跟以下的不等式:</p>
+
+\[\begin{aligned} 
+\Delta \text{cost} + \Delta \Phi &amp; \leq (l + t)(H_k - H_{l+t}) + s'(H_k - H_{s'} + 1) - s(H_k - H_{s} + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - s(H_k - H_s + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - l(H_k - H_{l+1}) \\
+&amp; = (2H_k - 1)t + 2t - (l + t)H_{l+t} + 1H_{l} - (t - s') H_k \\
+&amp; \leq (2H_k - 1)t \\
+&amp; = (2H_k - 1)\Delta \text{opt}
+\end{aligned}\]
+
+<ul>
+  <li>(1) 是來自於 $\Delta cost$ 的界線以及 $\Phi ,s,s’$ 的定義</li>
+  <li>(2) $l \leq s$ 並且 $\Phi$ 隨著 $s$ 增加而增加</li>
+  <li>(3) 因為 $2t - (l+t)H_{l+t} \leq -lH_{l+1}$ 跟 $s’ \leq t$</li>
+</ul>
+
+<p>以上就是透過分析 Marking Algorithm 的 Upper/Lower Bound，Competitive Ratio = $2H_k - 1$ 並且是 Tight 的證明。</p>
+
+<hr />
+
+<p>這個 Marking Algorithm 只是一個最簡單的例子來說明 Competitive Paging Algorithm 的分析，實際上在 OS 中 Marking Algorithm 還有更多的變化，
+通常更多的透過 Learning strategy 來做決策，例如: Clock-PRO，在分析上大部分是基於實驗的方式。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-21-2024 09:07</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekylls" /><category term="Algorithm" /><summary type="html"><![CDATA[Notes for Marking algorithms Analysis, Reference: [1] Fiat, A., Karp, R. M., Luby, M., McGeoch, L. A., Sleator, D. D., &amp; Young, N. E. (1991). Competitive paging algorithms. [2] Achlioptas, D., Chrobak, M., &amp; Noga, J. (2000). Competitive analysis of randomized paging algorithms.]]></summary></entry></feed>
