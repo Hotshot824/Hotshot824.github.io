@@ -146,6 +146,131 @@ T-State 的存在原因是:
 
 ---
 
+### How OS Read the Battery Infomation
+
+作業系統通常透過 ACPI 提供的 Methods 來讀取電池資訊，例如 _BIF (Battery Information) 與 _BST (Battery Status)。
+這些 Methods 定義在 ACPI Table 中，OS 可以透過 ACPI 介面呼叫這些 Methods 來取得電池的詳細資訊。
+並且通常是由 [AML] (ACPI Machine Language) 來實作這些 Methods 的邏輯。
+
+[AML]: https://en.wikipedia.org/wiki/ACPI_Machine_Language
+
+AML 是一種專門用於描述 ACPI 功能的低階語言，用來定義 ACPI Table 中的各種 Methods 與物件。
+ACPI Tables 由 BIOS / UEFI 事先定義，系統啟動時由韌體將其放置於記憶體並提供給 OS。
+OS 在運行時透過 ACPI Driver 來解析並執行這些 AML 程式碼。
+
+以 Linux 為例子，電池資訊位於 `/sys/class/power_supply/BAT0/` 目錄下，OS 透過檔案來表示電池狀態與資訊。
+通常會以 polling 或 event-driven 的方式來監控電池狀態變化，並根據電池狀態調整系統行為，例如降低效能以延長續航時間。
+
+**ACPI Control Method**
+
+> [OEMs and platform firmware vendors write definition blocks using the ACPI Source Language (ASL) and use a translator to produce the byte stream encoding described in Definition Block Encoding .]
+
+[OEMs and platform firmware vendors write definition blocks using the ACPI Source Language (ASL) and use a translator to produce the byte stream encoding described in Definition Block Encoding .]: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#control-methods-and-the-acpi-source-language-asl
+
+ACPI 定義了一些標準的 Control Methods，其中以下是與電池相關的 Methods:
+
+-   **_STA**: (Status)  
+報告電池裝置的狀態 (存在、啟用等)。
+-   **_BIF**: (Battery Information)  
+提供電池的靜態資訊，例如: 設計容量、電壓、型號、序號 ...
+-   **_BST**: (Battery Status)  
+提供電池的動態狀態資訊，例如: 充放電狀態、剩餘容量、當前電壓、充放電速率 ...
+-   **_BTP**: (Battery Trip Point) 
+由 OS 設定一個剩餘容量的閾值，當電池容量低於此值時觸發 ACPI Notify。
+
+這裡要指出 EC (Embedded Controller) 在電池管理中的角色，EC 負責提供原始電池資訊。
+而 AML 是由 BIOS / UEFI 開發者撰寫，並且寫入 ACPI Table 中，OS 透過 ACPI Driver 來解析並執行這些 AML 程式碼。
+
+從 User 可以觀察 DSDT (Differentiated System Description Table) 來了解系統的 ACPI 結構。
+
+```bash
+ls /sys/firmware/acpi/tables/DSDT
+sudo cat /sys/firmware/acpi/tables/DSDT > dsdt.dat
+sudo apt install acpica-tools
+iasl -d dsdt.dat
+```
+
+> 反組譯後的 DSDT 就會是 ASL，可以看到裡面定義了許多 ACPI Methods，例如 _BIF, _BST 等等。
+{: .block-warning }
+
+```asl
+Device (_SB.EPC)
+{
+    Name (_HID, EisaId ("INT0E0C"))  // _HID: Hardware ID
+    Name (_STR, Unicode ("Enclave Page Cache 1.0"))  // _STR: Description String
+    Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+    {
+        VendorShort ()      // Length = 0x07
+        {
+                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF         // .......
+        }
+    })
+    Method (_STA, 0, NotSerialized)  // _STA: Status
+    {
+        Return (0x0F)
+    }
+}
+```
+
+> 手邊只有虛擬機可以測試，實體機器的 DSDT 會更複雜，這裡以 SGX Enclave Page Cache 為例子
+
+會看到 DSDT 裡面定義了一個 Device (_SB.EPC)，並且有一個 Method (_STA) 用來回傳裝置狀態。
+該 _STA Method 回傳 0x0F，表示該裝置永遠存在且啟用。
+kernel sapce 可以透過 `#include <linux/acpi.h>` 來呼叫這些 ACPI Method。
+
+例如寫一個簡單的 Kernel Module 來讀取 _SB.EPC 裝置的 _STA 狀態:
+
+```c
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/acpi.h>
+
+static int __init epc_sta_init(void)
+{
+    struct acpi_device *adev;
+    unsigned long sta;
+    int ret;
+
+    pr_info("epc_sta: init\n");
+
+    /* Find the EPC device by its HID */
+    adev = acpi_dev_get_first_match_dev("INT0E0C", NULL, -1);
+    if (!adev) {
+        pr_err("epc_sta: EPC device not found\n");
+        return -ENODEV;
+    }
+
+    /* Get the _STA status */
+    ret = acpi_bus_get_status(adev, &sta);
+    if (ret) {
+        pr_err("epc_sta: acpi_bus_get_status failed: %d\n", ret);
+        return ret;
+    }
+
+    pr_info("epc_sta: EPC _STA = 0x%lx\n", sta);
+
+    return 0;
+}
+
+static void __exit epc_sta_exit(void)
+{
+    pr_info("epc_sta: exit\n");
+}
+
+module_init(epc_sta_init);
+module_exit(epc_sta_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("benson");
+MODULE_DESCRIPTION("Test ACPI _SB.EPC _STA");
+```
+
+剩下的要寫 Kernel Module 這邊就不做測試了，主要是了解如何透過 ACPI Method 來取得裝置資訊。
+
+> 以上就是 ACPI 定義的各種電源狀態與 OS 讀取電池資訊的方式，如果有後續研究再補充相關內容。
+{: .block-danger }
+
 > ##### Last Edit
-> 01-24-2026 18:36
+> 01-24-2026 18:32
 {: .block-warning }
