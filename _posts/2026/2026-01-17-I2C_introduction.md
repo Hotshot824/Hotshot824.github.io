@@ -4,7 +4,7 @@ author: Benson Hsu
 date: 2026-01-17
 category: Jekyll
 layout: post
-tags: [llvm, tablegen]
+tags: [i2c, embedded]
 ---
 
 > I2C 全名為 (Inter-Integrated Circuit)，是一種串列通訊匯流排，由 Philips 在 1980 年代開發，用於主機板、嵌入式系統用於連接低速周邊裝置而發展。
