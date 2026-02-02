@@ -7,10 +7,10 @@ layout: post
 tags: [bios]
 ---
 
-> BIOS 全名為 (Basic Input/Output System)，負責在電腦開機時初始化硬體並載入作業系統。
+> BIOS 全名為 (Basic Input/Output System)，負責在電腦開機時初始化硬體並呼叫 Bootloader 來載入作業系統。
 {: .block-tip }
 
-> 難道 OS 會自己飛進 DRAM 自己啟動嗎？當然不會，這時候就需要 BIOS 幫忙囉！
+> PC 電源按下去難道 OS 會自己飛進 DRAM 自己啟動嗎？當然不會，這時間點 DRAM 還沒初始化也無法使用，這時候就需要 BIOS 做最初的初始化工作。
 {: .block-warning }
 
 ### 1. PC Architecture Overview
