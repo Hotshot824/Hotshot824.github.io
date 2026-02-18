@@ -1,5 +1,5 @@
 ---
-title: "Architecture | The 12-Factor App"
+title: "Backend | The 12-Factor App"
 author: Benson Hsu
 date: 2026-01-29
 category: Jekyll
