@@ -1,0 +1,1495 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Testing | Method-Level Structural Unit Testing · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-11-24-deadlock.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2023-11-28-test_coverage_criteria.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#51-control-flow-testing" onclick="mobilePageScrollToAnchor(this)" >5.1 Control Flow Testing</a></li><li><a href="#52-cfg-to-clg" onclick="mobilePageScrollToAnchor(this)" >5.2 CFG to CLG</a></li><li><a href="#53-data-flow-testing" onclick="mobilePageScrollToAnchor(this)" >5.3 Data Flow Testing</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Testing | Method-Level Structural Unit Testing</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">November 25, 2023 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/method_level_structural_unit_testing">Testing | Method-Level Structural Unit Testing</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Software testing course notes from CCU, lecturer Nai-Wei Lin.<br />
+這章節主要開始介紹從 Method 為單位的 Unit testing，以 White-box 的角度來切入</p>
+</blockquote>
+
+<p>白箱測試 (White-box testing) 是透過實作的程式碼來進行測試，所以這章節會介紹如何從程式碼的角度來進行測試，而不是從 Specification 的角度來進行測試</p>
+
+<p><strong>Structural Testing(White-Box Testing)</strong></p>
+
+<ul>
+  <li>In structural testing, the software is viewed as a white box.</li>
+  <li><strong>Test inputs</strong> are derived from the <strong>implementation</strong> of the software.</li>
+  <li><strong>Expected outputs</strong> are still derived from the <strong>specification</strong> of the software.</li>
+  <li>Structural testing techniques include <strong>control flow testing</strong> and <strong>data flow testing</strong>.
+    <ul>
+      <li>Control flow: 透過 flowchart 來確認路徑，並且進行測試</li>
+      <li>Data flow: 透過 data 的細微變化，來進行測試</li>
+      <li>通常 Data flow 能比 Control flow 更細緻的進行測試，但是也更難進行測試</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="51-control-flow-testing">5.1 Control Flow Testing</h3>
+
+<ul>
+  <li>Control flow testing(控制流程測試)使用程式的控制結構來制定程式的 Test cases</li>
+  <li>Test cases 的設計是基於在充分覆蓋程式的整個控制結構上</li>
+  <li>Control flow graph(CFG, 控制流程圖)可以用來描述程式的控制結構</li>
+</ul>
+
+<p><strong>Control flow graph</strong></p>
+
+<ul>
+  <li>一個程式的 Control flow graph, G = (N, E)，包含一組節點 N 和一組邊 E</li>
+  <li>每個 Node 都代表一組程式的 Statement，有五種不同的 Node
+    <ul>
+      <li><strong>Entry</strong>: 程式的進入點</li>
+      <li><strong>Exit</strong>: 程式的結束點</li>
+      <li><strong>Statement</strong>: 程式的一般陳述句，不會創建新的分支，如: letExpr</li>
+      <li><strong>Decision</strong>: 包含一個條件陳述，由該條件創建 2 個或以上的分支，如: ifExpr, switchExpr</li>
+      <li><strong>Merge</strong>: 分支的合併點</li>
+    </ul>
+  </li>
+  <li>如果 Control 可以從 N<sub>1</sub> 到 N<sub>2</sub>，則存在一條從 N<sub>1</sub> 到 N<sub>2</sub> 的 Edge</li>
+</ul>
+
+<p><img src="/image/2023/11-25-method_level_structural_unit_testing/1.png" alt="" height="75%" width="75%" /></p>
+
+<p><strong>Test Input</strong></p>
+
+<ul>
+  <li>測試輸入可以由一條 CFG 的完整路徑中得到
+    <ul>
+      <li>完整路徑: 一條從 Entry 到 Exit 的路徑</li>
+    </ul>
+  </li>
+  <li>測試覆蓋標準(Test coverage criterion) 衡量<strong>一組測試輸入</strong>對程式的覆蓋程度</li>
+</ul>
+
+<p><img src="/image/2023/11-25-method_level_structural_unit_testing/2.png" alt="" height="75%" width="75%" /></p>
+
+<blockquote>
+  <p>假如有一個完整的 CFG 使用 BFS 會找出右邊的路徑，但要注意路徑並不代表一定能找出符合的測試輸入</p>
+</blockquote>
+
+<p><strong>Path Predicate Expression</strong></p>
+
+<ul>
+  <li>Input vector: 是輸入變數的 Vector 相對應的 Tuple of values</li>
+  <li>Complete path: 包含一系列的 Decision Node</li>
+  <li>Path predicate expression: 一個 Boolean expression，用來描述一個 Complete path 的 Input vector</li>
+</ul>
+
+<p>簡單來說 Path predicate expression 就是找出能達成這條路徑的一系列 expression:</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/3.png" width="50%" height="50%" />
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/4.png" width="50%" height="50%" />
+</div>
+
+<p><strong>Path Sensitization</strong></p>
+
+<ul>
+  <li>Path sensitization 是尋找 Paht predicate expression 的解集的過程</li>
+  <li>可以使用 Constraint Logic Programming(CLP) predicates 來實現 Path sensitization</li>
+  <li>如果一個 Path sensitization 有解就代表這條路徑是可行的</li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/5.png" width="50%" height="50%" />
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/6.png" width="50%" height="50%" />
+</div>
+
+<p><strong>Test Coverage Criteria</strong></p>
+
+<ul>
+  <li>Statement coverage (SC)</li>
+  <li>Decision coverage (DC)</li>
+  <li>Condition coverage (CC)</li>
+  <li>Decision/condition coverage (D/CC)</li>
+  <li>Multiple condition coverage (MCC)</li>
+  <li>Path coverage (PC)</li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>這幾種 Control flow 的 Test coverage criteria 會在另外一篇做介紹，請參考: <a href="./2023-11-28-test_coverage_criteria.html">Note - Test Coverage Criteria</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="52-cfg-to-clg">5.2 CFG to CLG</h3>
+
+<p>這裡介紹如何將 Control Flow Graph(控制流程圖)傳換成 Constriant Logic Graph(限制邏輯圖)，
+如果能將 CFG 轉換成 CLG 就能更容易地透過 Graph algorithm 來找出 Path predicate expression</p>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/7.png" width="50%" height="50%" />
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/8.png" width="50%" height="50%" />
+</div>
+
+<hr />
+
+<h3 id="53-data-flow-testing">5.3 Data Flow Testing</h3>
+
+<p>Data flow testing(資料流程控制)也要使用 Control flow graph(CFG) 來找出 data flow anomalies(資料流異常)，
+資料流異常是基於 value 和 Variable 之間的關聯性來檢測的，例如:</p>
+<ul>
+  <li>Variables are used without being initialized.</li>
+  <li>Initialized variables are not used once.</li>
+</ul>
+
+<p><strong>Definitions and Uses of Variables</strong></p>
+
+<ul>
+  <li><strong>Definition(定義)</strong>:
+    <ul>
+      <li>An occurrence of a variable in the program is a definition of the variable if 
+a value is bound to the variable at that occurrence.</li>
+    </ul>
+  </li>
+  <li><strong>Use(使用)</strong>:
+    <ul>
+      <li>An occurrence of a variable in the program is a use of the variable 
+if the value of the variable is referred at that occurrence.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Predicate Uses and Computation Uses</strong></p>
+
+<ul>
+  <li><strong>Predicate Uses(謂詞使用)</strong>:
+    <ul>
+      <li>A use of a variable is a predicate use <strong>(p-use)</strong> if the variable is in a predicate
+and its value is used to decide an execution path.</li>
+    </ul>
+  </li>
+  <li><strong>Computation Uses(計算使用)</strong>:
+    <ul>
+      <li>A use of a variable is a computation use <strong>(c-use)</strong> if the value of the variable is
+used to compute a value for defining another variable or as an output value.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>如果變數 x 被使用在決策就是 p-use，如果變數 x 被使用在計算就是 c-use</p>
+</blockquote>
+
+<p><strong>Definition Clear Paths</strong></p>
+
+<ul>
+  <li>A path (i, n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>, j) is a definition-clear path
+for a variable x from i to j if n<sub>1</sub> through n<sub>m</sub> do not contain a definition of x.</li>
+</ul>
+
+<blockquote>
+  <p>如果路徑中的 n<sub>1</sub> 到 n<sub>m</sub> 都沒有定義過 x 變數，則這條路徑是一條 definition-clear path</p>
+</blockquote>
+
+<p><strong>Definition-C-Use Associations</strong></p>
+
+<ul>
+  <li>如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>c-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>c-use</sub> 存在一條 definition-clear path，
+則會產生一個 <strong>definition-c-use association</strong>(定義-計算使用關聯)
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, n&lt;sub&gt;c-use&lt;/sub&gt;, x)</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Definition-P-Use Associations</strong></p>
+
+<ul>
+  <li>如果有一個 x 變數的 n<sub>d</sub> 存在，並且也有一個 x 變數的 n<sub>p-use</sub>，
+並且從 n<sub>d</sub> 到 n<sub>p-use</sub> 存在一條 definition-clear path，
+則會產生兩個 <strong>definition-p-use association</strong>(定義-謂詞使用關聯):
+    <ul>
+      <li>True:  <code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, (n&lt;sub&gt;p-use&lt;/sub&gt;, t), x)</code></li>
+      <li>Flase: <code class="language-plaintext highlighter-rouge">(n&lt;sub&gt;d&lt;/sub&gt;, (n&lt;sub&gt;p-use&lt;/sub&gt;, f), x)</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Definition-Use paths</strong></p>
+
+<ul>
+  <li><strong>Definition-Use paths(DU-Path, 定義-使用路徑)</strong>:
+    <ul>
+      <li>如果一條 path (n<sub>1</sub>, n<sub>2</sub>, …, n<sub>m</sub>) 滿足以下條件則他是變數 x 的 DU-Path:
+        <ul>
+          <li>n<sub>1</sub> 是 x 的 definition</li>
+          <li>n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear simple path(DCSP, 定義-清晰簡單路徑)</li>
+          <li>n<sub>1</sub> 到 n<sub>m</sub> 是一條 definition-clear loop-free path(DCLFP, 定義-清晰無迴圈路徑)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Definition-clear simple path:</strong> 除了 n<sub>1</sub> 和 n<sub>m</sub> 之外的所有 Node 都是不同的，並且 n<sub>m</sub> 是 x 的 definition
+    <ul>
+      <li>n<sub>m</sub> 必需是一個 c-use</li>
+    </ul>
+  </li>
+  <li><strong>Definition-clear loop-free path:</strong> 所有 Node 都是不同的
+    <ul>
+      <li>n<sub>m</sub> 必需是一個 p-use</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2023/11-25-method_level_structural_unit_testing/9.png" alt="" height="75%" width="75%" /></p>
+
+<p>上圖中的 (1, 2, 4) 是一條 DCSP，而 (1, 2, 3, 5) 是一條 DCLFP</p>
+
+<blockquote>
+  <p>(1, 2, 3, 5, 1) 也是一條 DU-Path，因為這是一條 Definition-clear simple path，1 跟 5 都是 x 的 definition</p>
+</blockquote>
+
+<p><strong>Test Coverage Criteria</strong></p>
+
+<ul>
+  <li>All-defs coverage</li>
+  <li>All-c-uses coverage</li>
+  <li>All-c-uses/some-p-uses coverage</li>
+  <li>All-p-uses coverage</li>
+  <li>All-p-uses/some-c-uses coverage</li>
+  <li>All-uses coverage</li>
+  <li>All-du-paths coverage</li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>這些是關於 Data-flow 的覆蓋流程標準同樣在另外一篇做介紹，請參考: <a href="./2023-11-28-test_coverage_criteria.html">Note - Test Coverage Criteria</a></p>
+</blockquote>
+
+<p><strong>Example</strong></p>
+
+<p>下面的例子會說明如何進行 Data-flow testing，假如有一個 Control flow graph 如下:</p>
+<ol>
+  <li>先找出所有 Variable 的 definition, use:
+    <ul>
+      <li>x: <code class="language-plaintext highlighter-rouge">definition: 1, 6</code>, <code class="language-plaintext highlighter-rouge">c-use: 3, 6, 7</code>, <code class="language-plaintext highlighter-rouge">p-use: 2, 4, 5</code></li>
+      <li>a: <code class="language-plaintext highlighter-rouge">definition: 3, 7</code>, <code class="language-plaintext highlighter-rouge">c-use: 8</code>, <code class="language-plaintext highlighter-rouge">p-use: none</code></li>
+    </ul>
+  </li>
+  <li>找出所有的 Associations，一定是從 definition 到 use:
+    <ul>
+      <li><strong>x<sub>1</sub></strong>:
+        <ul>
+          <li>c-use: (1, 3, x), (1, 6, x), <strong>(1, 7, x)</strong></li>
+          <li>p-use: (1, (2, t), x), (1, (2, f), x), (1, (4, t), x), (1, (4, f), x), (1, (5, t), x), <strong>(1, (5, f), x)</strong></li>
+        </ul>
+      </li>
+      <li><strong>x<sub>6</sub></strong>:
+        <ul>
+          <li>c-use: (6, 6, x), <strong>(6, 7, x)</strong></li>
+          <li>p-use: (6, (5, t), x), (6, (5, f), x)</li>
+        </ul>
+      </li>
+      <li><strong>a<sub>3</sub></strong>:
+        <ul>
+          <li>c-use: (3, 8, a)</li>
+        </ul>
+      </li>
+      <li><strong>a<sub>7</sub></strong>:
+        <ul>
+          <li>c-use: (7, 8, a)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>找出可以符合測試覆蓋標準的 DU-Path:
+    <ul>
+      <li>這裡以 All-Uses Coverage 為例，所以要找出可以覆蓋所有 Use 的 DU-Path</li>
+    </ul>
+  </li>
+</ol>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/10.png" width="50%" height="50%" />
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/11.png" width="50%" height="50%" />
+</div>
+
+<h5 id="data-flow-testing-for-clg">Data flow testing for CLG</h5>
+
+<p>可以發現如果從 Control flow grapg 進行 Data flow testing 在找出 DU-Path 會比較麻煩，因為路徑上還要處理 Decsion Node，
+所以可以先將 Control flow graph 轉換成 Constriant Logic Graph 再進行 Data flow testing，這樣在找尋路徑的時候就只需要處理是否有走過這個 Node 就好。</p>
+
+<ul>
+  <li>x: <code class="language-plaintext highlighter-rouge">definition: 1, 9</code>, <code class="language-plaintext highlighter-rouge">c-use: 4, 9, 10</code>, <code class="language-plaintext highlighter-rouge">p-use: 2, 3, 5, 6, 7, 8</code></li>
+  <li>a: <code class="language-plaintext highlighter-rouge">definition: 4, 10</code>, <code class="language-plaintext highlighter-rouge">c-use: 11</code>, <code class="language-plaintext highlighter-rouge">p-use: none</code></li>
+</ul>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/12.png" width="50%" height="50%" />
+    <img src="/image/2023/11-25-method_level_structural_unit_testing/13.png" width="50%" height="50%" />
+</div>
+
+<p>這時候如果是 All-Uses Coverage 的話就只需要找出一條有走過所有 Node 的路徑就可以了。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-25-2023 18:18</p>
+</blockquote>
+
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                software,
+                
+                software_qualitiy
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2023-11-28-test_coverage_criteria.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: OS | Deadlock">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-11-24-deadlock.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Note | Test Coverage Criteria">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Note | Test Coverage Criteria",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023/2023-11-28-test_coverage_criteria.md",
+            "ref": "_posts/2023/2023-11-28-test_coverage_criteria.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023/2023-11-25-method_level_structural_unit_testing.md",
+        "mtime": "2023-11-25 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

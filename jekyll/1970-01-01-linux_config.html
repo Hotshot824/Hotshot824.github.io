@@ -1,0 +1,1480 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Tool | Linux Config · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/1970-01-01-leetcode_guide.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/1970-01-01-virtual_machine_tool.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#change-username" onclick="mobilePageScrollToAnchor(this)" >Change username</a></li><li><a href="#disk-mount" onclick="mobilePageScrollToAnchor(this)" >Disk mount</a></li><li><a href="#firewall" onclick="mobilePageScrollToAnchor(this)" >Firewall</a></li><li><a href="#network-config" onclick="mobilePageScrollToAnchor(this)" >Network config</a></li><li><a href="#other" onclick="mobilePageScrollToAnchor(this)" >Other</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Tool | Linux Config</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/linux_config">Tool | Linux Config</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Notes Linux config</p>
+</blockquote>
+
+<h3 id="change-username">Change username</h3>
+
+<blockquote>
+  <p>要改使用者名稱通常很麻煩，這個是一個我覺得比較好的做法，多了 Link 至少讓沒改到的地方能連結到新的 home<br />
+<a href="https://www.linuxuprising.com/2019/04/how-to-change-username-on-ubuntu-debian.html">How To Change Username On Ubuntu, Debian, Linux Mint Or Fedora</a></p>
+</blockquote>
+
+<ol>
+  <li>Create a temporary user
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">sudo adduser tempuser</code></li>
+      <li><code class="language-plaintext highlighter-rouge">sudo usermod -aG sudo tempuser</code></li>
+    </ul>
+  </li>
+  <li>Login with tempuser
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">sudo usermod -l ${newusername} -d /home/${newusername} -m ${oldusername}</code></li>
+      <li><code class="language-plaintext highlighter-rouge">sudo groupmod -n ${newusername} ${oldusername}</code></li>
+    </ul>
+  </li>
+  <li>Create a symbolic link
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">sudo ln -s /home/${newusername} /home/${oldusername}</code></li>
+    </ul>
+  </li>
+  <li>Login new username and delete temporary user
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">sudo userdel -r tempuser</code></li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="disk-mount">Disk mount</h3>
+
+<h5 id="ext4-with-lvm-resize">Ext4 with LVM Resize</h5>
+
+<p>Reduce LVM size</p>
+<ol>
+  <li>Check disk mount <code class="language-plaintext highlighter-rouge">df -h</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span> /home
+<span class="c"># Filesystem                        Size  Used Avail Use% Mounted on</span>
+<span class="c"># /dev/mapper/debian--vg-home   23G  1.9G   20G   9% /home</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Unmount disk <code class="language-plaintext highlighter-rouge">umount</code>, then check and fix disk <code class="language-plaintext highlighter-rouge">e2kfsck</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>umount /dev/mapper/debian--vg-home
+e2kfsck <span class="nt">-f</span> /dev/mapper/debian--vg-home
+</code></pre></div>    </div>
+  </li>
+  <li>Resize file system <code class="language-plaintext highlighter-rouge">resize2fs</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resize2fs /dev/mapper/debian--vg-home 80G
+<span class="c"># resize2fs 1.42.9 (28-Dec-2023)</span>
+<span class="c"># Resizing the filesystem on /dev/mapper/debian--vg-home to 28321400 (4k) blocks.</span>
+<span class="c"># The filesystem on /dev/mapper/debian--vg-home is now 28321400 blocks long.</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Reduce LVM size <code class="language-plaintext highlighter-rouge">lvreduce</code>, then check and fix LVM <code class="language-plaintext highlighter-rouge">e2kfsck</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lvreduce <span class="nt">-L</span> 80G /dev/mapper/debian--vg-home
+e2kfsck <span class="nt">-f</span> /dev/mapper/debian--vg-home
+</code></pre></div>    </div>
+  </li>
+  <li>Mount disk <code class="language-plaintext highlighter-rouge">mount</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount /dev/mapper/debian--vg-home
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>Extend LVM size</p>
+<ol>
+  <li>Check physical volume <code class="language-plaintext highlighter-rouge">pvdisplay</code> and volume group <code class="language-plaintext highlighter-rouge">vgdisplay</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pvdisplay
+<span class="c"># --- Physical volume ---</span>
+<span class="c"># PV Name               /dev/sda5</span>
+<span class="c"># VG Name               debian-vg</span>
+<span class="c"># PV Size               100.00 GiB / not usable 2.00 MiB</span>
+<span class="c"># Allocatable           yes (but full)</span>
+<span class="c"># PE Size               4.00 MiB</span>
+vgdisplay
+<span class="c"># --- Volume group ---</span>
+<span class="c"># VG Name               debian-vg</span>
+<span class="c"># Free  PE / Size       2560 / 9.99 GiB</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Extend LVM size <code class="language-plaintext highlighter-rouge">lvextend</code> Using percentage
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lvextend <span class="nt">-l</span> +100%FREE /dev/mapper/debian--vg-home
+</code></pre></div>    </div>
+  </li>
+  <li>Resize file system
+    <ul>
+      <li>ext4 or ext3 use <code class="language-plaintext highlighter-rouge">resize2fs</code>
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>resize2fs /dev/mapper/debian--vg-home
+</code></pre></div>        </div>
+      </li>
+      <li>xfs use <code class="language-plaintext highlighter-rouge">xfs_growfs</code>
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xfs_growfs /dev/mapper/debian--vg-home
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>Check disk mount <code class="language-plaintext highlighter-rouge">df -h</code>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">df</span> <span class="nt">-h</span> /home
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="firewall">Firewall</h3>
+
+<h5 id="ufw-uncomplicated-firewall">ufw (Uncomplicated Firewall)</h5>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 如果要允許連線指定 Port 可以輸入指令:</span>
+<span class="nb">sudo </span>ufw allow &lt;port-number&gt;
+<span class="nb">sudo </span>ufw deny &lt;port-number&gt;
+
+<span class="c"># 只允許特定 IP 才能連線的話，可以輸入以下指令:</span>
+<span class="nb">sudo </span>ufw allow from &lt;IP&gt; to any port &lt;port-number&gt;
+<span class="nb">sudo </span>ufw deny from &lt;IP&gt; to any port &lt;port-number&gt;
+
+<span class="c"># 只允許 Subnet 可以連線到，可以輸入以下指令:</span>
+<span class="nb">sudo </span>ufw allow from &lt;IP-with-mask&gt; to any port &lt;port-number&gt;
+<span class="nb">sudo </span>ufw deny from &lt;IP-with-mask&gt; to any port &lt;port-number&gt;
+<span class="nb">sudo </span>ufw allow from 159.66.109.0/24 to any port 22
+
+<span class="c"># 刪除已經建立的規則:</span>
+<span class="nb">sudo </span>ufw status numbered
+<span class="c"># 知道指定編號可以輸入以下指令來刪除規則:</span>
+<span class="nb">sudo </span>ufw delete &lt;rule-number&gt;
+</code></pre></div></div>
+
+<h5 id="iptables">iptables</h5>
+
+<p>iptables 是最基本的防火牆工具，並且還可以設定 NAT、Port Forwarding 等功能，這裡有一個基本的腳本可以使用 <a href="https://gist.github.com/Hotshot824/5021fca047a65b6ff6df2139e59cf9e4#file-iptables-script-sh">iptables-script.sh</a>。</p>
+<ul>
+  <li>要保存 iptables 設定的話在 debian 可以使用 <code class="language-plaintext highlighter-rouge">iptables-persistent</code> 來保存設定
+    <ul>
+      <li>設定好當前 rules 後 <code class="language-plaintext highlighter-rouge">sudo bash -c iptables-save &gt; /etc/iptables/rules.v4</code>, <code class="language-plaintext highlighter-rouge">sudo bash -c ip6tables-save &gt; /etc/iptables/rules.v6</code></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>延伸閱讀: <a href="https://wiki.debian.org/DebianFirewall#Using_iptables_for_IPv4_traffic">DebianFirewall</a>, <a href="https://github.com/trimstray/iptables-essentials">iptables-essentials</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="network-config">Network config</h3>
+
+<h5 id="ubuntu-wifi-config">ubuntu wifi config</h5>
+
+<p><code class="language-plaintext highlighter-rouge">$ sudo vim /etc/netplan/50-cloud-init.yaml</code></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This file is generated from information provided by the datasource.  Changes</span>
+<span class="c1"># to it will not persist across an instance reboot.  To disable cloud-init's</span>
+<span class="c1"># network configuration capabilities, write a file</span>
+<span class="c1"># /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:</span>
+<span class="c1"># network: {config: disabled}</span>
+<span class="na">network</span><span class="pi">:</span>
+    <span class="na">ethernets</span><span class="pi">:</span>
+        <span class="na">eth0</span><span class="pi">:</span>
+            <span class="na">dhcp4</span><span class="pi">:</span> <span class="kc">true</span>
+            <span class="na">optional</span><span class="pi">:</span> <span class="kc">true</span>
+    <span class="na">version</span><span class="pi">:</span> <span class="m">2</span>
+    <span class="na">wifis</span><span class="pi">:</span>
+        <span class="na">wl0</span><span class="pi">:</span>
+            <span class="na">optional</span><span class="pi">:</span> <span class="kc">true</span>
+            <span class="na">access-points</span><span class="pi">:</span>
+                <span class="s2">"</span><span class="s">SSID-NAME-HERE"</span><span class="err">:</span>
+                    <span class="na">password</span><span class="pi">:</span> <span class="s2">"</span><span class="s">PASSWORD-HERE"</span>
+            <span class="na">dhcp4</span><span class="pi">:</span> <span class="kc">true</span>
+</code></pre></div></div>
+
+<hr />
+
+<h5 id="debian-static-ip-config">debian static ip config</h5>
+
+<p><code class="language-plaintext highlighter-rouge">sudo vim /etc/network/interface</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug ens160
+iface ens160 inet static
+    address ${address}
+    netmask ${netmask}
+    gateway ${gateway}
+
+# This an autoconfigured IPv6 interface
+iface ens160 inet6 auto
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sudo systemctl restart networking.service</code></p>
+
+<hr />
+
+<h5 id="fix-wifi-mt7601u-driver">fix Wifi Mt7601u driver</h5>
+
+<p>How to fix wireless adapter Mt7601u not working, Can run correctly on kernel 5.15. 
+<a href="https://askubuntu.com/questions/1189490/ralink-technology-wireless-adapter-mt7601u-mercury-mw150uh-usb-not-working">Reference</a></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/jeremyb31/mt7601u.git
+<span class="nb">sudo </span>dkms add ./mt7601u
+<span class="nb">sudo </span>dkms <span class="nb">install </span>mt7601u/1.0
+</code></pre></div></div>
+
+<hr />
+
+<h5 id="zerotier-route-config"><a href="https://zerotier.atlassian.net/wiki/spaces/SD/pages/224395274/Route+between+ZeroTier+and+Physical+Networks">ZeroTier Route Config</a></h5>
+<p>Install ZeroTier and add route to between vLan and Physical Lan</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-s</span> https://install.zerotier.com | <span class="nb">sudo </span>bash
+
+<span class="nb">sudo </span>zerotier-cli <span class="nb">join</span> <span class="nv">$NETWORK_ID</span>
+</code></pre></div></div>
+<p>Add to zerotier network, and Authorize it at https://my.zerotier.com/network/$NETWORK_ID.</p>
+
+<p><em>Configure the ZeroTier managed route:</em></p>
+
+<p>At my.zerotier.com/network/$NETWORK_ID -&gt; Settings -&gt; Managed Routes,<br />
+adds another route to every device joined to the ZeroTier network.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Destination</th>
+      <th>(Via)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>$PHY_SUB</td>
+      <td>$ZT_ADDR</td>
+    </tr>
+    <tr>
+      <td>192.168.100.0/23</td>
+      <td>172.27.0.1</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><strong>Edit</strong> <code class="language-plaintext highlighter-rouge">/etc/sysctl.conf</code> to uncomment net.ipv4.ip_forward. This enables forwarding at boot.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>sysctl <span class="nt">-w</span> net.ipv4.ip_forward<span class="o">=</span>1
+<span class="c"># Add you network interface to shell variables.</span>
+<span class="nv">PHY_IFACE</span><span class="o">=</span>eth0<span class="p">;</span> <span class="nv">ZT_IFACE</span><span class="o">=</span>zt7nnig26
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Add</strong> ip forwarding rules in iptables.</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>iptables <span class="nt">-t</span> nat <span class="nt">-A</span> POSTROUTING <span class="nt">-o</span> <span class="nv">$PHY_IFACE</span> <span class="nt">-j</span> MASQUERADE
+<span class="nb">sudo </span>iptables <span class="nt">-A</span> FORWARD <span class="nt">-i</span> <span class="nv">$PHY_IFACE</span> <span class="nt">-o</span> <span class="nv">$ZT_IFACE</span> <span class="nt">-m</span> state <span class="nt">--state</span> RELATED,ESTABLISHED <span class="nt">-j</span> ACCEPT
+<span class="nb">sudo </span>iptables <span class="nt">-A</span> FORWARD <span class="nt">-i</span> <span class="nv">$ZT_IFACE</span> <span class="nt">-o</span> <span class="nv">$PHY_IFACE</span> <span class="nt">-j</span> ACCEPT
+<span class="c"># Save iptables rules for next boot.</span>
+<span class="nb">sudo </span>apt <span class="nb">install </span>iptables-persistent
+<span class="nb">sudo </span>bash <span class="nt">-c</span> iptables-save <span class="o">&gt;</span> /etc/iptables/rules.v4
+</code></pre></div></div>
+
+<ul>
+  <li>Last using <code class="language-plaintext highlighter-rouge">sudo iptables -L -v</code> to check iptables rules.</li>
+</ul>
+
+<p><strong>Add Static Route</strong></p>
+
+<blockquote class="block-danger">
+  <p>Best to add a static route to the device to be connected to the ZeroTier network.</p>
+</blockquote>
+
+<p>要連上 ZeroTier 的裝置加上 Static route 可以讓連線更穩定，不然有時候會發生 ping 不到的情況，
+後來用 traceroute 才發現 ping 的路徑跑到別的網路去了。</p>
+
+<ul>
+  <li>Windows <code class="language-plaintext highlighter-rouge">route add $PHY_SUB mask $PHY_SUB_MASK $PHY_GATEWAY</code></li>
+  <li>Linux <code class="language-plaintext highlighter-rouge">sudo ip route add $PHY_SUB via $PHY_GATEWAY</code></li>
+</ul>
+
+<hr />
+
+<h3 id="other">Other</h3>
+
+<h5 id="ulimit">ulimit</h5>
+
+<ul>
+  <li>ulimit 可以用來限制 shell 執行程式所需的資源
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">ulimit [options] [limit]</code></li>
+      <li><a href="https://ss64.com/bash/ulimit.html">ulimit Man Page</a></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-11-2024 03:38 Add static route config.</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                linux,
+                
+                tool
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/1970-01-01-virtual_machine_tool.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Leetcode | Master Guide">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/1970-01-01-leetcode_guide.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Tool | Virtual Machine">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Tool | Virtual Machine",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/1970/1970-01-01-virtual_machine_tool.md",
+            "ref": "_posts/1970/1970-01-01-virtual_machine_tool.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/1970/1970-01-01-linux_config.md",
+        "mtime": "1970-01-01 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

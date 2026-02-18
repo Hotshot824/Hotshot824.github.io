@@ -1,0 +1,1570 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Leetcode | Master Guide · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/1970-01-01-editor_envirmnment.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/1970-01-01-linux_config.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#array" onclick="mobilePageScrollToAnchor(this)" >Array</a></li><li><a href="#backtracking" onclick="mobilePageScrollToAnchor(this)" >Backtracking</a></li><li><a href="#binary-tree" onclick="mobilePageScrollToAnchor(this)" >Binary Tree</a></li><li><a href="#bit-manipulation" onclick="mobilePageScrollToAnchor(this)" >Bit Manipulation</a></li><li><a href="#dynamic-programming" onclick="mobilePageScrollToAnchor(this)" >Dynamic Programming</a></li><li><a href="#easy" onclick="mobilePageScrollToAnchor(this)" >Easy</a></li><li><a href="#graph" onclick="mobilePageScrollToAnchor(this)" >Graph</a></li><li><a href="#greedy-algorithm" onclick="mobilePageScrollToAnchor(this)" >Greedy Algorithm</a></li><li><a href="#hash" onclick="mobilePageScrollToAnchor(this)" >Hash</a></li><li><a href="#linkedlist" onclick="mobilePageScrollToAnchor(this)" >Linkedlist</a></li><li><a href="#math" onclick="mobilePageScrollToAnchor(this)" >Math</a></li><li><a href="#sliding-window" onclick="mobilePageScrollToAnchor(this)" >Sliding Window</a></li><li><a href="#stack--queue" onclick="mobilePageScrollToAnchor(this)" >Stack &amp; Queue</a></li><li><a href="#string" onclick="mobilePageScrollToAnchor(this)" >String</a></li><li><a href="#two-pointer" onclick="mobilePageScrollToAnchor(this)" >Two Pointer</a></li><li><a href="#other" onclick="mobilePageScrollToAnchor(this)" >Other</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Leetcode | Master Guide</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/leetcode_guide">Leetcode | Master Guide</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>我的刷題筆記，主要用於記錄自己在刷題過程中遇到的問題與解法。</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>Reference: <a href="https://github.com/youngyangyang04/leetcode-master">leetcode-master</a>, <a href="https://hackmd.io/@bangyewu/ryLbEED23/%2FAXR8NqGRQj2MLo6oCY7DGQ">Python-LeetCode 581</a>, <a href="https://github.com/EndlessCheng/codeforces-go?tab=readme-ov-file">codeforces-go</a>, <a href="https://leetcode.cn/discuss/post/3141566/ru-he-ke-xue-shua-ti-by-endlesscheng-q3yd/">灵茶山艾府: 如何科学刷题？</a></p>
+</blockquote>
+
+<blockquote>
+  <p>以上參考從基礎的 Array 到 Dynamic Programming 都有詳細的解釋。</p>
+</blockquote>
+
+<h3 id="array">Array</h3>
+
+<p><strong>Binary Search</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/704.Binary_Search.md">704. Binary Search</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2070.Most_Beautiful_Item_For_Each_Query.md">2070. Most Beautiful Item for Each Query</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2601.Prime_Subtraction_Operation.md">2601. Prime Subtraction Operation</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Climbing_the_Leaderboard.md">Hackerrank. Climbing the Leaderboard</a></p>
+
+<p><strong>Easy Array</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/26.Remove_Duplicates_From_Sorted_Array.md">26. Remove Duplicates from Sorted Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/27.Remove_Element.md">27. Remove Element</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/34.Fflpe_In_Sorted_Array.md">34. Find First and Last Position of Element in Sorted Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/35.Search_Insert_Position.md">35. Search Insert Position</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/57.Insert_Interval.md">57. Insert Interval</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/69.Sqrt.md">69. Sqrt(x)</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/283.Move_Zeroes.md">283. Move Zeroes</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/287.Find_The_Duplicate_Number.md">287. Find the Duplicate Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/367.Valid_Perfect_Square.md">367. Valid Perfect Square</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/844.Backspace_String_Compare.md">844. Backspace String Compare</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/977.Squares_Of_Sorted_Array.md">977. Squares of a Sorted Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1995.Count_Special_Quadruplets.md">1995. Count Special Quadruplets</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2161.Partition_Array_According_To_Given_Pivot.md">2161. Partition Array According to Given Pivot</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_array.md">Easy Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Minimum_Distances.md">Hackerrank. Minimum Distances</a></p>
+
+<p><strong>Matrix</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/36.Valid_Sudoku.md">36. Valid Sudoku</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/840.Magic_Squares_In_Grid.md">840. Magic Squares In Grid</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/861.Score_After_Flipping_Matrix.md">861. Score After Flipping Matrix</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2373.Largest_Local_Values_In_A_Matrix.md">2373. Largest Local Values in a Matrix</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Forming_a_Magic_Square.md">Hackerrank. Forming a Magic Square</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Queens_Attack_II.md">Hackerrank. Queens Attack II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.The_Grid_Search.md">Hackerrank. The Grid Search</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Martix.md">Martix</a></p>
+
+<p><strong>Prefix Sum</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/525.Contiguous_Array.md">525. Contiguous Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/974.Subarray_Sums_Divisible_By_K.md">974. Subarray Sums Divisible by K</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2145.Count_The_Hidden_Sequences.md">2145. Count the Hidden Sequences</a></p>
+
+<p><strong>Sort</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/4.Median_Of_Two_Sorted_Arrays.md">4. Median of Two Sorted Arrays</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/33.Search_In_Rotated_Sorted_Array.md">33. Search in Rotated Sorted Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/75.Sort_Colors.md">75. Sort Colors</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/80.Remove_Duplicates_From_Sorted_Array_Ii.md">80. Remove Duplicates from Sorted Array II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/540.Single_Element_In_A_Sorted_Array.md">540. Single Element in a Sorted Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/786.K_Th_Smallest_Prime_Fraction.md">786. K-th Smallest Prime Fraction</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/945.Minimum_Increment_To_Make_Array_Unique.md">945. Minimum Increment to Make Array Unique</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1051.Height_Checker.md">1051. Height Checker</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1122.Relative_Sort_Array.md">1122. Relative Sort Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1508.Range_Sum_Of_Sorted_Subarray_Sums.md">1508. Range Sum of Sorted Subarray Sums</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1636.Sort_Array_By_Increasing_Frequency.md">1636. Sort Array by Increasing Frequency</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2037.Minimum_Number_Of_Moves_To_Seat_Everyone.md">2037. Minimum Number of Moves to Seat Everyone</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2233.Maximum_Product_After_K_Increments.md">2233. Maximum Product After K Increments</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2785.Sort_Vowels_in_a_String.md">2785. Sort Vowels in a String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Organizing_Containers_of_Balls.md">Hackerrank. Organizing Containers of Balls</a></p>
+
+<p><strong>Spiral Matrix</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/209.Minimum_Size_Subarray_Sum.md">209. Minimum Size Subarray Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Spiral_Matrix.md">Spiral Matrix</a></p>
+
+<h3 id="backtracking">Backtracking</h3>
+
+<p><strong>Backtracking</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/17.Letter_Combinations_Phone_Number.md">17. Letter Combinations of a Phone Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/22.Generate_Parentheses.md">22. Generate Parentheses</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/37.Sudoku_Solver.md">37. Sudoku Solver</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/39.Combination_Sum.md">39. Combination Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/46.Permutations.md">46. Permutations</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/51.N_Queens.md">51.N Queens</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/52.N_Queens_Ii.md">52.N Queens Ii</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/77.Combinations.md">77. Combinations</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/78.Subsets.md">78. Subsets</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/79.Word_Search.md">79. Word Search</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/93.Restore_Ip_Addresses.md">93. Restore IP Addresses</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/131.Palindrome_Partitioning.md">131. Palindrome Partitioning</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/1255.Maximum_Score_Words_Formed_By_Letters.md">1255. Maximum Score Words Formed by Letters</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2597.The_Number_Of_Beautiful_Subsets.md">2597. The Number of Beautiful Subsets</a></p>
+
+<h3 id="binary-tree">Binary Tree</h3>
+
+<p><strong>Binary Tree</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/100.Same_Tree.md">100. Same Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/101.Symmetric_Tree.md">101. Symmetric Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/105.Construct_Binary_Tree_from_Preorder_and_Inorder_Traversal.md">105. Construct Binary Tree from Preorder and Inorder Traversal</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/110.Balanced_Binary_Tree.md">110. Balanced Binary Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/112.Path_Sum.md">112. Path Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/222.Count_Complete_Tree_Nodes.md">222. Count Complete Tree Nodes</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/226.Invert_Binary_Tree.md">226.Invert Binary Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/257.Binary_Tree_Paths.md">257. Binary Tree Paths</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/513.Find_Bottom_Left_Tree_Value.md">513. Find Bottom Left Tree Value</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/559.Maximum_Depth_Of_N_Ary_Tree.md">559.Maximum Depth Of N Ary Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/572.Subtree_Of_Another_Tree.md">572.Subtree Of Another Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/783.Minimum_Distance_Between_Bst_Nodes.md">783. Minimum Distance Between BST Nodes</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1038.Binary_Search_Tree_To_Greater_Sum_Tree.md">1038. Binary Search Tree to Greater Sum Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1325.Delete_Leaves_With_A_Given_Value.md">1325. Delete Leaves With a Given Value</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1367.Linked_List_In_Binary_Tree.md">1367. Linked List in Binary Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1530.Number_Of_Good_Leaf_Nodes_Pairs.md">1530. Number of Good Leaf Nodes Pairs</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2096.Step_By_Step_Directions_From_A_Binary_Tree_Node_To_Another.md">2096. Step-By-Step Directions From a Binary Tree Node to Another</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2196.Create_Binary_Tree_From_Descriptions.md">2196. Create Binary Tree From Descriptions</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Binary_Tree_Level_Order_Traversal.md">Binary Tree Level Order Traversal</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Bulid_Binary_Tree_for_Array.md">Build Binary Tree for Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Iteration_Binary_Tree_Traversal.md">Iteration Binary Tree Traversal</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Iteration_Binary_Trees_Unified_Method.md">Iteration Binary Trees Unified Method</a></p>
+
+<p><strong>Binary tree</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/N-ary_Tree_Traversal.md">N-ary Tree Traversal</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Recursion_Binary_Tree_Traversal.md">Recursion Binary traversal</a></p>
+
+<p><strong>Other Operations</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/623.Add_One_Row_To_Tree.md">623. Add One Row to Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/979.Distribute_Coins_In_Binary_Tree.md">979. Distribute Coins in Binary Tree</a></p>
+
+<h3 id="bit-manipulation">Bit Manipulation</h3>
+
+<p><strong>Bit Manipulation</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/201.Bitwise_And_Of_Numbers_Range.md">201. Bitwise AND of Numbers Range</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2419.Longest_Subarray_With_Maximum_Bitwise_And.md">2419. Longest Subarray With Maximum Bitwise AND</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2429.Minimize_Xor.md">2429. Minimize XOR</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Bitwise.md">Bit Manipulation Summary</a></p>
+
+<h3 id="dynamic-programming">Dynamic Programming</h3>
+
+<p><strong>0/1 Knapsack</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Knapsack_Problem.md">0/1 Knapsack Problem</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/416.Partition_Equal_Subset_Sum.md">416. Partition Equal Subset Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/474.Ones_And_Zeroes.md">474. Ones and Zeroes</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/494.Target_Sum.md">494. Target Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1049.Last_Stone_Weight_Ii.md">1049. Last Stone Weight II</a></p>
+
+<p><strong>Dynamic Programming</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/32.Longest_Valid_Parentheses.md">Stack with DP</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/62.Unique_Paths.md">62. Unique Paths</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/70.Climbing_Stairs.md">70. Climbing Stairs</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/96.Unique_Binary_Search_Trees.md">96. Unique Binary Search Trees</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/300.Longest_Increasing_Subsequence.md">300. Longest Increasing Subsequence</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/343.Integer_Break.md">343.Integer Break</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/509.Fibonacci_Number.md">509. Fibonacci Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/1289.Minimum_Falling_Path_Sum.md">931. Minimum Falling Path Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1105.Filling_Bookcase_Shelves.md">1105. Filling Bookcase Shelves</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1749.Maximum_Absolute_Sum_Of_Any_Subarray.md">1749. Maximum Absolute Sum of Any Subarray</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2370.Longest_Ideal_Subsequence.md">2370. Longest Ideal Subsequence</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2684.Maximum_Number_Of_Moves_In_A_Grid.md">2684. Maximum Number of Moves in a Grid</a></p>
+
+<p><strong>Unbounded Knapsack</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/139.Word_Break.md">139. Word Break</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/140.Word_Break_Ii.md">140. Word Break II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/279.Perfect_Squares.md">279. Perfect Squares</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/377.Combination_Sum_Iv.md">377. Combination Sum IV</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/518.Coin_Change_Ii.md">518. Coin Change II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Unbounded_Knapsack_Problem.md">Unbounded Knapsack Problem</a></p>
+
+<h3 id="easy">Easy</h3>
+
+<p><strong>Math</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1716.Calculate_Money_in_Leetcode_Bank.md">1716. Calculate Money in Leetcode Bank</a></p>
+
+<h3 id="graph">Graph</h3>
+
+<p><strong>Breadth First Search</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/752.Open_The_Lock.md">752. Open the Lock</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1654.Minimum_Jumps_To_Reach_Home.md">1654. Minimum Jumps to Reach Home</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2045.Second_Minimum_Time_To_Reach_Destination.md">2045. Second Minimum Time to Reach Destination</a></p>
+
+<p><strong>Graph</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/514.Freedom_Trail.md">514. Freedom Trail</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/787.Cheapest_Flights_Within_K_Stops.md">787. Cheapest Flights Within K Stops</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1219.Path_With_Maximum_Gold.md">1219. Path with Maximum Gold</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1382.Balance_A_Binary_Search_Tree.md">1382. Balance a Binary Search Tree</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1791.Find_Center_Of_Star_Graph.md">1791. Find Center of Star Graph</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1971.Find_If_Path_Exists_In_Graph.md">1971. Find if Path Exists in Graph</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2092.Find_All_People_With_Secret.md">2092. Find All People With Secret</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2285.Maximum_Total_Importance_Of_Roads.md">2285. Maximum Total Importance of Roads</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2497.Maximum_Star_Sum_Of_A_Graph.md">2497. Maximum Star Sum of a Graph</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2812.Find_The_Safest_Path_In_A_Grid.md">2812. Find the Safest Path in a Grid</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2924.Find_Champion_Ii.md">2924. Find Champion II</a></p>
+
+<p><strong>Graph Search</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/200.Number_Of_Islands.md">200. Number of Islands</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/778.Swim_In_Rising_Water.md">778. Swim in Rising Water</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/797.All_Paths_From_Source_To_Target.md">797. All Paths From Source to Target</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2368.Reachable_Nodes_With_Restrictions.md">2368. Reachable Nodes With Restrictions</a></p>
+
+<p><strong>Shortest Path</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/743.Network_Delay_Time.md">743. Network Delay Time</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1976.Number_Of_Ways_To_Arrive_At_Destination.md">1976. Number of Ways to Arrive at Destination</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2976.Minimum_Cost_To_Convert_String_I.md">2976. Minimum Cost to Convert String I</a></p>
+
+<p><strong>Topological Sort</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/310.Minimum_Height_Trees.md">310. Minimum Height Trees</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2192.All_Ancestors_Of_A_Node_In_A_Directed_Acyclic_Graph.md">2192. All Ancestors of a Node in a Directed Acyclic Graph</a></p>
+
+<h3 id="greedy-algorithm">Greedy Algorithm</h3>
+
+<p><strong>Greedy Algorithm</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/55.Jump_Game.md">55. Jump Game</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/452.Minimum_Number_Of_Arrows_To_Burst_Balloons.md">452. Minimum Number of Arrows to Burst Balloons</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/455.Assign_Cookies.md">455. Assign Cookies</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/621.Task_Scheduler.md">621. Task Scheduler</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/763.Partition_Labels.md">763. Partition Labels</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/948.Bag_Of_Tokens.md">948. Bag of Tokens</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1509.Minimum_Difference_Between_Largest_And_Smallest_Value_In_Three_Moves.md">1509. Minimum Difference Between Largest and Smallest Value in Three Moves</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2411.Smallest_Subarrays_With_Maximum_Bitwise_Or.md">2411. Smallest Subarrays With Maximum Bitwise OR</a></p>
+
+<h3 id="hash">Hash</h3>
+
+<p><strong>Hash</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/15.3sum.md">15. 3Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/18.4sum.md">18. 4Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/41.First_Missing_Positive.md">41. First Missing Positive</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/128.Longest_Consecutive_Sequence.md">128. Longest Consecutive Sequence</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/202.Happy_Number.md">202. Happy Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/242.Valid_Anagram.md">242. Valid Anagram</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/268.Missing_Number.md">268. Missing Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/349.Intersection_Of_Two_Arrays.md">349. Intersection of Two Arrays</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/383.Ransom_Note.md">383. Ransom Note</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/454.4sum_Ii.md">454. 4Sum II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/506.Relative_Ranks.md">506. Relative Ranks</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/791.Custom_Sort_String.md">791. Custom Sort String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/873.Length_Of_Longest_Fibonacci_Subsequence.md">873. Length of Longest Fibonacci Subsequence</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/916.Word_Subsets.md">916. Word Subsets</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/966.Vowel_Spellchecker.md">966. Vowel Spellchecker</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1002.Find_Common_Characters.md">1002. Find Common Characters</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1481.Least_Number_Of_Unique_Integers_After_K_Removals.md">1481. Least Number of Unique Integers after K Removals</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2342.Max_Sum_Of_A_Pair_With_Equal_Sum_Of_Digits.md">2342. Max Sum of a Pair With Equal Sum of Digits</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2395.Find_Subarrays_With_Equal_Sum.md">2395. Find Subarrays With Equal Sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2657.Find_The_Prefix_Common_Array_Of_Two_Arrays.md">2657. Find the Prefix Common Array of Two Arrays</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3541.Find_Most_Frequent_Vowel_And_Consonant.md">3541. Find Most Frequent Vowel and Consonant</a></p>
+
+<h3 id="linkedlist">Linkedlist</h3>
+
+<p><strong>Linkedlist</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/21.Merge_Two_Sorted_Lists.md">21. Merge Two Sorted Lists</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/23.Merge_K_Sorted_Lists.md">23.Merge K Sorted Lists</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/24.Swap_Nodes_In_Pairs.md">24. Swap Nodes in Pairs</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/25.Reverse_Nodes_In_K_Group.md">25.Reverse Nodes In K Group</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/83.Remove_Duplicates_From_Sorted_List.md">83.Remove Duplicates From Sorted List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/141.Linked_List_Cycle.md">141. Linked List Cycle</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/142.Linked_List_Cycle_Ii.md">142. Linked List Cycle II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/143.Reorder_List.md">143. Reorder List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/148.Sort_List.md">148. Sort List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/160.Intersection_Two_Linked_Lists.md">160. Intersection of Two Linked Lists</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/203.Remove_Linked_List_Elements.md">203. Remove Linked List Elements</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/206.Reverse_Linked_List.md">206. Reverse Linked List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/707.Design_Linked_List.md">707. Design Linked List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/725.Split_Linked_List_In_Parts.md">725. Split Linked List in Parts</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2058.Find_The_Minimum_And_Maximum_Number_Of_Nodes_Between_Critical_Points.md">2058. Find the Minimum and Maximum Number of Nodes Between Critical Points</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2181.Merge_Nodes_In_Between_Zeros.md">2181. Merge Nodes in Between Zeros</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2816.Double_A_Number_Represented_As_A_Linked_List.md">2816. Double a Number Represented as a Linked List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Middle_Node_Of_Linkedlist.md">Middle Node of Linkedlist</a></p>
+
+<h3 id="math">Math</h3>
+
+<p><strong>Math</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/43.Multiply_Strings.md">43. Multiply Strings</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/84.Largest_Rectangle_In_Histogram.md">84. Largest Rectangle in Histogram</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/976.Largest_Perimeter_Triangle.md">976. Largest Perimeter Triangle</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1518.Water_Bottles.md">1518. Water Bottles</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2364.Count_Number_Of_Bad_Pairs.md">2364. Count Number of Bad Pairs</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2579.Count_Total_Number_Of_Colored_Cells.md">2579. Count Total Number of Colored Cells</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2971.Find_Polygon_With_The_Largest_Perimeter.md">2971. Find Polygon With the Largest Perimeter</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3432.Count_Partitions_with_Even_Sum_Difference.md">3432. Count Partitions with Even Sum Difference</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.3D_Surface_Area.md">Hackerrank. 3D Surface Area</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank. Absolute Permutation.md">Hackerrank. Absolute Permutation</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Apple_and_Orange.md">Hackerrank. Apple and Orange</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Extra_Long_Factorials.md">Hackerrank. Extra Long Factorials</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Grading_Students.md">Hackerrank. Grading Students</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.NonDivisible_Subset.md">Hackerrank. Non-Divisible Subset</a></p>
+
+<h3 id="sliding-window">Sliding Window</h3>
+
+<p><strong>Sliding Window</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3.Longest_Substring_Without_Repeating_Characters.md">3. Longest Substring Without Repeating Characters</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/395.Longest_Substring_With_At_Least_K_Repeating_Characters.md">395. Longest Substring with At Least K Repeating Characters</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/643.Maximum_Average_Subarray_I.md">643. Maximum Average Subarray I</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/713.Subarray_Product_Less_Than_K.md">713. Subarray Product Less Than K</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/992.Subarrays_With_K_Different_Integers.md">992. Subarrays with K Different Integers</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1456.Maximum_Numberof_Vowels_in_a_Substring_of_Given_Length.md">1456. Maximum Number of Vowels in a Substring of Given Length</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1839.Longest_Substring_Of_All_Vowels_In_Order.md">1839. Longest Substring Of All Vowels in Order</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2134.Minimum_Swaps_To_Group_All_1s_Together_Ii.md">2134. Minimum Swaps to Group All 1’s Together II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2444.Count_Subarrays_With_Fixed_Bounds.md">2444. Count Subarrays With Fixed Bounds</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2461.Maximum_Sum_Of_Distinct_Subarrays_With_Length_K.md">2461. Maximum Sum of Distinct Subarrays With Length K</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2958.Length_Of_Longest_Subarray_With_At_Most_K_Frequency.md">2958. Length of Longest Subarray With at Most K Frequency</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3254.Find_The_Power_Of_K_Size_Subarrays_I.md">3254. Find the Power of K-Size Subarrays I</a></p>
+
+<h3 id="stack--queue">Stack &amp; Queue</h3>
+
+<p><strong>Priority Queue</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/502.Ipo.md">502. IPO</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/703.Kth_Largest_Element_In_A_Stream.md">703. Kth Largest Element in a Stream</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1046.Last_Stone_Weight.md">1046. Last Stone Weight</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1642.Furthest_Building_You_Can_Reach.md">1642. Furthest Building You Can Reach</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2530.Maximal_Score_After_Applying_K_Operations.md">2530. Maximal Score After Applying K Operations</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3066.Minimum_Operations_To_Exceed_Threshold_Value_Ii.md">3066. Minimum Operations to Exceed Threshold Value II</a></p>
+
+<p><strong>Stack &amp; Queue</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/20.Valid_Parentheses.md">20. Valid Parentheses</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/150.Evaluate_Reverse_Polish_Notation.md">150. Evaluate Reverse Polish Notation</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/225.Implement_Stack_Using_Queues.md">225. Implement Stack using Queues</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/232.Implement_Queue_Using_Stacks.md">232. Implement Queue using Stacks</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/239.Sliding_Window_Maximum.md">239. Sliding Window Maximum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/347.Top_K_Frequent_Elements.md">347. Top K Frequent Elements</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/735.Asteroid_Collision.md">735. Asteroid Collision</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/921.Minimum_Add_To_Make_Parentheses_Valid.md">921. Minimum Add to Make Parentheses Valid</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/950.Reveal_Cards_In_Increasing_Order.md">950. Reveal Cards In Increasing Order</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1047.Remove_All_Adjacent_Duplicates_String.md">1047. Remove All Adjacent Duplicates In String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1190.Reverse_Substrings_Between_Each_Pair_Of_Parentheses.md">1190. Reverse Substrings Between Each Pair of Parentheses</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1249.Minimum_Remove_To_Make_Valid_Parentheses.md">1249. Minimum Remove to Make Valid Parentheses</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1700.Number_Of_Students_Unable_To_Eat_Lunch.md">1700. Number of Students Unable to Eat Lunch</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1717.Maximum_Score_From_Removing_Substrings.md">1717. Maximum Score From Removing Substrings</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1910.Remove_All_Occurrences_Of_A_Substring.md">1910. Remove All Occurrences of a Substring</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2116.Check_If_A_Parentheses_String_Can_Be_Valid.md">2116. Check if a Parentheses String Can Be Valid</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/2197. Replace_NonCoprime_Numbers_in_Array.md">2197. Replace Non-Coprime Numbers in Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2211.Count_Collisions_on_a_Road.md">2211. Count Collisions on a Road</a></p>
+
+<h3 id="string">String</h3>
+
+<p><strong>String</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/9.Palindrome_Number.md">9.Palindrome Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/28.Find_Index_Of_First_Occurrence_String.md">28. Find the Index of the First Occurrence in a String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/68.Text_Justification.md">Leetcode. Text Justification</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/71.Simplify_Path.md">71. Simplify Path</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/151.Reverse_Words_String.md">151. Reverse Words in a String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/344.Reverse_String.md">344. Reverse String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/394.Decode_String.md">394. Decode String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/459.Repeated_Substring_Pattern.md">459. Repeated Substring Pattern</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/539.Minimum_Time_Difference.md">539.Minimum_Time_Difference.md</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/541.Reverse_String_Ii.md">541. Reverse String II</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/796.Rotate_String.md">796. Rotate String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1400.Construct_K_Palindrome_Strings.md">1400. Construct K Palindrome Strings</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1653.Minimum_Deletions_To_Make_String_Balanced.md">1653. Minimum Deletions to Make String Balanced</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1935.Maximum_Number_of_Words_You_Can_Type.md">1935. Maximum Number of Words You Can Type</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2108.Find_First_Palindromic_String_In_The_Array.md">2108. Find First Palindromic String in the Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2109.Adding_Spaces_To_A_String.md">2109. Adding Spaces to a String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/3042.Count_Prefix_And_Suffix_Pairs_I.md">3042. Count Prefix and Suffix Pairs I</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/3223.Minimum_Length_Of_String_After_Operations.md">3223. Minimum Length of String After Operations</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_hash.md">Easy Hash</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Easy_string.md">Easy String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Bigger_is_Greater.md">Hackerrank. Bigger is Greater</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Encryption.md">Hackerrank. Encryption</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Modified_Kaprekar_Numbers.md">Hackerrank. Modified Kaprekar Numbers</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/Hackerrank.Repeated_String.md">Hackerrank. Repeated String</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.The_Time_in_Words.md">Hackerrank. The Time in Words</a></p>
+
+<p><strong>Trie</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/14.Longest_Common_Prefix.md">14. Longest Common Prefix</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/208.Implement_Trie.md">208. Implement Trie (Prefix Tree)</a></p>
+
+<h3 id="two-pointer">Two Pointer</h3>
+
+<p><strong>Two Pointer</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/5.Longest_Palindromic_Substring.md">5. Longest Palindromic Substring</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/19.Remove_Nth_Node_From_End_Of_List.md">19. Remove Nth Node From End of List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/42.Trapping_Rain_Water.md">42. Trapping Rain Water</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/125.Valid_Palindrome.md">125. Valid Palindrome</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/442.Find_All_Duplicates_In_An_Array.md">442. Find All Duplicates in an Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/845.Longest_Mountain_In_Array.md">845. Longest Mountain in Array</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/881.Boats_To_Save_People.md">881. Boats to Save People</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1358.Number_Of_Substrings_Containing_All_Three_Characters.md">1358. Number of Substrings Containing All Three Characters</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1365.How_Many_Numbers_Are_Smaller_Than_The_Current_Number.md">1365.How Many Numbers Are Smaller Than The Current Number</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1395.Count_Number_Of_Teams.md">1395. Count Number of Teams</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1721.Swapping_Nodes_In_A_Linked_List.md">1721. Swapping Nodes in a Linked List</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/1750.Minimum_Length_Of_String_After_Deleting_Similar_Ends.md">1750. Minimum Length of String After Deleting Similar Ends</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2149.Rearrange_Array_Elements_By_Sign.md">2149. Rearrange Array Elements by Sign</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/2570.Merge_Two_2d_Arrays_By_Summing_Values.md">2570. Merge Two 2D Arrays by Summing Values</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/Hackerrank.Beautiful_Triplets.md">Hackerrank. Beautiful Triplets</a></p>
+
+<h3 id="other">Other</h3>
+
+<p><strong>Other</strong><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1.Two_Sum.md">1. Two sum</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/2.Add_Two_Numbers.md">2. Add Two Numbers</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/7.Reverse_Integer.md">7. Reverse Integer</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/11.Container_With_Most_Water.md">11. Container With Most Water</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/13.Romantointeger.md">13. Roman to Integer</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/16.3sum_Closest.md">16. 3Sum_Closest</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/49.Group_Anagrams.md">49. Group Anagrams</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Medium/50.Powx_N.md">50. Pow(x, n)</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/67.Add_Binary.md">67. Add Binary</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/118.Pascals_Triangle.md">118. Pascal’s Triangle</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/989.Add_To_Array_Form_Of_Integer.md">989. Add to Array-Form of Integer</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1523.Count_Odd_Numbers_In_An_Interval_Range.md">1523. Count Odd Numbers in an Interval Range</a><br />
+<a href="https://github.com/Hotshot824/Leetcode/blob/publish/Easy/1979.Fgcd_Of_Array.md">1979. Find Greatest Common Divisor of Array</a></p>
+
+<p><a href="https://github.com/Hotshot824/Leetcode/blob/publish/Hard/135.Candy.md">135.Candy</a></p>
+
+<blockquote class="block-tip">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>Leetcode 2025-12-18 12:25:30</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                leetcode,
+                
+                algorithm
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/1970-01-01-linux_config.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Tool | Edirot Guide">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/1970-01-01-editor_envirmnment.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Tool | Linux Config">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Tool | Linux Config",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/1970/1970-01-01-linux_config.md",
+            "ref": "_posts/1970/1970-01-01-linux_config.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/1970/1970-01-01-leetcode_guide.md",
+        "mtime": "1970-01-01 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

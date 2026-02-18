@@ -1,0 +1,2060 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>OS | CPU Scheduler · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-10-18-process_thread.html" />
+        
+
+        
+            <link rel="next" href="/jekylls/2023-10-26-syntax_analysis.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#noun-concept-definition" onclick="mobilePageScrollToAnchor(this)" >Noun, Concept definition</a></li><li><a href="#scheduler-concepts" onclick="mobilePageScrollToAnchor(this)" >Scheduler Concepts</a></li><li><a href="#linux-scheduler" onclick="mobilePageScrollToAnchor(this)" >Linux Scheduler</a></li><li><a href="#o1--cfs-scheduler" onclick="mobilePageScrollToAnchor(this)" >O(1) &amp; CFS scheduler</a></li><li><a href="#scheduler-problem" onclick="mobilePageScrollToAnchor(this)" >Scheduler Problem</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >OS | CPU Scheduler</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">October 19, 2023 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/cpu_scheduler">OS | CPU Scheduler</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>本章節會主要介紹 Linux Scheduler，Linux Scheduler 現在的的目標是: 如何從「好變為更好」</p>
+
+<ul>
+  <li>Noun, Concept definition</li>
+  <li>2.4 Scheduler</li>
+  <li>2.6 O(1) Scheduler</li>
+  <li>2.6 - 5.3 Complete fair scheduler(CFS)</li>
+</ul>
+
+<blockquote>
+  <p>Linux Kernel 2.4 是一個非常長壽的版本，持續了大約 10 年左右，但即便這樣一個這麼長壽、穩定的 Scheduler，
+Linux Kernel 設計者仍然在考慮如何讓她變得更好。</p>
+</blockquote>
+
+<h3 id="noun-concept-definition">Noun, Concept definition</h3>
+
+<p><a href="./2023-10-19-cpu_scheduler.html#41-task">4.1 Task</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#42-scheduler-types">4.2 Scheduler Types</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#43-cooperative-multitasking---novell-netware">4.3 Cooperative multitasking - Novell-Netware</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#44-preemptable-os">4.4 Preemptable OS</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#45-scheduler--context-switch">4.5 Scheduler &amp; Context switch</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#46-scheduling-criteria">4.6 Scheduling Criteria</a></p>
+
+<h5 id="41-task">4.1 Task</h5>
+
+<ul>
+  <li>在 Linux 中，Process 和 Thread 都是 Task</li>
+  <li>Process 之間不會共用任何資源，<strong>尤其是 Memory</strong></li>
+  <li>Thread 則是幾乎共用所有資源，<strong>尤其是 Memory</strong></li>
+  <li>Task 的生命週期中分為兩種情況
+    <ul>
+      <li>Using CPU</li>
+      <li>Waiting，例如: Waiting mutex, I/O …</li>
+    </ul>
+  </li>
+  <li>Task 在使用 CPU 時分為: 執行於 User mode/Kernel mode</li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>在 Linux Task 可以執行在 User/Kernel mode，改變模式稱作 Mode change，而 Kernel Thread 專指只有 Kernel mode 的 Task，例如: Device Driver</p>
+</blockquote>
+
+<p><strong>Task &amp; Scheduling</strong></p>
+
+<p>以下是一個 Task 的生命週期，這裡從 Scheduler 角度來看的話主要影響的是兩個部分:</p>
+<ul>
+  <li>Waining(semaphore): 怎麼在 Waiting 時，讓 Task 的使用率最大化</li>
+  <li>OS 可以分成兩大類:
+    <ul>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Cooperative_multitasking">Cooperative multitasking</a></strong>(Non-preemptive, 協同運作式多工)</li>
+      <li><strong><a href="https://en.wikipedia.org/wiki/Preemption_%28computing%29">Preemptable OS</a></strong>(Preemptive, 搶占式多任務處理)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/1.png" alt="" height="100%" width="100%" /></p>
+
+<h5 id="42-scheduler-types">4.2 Scheduler Types</h5>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/2.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li><strong>Non-preemptive OS</strong>(△): 就是指只有 Task 自己放棄 CPU 使用權，才會交出 CPU 使用權
+    <ol>
+      <li>Task 執行結束，這樣當然就交出 CPU 使用權</li>
+      <li>Task 發出 Blocking I/O request 因為要等待 I/O 完成，因此也會交出 CPU 使用權
+        <ul>
+          <li>當然也有 Async I/O，Vectored I/O 等方法，這裡先不討論</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li><strong>Preemptive OS</strong>(☐△):
+    <ol>
+      <li>每個 Task 會有一個 Time slice 執行，例如: 1/1000 Sec，執行結束就要做切換</li>
+      <li>從 Wating 等待完畢 I/O 後，返回 Runtable 時要不要馬上切回該 Task</li>
+      <li>新的 Task 也可以給予高優先權，讓他馬上執行
+        <ul>
+          <li>Preemptive OS 又分為:</li>
+        </ul>
+        <ul>
+          <li><strong>Preemptable Kernel</strong>, <strong>Non-preemptable Kernel</strong></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h5 id="43-cooperative-multitasking---novell-netware">4.3 Cooperative multitasking - Novell-Netware</h5>
+
+<p><a href="https://en.wikipedia.org/wiki/NetWare">Netware</a>:</p>
+<ul>
+  <li>Netware 所有的程式都在 ring 0 執行，但是這樣就要確保所有的程式都是由 Novell 來控制，
+這樣才能確保所有的程式都是可信任的，沒有惡意程式</li>
+  <li>但是當 CPU 效能變強之後，這樣的設計就不太好，因為所有的程式都要由 Novell 來提供，這不太可能，因此最後由 Windows NT 勝出</li>
+</ul>
+
+<h5 id="44-preemptable-os">4.4 Preemptable OS</h5>
+
+<p><strong>Preemptive OS:</strong></p>
+<ul>
+  <li>如果一個 Task 執行過久，OS 會主動將 CPU 控制權交給下一個 Task</li>
+  <li>如果要設計 Preemptive OS 必須要有 Hardware support，例如: Timer, Interrupt
+    <ul>
+      <li>Timer: 用來計算 Task 執行的時間</li>
+      <li>Interrupt: 使 OS 能獲得 CPU 控制權</li>
+    </ul>
+  </li>
+  <li>所有版本的 Linux 都是 Preemptive OS</li>
+</ul>
+
+<p><strong>Preemptive Kernel</strong></p>
+
+<ul>
+  <li>Non-preemptive Kernel(throughput):
+    <ul>
+      <li>在 2.6 Kernel 之前，Linux 是 Non-preemptable Kernel</li>
+      <li>當 Task 執行在 Kernel mode 時，其優先權無限大
+        <ul>
+          <li>Context switch 只會發生在 Task 由 Kernel mode 切換到 User mode 時</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Preemptive Kernel(latency):
+    <ul>
+      <li>在 2.6 Kernel 之後，Linux 可以設定為 Preemptable Kernel</li>
+      <li>當 Task 執行在 Kernel mode 時如果沒有任何的 Lock 就可能發生 Context switch</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/3.png" alt="" height="100%" width="100%" /></p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/4.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote class="block-tip">
+  <p>注意如果在 Kernel 中發生 Interrupt，下次 Task A 執行時會直接從 Kernel mode 中繼續執行，
+因此在 2.6 Kernel 後編譯時可以選擇 Kernel 注重 throughput 還是 latency，</p>
+</blockquote>
+
+<p><strong>Form Non-preemprive kernel to Preemprive kernel</strong></p>
+
+<ul>
+  <li>在 Non-Preemprive kernel 中，所有進入 Kernel 的 Task 可以假設自己不會被 Preempt，因此存取很多共用資料，不需要使用 Lock</li>
+  <li>在 Preemprive kernel 中，程式設計師需要仔細思考、改寫程式碼，所有存取到共用資料的程式碼都需要使用 Lock-UnLock 來保護
+    <ul>
+      <li>這是一件非常耗費人力的工作</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="45-scheduler--context-switch">4.5 Scheduler &amp; Context switch</h5>
+
+<ul>
+  <li><strong>Scheduler</strong> 決定接下來要執行哪一個 Task
+    <ul>
+      <li>使用 C language 撰寫</li>
+    </ul>
+  </li>
+  <li><strong>Context switch</strong>
+    <ul>
+      <li>負責從一個 Task 切換到另一個 Task</li>
+      <li>主要切換的是普通 Register</li>
+      <li>如果 Task 使用到一些特別的 Register，例如: 浮點數運算器(Floating Point Unit, FPU)，則需要額外處理(Lazy)
+        <ul>
+          <li>Lazy: 只有新的 Task 需要使用到 FPU 時，才會切換 FPU 相關的 Register</li>
+        </ul>
+      </li>
+      <li>Context switch 隱含的切換
+        <ul>
+          <li>依照需求切換 Page Table(TLB)</li>
+          <li>切換 Cache 的內容</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="46-scheduling-criteria">4.6 Scheduling Criteria</h5>
+
+<p>這裡介紹如何分析一個 Scheduler 的好壞</p>
+
+<ul>
+  <li><strong>CPU Utilization</strong>(使用率): CPU 維持在高使用率，Task 之間互相有等待的關係，要如何 Schedule?</li>
+  <li><strong>Throughput</strong>(吞吐量): 在單位時間內，CPU 可以執行多少 Task
+    <ul>
+      <li>例如: 讓 I/O Task 優先執行</li>
+    </ul>
+  </li>
+  <li><strong>Turnaround time</strong>(往返時間): Task 從開始到結束的時間，與 Scheduler 及程式本身的執行程度相關</li>
+  <li><strong>Waiting time</strong>(等待時間): Task 在 Ready Queue 中等待的時間，通常高優先權的 Task 會等待較短的時間
+    <ul>
+      <li>只要一個 Task 能執行，但 OS 使其等待就要算入 Waiting time</li>
+    </ul>
+  </li>
+  <li><strong>Response time</strong>(回應時間): Task 從發出 Request 到第一次回應的時間
+    <ul>
+      <li>例如: 程式需要輸出回應到螢幕，好的 Scheduler 可以讓 Progress bar 非常即時的反應</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>CPU Utilization</strong></p>
+
+<p>實際的 CPU 使用率會受到 Task 的高低優先權影響，因此 CPU 使用率會有兩種情況:</p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/5.png" alt="" height="100%" width="100%" /></p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/6.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>可以透過軟體的方式對 Lock-Unlock 做最佳化，例如: Intel vtune, kernelshark 之類的視覺化工具</p>
+</blockquote>
+
+<p><strong>Response time</strong></p>
+
+<p>假如系統中有 10 個 Task，這 10 個 Task 連接到 10 個 User，如果要讓執行感覺流暢的話，有以下做法:</p>
+
+<ol>
+  <li>單向互動:
+    <ul>
+      <li>假如 Task 是播放影片，那就安排適當的 Buffer，解碼後的影片放入 Buffer 供 User task 拿取</li>
+      <li>只要 Buffer 夠大，即使每 10 秒才輪到一次執行，使用者也不會覺得 Lag</li>
+    </ul>
+  </li>
+  <li>雙向互動:
+    <ul>
+      <li>假如 Task 是語音通話，必須在 150ms 中輪到執行一次，否則會覺得通話品質不好</li>
+      <li>那每個 Task 一回合只能執行 15ms</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h3 id="scheduler-concepts">Scheduler Concepts</h3>
+
+<h5 id="47-simple-scheduler">4.7 Simple Scheduler</h5>
+
+<ul>
+  <li><strong>FCFS(Fisrt Come First Serve)</strong>
+    <ul>
+      <li>依照 Task 的抵達順序，依照順序執行</li>
+    </ul>
+  </li>
+  <li><strong>SJF(Shortest Job First)</strong>
+    <ul>
+      <li>依照 Task 的執行時間，執行時間短的 Task 優先執行</li>
+    </ul>
+  </li>
+  <li><strong>RR(Round Robin)</strong>
+    <ul>
+      <li>在一群 Task 中輪流執行，每一個 Task 最多執行 X 個 Time slice</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在 Linux 中可以看到上面三種方法的影子</p>
+</blockquote>
+
+<p><strong>FCFS</strong></p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/7.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Wating time: P1 = 0, P2 = 100, P3 = 150</li>
+  <li>Average waiting time: (0 + 100 + 150) / 3 = 83.3</li>
+  <li>如果先抵達的 Task 執行時間很長，Average waiting time 就會變得比較長</li>
+</ul>
+
+<p><strong>SJF</strong></p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/8.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>在 P1 執行中，P2、P3 抵達，放入 Ready Queue，然後依照執行時間排序</li>
+  <li>Wating time: P1 = 0, P2 = 110, P3 = 100</li>
+  <li>Average waiting time: (0 + 110 + 100) / 3 = 70</li>
+</ul>
+
+<p><strong>Preemptive SJF</strong></p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/9.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>只要有工作進入 Ready Queue，或有工作結束就要決定執行的 Task</li>
+  <li>Wating time: P1 = 60, P2 = 10, P3 = 0</li>
+  <li>Average waiting time: (60 + 10 + 0) / 3 = 23.3</li>
+</ul>
+
+<blockquote>
+  <p>直觀上會覺得 Preemptive SJF 是比較好的演算法，但注意 Preemptive SJF 有 Context switch overhead</p>
+</blockquote>
+
+<ul>
+  <li>如果只是寫 SJF 通常指 Non-preemptive SJF</li>
+  <li>Preemptive SJF 又稱作 SRTF(Shortest Remaining Time First)</li>
+  <li>在 Average waiting time 方面，SJF &amp; SRTF 分別是 Preemptable scheduling &amp; Non-preemptable scheduling 的最佳演算法</li>
+</ul>
+
+<p><strong>Estimate Execution Time</strong></p>
+
+<p>前面提到的 Scheduler 都是假設 Task 的執行時間是已知的，但實際上 Task 的執行時間是不知道的，因此需要估計 Task 的執行時間</p>
+
+<ul>
+  <li>一個 Task 的生命週期分為兩種情況
+    <ul>
+      <li>Using CPU, Waiting</li>
+    </ul>
+  </li>
+  <li>依照 Task 以前使用 CPU 使用時間的多寡，來預測這次使用 CPU 時間的多寡，例如以下公式
+    <ul>
+      <li>t<sub>n</sub>: 上一次的 CPU time</li>
+      <li>𝜏<sub>x</sub>: 預測的第 x 次的 CPU time</li>
+      <li>Linux Kernel 2.4 使用以下的方法，並且 𝛼 取 1/2 因為可以避免浮點數運算
+        <ul>
+          <li>t<sub>n+1</sub> = 𝛼 * t<sub>n</sub> + (1 - 𝛼) * 𝜏<sub>n</sub></li>
+          <li>𝛼 是一個權重因子界於 0 ~ 1 之間
+            <ul>
+              <li>越靠近 1，表示越重視過去的 CPU time</li>
+              <li>越靠近 0，表示越重視預測的 CPU time</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Round Robin</strong></p>
+
+<p>如果使用 RR 那麼 Time slice 要設定為多少?</p>
+<ul>
+  <li>太長: 會讓 Task 等待的時間變長</li>
+  <li>太短: 會讓 Context switch overhead 變大</li>
+  <li>通常 Time slice 會設定為一個 Task 可以在 Time slice 內執行完畢，變成 Waiting 狀態
+    <ul>
+      <li>也就是在 Time slice 中成功把 I/O request 發出去</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>目前 Linux 的設定為使用者需要多少的 Time slice，可以動態的調整 Time slice 的大小</p>
+</blockquote>
+
+<h3 id="linux-scheduler">Linux Scheduler</h3>
+
+<p><a href="./2023-10-19-cpu_scheduler.html#48-linux-24-scheduler">4.8 Linux 2.4 Scheduler</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#49-linux-26-scheduler">4.9 Linux 2.6 Scheduler</a></p>
+
+<ul>
+  <li>Linux 共有 140 個優先權等級
+    <ul>
+      <li>0 ~ 99: Real-time priority
+        <ul>
+          <li>通常是一些需要 Real-time 的 Task，例如: 影片播放，聲音播放</li>
+        </ul>
+      </li>
+      <li>100 ~ 139: Normal priority
+        <ul>
+          <li>對使用者而言是 -20 ~ +19，預設值為 0，稱作 Nice value</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Nice value 是由 User 指定，Linux 當作參考用以計算 Dynamic priority，Dynamic priority 會因以下因素影響:
+    <ul>
+      <li>該 Task 是 I/O bound 還是 CPU bound</li>
+      <li>考慮 Core 的特性</li>
+      <li>考慮 Multi-thread 的特性</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>使用者在啟動 Task 時可以指定 Nice value，或在 Task 執行時使用 renice 指令來調整 Nice value</p>
+</blockquote>
+
+<h5 id="48-linux-24-scheduler">4.8 Linux 2.4 Scheduler</h5>
+
+<ol>
+  <li>在 2.4 Scheduler 中如何對 I/O 進行優化</li>
+  <li>思考在 2.4 在 Multi-processor 的環境下欠缺什麼?</li>
+</ol>
+
+<ul>
+  <li>Non-preemptible kernel
+    <ul>
+      <li>Set p-&gt;need_resched if schedule() should be invoked at the ‘next opportunity’(kernel -&gt; user mode).</li>
+      <li>所以一個正在 Kernel 中運行的 Task 要進行 Context switch 時就會將 need_resched 設為 1</li>
+    </ul>
+  </li>
+  <li>Round-Robin
+    <ul>
+      <li>task_struct-&gt;counter: number of clock ticks left to run in this scheduling slice, decremented by a timer.</li>
+      <li>這是一個 Task 執行的 counter，每個 time tick 就 -1，用完了就不能在這個回合內使用 CPU</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>2.4 Scheduler - SMP:</strong></p>
+
+<p>當有 CPU 進入 Idle 時，2.4 Scheduler 會從 Ready Queue 中 Search &amp; Estimate，找出最佳的 Task 來執行</p>
+<ul>
+  <li>Search: 會依照這個 Task 對這個 CPU 有多適合</li>
+</ul>
+
+<div style="display: flex; justify-content: center;">
+    <img src="/image/2023/10-19-cpu_scheduler/10.png" width="50%" height="50%" />
+    <img src="/image/2023/10-19-cpu_scheduler/11.png" width="50%" height="50%" />
+</div>
+
+<p><strong>2.4 Scheduler - Run-Queue:</strong></p>
+
+<p>在 2.4 中所有人都是使用同一個 Run-Queue:</p>
+<ol>
+  <li>Use spin_lock_irq() to lock “runqueue_lock”
+    <ul>
+      <li>因為 2.4 Scheduler 僅有一個 Run-Queue，要在運算時 Lock 然後運算完 Unlock，自然會造成效能瓶頸</li>
+    </ul>
+  </li>
+  <li>Check if a task is “runnable”
+    <ul>
+      <li>in TASK_RUNNING state</li>
+      <li>in TASK_INTERRUPTIBLE state and a signal is pending</li>
+    </ul>
+  </li>
+  <li>Examine the “goodness” of each process
+    <ul>
+      <li>檢查所有 Task 的 Goodness，並且選出最好的 Task</li>
+    </ul>
+  </li>
+  <li>Context switch</li>
+</ol>
+
+<p><strong>2.4 Scheduler - Goodness:</strong></p>
+
+<ul>
+  <li>“goodness”: identifying the best candidate among all processes in the runqueue list.</li>
+  <li>“goodness” = 0: the entity has exhausted its quantum.</li>
+  <li>0 &lt; “goodness” &lt; 1000: the entity is a conventional process/thread that has not exhausted its quantum; a higher value denotes a higher level of goodness.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if (p-&gt;mm == prev-&gt;mm)
+return p-&gt;counter + p-&gt;priority + 1;
+else
+return p-&gt;counter + p-&gt;priority;
+</code></pre></div></div>
+
+<p>A small bonus is given to the task p if it shares the address space with the previous task.</p>
+
+<p>Examine the processor field of the processes and gives a consistent bonus (that is PROC_CHANGE_PENALTY, usually 15) 
+to the process that was last executed on the ‘this_cpu’ CPU.</p>
+
+<p>例如: 一個 Multi-thread 程式的 Task，如果有一個 Thread 執行在一個 CPU 上，那麼其他的 Thread 就會有一個加分，讓他們可以在同一個 CPU 上執行。
+同樣的如果一個 Process 最後是在這 this_cpu 上運行，那麼他在這顆 CPU 上計算分數時也會有獎勵加分。</p>
+
+<blockquote class="block-danger">
+  <p>2.4 Scheduler 的問題是 Scheduler 要對所有的 Task 計算 goodness，每次都要重算。但其實大多數時間每次計算出的 goodness 都是差不多的，
+真的有需要每次都重算嗎?</p>
+</blockquote>
+
+<p><strong>Linux 2.4 Scheduler - Improve I/O performance</strong></p>
+
+<p>Defintion:</p>
+<ul>
+  <li>I/O-bound processes: spends much of its time submitting and waiting on I/O requests</li>
+  <li>Processor-bound processes: spend much of their time executing code</li>
+</ul>
+
+<p>Linux 傾向於支援 I/O-bound processes，這樣會提供好的 Process response time，但是怎麼對 Process 進行分類?</p>
+
+<ul>
+  <li>將 <strong>Run time</strong> 分為無數個 <strong>epoch</strong></li>
+  <li>當沒有 task 可以執行時就換到下一個 epoch
+    <ul>
+      <li>此時可能有些 task 的 <strong>time slice</strong> 還沒用完，但這些 task 正在 waiting</li>
+      <li>2.4 Scheduler 假設所有的 waiting 就是在 <strong>waiting I/O</strong></li>
+    </ul>
+  </li>
+  <li>進入下一個 epoch 的時候，補充所有 task 的 time slice
+    <ul>
+      <li>如果是 I/O-bound task，因為在上一個 epoch 在 waiting I/O，還有一些 time slice 沒用完，
+因此補充後這些 task 會有較多的 time slice</li>
+    </ul>
+  </li>
+  <li>在 Linux 2.4 中，time slice 就是 dynamic priority
+    <ul>
+      <li>因此 I/O-bound task 會有較高的 dynamic priority</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/9.png" alt="" height="100%" width="100%" /></p>
+
+<p>從上面的圖來看:</p>
+<ul>
+  <li>Epoch1: CPU bound 都已經用完 time slice，此時剩下 I/O bound slice，必須進入下一個 epoch 否則會進入 idle</li>
+  <li>Epoch2: 使用 timeSlice<sub>new</sub> = timeSlice<sub>old</sub> / 2 + baseTimeSlicep[nice] 的公式來補充 time slice</li>
+  <li>依照這樣的運算 Epoch2 的 I/O bound task 一定會比 CPU bound 有更高的 Priority</li>
+</ul>
+
+<blockquote>
+  <p>注意 Kernel 中不會使用 FPU，因此不會有 float point</p>
+</blockquote>
+
+<p><strong>Cauclate time Slice</strong></p>
+
+<p>timeSlice<sub>new</sub> = timeSlice<sub>old</sub> / 2 + baseTimeSlicep[nice]</p>
+
+<p>為什麼要除以 2，假如有一個惡意的程式如下:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">65535</span><span class="p">);</span>
+    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>每次拿到 CPU time 就去 sleep，因此在 sleep 中會被視為一個 I/O bound task，因此拿到很高的 time slice，
+這樣醒來時就是一個 CPU bound task 同時也有很高的 time slice，可以搶佔 CPU 造成其他的 I/O bound task 也無法獲取 CPU time。</p>
+
+<p><strong>Main disadvantages of 2.4 Scheduler</strong></p>
+
+<ul>
+  <li>計算 goodness 太耗費時間，就算某個 Task goodness 一直沒變，每次還是要重新計算</li>
+  <li>所有 CPU 共用同一個 Run queue，這個 Run queue 會變成系統的效能瓶頸，因為每次都要 Lock &amp; Unlock</li>
+  <li>Wating 不一定是 I/O，例如: sleep()
+    <ul>
+      <li>在 2.4 Scheduler 中只針對 I/O 做提高優先權</li>
+      <li>例如 waiting child process 也是一種 waiting，也可以被考慮在內</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h5 id="49-linux-26-scheduler">4.9 Linux 2.6 Scheduler</h5>
+
+<ul>
+  <li>O(1) Scheduler</li>
+  <li>CFS(Complete Fair Scheduler)</li>
+</ul>
+
+<p><strong>2.6 Scheduler Architecture</strong></p>
+
+<p>2.6 Scheduler 首先在架構的改善就是使每一顆 CPU 有自己的 Run queue</p>
+<ul>
+  <li>即使這樣 CPU 要去 Run queue 拿資料時也要做 Lock &amp; Unlock</li>
+  <li>因為是 Lock 自己的 Run queue，因此 Lock &amp; Unlock 通常都會成功，不會有競爭的情況發生</li>
+</ul>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/13.png" alt="" height="100%" width="100%" /></p>
+
+<p>當自己有自己的 Run queue 後要考慮的就是 Load balancing(負載平衡)</p>
+<ul>
+  <li>系統去檢查 Run queue 是否 Loading 過重，如果是就會將 Task 搬移到另一個 Run queue</li>
+  <li>因此才需要 Lock &amp; Unlock，是為了避免 CPU 在搬移 Task 時出現錯誤
+    <ul>
+      <li>Put: 當 CPU 覺得自己的 loading 太重，將 task 塞給另一顆 CPU</li>
+      <li>Pull: 覺得自己的 loading 太輕，從別的 CPU 拉 task 過來</li>
+    </ul>
+  </li>
+  <li>如何評估 Loading 輕重
+    <ul>
+      <li>比較簡單的方式，查看每個 CPU 的 Task 數量跟 runnable task 數量</li>
+    </ul>
+  </li>
+</ul>
+
+<p>每一顆 CPU 上都會有一個 thread 來觀察是否要做 Load balancing，這個 thread 稱作 Balance thread</p>
+
+<blockquote class="block-warning">
+  <p>但假如 A, B 兩顆 CPU 同時要搬移 Task 要給予對方，同時鎖定對方的 Run queue，就會造成互相等待，造成 Deadlock，這部分後面會說明</p>
+</blockquote>
+
+<p><strong>CPU Affinity</strong></p>
+
+<ul>
+  <li>由於每一顆 CPU 都有自己的 Run queue，通常除非 Loading unbalance，否則不會去觸發 Task migration
+    <ul>
+      <li>因此 2.6 Scheduler 可以更有效的使用 Cache</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Fully Preemptible Kernel</strong></p>
+
+<p>2.6 Kernel 之後，Linux 中每一個 Task 執行於 Kernel mode 時會有一個變數 <code class="language-plaintext highlighter-rouge">preempt_count</code>，用於記錄該 Task 是否可以被 Preempt</p>
+<ul>
+  <li>每當 Lock 一個 Resource 時，<code class="language-plaintext highlighter-rouge">preempt_count++</code></li>
+  <li>每當 Unlock 一個 Resource 時，<code class="language-plaintext highlighter-rouge">preempt_count--</code></li>
+  <li>如果 <code class="language-plaintext highlighter-rouge">preempt_count == 0</code>，Kernel 可以做 Context switch
+    <ul>
+      <li>Kernel 要做 Context switch 通常是因為 interrupt，例如: 一個高優先權的 task 正在等這個 interrupt</li>
+      <li>每次 <code class="language-plaintext highlighter-rouge">preempt_count</code> 從 1 變為 0，Kernel 都會檢查一下是否要 Context switch</li>
+    </ul>
+  </li>
+  <li>如果 Kernel 直接執行 schedule()，無論 <code class="language-plaintext highlighter-rouge">preempt_count</code> 是多少，都會做 Context switch</li>
+</ul>
+
+<blockquote>
+  <p>schedule() 是在 Linux kernel 中的重要函數，會直接進行 scheduler 調度，並且切換到下一個 Task 執行</p>
+</blockquote>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://stackoverflow.com/questions/20679228/linux-kernel-schedule-function">Linux kernel: schedule() function</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="o1--cfs-scheduler">O(1) &amp; CFS scheduler</h3>
+
+<p><a href="./2023-10-19-cpu_scheduler.html#410-o1-scheduler">4.10 O(1) Scheduler</a><br />
+<a href="./2023-10-19-cpu_scheduler.html#411-cfs-scheduler">4.11 CFS Scheduler</a></p>
+
+<ul>
+  <li>2.5 ~ 2.6.22: <strong>O(1) Scheduler</strong>
+    <ul>
+      <li>Time complexity: O(1)</li>
+      <li>Using Run queue(an active Q and an expired Q) to realize the ready queue</li>
+    </ul>
+  </li>
+  <li>2.6.23 ~ : <strong>CFS Scheduler</strong>
+    <ul>
+      <li>Time complexity: O(log N)</li>
+      <li>the ready queue is implemented as a red-black tree</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="410-o1-scheduler">4.10 O(1) Scheduler</h5>
+
+<ul>
+  <li>每顆 CPU 有自己的 Run queue，每個 Run queue 由兩個 Array 組成
+    <ul>
+      <li>active array: time quantum 還沒用完的 task</li>
+      <li>expired array: time quantum 用完的 task</li>
+    </ul>
+  </li>
+  <li>Time complexity: O(1)
+    <ul>
+      <li>能在 O(1) 的時間內 access, search, insert, delete</li>
+      <li>每次用完 time quantum 的 task 被移到 expired array 並在<strong>此時計算下一回合的 Dynamic priority</strong></li>
+    </ul>
+  </li>
+  <li>選出最高 Priority 的 Task，就使用求 min 的演算法</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>對一個 array 求 min 的演算法最佳 time complexity 為使用 heap 建立資料結構，time complexity 為 O(log N)，
+但是因為 Linux 的優先權只有 140 種，因此可以使用一些方法來優化到 O(1)</p>
+</blockquote>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">prio_array</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nr_active</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">bitmap</span><span class="p">[</span><span class="n">BITMAP_SIZE</span><span class="p">];</span>  <span class="c1">// BITMAP_SIZE = 140</span>
+    <span class="k">struct</span> <span class="n">list_head</span> <span class="n">queue</span><span class="p">[</span><span class="n">MAX_PRIO</span><span class="p">];</span>   <span class="c1">// MAX_PRIO = 140</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">prio_array</span> <span class="n">prio_array_t</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">runqueue</span> <span class="p">{</span>
+    <span class="cm">/* ... */</span>
+    <span class="k">struct</span> <span class="n">mm_struct</span> <span class="o">*</span><span class="n">prev_mm</span><span class="p">;</span>          <span class="c1">// prev task's mm_struct</span>
+    <span class="n">prio_array_t</span> <span class="o">*</span><span class="n">active</span><span class="p">,</span> <span class="o">*</span><span class="n">expired</span><span class="p">;</span>
+    <span class="n">prio_array_t</span> <span class="n">arrays</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="cm">/* ... */</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>prio_array</strong>
+    <ul>
+      <li>nr_active: 紀錄 active array 中有多少 task</li>
+      <li>bitmap: 用來快速查詢至少有一個 task 的 priority</li>
+      <li>queue: 用來存放相同 priority 的 task</li>
+    </ul>
+  </li>
+  <li><strong>runqueue</strong> 中維護了兩個 prio_array，分別是 active, expired
+    <ul>
+      <li>*prev_mm: 如果 task 是同一個程式的 thread 那麼 mm_struct 指向的位置會是一樣，這樣就可以不用做 Memory context switch</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://hackmd.io/@RinHizakura/S1opp7-mP">Linux 核心設計: O(1) Scheduler</a>, <a href="https://hackmd.io/@sysprog/linux-scheduler#%E7%AC%A6%E5%90%88-O1-%E6%93%8D%E4%BD%9C%E7%9A%84%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B">Linux 核心設計: 不只挑選任務的排程器: O(1) Scheduler</a></p>
+</blockquote>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/14.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>在這兩個 Queue 中每個 Task 可以拿到的 Time quantum 大約等於 1 / priority</li>
+  <li>在 Linux 中 Priority 高有兩個好處:
+    <ol>
+      <li>有較高的 Time quantum(Time slice)</li>
+      <li>可以更快的搶到 CPU</li>
+    </ol>
+  </li>
+  <li>在 Active queue 中較高優先權的 task 除非放棄或是 time quantum 用完，否則後面的 task 都不會執行
+    <ul>
+      <li>在同一個 priority 中，會依照 Round-Robin 的方式來輪流執行</li>
+      <li>如果進行 I/O bound 也就是放棄，那麼就會被移到 expired queue，並且在此時計算下一回合的 Dynamic priority</li>
+      <li>如果是 I/O bound 那就會獲得比較高的 Priority</li>
+    </ul>
+  </li>
+  <li>等到 Active queue 中的所有的 task 都被移到 expired queue 後，就會將兩個 queue 交換</li>
+</ul>
+
+<p><strong>4.10 O(1) Scheduler - bitmap</strong></p>
+
+<p><img src="https://imgur-backup.hackmd.io/nM1OlJA.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>在 bitmap 中每個 bit 代表一個 priority，如果為 1 表示至少有一個 task</li>
+  <li>Insert, Delete 的演算法如下:
+    <ul>
+      <li>Y = priority / 32, X = priority % 32</li>
+      <li>例如: 編號 9 的 Priority，9 / 32 = 0, 9 % 32 = 9, 即可存取 bitmap[0][9] 設定為 0 或 1</li>
+    </ul>
+  </li>
+  <li>Min(尋找最高優先權的 Task):
+    <ul>
+      <li>從 0 開始找顯然要 O(N) 的時間，不是 O(1)</li>
+      <li>有硬體支援的話就能直接使用一個 Function <a href="https://en.wikipedia.org/wiki/Find_first_set">ffs()</a> 就能做到 O(1)</li>
+      <li>在 <a href="https://github.com/torvalds/linux/blob/master/tools/include/linux/bitops.h">include/asm-generic/bitops</a> 中有一系列 ffs() 的實作</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Disadvantages of O(1) Scheduler</strong></p>
+
+<ul>
+  <li>跟 2.4 Scheduler 一樣，使用 Epoch 來區分 I/O bound &amp; CPU bound</li>
+  <li>因此每個 Task 都要再使用完 Time slice 以後，經過一個 Epoch 才能獲得更多的 Time slice</li>
+  <li>對於某些需要更頻繁的獲取 CPU time 的 Task 來說，無論 Priority 多高都要等待一個 Epoch 才能獲得更多的 Time slice
+    <ul>
+      <li>例如: 遊戲、多媒體</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://zhuanlan.zhihu.com/p/33461281">谈谈调度 - Linux O(1)</a></p>
+</blockquote>
+
+<h5 id="411-cfs-scheduler">4.11 CFS Scheduler</h5>
+
+<blockquote class="block-warning">
+  <p>CFS source code 目前存在於: <a href="https://github.com/torvalds/linux/blob/master/kernel/sched/fair.c">linux/kernel/sched/fair.c</a></p>
+</blockquote>
+
+<p>CFS (Completely Fair Scheduler) 在 2.6.23 之後取代 O(1) Scheduler，但是 O(1) Scheduler 獨特的設計與簡單的算法，
+影響了很多系統的設計。CFS 雖然在性能上比 O(1) Scheduler 差，但是在公平性上比 O(1) Scheduler 好。</p>
+
+<ul>
+  <li>CFS 獨特的地方在於回填 Time quantum</li>
+  <li>相較於前面兩種 Scheduler，Priority 高的 Task 回填速度會更快
+    <ul>
+      <li>因此高 Priority 的 Task 會有更多的 Time slice，更好的 Response time</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Design Concept</strong></p>
+
+<ul>
+  <li>將一顆 Physical CPU 依照目前正在執行的 Task 分成多個 Virtual CPU</li>
+  <li>假如這些 Task 的 Priority 都一樣，那麼每個 Virtual CPU 的效能為 Physical CPU 效能的 1 / N
+    <ul>
+      <li>這表示如果 Task 的優先權越低，那麼他的 Time slice 就會越小</li>
+    </ul>
+  </li>
+  <li>但是每次的執行時間也有下限，不可能依照 Task 的數量無限制的分割 1 / N，所以會有一個臨界值 λ
+    <ul>
+      <li>λ = 「希望達到的反應時間」/「# of task」</li>
+      <li>這個 λ 是可以由使用者設定的</li>
+    </ul>
+  </li>
+</ul>
+
+<p>前兩個 Scheduler 都是等到所有 Ready queue 裡面的 Task 都用完 Time slice，Scheduler 才會去計算下一回合的 Time slice，
+稱作 <strong>Epoch</strong>。</p>
+<ul>
+  <li>藉由 Epoch 可以看 Task 在上一個 Epoch 的行為來判斷他是 I/O bound 還是 CPU bound</li>
+  <li>但是在 CFS 中，是依照 waiting time 來決定執行順序，waiting time 越長的 Task 優先執行</li>
+</ul>
+
+<p><strong>CFS Architecture</strong></p>
+
+<ul>
+  <li>這裡使用 rbtree 來實作 Ready queue，依照 Task 的 vruntime 來排序
+    <ul>
+      <li>vruntime 表示的是一個 task 真正在 CPU 上的執行時間</li>
+      <li>vruntime 越小表示 Task 在 CPU 上執行的時間越少，因此從公平的角度來看優先權越高</li>
+    </ul>
+  </li>
+  <li>每次執行就取出 rbtree 中最左邊的 Task 執行
+    <ul>
+      <li>執行完畢後就計加上 delta_exec，然後重新放回紅黑樹中因此 <strong>Time Complexity 為 Θ(log N)</strong></li>
+      <li>這樣可以確保每個 Task 都有機會在 rbtree 的最左邊，也就是最優先執行的位置</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/15.png" alt="" height="100%" width="100%" /></p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://arthurchiao.art/blog/linux-cfs-design-and-implementation-zh/#22-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">Linux CFS 调度器：原理、设计与内核实现（2023）</a></p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>delta_exec 如何計算的 source code 目前存在於: <a href="https://github.com/torvalds/linux/blob/master/kernel/sched/fair.c">linux/kernel/sched/fair.c</a> 中的 <code class="language-plaintext highlighter-rouge">__calc_delta()</code></p>
+</blockquote>
+
+<p><strong>Virtual Time</strong></p>
+
+<p>在之前的 Scheduler，Time slice 是不固定的，優先權越高的 Task Time slice 越長，但是在 CFS 中，Time slice 是固定的，
+這個 Time slice 是依照系統希望的 Response time 來計算的。</p>
+
+<p>例如下面的例子，如果將 CPU 模擬為 3 個 CPU，分別為 1/2(藍色), 1/4, 1/4 的效能，那麼每次當藍色的 Task 執行完畢後，
+計算出的 vrutime 會比 1/4 的還要小，因此在同一個時間單位內，藍色的 Task 會執行更多次。</p>
+
+<p><img src="/image/2023/10-19-cpu_scheduler/16.png" alt="" height="100%" width="100%" /></p>
+
+<p><strong>CFS - I/O</strong></p>
+
+<ul>
+  <li>如果有從 Waiting queue 回來的 I/O Task 怎麼把他放到 rbtree 最左邊</li>
+  <li>將他設定為最小的 vruntime 這樣就能強制 Scheduler 馬上進行 Context switch 執行 I/O Task
+    <ul>
+      <li>min_vruntime: CFS 會去維護一個 min_vruntime，表示目前 rbtree 中最小的 vruntime</li>
+      <li>min_vruntime - Δ 設定為從 waiting queue 回來的 Task 的 vruntime 這樣就能馬上執行</li>
+    </ul>
+  </li>
+</ul>
+
+<p>也因為這樣的設計，假如有一個 CPU bound Task 在這樣的設計下即使 Priority 最高 -19，也會被搶走 CPU time。</p>
+
+<p><strong>CFS - New Task</strong></p>
+
+<p>將新進入系統的 Task 都設為 min_vruntime 插入到 rbtree 的最左邊，但是如果有一個這樣的程式:</p>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fork</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>在 Linux 的解決方法是將剩餘的 CPU time 平均分配給 child, parent，另外也可以設定 ulimit 來限制一個 process 可以 fork 的次數，
+超過這個次數就可以認為他是一個惡意的程式。</p>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://en.wikipedia.org/wiki/Fork_bomb">Fork bomb</a></p>
+</blockquote>
+
+<hr />
+
+<h3 id="scheduler-problem">Scheduler Problem</h3>
+
+<p>對於現在的 Linux Scheduler 來說還有什麼需求沒有被滿足:</p>
+
+<ul>
+  <li>對於 Real-time 的支援
+    <ul>
+      <li>目前最主流的擴充套件是 <a href="Real-Time Application Interface">RTAI</a></li>
+      <li>已經可以被使用在加工上 <a href="https://linuxcnc.org/">LinuxCNC</a></li>
+    </ul>
+  </li>
+  <li>對於 Power management 的支援(Power saving)
+    <ul>
+      <li>動態調整 CPU clock rate, voltage</li>
+      <li>讓 CPU 能進入省電模式，例如: ACPI 定義的 C0, C1, C2 …，Advanced Configuration and Power Interface</li>
+    </ul>
+  </li>
+  <li>對於 BigLittle 等新的 CPU Architecture 的支援</li>
+  <li>優先權是否可以和 Time slice 拆開，以實現更好的 QoS(Quality of Service)
+    <ul>
+      <li>例如: 實現一個 system call 叫做 balance，可以調整 time slice 和 priority 的比例</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>12-02-2023 16:03</p>
+</blockquote>
+
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                OS
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekylls/2023-10-26-syntax_analysis.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: OS | Process and Thread">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-10-18-process_thread.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Compiler | Syntax Analysis Notes">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Compiler | Syntax Analysis Notes",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023/2023-10-26-syntax_analysis.md",
+            "ref": "_posts/2023/2023-10-26-syntax_analysis.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023/2023-10-19-cpu_scheduler.md",
+        "mtime": "2023-10-19 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

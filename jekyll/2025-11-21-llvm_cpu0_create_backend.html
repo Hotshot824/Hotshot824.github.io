@@ -1,0 +1,2464 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>LLVM | CPU0 Create Backend Machine · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2025-11-20-tablegen_introduction.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2026-01-17-I2C_introduction.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#11-introduction" onclick="mobilePageScrollToAnchor(this)" >1.1 Introduction</a></li><li><a href="#12-cpu0-backend-machine-id-and-relocation-records" onclick="mobilePageScrollToAnchor(this)" >1.2 Cpu0 Backend Machine ID and Relocation Records</a></li><li><a href="#13-cpu0td-files" onclick="mobilePageScrollToAnchor(this)" >1.3 Cpu0.td Files</a></li><li><a href="#14-cpu0-register" onclick="mobilePageScrollToAnchor(this)" >1.4 Cpu0 Register</a></li><li><a href="#15-cpu0-instruction" onclick="mobilePageScrollToAnchor(this)" >1.5 Cpu0 Instruction</a></li><li><a href="#16-instructions-specific-format" onclick="mobilePageScrollToAnchor(this)" >1.6 Instructions Specific Format</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >LLVM | CPU0 Create Backend Machine</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">November 21, 2025 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/llvm_cpu0_create_backend">LLVM | CPU0 Create Backend Machine</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>CPU0 是一個 LLVM 教學用的目標架構，主要用來展示 LLVM 從中間表示（IR）到目標機器碼的轉換過程。在這篇文章中，我們將介紹如何為 CPU0 架構創建 LLVM 後端。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://jonathan2251.github.io/lbd/index.html#">Tutorial: Creating an LLVM Backend for the Cpu0 Architecture</a></p>
+</blockquote>
+
+<h3 id="11-introduction">1.1 Introduction</h3>
+
+<p>在 LLVM IR 之前，不管什麼語言都將轉換成 LLVM IR，然後再 LLVM IR 階段會進行與目標無關的最佳化，這些階段的輸入輸出都是 LLVM IR。在進入 Codegen 階段之後，就開始目標相關的最佳化。這個最佳化的過程我們可以簡單分成幾個步驟:</p>
+
+<ol>
+  <li>Selection DAG Lowering
+    <ul>
+      <li>將 LLVM IR 轉換成 SelectionDAG</li>
+      <li>每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Selection
+    <ul>
+      <li>對於 IR 中的每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling
+    <ul>
+      <li>在 2 的階段 SelectionDAG 會被轉換成 MachineInstr</li>
+      <li>在此階段 Physical Register 仍未分配，可以做 Pre-RA Scheduling</li>
+    </ul>
+  </li>
+  <li>Register Allocation
+    <ul>
+      <li>將 Virtual Register 分配到 Physical Register</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling (Again)
+    <ul>
+      <li>在 Register Allocation 後，會再次進行 Instruction Scheduling</li>
+      <li>此處才能根據 Pipeline 的特性來進行 Scheduling</li>
+    </ul>
+  </li>
+  <li>Code Emission
+    <ul>
+      <li>此處將 MachineInstr 轉換 MCInst</li>
+      <li>最後將 MCInst 轉換成 Assembly Code 或 Machine Code</li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="/image/2025/11-20-llvm_cpu0_instructionSelect/1.png" alt="" /></p>
+
+<p><strong>CPU0</strong></p>
+
+<p>CPU0 是一個 32bit 的 RISC 架構，具有簡單的指令集和固定長度的指令格式。詳細的 CPU0 架構規格可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html">CPU0 Architecture</a>。主要有三種指令類型，分別是 R-Type、I-Type 和 J-Type 指令。</p>
+
+<ul>
+  <li>L-type instructions: Primarily used for memory operations.</li>
+  <li>A-type instructions: Designed for arithmetic operations.</li>
+  <li>J-type instructions: Typically used for altering control flow (e.g., jumps).</li>
+</ul>
+
+<hr />
+
+<h3 id="12-cpu0-backend-machine-id-and-relocation-records">1.2 Cpu0 Backend Machine ID and Relocation Records</h3>
+
+<blockquote class="block-tip">
+  <p>這些修改的目的是讓 LLVM 認識 CPU0 架構，並能夠正確處理與 CPU0 相關的機器碼和重定位資訊</p>
+</blockquote>
+
+<p>在 CPU0 的教學中，首先要為 CPU0 定義 Backend Machine ID 和 Relocation Records。這些檔案位於 <code class="language-plaintext highlighter-rouge">lbdex/llvm/modify</code> 在編譯過程中會直接替換 LLVM Source Code 中對應的檔案。其中包含以下檔案：</p>
+
+<ul>
+  <li>llvm/config-ix.cmake
+    <ul>
+      <li>LLVM Cmake 的配置檔案，負責 LLVM_NATIVE_ARCH 依照 Host 的系統來設定在什麼架構下編譯</li>
+      <li>它決定了 LLVM 自己在建置階段該使用哪個目標架構，例如啟用哪些最佳化或平台特定的邏輯</li>
+      <li>此設定只影響 LLVM 本身的建置行為，不影響 LLVM 是否支援其它平台</li>
+    </ul>
+  </li>
+  <li>llvm/CMakeLists.txt
+    <ul>
+      <li>LLVM 的主要 CMake 配置檔案，負責定義 LLVM 的建置過程和模組</li>
+      <li>將 <code class="language-plaintext highlighter-rouge">Cpu0</code> 加入 <code class="language-plaintext highlighter-rouge">LLVM_ALL_TARGETS</code> 列表後，才會觸發編譯 <code class="language-plaintext highlighter-rouge">lib/Target/Cpu0</code> 目錄下的後端模組</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/ADT/Triple.h
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Triple</code> 是 LLVM 中用來表示<strong>目標平台</strong>的標準格式，格式為 <code class="language-plaintext highlighter-rouge">arch-vendor-os-abi</code>
+        <ul>
+          <li>x86_64-pc-linux-gnu</li>
+          <li>cpu0-unknown-none</li>
+        </ul>
+      </li>
+      <li>LLVM 會依照 Triple 來選擇合適的 TargetMachine、TargetLowering、TargetInstrInfo 等元件</li>
+    </ul>
+  </li>
+  <li>llvm/lib/Support/Triple.cpp
+    <ul>
+      <li>實作 Triple 的 string, enum 的查詢邏輯</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELF.h
+    <ul>
+      <li>這裡說明了 CPU0 的 ELF 中的 Machine ID, e_flags, relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELFRelocs/Cpu0.def
+    <ul>
+      <li>定義 CPU0 架構的 ELF 重定位類型，例如:
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_32</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_LO16</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Object/ELFObjectFile.h
+    <ul>
+      <li>定義解析 ELF object file 的功能，例如:
+        <ul>
+          <li>getArch() 透過 ELF header 取得 Machine ID</li>
+          <li>getFileFormatName() 取得 ELF file format name
+            <ul>
+              <li>輸出像 <code class="language-plaintext highlighter-rouge">"ELF32-cpu0"</code> 的格式名</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/lib/Object/ELF.cpp
+    <ul>
+      <li>實作 ELF relocation 的編號與名稱對應邏輯</li>
+      <li>在 CPU0 中這裡是在 switch case 中 include Cpu0.def 來處理 CPU0 的 relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/MCSubtargetInfo.cpp
+    <ul>
+      <li>處理 subtarget 的 CPU 名稱與 feature string 的對應</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/SubtargetFeature.cpp
+    <ul>
+      <li>實作了 LLVM SubtargetFeature 的 string 處理邏輯</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>完整的修改可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html#cpu0-backend-machine-id-and-relocation-records">Cpu0 Backend Machine ID and Relocation Records</a></p>
+</blockquote>
+
+<p>這個階段的修改目標是讓 LLVM 能識別 Cpu0 架構，必須做到以下幾點:</p>
+<ol>
+  <li>註冊 triple 名稱 <code class="language-plaintext highlighter-rouge">cpu0-unknown-none</code></li>
+  <li>註冊它的 ELF Machine ID (EM_CPU0) 與 Relocation 類型</li>
+  <li>支援 llvm-objdump, llvm-mc 等工具能正確處理 ELF32-cpu0 格式
+    <ul>
+      <li>否則只會出現 “unknown file format” 的錯誤訊息</li>
+    </ul>
+  </li>
+  <li>避免報錯（例如 feature string 沒定義時跳出 unrecognized 警告）</li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這些修改在目前的階段只要完全照著做就可以了，如果想要深入這部分的研究，要補充 ELF format、LLVM Triple、LLVM MC layer、Relocation types 等相關知識</p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-cpu0td-files">1.3 Cpu0.td Files</h3>
+
+<p><strong>LLVM’s Target Description Files: .td</strong></p>
+
+<blockquote>
+  <p><a href="https://llvm.org/docs/TableGen/">TableGen Overview</a> 官方的文件介紹了 TableGen 的基本概念</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>詳細的 TableGen 介紹可以參考 <a href="./2025-11-20-tablegen_introduction">TableGen Introduction</a></p>
+</blockquote>
+
+<p>LLVM 使用 TableGen (.td) 文件來描述目標架構的指令集、寄存器和其他相關資訊。這些文件定義了 CPU0 的指令格式、操作數類型以及指令的語義。這些描述檔案通常放在 LLVM 的目標目錄下，在 <code class="language-plaintext highlighter-rouge">llvm-project/llvm/lib/Target</code> 下，我們可以找到這些不同目標的檔案，如 <code class="language-plaintext highlighter-rouge">RISCV</code>, <code class="language-plaintext highlighter-rouge">ARM</code>, <code class="language-plaintext highlighter-rouge">X86</code> 等等。實際上要在 LLVM 中新增一個目標架構，主要就是撰寫這些 TableGen 檔案。</p>
+
+<p>CPU0 td 檔案的主要入口是 <code class="language-plaintext highlighter-rouge">Cpu0Other.td</code>，在此之前需要先完成 CmakeLists.txt 的設定，讓 LLVM 能夠編譯 Cpu0 後端模組。CPU0 是一個章節式的教學範例，可以透過更改 <code class="language-plaintext highlighter-rouge">Cpu0SetChapter.h</code> 中的 <code class="language-plaintext highlighter-rouge">#define CH       CH2</code> 來選擇哪個章節的功能要被編譯進去，更改完後重新編譯 LLVM。</p>
+
+<h4 id="131-cpu0td">1.3.1 Cpu0.td</h4>
+
+<blockquote class="block-danger">
+  <p>完整的程式碼請參考 CPU0 Cpu0 Architecture and LLVM Structure 章節，接下來逐小節說明該檔案的內容</p>
+</blockquote>
+
+<p><strong>SubtargetFeature</strong></p>
+
+<pre><code class="language-td">def FeatureChapter3_1  : SubtargetFeature&lt;"ch3_1", "HasChapterDummy","true", "Enable Chapter instructions."&gt;;
+</code></pre>
+
+<ul>
+  <li>SubtargetFeature: 是 LLVM TableGen 中用來定義子目標特性的類型
+    <ul>
+      <li>這些特性可以用來描述目標架構的不同變體或功能</li>
+      <li>例如，某些 CPU 可能支援特定的指令集擴展，這些擴展可以透過 SubtargetFeature 來表示</li>
+    </ul>
+  </li>
+  <li>SubtargetFeature 的格式在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中、是字串形式的表格
+    <pre><code class="language-td">class SubtargetFeature&lt;string n, string f, string v, string d, list&lt;SubtargetFeature&gt; i = []&gt; {
+    string Name = n;
+    string FieldName = f;
+    string Value = v;
+    string Desc = d;
+    list&lt;SubtargetFeature&gt; Implies = i;
+}
+</code></pre>
+  </li>
+  <li>CPU0 透過 SubtargetFeature 來定義不同功能的開啟與關閉，例如:
+    <pre><code class="language-td">def FeatureCmp         : SubtargetFeature&lt;"cmp", "HasCmp", "true",
+                            "Enable 'cmp' instructions."&gt;;
+...
+def FeatureCpu032II    : SubtargetFeature&lt;"cpu032II", "Cpu0ArchVersion",                      
+                        "Cpu032II", "Cpu032II ISA Support (slt)",
+                            [FeatureCmp, FeatureSlt, FeatureChapterAll]&gt;;
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCmp</code>: 啟用 cmp 指令</li>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCpu032II</code>: 啟用所有章節的內容與 Cmp、Slt 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Processor</strong></p>
+
+<pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Processor</code> 是 LLVM TableGen 中用來定義處理器的類型
+    <ul>
+      <li>它描述了一個具體的處理器模型，包含其名稱、行程安排、子目標特性、微架構最佳化特性</li>
+      <li><code class="language-plaintext highlighter-rouge">class Processor&lt;string n, ProcessorItineraries pi, list&lt;SubtargetFeature&gt; f,list&lt;SubtargetFeature&gt; tunef = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>CPU0 定義了兩個 Processor，並加入 <code class="language-plaintext highlighter-rouge">Cpu0GenericItineraries</code> Pipelines:
+    <pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+
+def : Proc&lt;"cpu032I",  [FeatureCpu032I]&gt;;
+def : Proc&lt;"cpu032II", [FeatureCpu032II]&gt;;
+</code></pre>
+  </li>
+</ul>
+
+<p><strong>Target</strong></p>
+
+<pre><code class="language-td">def Cpu0 : Target {
+  let InstructionSet = Cpu0InstrInfo;
+}
+</code></pre>
+
+<ul>
+  <li>最後 CPU0 定義了 Target，並指定它的 InstructionSet 為 <code class="language-plaintext highlighter-rouge">Cpu0InstrInfo</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Target</code> 是 LLVM TableGen 中用來定義目標架構的類型，其中包含以下欄位:
+    <ul>
+      <li>InstructionSet: 指定該 Target 使用哪個 InstructionInfo</li>
+      <li>AssemblyParsers: 指定該 Target 使用哪個 Assembly Parser
+        <ul>
+          <li>通常預留 DefaultAsmParser</li>
+        </ul>
+      </li>
+      <li>AssemblyParserVariants: 支援哪幾種 Assembly 變體如: AT&amp;T, Intel Style</li>
+      <li>AsmWriters: 此 Target 對應的 Assembly Writer 變體，用於 Assembly Code 的輸出</li>
+      <li>AllowRegisterRenaming: 是否允許 Register Renaming，Default 為 0</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以上的 <code class="language-plaintext highlighter-rouge">SubtargetFeature</code>、<code class="language-plaintext highlighter-rouge">Processor</code>、<code class="language-plaintext highlighter-rouge">Target</code> 都位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，可以參考該檔案了解更多細節。</p>
+
+<h3 id="14-cpu0-register">1.4 Cpu0 Register</h3>
+
+<h4 id="141-cpu0registerinfotd">1.4.1 Cpu0RegisterInfo.td</h4>
+
+<p><strong>Register</strong></p>
+
+<blockquote class="block-tip">
+  <p>Cpu0RegisterInfo.td 定義了 CPU0 架構的 Register Set 和 Register Classes</p>
+</blockquote>
+
+<pre><code class="language-td">// We have banks of 16 registers each.
+class Cpu0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Register&lt;n&gt; {
+  // For tablegen(... -gen-emitter)  in CMakeLists.txt
+  let HWEncoding = Enc;
+  
+  let Namespace = "Cpu0";
+}
+
+// Cpu0 CPU Registers
+class Cpu0GPRReg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+
+// Co-processor 0 Registers
+class Cpu0C0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+</code></pre>
+
+<ul>
+  <li>在 CPU0 中定義了兩種 Register 類型:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0GPRReg</code>: General Purpose Registers (GPRs)
+        <ul>
+          <li>R0 ~ R15 共 16 個通用暫存器</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0C0Reg</code>: Co-processor 0 Registers (C0Rs)
+        <ul>
+          <li>PC, EPC 協處理器暫存器</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Register</code> 是 LLVM TableGen 中用來定義寄存器的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Register&lt;string n, list&lt;string&gt; altNames = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>位址同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，其包含以下重要欄位:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">string namespace</code>: 命名空間
+        <ul>
+          <li>“Cpu0”, “X86”</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">list&lt;string&gt; AltNames</code>: 別名清單
+        <ul>
+          <li>MIPS <code class="language-plaintext highlighter-rouge">a0, r4</code></li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">AsmName</code>: 實際在 Assembly code 中使用的名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">bits&lt;16&gt; HWEncoding</code>: 此 Register 在機器碼中的硬體編碼，
+        <ul>
+          <li>RISC-V 為 5 bits</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">DwarfNumbers</code>: DWARF Debugging 用的 Register 編號</li>
+      <li><code class="language-plaintext highlighter-rouge">CostPerUse</code>: 指令使用該 Register 的額外代價，與 Codesize 有關、影響 Register Allocation</li>
+      <li><code class="language-plaintext highlighter-rouge">isArtificial</code>: 若表示為 true，表示此 Register 是虛擬的、非實體存在的
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">EFLAGS</code>、<code class="language-plaintext highlighter-rouge">RIP</code> 等特殊用途的 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegs</code>: 定義此 Register 的子 Register
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 有 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 等子 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegIndices</code>: 對應 <code class="language-plaintext highlighter-rouge">SubRegs</code> 的 Index
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">sub_16bit_hi</code>, <code class="language-plaintext highlighter-rouge">sub_lo</code> 等</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Aliases</code>: 與此 Register 記憶體位置相同的其他 Register
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">SP</code> 可能 alias 某個 General Purpose Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">CoveredBySubRegs</code>: 若為 true，表示此 Register 的值完全由其 sub-registers 決定
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 為 true，因為其值由 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 決定</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-td">// The register string, such as "9" or "gp" will show on "llvm-objdump -d"
+//@ All registers definition
+let Namespace = "Cpu0" in {
+  //@ General Purpose Registers
+  def ZERO : Cpu0GPRReg&lt;0,  "zero"&gt;, DwarfRegNum&lt;[0]&gt;;
+  def AT   : Cpu0GPRReg&lt;1,  "1"&gt;,    DwarfRegNum&lt;[1]&gt;;
+  def V0   : Cpu0GPRReg&lt;2,  "2"&gt;,    DwarfRegNum&lt;[2]&gt;;
+  def V1   : Cpu0GPRReg&lt;3,  "3"&gt;,    DwarfRegNum&lt;[3]&gt;;
+  def A0   : Cpu0GPRReg&lt;4,  "4"&gt;,    DwarfRegNum&lt;[4]&gt;;
+  def A1   : Cpu0GPRReg&lt;5,  "5"&gt;,    DwarfRegNum&lt;[5]&gt;;
+  def T9   : Cpu0GPRReg&lt;6,  "t9"&gt;,   DwarfRegNum&lt;[6]&gt;;
+  def T0   : Cpu0GPRReg&lt;7,  "7"&gt;,    DwarfRegNum&lt;[7]&gt;;
+  def T1   : Cpu0GPRReg&lt;8,  "8"&gt;,    DwarfRegNum&lt;[8]&gt;;
+  def S0   : Cpu0GPRReg&lt;9,  "9"&gt;,    DwarfRegNum&lt;[9]&gt;;
+  def S1   : Cpu0GPRReg&lt;10, "10"&gt;,   DwarfRegNum&lt;[10]&gt;;
+  def GP   : Cpu0GPRReg&lt;11, "gp"&gt;,   DwarfRegNum&lt;[11]&gt;;
+  def FP   : Cpu0GPRReg&lt;12, "fp"&gt;,   DwarfRegNum&lt;[12]&gt;;
+  def SP   : Cpu0GPRReg&lt;13, "sp"&gt;,   DwarfRegNum&lt;[13]&gt;;
+  def LR   : Cpu0GPRReg&lt;14, "lr"&gt;,   DwarfRegNum&lt;[14]&gt;;
+  def SW   : Cpu0GPRReg&lt;15, "sw"&gt;,   DwarfRegNum&lt;[15]&gt;;
+  def PC   : Cpu0C0Reg&lt;0, "pc"&gt;,  DwarfRegNum&lt;[20]&gt;;
+  def EPC  : Cpu0C0Reg&lt;1, "epc"&gt;, DwarfRegNum&lt;[21]&gt;;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>Register 命名原則幾乎與 MIPS 相同，因為 CPU0 是基於 MIPS 架構設計的。</p>
+</blockquote>
+
+<blockquote>
+  <p>AT = Assembler Temporary, V = Value registers, A = Argument registers, T = Temporary registers, S = Saved registers, GP = Global Pointer, FP = Frame Pointer, SP = Stack Pointer, LR = Link Register, SW = Status Word</p>
+</blockquote>
+
+<p><strong>DwarfRegNum</strong></p>
+
+<ul>
+  <li>CPU0 的 Register 同時繼承了 <code class="language-plaintext highlighter-rouge">DwarfRegNum</code>，用來指定 DWARF Debugging 中的 Register 編號
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">ZERO</code> Register 在 DWARF 中的編號為 0</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">DwarfRegNum</code> 定義在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class DwarfRegNum&lt;list&lt;int&gt; Numbers&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/DWARF">DWARF</a> 是一套廣泛使用的除錯資訊格式標準，用於在 object/executable 中描述符號、型別、source line、變數位置等除錯所需資訊。</p>
+</blockquote>
+
+<p><strong>RegisterClass</strong></p>
+
+<pre><code class="language-td">def CPURegs : RegisterClass&lt;"Cpu0", [i32], 32, (add
+  // Reserved
+  ZERO, AT, 
+  // Return Values and Arguments
+  V0, V1, A0, A1, 
+  // Not preserved across procedure calls
+  T9, T0, T1,
+  // Callee save
+  S0, S1,
+  // Reserved
+  GP, FP, 
+  SP, LR, SW)&gt;;
+
+//@Status Registers class
+def SR     : RegisterClass&lt;"Cpu0", [i32], 32, (add SW)&gt;;
+
+//@Co-processor 0 Registers class
+def C0Regs : RegisterClass&lt;"Cpu0", [i32], 32, (add PC, EPC)&gt;;
+</code></pre>
+
+<ul>
+  <li>RegisterClass 用於分類和組織 Register Set</li>
+  <li>其定義同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <pre><code class="language-td">class RegisterClass&lt;
+    string namespace, 
+    list&lt;ValueType&gt; regTypes, 
+    int alignment, 
+    dag regList, 
+    RegAltNameIndex idx = NoRegAltName
+    &gt; : DAGOperand
+</code></pre>
+  </li>
+  <li>Cpu0RegisterInfo.td 定義了三個 RegisterClass:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 包含所有通用暫存器</li>
+      <li><code class="language-plaintext highlighter-rouge">SR</code>: 包含狀態暫存器 SW</li>
+      <li><code class="language-plaintext highlighter-rouge">C0Regs</code>: 包含協處理器 0 的暫存器 PC 和 EPC</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>以上就是 Cpu0RegisterInfo.td 的主要內容，這些定義讓 LLVM 能夠識別和操作 CPU0 架構的 Register</p>
+</blockquote>
+
+<hr />
+
+<h4 id="142-cpu0registerinfogproutforothertd">1.4.2 Cpu0RegisterInfoGPROutForOther.td</h4>
+
+<blockquote class="block-tip">
+  <p>同一個 Register 可以有多個 RegisterClass 的定義</p>
+</blockquote>
+
+<p>其中，GPROut 這個 Register Class 定義於 Cpu0RegisterInfoGPROutForOther.td，其內容包含 CPURegs 中除了 SW 以外的所有暫存器。這樣的設計可確保在 Register Allocation 階段中，SW 不會被配置為輸出暫存器（ output register ）。</p>
+
+<pre><code class="language-td">def GPROut : RegisterClass&lt;"Cpu0", [i32], 32, (add (sub CPURegs, SW))&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sub</code>: is subtraction operation for DAG or list</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: is addition operation for DAG or list</li>
+</ul>
+
+<p>SW 通常不是作為顯式的 Register 使用，而是用於保存 CPU 狀態的特殊 Register。因此，在某些情況下，我們希望避免將 SW 分配為輸出暫存器，以防止不必要的干擾或錯誤。</p>
+
+<pre><code class="language-mips">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+ADD  r3, r4     ; explicit-def r3, implicit-def SW
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>SW 通常是與 ALU 操作相關聯的，因此更接近於 GPR 而不是 C0Reg (Co-processor 0 Register)</p>
+</blockquote>
+
+<hr />
+
+<h3 id="15-cpu0-instruction">1.5 Cpu0 Instruction</h3>
+
+<h4 id="151-cpu0instrformatstd">1.5.1 Cpu0InstrFormats.td</h4>
+
+<p>首先第一步要定義的是 CPU0 的指令格式 (Instruction Formats)，這些格式定義了每種指令的結構和操作數類型。CPU0 有三種主要的指令格式: R-type、I-type 和 J-type。</p>
+
+<p><strong>Custom Format</strong></p>
+
+<pre><code class="language-td">// Format specifies the encoding used by the instruction.  This is part of the
+// ad-hoc solution used to emit machine instruction encodings by our machine
+// code emitter.
+class Format&lt;bits&lt;4&gt; val&gt; {
+  bits&lt;4&gt; Value = val;
+}
+
+def Pseudo    : Format&lt;0&gt;;
+def FrmA      : Format&lt;1&gt;;
+def FrmL      : Format&lt;2&gt;;
+def FrmJ      : Format&lt;3&gt;;
+def FrmOther  : Format&lt;4&gt;; // Instruction w/ a custom format
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Format</code> 是 Cpu0 自訂義的欄位，用來表示指令的格式類型
+    <ul>
+      <li>利用該欄位可以在指令編碼和解碼時區分不同的指令格式</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Instruction</strong></p>
+
+<blockquote class="block-tip">
+  <p>一條具體的 Instruction 是從上自下從 Base Class -&gt; Instruction Type -&gt; Instruction 來繼承實現的</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Instruction</code> 位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 欄位眾多，此處直接講解 Cpu0Inst 設計</li>
+</ul>
+
+<pre><code class="language-td">// Generic Cpu0 Format
+class Cpu0Inst&lt;dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+               InstrItinClass itin, Format f&gt;: Instruction
+{
+  // Inst and Size: for tablegen(... -gen-emitter) and 
+  // tablegen(... -gen-disassembler) in CMakeLists.txt
+  field bits&lt;32&gt; Inst;
+  Format Form = f;
+
+  let Namespace = "Cpu0";
+
+  let Size = 4;
+
+  bits&lt;8&gt; Opcode = 0;
+
+  // Top 8 bits are the 'opcode' field
+  let Inst{31-24} = Opcode;
+
+  let OutOperandList = outs;
+  let InOperandList  = ins;
+
+  let AsmString   = asmstr;
+  let Pattern     = pattern;
+  let Itinerary   = itin;
+
+  //
+  // Attributes specific to Cpu0 instructions...
+  //
+  bits&lt;4&gt; FormBits = Form.Value;
+
+  // TSFlags layout should be kept in sync with Cpu0InstrInfo.h.
+  let TSFlags{3-0}   = FormBits;
+
+  let DecoderNamespace = "Cpu0";
+
+  field bits&lt;32&gt; SoftFail = 0;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>field 是 TableGen 中的可變欄位，可以被多次修改與覆蓋</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Cpu0Inst</code> 是所有 CPU0 指令的基類，定義了指令的基本結構和屬性
+    <ul>
+      <li>包含輸入輸出操作數、組合語言表示、指令模式、行程安排類別和格式等欄位</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; Inst;</code>: 定義 Instruction 的 32 位元編碼
+    <ul>
+      <li>LLVM 沒有內建 Inst 這樣的欄位，並不會刻意提供 Instruction 的 bit layout 這種欄位，
+因為 LLVM 必須支援任何 ISA 的形狀</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Format Form = f;</code>: 指定指令的格式類型，此為 Cpu0 自訂義的欄位</li>
+  <li><code class="language-plaintext highlighter-rouge">let Size = 4;</code>: 定義指令的大小為 4 bytes</li>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; Opcode = 0;</code>: 定義指令的 Opcode 欄位為 8 bits</li>
+  <li><code class="language-plaintext highlighter-rouge">let Inst{31-24} = Opcode;</code>: 指定 Opcode 在指令編碼中的位置，這裡是最高的 8 位元</li>
+  <li><code class="language-plaintext highlighter-rouge">let OutOperandList = outs;</code> 定義指令的輸出操作數列表，也就是 Register Class
+    <ul>
+      <li>常見寫法如: <code class="language-plaintext highlighter-rouge">(outs R32:$rd, R32:$rs)</code>，表示 $dst 必須從 GPROut 類別挑 physical reg</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let InOperandList  = ins;</code> 定義指令的輸入操作數列表，也是 Register Class</li>
+  <li><code class="language-plaintext highlighter-rouge">let AsmString   = asmstr;</code> 指定指令的組合語言表示</li>
+  <li><code class="language-plaintext highlighter-rouge">let Pattern     = pattern;</code> 定義指令的模式，用於指令選擇和生成
+    <ul>
+      <li>在 Instruction Selection 階段會用到</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let Itinerary   = itin;</code> 指定指令的行程安排類別，用於指令調度</li>
+  <li><code class="language-plaintext highlighter-rouge">let TSFlags{3-0}   = FormBits;</code> 定義指令的目標特定標誌，這裡用於存儲指令格式資訊
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Target-Specific Flags</code> 是每條指令可以攜帶的額外資訊，LLVM 並不了解這些標誌的意義</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; SoftFail = 0;</code> 定義一個可變欄位，用於指示指令是否允許軟失敗</li>
+</ul>
+
+<p>以上定義了 Cpu0Inst 的基本結構，接下來可以基於此類別定義 Instruction Type</p>
+
+<blockquote>
+  <p>SoftFail 是提供給 disassembler 使用的機制，用於標示「編碼合法，但語意或 operand 組合不完全合法」的情況，不影響執行階段行為，也不涉及程式是否崩潰</p>
+</blockquote>
+
+<p><strong>Instruction Type</strong></p>
+
+<blockquote class="block-tip">
+  <p>此處僅以 Type A 為例，其他 Type 類似</p>
+</blockquote>
+
+<pre><code class="language-td">class FA&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr,
+         list&lt;dag&gt; pattern, InstrItinClass itin&gt;:
+      Cpu0Inst&lt;outs, ins, asmstr, pattern, itin, FrmA&gt;
+{
+  bits&lt;4&gt;  ra;
+  bits&lt;4&gt;  rb;
+  bits&lt;4&gt;  rc;
+  bits&lt;12&gt; shamt;
+
+  let Opcode = op;
+
+  let Inst{23-20} = ra;
+  let Inst{19-16} = rb;
+  let Inst{15-12} = rc;
+  let Inst{11-0}  = shamt;
+}
+</code></pre>
+
+<p>A-type (Arithmetic type) 指令格式，主要用於算術運算指令。以 3 地址運算的指令模板，
+同時包含一個 shift amount 欄位 (shift amount)。其餘 L-type、J-type 都是類似的定義方式。</p>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; margin: auto; text-align: center;">
+  <thead>
+    <tr>
+      <th rowspan="2">Type</th>
+      <th colspan="6">Instruction Encoding (Bits)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- A-type -->
+    <tr>
+      <td rowspan="2"><b>A-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td>Rc</td>
+      <td>Shamt</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td>15–12</td>
+      <td>11–0</td>
+    </tr>
+
+    <!-- L-type -->
+    <tr>
+      <td rowspan="2"><b>L-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td colspan="3">Cx (16 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td colspan="3">15–0</td>
+    </tr>
+
+    <!-- J-type -->
+    <tr>
+      <td rowspan="2"><b>J-type</b></td>
+      <td>Op</td>
+      <td colspan="5">Cx (24 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td colspan="5">23–0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<blockquote>
+  <p>透過上述定義，我們定義了 Cpu0 指令的格式和結構，這些定義將用於後續的指令實現和編碼過程中</p>
+</blockquote>
+
+<h4 id="152-cpu0instrinfotd">1.5.2 Cpu0InstrInfo.td</h4>
+
+<p class="block-tip">Cpu0InstrInfo.td 定義了 CPU0 架構的具體指令</p>
+
+<p><strong>SDTypeProfile</strong></p>
+
+<pre><code class="language-td">def SDT_Cpu0Ret          : SDTypeProfile&lt;0, 1, [SDTCisInt&lt;0&gt;]&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTypeProfile</code> 的作用是在 SelectionDAG 層級檢查 SDNode 的型別與結構是否合法</li>
+  <li>其定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>
+    <pre><code class="language-td">// SDTypeProfile - This profile describes the type requirements of a Selection
+// DAG node.
+class SDTypeProfile&lt;int numresults, int numoperands,
+                    list&lt;SDTypeConstraint&gt; constraints&gt; {
+int NumResults = numresults;
+int NumOperands = numoperands;
+list&lt;SDTypeConstraint&gt; Constraints = constraints;
+}
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">numresults</code>: 指定 SDNode 的 Result 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">numoperands</code>: 指定 SDNode 的 Operand 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTypeConstraint</code>: 是用於描述每個 Result 和 Operand 的型別約束</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>在 CPU0 雖然定義了 SDTypeProfile，但目前並沒有實際應用在指令定義中，後續將使用 SDTNone 來跳過檢查</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTNone</code>: 是一個特殊的 SDTypeProfile，表示不對 SDNode 的型別和結構進行任何檢查
+    <pre><code class="language-td">def SDTNone : SDTypeProfile&lt;0, 0, []&gt;;
+</code></pre>
+  </li>
+  <li>在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code> 中有許多預設的 SDTypeProfile，例如:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">SDTisInt</code>: 用於表示整數型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisFloat</code>: 用於表示浮點型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisVector</code>: 用於表示向量型別的 SDNode</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>SDNodeProperty</strong></p>
+
+<p>SDNodeProperty 是用來描述 SDNode 行為的 flag，是 SDNode 的第三個參數。例如:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDNPHasChain</code>: 表示該 SDNode 有 chain 輸入輸出、不能被重新排序
+    <ul>
+      <li>常見於 load, store, call, ret 或具有 branch with side effect 的指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">SDNPInGlue</code>: 表示該 SDNode 有 glue 輸入輸出，用於指令調度階段的依賴管理
+    <ul>
+      <li>常見於需要緊密相鄰執行的指令，例如 compare 與 branch 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如以下的指令:</p>
+<pre><code class="language-MIPS">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+</code></pre>
+
+<p>如果只有 chain 而沒有 Glue 則只能保證 BEQ 在 CMP 之後執行，但無法保證 BEQ 一定要在 CMP 之後的下一個指令執行，可能會被插入其他的指令。因此要加入表示 <code class="language-plaintext highlighter-rouge">CMP -- glue --&gt; BEQ</code> 來確保 BEQ 一定緊接在 CMP 之後執行。</p>
+
+<blockquote>
+  <p>branch with side effect 代表這個 branch 不只是「決定控制流往哪走」，它本身還具有可觀察的副作用。例如會影響 Memory 中的值，因此不能隨意移動、排序或者刪除</p>
+</blockquote>
+
+<p><strong>SDNode</strong></p>
+
+<blockquote>
+  <p>之後會另外寫一篇專門介紹 SDNode 的文章，再詳細說明 SDNodeProperty 的使用，可以先參考 <a href="https://zhuanlan.zhihu.com/p/649629353">LLVM后端技术浅谈-自定义SDNode</a></p>
+</blockquote>
+
+<pre><code class="language-td">def Cpu0Ret : SDNode&lt;"Cpu0ISD::Ret", SDTNone,
+                     [SDNPHasChain, SDNPOptInGlue, SDNPVariadic]&gt;;
+</code></pre>
+
+<p>此處定義了 Cpu0Ret 的 SDNode，表示 CPU0 的返回 SDNode。大多數 ISA 都會自訂義 Ret SDNode 來表示函式返回，而不是使用預設的 ISD::RET。因為 Ret 幾乎完全是 ABI 相關的行為，不同架構的 Ret 行為差異很大，因此 <code class="language-plaintext highlighter-rouge">ISD::RET</code> 很少被直接使用。</p>
+
+<blockquote>
+  <p>Ret 通常涉及 Return address、Calling convention、Delay slot、Stack adjustment 等等，這些都是與 ABI 密切相關的行為</p>
+</blockquote>
+
+<p><strong>Operand</strong></p>
+
+<blockquote class="block-tip">
+  <p>Operand 用於定義 Instruction 的操作數 (Operand) 類型</p>
+</blockquote>
+
+<p>操作數 (Operand) 是指令中的參數，可以是寄存器、
+立即數 (immediate) 或記憶體地址 (memory address) 等，
+但 Register 已經由 RegisterClass 隱式提供，
+因此在 Operand 中需要額外定義的是立即數和記憶體地址。</p>
+
+<pre><code class="language-td">// Signed Operand
+def simm16      : Operand&lt;i32&gt; {
+  let DecoderMethod= "DecodeSimm16";
+}
+
+// Address operand
+def mem : Operand&lt;iPTR&gt; {
+  let PrintMethod = "printMemOperand";
+  let MIOperandInfo = (ops GPROut, simm16);
+  let EncoderMethod = "getMemEncoding";
+}
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Operand</code> 是 LLVM TableGen 中用來定義指令操作數的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Operand&lt;ValueType ty&gt; : DAGOperand</code></li>
+      <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code></li>
+    </ul>
+  </li>
+  <li>此處介紹在 CPU0 中所使用到的 field:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">PrintMethod</code>: 指定用於打印操作數的函式名稱
+        <ul>
+          <li>例如 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 用於打印記憶體操作數</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">MIOperandInfo</code>: 定義操作數的組成部分，例如記憶體操作數由 GPROut 和 simm16 組成</li>
+      <li><code class="language-plaintext highlighter-rouge">DecoderMethod</code>: 指定用於解碼操作數的函式名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">EncoderMethod</code>: 指定用於編碼操作數的函式名稱</li>
+    </ul>
+  </li>
+</ul>
+
+<p>在 Cpu0 中定義了兩個額外的 Operand:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 定義了一個 16 位元的有號立即數操作數
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">DecodeSimm16</code> 函式來解碼該操作數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mem</code>: 定義了一個記憶體地址操作數，由 GPROut 和 simm16 組成
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 函式來打印該操作數</li>
+      <li>由 GPROut 和 simm16 組成
+        <ul>
+          <li>代表該記憶體地址是由一個 GRPOut Register 和一個 16 位元的有號立即數偏移量組成</li>
+        </ul>
+      </li>
+      <li>使用 <code class="language-plaintext highlighter-rouge">getMemEncoding</code> 函式來編碼該操作數</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>Zero 同樣包含在 GPROut 中，並且可以被用於記憶體地址計算，代表從地址 0 開始偏移，通常使用於絕對地址存取</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatLeaf</strong></p>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 用於在 Instruction Selection 階段中 DAG pattern matching 時的過濾條件</p>
+</blockquote>
+
+<pre><code class="language-td">// Node immediate fits as 16-bit sign extended on target immediate.
+// e.g. addi, andi
+def immSExt16  : PatLeaf&lt;(imm), [{ return isInt&lt;16&gt;(N-&gt;getSExtValue()); }]&gt;;
+</code></pre>
+
+<p>PatLeaf 是用於在 Instruction Selection 階段中表示指令操作數的類型。這裡將 <code class="language-plaintext highlighter-rouge">imm</code> 作為過濾條件，</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">imm</code> 是 SelectionDAG 中的 Immediate 節點
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">def imm : SDNode&lt;"ISD::Constant", SDTIntLeaf, [], "ConstantSDNode"&gt;;</code></li>
+    </ul>
+  </li>
+  <li>其位置於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code></li>
+</ul>
+
+<p>因此 immSExt16 的作用是在 imm 上進行過濾，<code class="language-plaintext highlighter-rouge">isInt&lt;N&gt;</code> 是 LLVM 的輔助 Template 函數，
+用於檢查一個整數值是否能夠被表示為 N 位元的有號整數。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/llvm/include/llvm/Support/MathExtras.h</code> 中定義了這個函式:
+    <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// Checks if an integer fits into the given bit width.</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">unsigned</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isInt</span><span class="p">(</span><span class="kt">int64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">N</span> <span class="o">&gt;=</span> <span class="mi">64</span> <span class="o">||</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">getSExtValue()</code> 是 <code class="language-plaintext highlighter-rouge">ConstantSDNode</code> 的成員函式，用於取得該節點的有號擴展值</li>
+</ul>
+
+<p>因此 immSExt16 定義表示，檢查一個 Immediate 節點的值是否能夠被表示為 16 位元的有號整數。</p>
+
+<hr />
+
+<p><strong>ComplexPattern</strong></p>
+
+<blockquote class="block-tip">
+  <p>在 PatLeaf 處理時通常只看 SDNode，但在 ComplexPattern 中則需要去顯式聲明 SDNode 的內部欄位</p>
+</blockquote>
+
+<pre><code class="language-to">def addr : ComplexPattern&lt;iPTR, 2, "SelectAddr", [frameindex], [SDNPWantParent]&gt;;
+</code></pre>
+
+<ul>
+  <li>ComplexPattern 用於處理更複雜的情況，先觀察 ComplexPattern 的定義:</li>
+  <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">// Complex pattern definitions.
+//
+
+// Complex patterns, e.g. X86 addressing mode, requires pattern matching code
+// in C++. NumOperands is the number of operands returned by the select function;
+// SelectFunc is the name of the function used to pattern match the max. pattern;
+// RootNodes are the list of possible root nodes of the sub-dags to match.
+// e.g. X86 addressing mode - def addr : ComplexPattern&lt;4, "SelectAddr", [add]&gt;;
+//
+class ComplexPattern&lt;ValueType ty, int numops, string fn,
+                    list&lt;SDNode&gt; roots = [], list&lt;SDNodeProperty&gt; props = [],
+                    int complexity = -1&gt; {
+ValueType Ty = ty;
+int NumOperands = numops;
+string SelectFunc = fn;
+list&lt;SDNode&gt; RootNodes = roots;
+list&lt;SDNodeProperty&gt; Properties = props;
+int Complexity = complexity;
+}
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">ValueType ty</code>: 這個 Pattern 所期待的結果型別</li>
+  <li><code class="language-plaintext highlighter-rouge">int numops</code>: 該 Pattern 所產生的 Operand 數量
+    <ul>
+      <li>CPU0 address 為 base + offset = 2</li>
+      <li>X86 address 為 base + index * scale + displacement = 4</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">string fn</code>: 真正進行 Pattern match 後的處理函式名稱
+    <ul>
+      <li>這個函式會在 C++ 端實作，這裡會呼叫該函式來進行匹配</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNode&gt; roots</code>: 允許的根節點類型列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[add, frameindex]</code>，該 SDNode opcode 必須是 add 或 frameindex</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNodeProperty&gt; props</code>: 該 Pattern 所需的 SDNodeProperty 列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>，代表 fn 函式需要父節點作為額外參數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int complexity</code>: 多個 ComplexPattern 時的優先順序，數值越小優先匹配
+    <ul>
+      <li>同一個根節點可能會有多個 ComplexPattern，透過 complexity 來決定優先匹配哪一個</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這樣我們回頭去看 Cpu0 中的 addr ComplexPattern:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">iPTR</code>: 表示該 SDNode 的 ValueType 為指標型別</li>
+  <li><code class="language-plaintext highlighter-rouge">2</code>: 該 Pattern 處理後會產生兩個 Operand (base, offset)</li>
+  <li><code class="language-plaintext highlighter-rouge">"SelectAddr"</code>: 用於處理該 Pattern 的函式名稱</li>
+  <li><code class="language-plaintext highlighter-rouge">[frameindex]</code>: 只允許根節點為 frameindex 的 SDNode</li>
+  <li><code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>: 將父節點傳遞給 SelectAddr 函式</li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 和 ComplexPattern 都是用於 Instruction Selection 階段的 Pattern matching，但 PatLeaf 通常用於較簡單的過濾條件，而 ComplexPattern 則用於處理更複雜的情況</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatFrag</strong></p>
+
+<pre><code class="language-td">class AlignedLoad&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$ptr), (Node node:$ptr), [{
+  LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);
+  return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();
+}]&gt;;
+
+class AlignedStore&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$val, node:$ptr), (Node node:$val, node:$ptr), [{
+  StoreSDNode *SD = cast&lt;StoreSDNode&gt;(N);
+  return SD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= SD-&gt;getAlignment();
+}]&gt;;
+
+// Load/Store PatFrags.
+def load_a          : AlignedLoad&lt;load&gt;;
+def store_a         : AlignedStore&lt;store&gt;;
+</code></pre>
+
+<p>要理解這段 TableGen 代碼，首先需要了解 PatFrag 的概念。PatFrag 是用於定義可重用的模式片段 (pattern fragments)，這些片段可以在多個指令定義中被引用，以避免重複定義相同的模式。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">PatFrag</code> 的定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">class PatFrag&lt;dag ops, dag frag, code pred = [{}], SDNodeXForm xform = NOOP_SDNodeXForm&gt;
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">dag ops</code>: 定義該 PatFrag 將會有哪些參數</li>
+  <li><code class="language-plaintext highlighter-rouge">dag frag</code>: 該 PatFrag 應該匹配的模式</li>
+  <li><code class="language-plaintext highlighter-rouge">code pred</code>: 一個可選的條件，用於在匹配後以 C++ 代碼做進一步的過濾</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNodeXForm xform</code>: 用於在匹配後對 SDNode 進行轉換的函式</li>
+</ul>
+
+<p>這樣我們先回頭看 Cpu0 中的 AlignedLoad:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">(ops node:$ptr)</code>: 定義了該 PatFrag 接受一個參數 node，名稱為 $ptr</li>
+  <li><code class="language-plaintext highlighter-rouge">(Node node:$ptr)</code>: 定義了該 PatFrag 應該匹配的模式，這裡是匹配由使用者傳入的 PatFrag Node</li>
+  <li><code class="language-plaintext highlighter-rouge">[{ ... }]</code>: 這段 C++ 代碼用於在匹配後進行進一步的過濾
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);</code>
+        <ul>
+          <li>將匹配到的 SDNode N 強制轉換為 LoadSDNode</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();</code>
+        <ul>
+          <li>檢查該 Load 指令的記憶體型別大小是否小於等於其對齊要求</li>
+          <li>例如左側為 load i32 (4 bytes), 則右側的記憶體對齊至少也要 4 bytes</li>
+          <li>存取大小 &lt;= 對齊要求，表示該 Load 是對齊的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>因為 LLVM IR 的 Load/Store 包含多種存取/對齊方式，因此需要在 PatFrag 中進行過濾，確保只匹配符合對齊要求的 Load/Store 指令</p>
+</blockquote>
+
+<blockquote>
+  <p>SD 基本上與 LD 是相同的，差別是 SD 在 DAG 中是有兩個 Operand (val, ptr) 所以需要兩個參數，而 LD 只有一個參數 (ptr) 剩下的是 Result</p>
+</blockquote>
+
+<hr />
+
+<h3 id="16-instructions-specific-format">1.6 Instructions Specific Format</h3>
+
+<p>在完成了上述基礎設置後，接下來定義的是指令的具體格式，雖然指令可以被分為 R-type、I-type 和 J-type，但還是有許多指令具有特殊的格式需求，因此需要進一步細分成更具體可重用的格式。</p>
+
+<p><strong>Arithmetic &amp; Logical</strong></p>
+
+<p>算數和邏輯指令的模板，使用之前定義好的 FL 來定義算術和邏輯指令的模板:</p>
+
+<pre><code class="language-td">// Arithmetic and logical instructions with 2 register operands.
+class ArithLogicI&lt;bits&lt;8&gt; op, string instr_asm, SDNode OpNode,
+                  Operand Od, PatLeaf imm_type, RegisterClass RC&gt; :
+  FL&lt;op, (outs GPROut:$ra), (ins RC:$rb, Od:$imm16),
+     !strconcat(instr_asm, "\t$ra, $rb, $imm16"),
+     [(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))], IIAlu&gt; {
+  let isReMaterializable = 1;
+}
+
+/// Arithmetic Instructions (ALU Immediate)
+// IR "add" defined in include/llvm/Target/TargetSelectionDAG.td, line 315 (def add).
+def ADDiu   : ArithLogicI&lt;0x09, "addiu", add, simm16, immSExt16, CPURegs&gt;;
+</code></pre>
+
+<p>ArithLogicI 相對來說比較簡單，我們觀察 ArithLogicI 的設計一共有六個參數:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; op</code>: 指令的 Opcode</li>
+  <li><code class="language-plaintext highlighter-rouge">string instr_asm</code>: 指令的組合語言表示，以 String 形式傳入</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNode OpNode</code>: 指令對應的 SDNode，用於指令選擇階段</li>
+  <li><code class="language-plaintext highlighter-rouge">Operand Od</code>: 立即值運算元的 Operand 類型，用於在 MachineInstr 中表示立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">PatLeaf imm_type</code>: 立即值的 PatLeaf 類型，用於在 Instruction Selection 階段過濾立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">RegisterClass RC</code>: 來源暫存器所屬的暫存器類別</li>
+</ol>
+
+<p>在 ArithLogicI 的定義中:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FL&lt;...&gt;</code>: 繼承自之前定義的 FL (Format L-type)</li>
+  <li><code class="language-plaintext highlighter-rouge">(outs GPROut:$ra)</code>: 定義指令的輸出操作數為 GPROut 類別的暫存器 $ra</li>
+  <li><code class="language-plaintext highlighter-rouge">(ins RC:$rb, Od:$imm16)</code>: 定義指令的輸入操作數為 RC 類別的暫存器 $rb 和 Od 類別的立即值 $imm16</li>
+  <li><code class="language-plaintext highlighter-rouge">!strconcat(instr_asm, "\t$ra, $rb, $imm16")</code>:
+    <ul>
+      <li>傳入的 instr_asm 格式化輸出為 <code class="language-plaintext highlighter-rouge">instr_asm $ra, $rb, $imm16</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">[(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))]</code>: 匹配模式</li>
+  <li><code class="language-plaintext highlighter-rouge">IIAlu</code>: 指令的行程安排類別，在之後小節會介紹</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReMaterializable = 1;</code>: 指示該指令是可重構的 (rematerializable)，表示該指令的結果可以在需要時重新計算，而不需要保存到暫存器或記憶體中</li>
+</ul>
+
+<blockquote>
+  <p>rematerialization 代表如果這個值在之後很長一段時間沒有被使用到，compiler 可以選擇不保留這個值，而是在之後需要使用的時候重新計算它，這樣可以節省 register 或 memory 的使用。但如果是 side-effect 指令 (例如 store)，就不能 rematerialize，因為它改變了程式的狀態必須透過保存來維持正確性</p>
+</blockquote>
+
+<p>這樣我們來看 ADDiu 的定義:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">0x09</code>: 指令的 Opcode 為 0x09</li>
+  <li><code class="language-plaintext highlighter-rouge">"addiu"</code>: 指令的組合語言表示為 “addiu”</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: 指令對應的 SDNode 為 ISD::ADD</li>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 立即值運算元的 Operand 要透過 simm16 來表示在 MachineInstr 中</li>
+  <li><code class="language-plaintext highlighter-rouge">immSExt16</code>: 立即值的 PatLeaf 類型為 immSExt16，用於過濾 16 位元有號立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 來源暫存器所屬的暫存器類別為 CPURegs</li>
+</ul>
+
+<p><strong>Load &amp; Store</strong></p>
+
+<pre><code class="language-td">class FMem&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+          InstrItinClass itin&gt;: FL&lt;op, outs, ins, asmstr, pattern, itin&gt; {
+  bits&lt;20&gt; addr;
+  let Inst{19-16} = addr{19-16};
+  let Inst{15-0}  = addr{15-0};
+  let DecoderMethod = "DecodeMem";
+}
+
+// Memory Load/Store
+let canFoldAsLoad = 1 in
+class LoadM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+            Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs RC:$ra), (ins MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(set RC:$ra, (OpNode addr:$addr))], IILoad&gt; {
+  let isPseudo = Pseudo;
+}
+
+class StoreM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+             Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs), (ins RC:$ra, MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(OpNode RC:$ra, addr:$addr)], IIStore&gt; {
+  let isPseudo = Pseudo;
+}
+
+//@ 32-bit load.
+class LoadM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                   bit Pseudo = 0&gt;
+  : LoadM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+// 32-bit store.
+class StoreM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                    bit Pseudo = 0&gt;
+  : StoreM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+/// Load and Store Instructions
+///  aligned
+def LD     : LoadM32&lt;0x01,  "ld",  load_a&gt;;
+def ST     : StoreM32&lt;0x02, "st",  store_a&gt;;
+</code></pre>
+
+<p>這裡定義了多層次的 Load 和 Store 指令模板，首先是 FMem 類別，然後是 LoadM 和 StoreM 類別，最後是 LoadM32 和 StoreM32 類別。</p>
+
+<ol>
+  <li>FMem (Load/Store Memory 的基礎類別):
+    <ul>
+      <li>繼承自之前定義的 FL (Format L-type)</li>
+      <li>定義了記憶體地址欄位 addr，並指定其在指令編碼中的位置</li>
+      <li><code class="language-plaintext highlighter-rouge">let DecoderMethod = "DecodeMem";</code>: 指定用於解碼記憶體操作數的函式名稱</li>
+    </ul>
+  </li>
+  <li>LoadM (Load 指令模板):
+    <ul>
+      <li>繼承自 FMem，定義了 Load 指令的模板</li>
+      <li>定義了輸出操作數為 RC 類別的暫存器 $ra，輸入操作數為 MemOpnd 類別的記憶體地址 $addr</li>
+      <li><code class="language-plaintext highlighter-rouge">let isPseudo = Pseudo;</code>: 指示該指令是否為偽指令</li>
+      <li><code class="language-plaintext highlighter-rouge">let canFoldAsLoad = 1;</code>: 指示該 Load 指令可以被折疊 (folded) 成其他指令
+        <ul>
+          <li>例如如果 addiu 支援記憶體存取，則可以將 load + addiu 折疊成一條 addiu 指令</li>
+          <li><code class="language-plaintext highlighter-rouge">addiu $rd, 0($addr), imm</code> 直接從記憶體做加法運算，省略 load 指令</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>LoadM32 (32 位元 Load 指令模板):
+    <ul>
+      <li>繼承自 LoadM，專門用於 32 位元的 Load 指令</li>
+      <li>預設使用 GPROut 作為暫存器類別，mem 作為記憶體操作數類別</li>
+    </ul>
+  </li>
+  <li>最後定義了具體的 Load 指令 LD:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">0x01</code>: 指令的 Opcode 為 0x01</li>
+      <li><code class="language-plaintext highlighter-rouge">"ld"</code>: 指令的組合語言表示為 “ld”</li>
+      <li><code class="language-plaintext highlighter-rouge">load_a</code>: 使用之前定義的 load_a PatFrag 來過濾記憶體地址模式</li>
+    </ul>
+  </li>
+</ol>
+
+<p>設計多層次的 Load 和 Store 指令模板，其目的是為了提高指令定義的靈活性和可重用性。通過這種方式，可以透過更改 RegisterClass 或 Operand 類型來輕鬆定義不同變體的 Load 和 Store 指令，而不需要重複定義相同的指令結構。</p>
+
+<blockquote>
+  <p>例如要擴展為 i8 load/store，只要改變以下定義: 1. 定義新的 memory Operand (例如 mem8) 2. 重新定義對應的 PatFrag 3. 建立新的 LoadM8/StoreM8 類別繼承自 LoadM/StoreM 4. 定義具體的 LB/ SB 指令</p>
+</blockquote>
+
+<p>這種設計的好處是最後的具體指令定義變得非常簡潔，只需要指定 Opcode、組合語言表示和 PatFrag。</p>
+
+<p><strong>Jump</strong></p>
+
+<pre><code class="language-td">//@JumpFR {
+let isBranch=1, isTerminator=1, isBarrier=1, imm16=0, hasDelaySlot = 1,
+    isIndirectBranch = 1 in
+class JumpFR&lt;bits&lt;8&gt; op, string instr_asm, RegisterClass RC&gt;:
+  FL&lt;op, (outs), (ins RC:$ra),
+     !strconcat(instr_asm, "\t$ra"), [(brind RC:$ra)], IIBranch&gt; {
+  let rb = 0;
+  let imm16 = 0;
+}
+//@JumpFR }
+
+def JR      : JumpFR&lt;0x3c, "jr", GPROut&gt;;
+</code></pre>
+
+<p>Jump 雖然是 FL 但通常只使用一個 Register 作為目標地址，因此定義了一個 JumpFR 類別來表示這種情況。</p>
+<ul>
+  <li>以下是 TableGen Instruction 的欄位:
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">isBranch=1</code>: 指示該指令是一個分支指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isTerminator=1</code>: 指示該指令是一個 Basic Block 的終止指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isBarrier=1</code>: 指示該指令是一個屏障指令，在此之後的指令不會被執行到</li>
+      <li><code class="language-plaintext highlighter-rouge">hasDelaySlot = 1</code>: 指示該指令具有延遲槽 (delay slot)</li>
+      <li><code class="language-plaintext highlighter-rouge">isIndirectBranch = 1</code>: 指示該指令是一個間接分支指令，跳轉地址由 Register 提供</li>
+    </ol>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">imm16</code>, <code class="language-plaintext highlighter-rouge">rb</code> 是在 FL 中定義的欄位，這裡將它們設為 0，因為 JumpFR 不需要這些欄位</li>
+  <li>最後定義 JR 指令: <code class="language-plaintext highlighter-rouge">0x3c</code>, <code class="language-plaintext highlighter-rouge">"jr"</code>, <code class="language-plaintext highlighter-rouge">GPROut</code></li>
+</ul>
+
+<blockquote>
+  <p>delay slot 是允許執行在分支指令之後的下一條指令，無論分支是否被採取都會執行該指令，如果要跳轉則直接改變 PC，否則繼續執行下一條指令</p>
+</blockquote>
+
+<p><strong>Return</strong></p>
+
+<pre><code class="language-td">// Return instruction
+class RetBase&lt;RegisterClass RC&gt;: JumpFR&lt;0x3c, "ret", RC&gt; {
+  let isReturn = 1;
+  let isCodeGenOnly = 1;
+  let hasCtrlDep = 1;
+  let hasExtraSrcRegAllocReq = 1;
+}
+
+def RET : RetBase&lt;GPROut&gt;;
+</code></pre>
+
+<ul>
+  <li>定義了一個 RetBase 類別，繼承自 JumpFR，表示返回指令的基類</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReturn = 1;</code>: 指示該指令是一個返回指令</li>
+  <li><code class="language-plaintext highlighter-rouge">let isCodeGenOnly = 1;</code>: 指示該指令僅在程式碼生成階段使用，最終的 ASM 不會包含該指令
+    <ul>
+      <li>例如直接以 <code class="language-plaintext highlighter-rouge">jr $ra</code> 來實現返回，而不需要額外的 RET 指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let hasCtrlDep = 1;</code>: 指示該指令具有控制依賴</li>
+  <li><code class="language-plaintext highlighter-rouge">let hasExtraSrcRegAllocReq = 1;</code>: 指示該指令在暫存器分配階段有額外的來源暫存器需求</li>
+  <li>最後定義 RET 指令，使用 GPROut 作為暫存器類別</li>
+</ul>
+
+<p><strong>No Operation (NOP)</strong></p>
+
+<pre><code class="language-td">/// No operation
+let addr=0 in
+  def NOP   : FJ&lt;0, (outs), (ins), "nop", [], IIAlu&gt;;
+</code></pre>
+
+<p>空操作指令 (NOP) 的定義非常簡單，使用 FJ 類別來表示沒有任何操作的指令。</p>
+
+<p><strong>Pat</strong></p>
+
+<pre><code class="language-td">def : Pat&lt;(i32 immSExt16:$in),
+          (ADDiu ZERO, imm:$in)&gt;;
+</code></pre>
+
+<p>最後這段用於定義一個 Pat (Pattern)，表示將一個 16 位元有號立即值的 i32 型別映射到 ADDiu 指令，並將結果存入 ZERO 寄存器。因為 CPU0 沒有設計專門的 load immediate 指令，因此使用 ADDiu ZERO, imm 來實現載入立即值的功能。</p>
+
+<hr />
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-21-2025 22:13</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                llvm,
+                
+                backend,
+                
+                cpu0
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2026-01-17-I2C_introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: LLVM | TableGen Introduction">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2025-11-20-tablegen_introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Note | I2C Introduction">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Note | I2C Introduction",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2026/2026-01-17-I2C_introduction.md",
+            "ref": "_posts/2026/2026-01-17-I2C_introduction.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2025/2025-11-21-llvm_cpu0_create_backend.md",
+        "mtime": "2025-11-21 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

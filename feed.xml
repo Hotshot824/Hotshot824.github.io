@@ -1,0 +1,3943 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://hotshot824.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://hotshot824.github.io/" rel="alternate" type="text/html" /><updated>2026-02-18T08:41:21+00:00</updated><id>https://hotshot824.github.io/feed.xml</id><title type="html">Home</title><subtitle>Build Jekyll site with the GitBook style.
+</subtitle><author><name>Benson Hsu</name></author><entry><title type="html">Backend | Swagger</title><link href="https://hotshot824.github.io/jekyll/2026-02-05-swagger.html" rel="alternate" type="text/html" title="Backend | Swagger" /><published>2026-02-05T00:00:00+00:00</published><updated>2026-02-05T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/swagger</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-02-05-swagger.html"><![CDATA[<blockquote class="block-tip">
+  <p>Swagger 是一個非常流行的工具，可以幫助我們以 Specification First 的方式來開發 RESTful API，
+Swagger 允許我們使用 YAML 或 JSON 來定義 API 的規格，然後我們可以直接透過 Specification 來產生 Controller 的程式碼，
+這樣就能夠讓 API 的定義和實現分離，提升開發效率和 API 的可維護性。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>目前 <a href="https://swagger.io/">Swagger</a> 已經更名為 <a href="https://www.openapis.org/">OpenAPI</a>，不過很多人還是習慣稱呼 Swagger，所以兩種名稱都可以使用</p>
+</blockquote>
+
+<h3 id="1-overview">1. Overview</h3>
+
+<blockquote class="block-tip">
+  <p>依照 Specification First 的方式來開發 RESTful，也可以算是 Specification Driven Development (SDD) 的實踐方式</p>
+</blockquote>
+
+<p>如果我們要開發一個 Backend 的 RESTful API，主要有兩種做法:</p>
+
+<ol>
+  <li><strong>Code First:</strong>
+    <ul>
+      <li>我們直接到後端框架中撰寫 Controller 的程式碼，然後在程式碼中使用註解的方式來定義 API 的規格，
+例如使用 Spring Boot 的 <code class="language-plaintext highlighter-rouge">@RestController</code> 和 <code class="language-plaintext highlighter-rouge">@RequestMapping</code> 等註解來定義 API 的路徑、HTTP 方法、參數等等</li>
+      <li>優點是開發速度快，因為我們直接在程式碼中定義 API 的規格，不需要額外的工具來管理 API 的規格</li>
+      <li>有可能導致 API 設計不一致，Docs 不完整或者導致前後端耦合</li>
+    </ul>
+  </li>
+  <li><strong>Specification First:</strong>
+    <ul>
+      <li>我們先使用 Swagger 的 YAML 或 JSON 來定義 API 的規格，然後透過 Swagger 的工具來產生 Controller 的程式碼，
+這樣就能夠讓 API 的定義和實現分離，提升開發效率和 API 的可維護性</li>
+      <li>優點是前後端可以同時進行開發，前後端都根據 API 的規格來進行開發</li>
+      <li>缺點是需要額外的工具來管理 API 的規格，並且在開發過程中需要保持 API 的規格和實現的一致性</li>
+    </ul>
+  </li>
+</ol>
+
+<p>目前如果是大型專案或者 Microservice 的架構，通常會傾向使用 Specification First 的方式來開發 RESTful API，
+因為這樣可以讓 API 的定義更加清晰，並且能夠更好地管理 API 的版本和變更。
+而在中小型專案或者是快速開發的情況下，可能會傾向使用 Code First 的方式來開發 RESTful API，
+因為這樣可以更快地開始開發，不需要額外的工具來管理 API 的規格。</p>
+
+<h4 id="11-swagger-example">1.1 Swagger Example</h4>
+
+<p>我們來設計一個簡單的範例，假如我們有一個 User Registration 的 API，我們可以使用 Swagger 的 YAML 來定義 API 的規格，如下所示:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">openapi</span><span class="pi">:</span> <span class="s">3.0.0</span>
+<span class="na">info</span><span class="pi">:</span>
+  <span class="na">title</span><span class="pi">:</span> <span class="s">User Registration API</span>
+  <span class="na">description</span><span class="pi">:</span> <span class="s">API for user registration</span>
+  <span class="na">version</span><span class="pi">:</span> <span class="s">1.0.0</span>
+<span class="na">servers</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">url</span><span class="pi">:</span> <span class="s">http://example.com/v1</span>
+    <span class="na">description</span><span class="pi">:</span> <span class="s">Production server</span>
+  <span class="pi">-</span> <span class="na">url</span><span class="pi">:</span> <span class="s">http://test.example.com/v1</span>
+    <span class="na">description</span><span class="pi">:</span> <span class="s">Test server</span>
+<span class="na">paths</span><span class="pi">:</span>
+  <span class="na">/users</span><span class="pi">:</span>
+    <span class="na">post</span><span class="pi">:</span>
+      <span class="na">summary</span><span class="pi">:</span> <span class="s">Register a new user</span>
+      <span class="na">requestBody</span><span class="pi">:</span>
+        <span class="na">required</span><span class="pi">:</span> <span class="kc">true</span>
+        <span class="na">content</span><span class="pi">:</span>
+          <span class="na">application/json</span><span class="pi">:</span>
+            <span class="na">schema</span><span class="pi">:</span>
+              <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+              <span class="na">properties</span><span class="pi">:</span>
+                <span class="na">username</span><span class="pi">:</span>
+                  <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+                <span class="na">email</span><span class="pi">:</span>
+                  <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+                <span class="na">password</span><span class="pi">:</span>
+                  <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+      <span class="na">responses</span><span class="pi">:</span>
+        <span class="na">201</span><span class="pi">:</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">User created successfully</span>
+        <span class="na">400</span><span class="pi">:</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">Bad request</span>
+</code></pre></div></div>
+
+<p>這是一個很簡單的 OpenAPI 的定義，我們從上往下逐一來解釋一下這個定義的內容:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">info</code>: API 的基本資訊，包括 API 的標題、描述和版本號</li>
+  <li><code class="language-plaintext highlighter-rouge">servers</code>: API 的伺服器資訊，包括伺服器的 URL 和描述
+    <ul>
+      <li>這裡有兩個 Server 一個用於正式環境，一個用於測試環境</li>
+      <li>通常是給 Client 來選擇要使用哪個 Server 來呼叫 API</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">paths</code>: API 的路徑和 HTTP 方法
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">/users</code>: 這個路徑的 API 並且只有 POST 方法</li>
+      <li><code class="language-plaintext highlighter-rouge">requestBody</code>: POST 方法的 Body 的內容，必須為 JSON 格式
+        <ul>
+          <li>包含 <code class="language-plaintext highlighter-rouge">username</code>, <code class="language-plaintext highlighter-rouge">email</code>, <code class="language-plaintext highlighter-rouge">password</code> 這三個欄位</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">responses</code>: API 的回應，包括成功和失敗的回應
+    <ul>
+      <li>成功的回應是 201，表示使用者創建成功</li>
+      <li>失敗的回應是 400，表示請求錯誤</li>
+    </ul>
+  </li>
+</ol>
+
+<p>這樣我們透過 Swagger 可以很清楚的知道 API 的規格為 <code class="language-plaintext highlighter-rouge">POST /users</code>，並且知道這個 API 的請求和回應的格式，
+這樣就能夠讓前後端都根據這個規格來進行開發。</p>
+
+<hr />
+
+<h3 id="2-openapi-to-spring-boot-controller">2. OpenAPI to Spring Boot Controller</h3>
+
+<blockquote class="block-tip">
+  <p>實際開發直接將 OpenAPI 的定義轉換成 Spring Boot 的 Controller 程式碼，這樣能確保規格和實現的一致性</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://openapi-generator.tech/">OpenAPI Generator</a> 是轉換 OpenAPI 定義成程式碼的工具，支援多種語言和框架，包括 Java 的 Spring</p>
+</blockquote>
+
+<p>那我們要先了解那些部分是規格可以定義然後直接轉換成 Controller 的程式碼，主要可以分為以下轉換:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">paths</code> 的部分可以轉換成 Controller 的路徑和 HTTP 方法</li>
+  <li><code class="language-plaintext highlighter-rouge">components/schemas</code> 的部分可以轉換成 <a href="https://en.wikipedia.org/wiki/Data_transfer_object">DTO</a> 的類別定義</li>
+</ol>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Data_transfer_object">DTO</a> 是一種用於在不同層之間傳遞資料的物件，通常用於將資料從 Controller 層傳遞到 Service 層，或者從 Service 層傳遞到 Repository 層，
+透過 DTO 我們可以避免直接使用實體類別來傳遞資料，這樣可以避免實體類別的變更對其他層造成影響，並且可以更好地控制資料的格式和內容。</p>
+</blockquote>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">openapi</span><span class="pi">:</span> <span class="s">3.0.3</span>
+
+<span class="na">info</span><span class="pi">:</span>
+  <span class="na">title</span><span class="pi">:</span> <span class="s">User Registration API</span>
+  <span class="na">version</span><span class="pi">:</span> <span class="s">1.0.0</span>
+
+<span class="na">paths</span><span class="pi">:</span>
+  <span class="na">/</span><span class="pi">:</span>
+    <span class="na">get</span><span class="pi">:</span>
+      <span class="na">summary</span><span class="pi">:</span> <span class="s">Root health endpoint</span>
+      <span class="na">operationId</span><span class="pi">:</span> <span class="s">getRoot</span>
+      <span class="na">responses</span><span class="pi">:</span>
+        <span class="na">200</span><span class="pi">:</span>
+          <span class="na">description</span><span class="pi">:</span> <span class="s">Hello message</span>
+          <span class="na">content</span><span class="pi">:</span>
+            <span class="na">application/json</span><span class="pi">:</span>
+              <span class="na">schema</span><span class="pi">:</span>
+                <span class="na">$ref</span><span class="pi">:</span> <span class="s1">'</span><span class="s">#/components/schemas/RootResponse'</span>
+
+<span class="na">components</span><span class="pi">:</span>
+    <span class="na">schemas</span><span class="pi">:</span>
+        <span class="na">RootResponse</span><span class="pi">:</span>
+            <span class="na">type</span><span class="pi">:</span> <span class="s">object</span>
+            <span class="na">properties</span><span class="pi">:</span>
+                <span class="na">message</span><span class="pi">:</span>
+                    <span class="na">type</span><span class="pi">:</span> <span class="s">string</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">$ref</code> 是 OpenAPI 中用來引用其他部分定義的語法，透過 <code class="language-plaintext highlighter-rouge">$ref</code> 我們可以在 OpenAPI 定義中引用其他部分的定義
+    <ul>
+      <li>也可以引用多個檔案，例如 <code class="language-plaintext highlighter-rouge">./schemas.yaml</code> 中定義了 <code class="language-plaintext highlighter-rouge">RootResponse</code> 的 schema</li>
+      <li>使用 <code class="language-plaintext highlighter-rouge">$ref: './schemas.yaml#/RootResponse'</code> 來引用這個 schema</li>
+    </ul>
+  </li>
+  <li>這裡我們指定了 <code class="language-plaintext highlighter-rouge">200</code> 的回應內容為 <code class="language-plaintext highlighter-rouge">RootResponse</code> 的 schema，這樣在轉換成 Controller 程式碼時，
+就會知道這個 API 的回應格式是 <code class="language-plaintext highlighter-rouge">RootResponse</code> 這個 DTO 類別</li>
+</ul>
+
+<h4 id="21-spring-boot-file-structure">2.1 Spring Boot File Structure</h4>
+
+<blockquote class="block-warning">
+  <p>這裡我就不準備現成環境了，可以參考 <a href="https://github.com/hendisantika/spring-boot-swagger/tree/master">Spring Boot Swagger Example</a> 這個專案的結構來準備一個 Spring Boot 的專案結構，
+不過他的版本有點久，所以自己架設也是很簡單的。</p>
+</blockquote>
+
+<p>讓我們準備好一個 Spring Boot 的專案結構，如下所示:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span>
+├── HELP.md
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── src ── main ── resources ── openapi ── openapi.yaml
+└── target ── generated-sources
+</code></pre></div></div>
+
+<ul>
+  <li>Swagger 相關的 yaml 通常被放置在 <code class="language-plaintext highlighter-rouge">src/main/resources/openapi</code> 這個目錄下</li>
+  <li>產生後的檔案被放置在 <code class="language-plaintext highlighter-rouge">target/generated-sources</code> 這個目錄下</li>
+</ul>
+
+<p>然後去設定 <code class="language-plaintext highlighter-rouge">pom.xml</code> 來使用 OpenAPI Generator 的 Maven Plugin，如下:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+    <span class="nt">&lt;plugins&gt;</span>
+        <span class="nt">&lt;plugin&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.openapitools<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>openapi-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>7.5.0<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;executions&gt;</span>
+                <span class="nt">&lt;execution&gt;</span>
+                    <span class="nt">&lt;goals&gt;</span>
+                        <span class="nt">&lt;goal&gt;</span>generate<span class="nt">&lt;/goal&gt;</span>
+                    <span class="nt">&lt;/goals&gt;</span>
+                    <span class="nt">&lt;configuration&gt;</span>
+                        <span class="nt">&lt;inputSpec&gt;</span>${project.basedir}/src/main/resources/openapi/openapi.yaml<span class="nt">&lt;/inputSpec&gt;</span>
+                        <span class="nt">&lt;generatorName&gt;</span>spring<span class="nt">&lt;/generatorName&gt;</span>
+                        <span class="nt">&lt;library&gt;</span>spring-boot<span class="nt">&lt;/library&gt;</span>
+                        <span class="nt">&lt;output&gt;</span>${project.build.directory}/generated-sources/openapi<span class="nt">&lt;/output&gt;</span>
+                        <span class="nt">&lt;apiPackage&gt;</span>com.example.demo.api<span class="nt">&lt;/apiPackage&gt;</span>
+                        <span class="nt">&lt;modelPackage&gt;</span>com.example.demo.model<span class="nt">&lt;/modelPackage&gt;</span>
+                        <span class="nt">&lt;configOptions&gt;</span>
+                            <span class="nt">&lt;interfaceOnly&gt;</span>true<span class="nt">&lt;/interfaceOnly&gt;</span>
+                            <span class="nt">&lt;useSpringBoot3&gt;</span>true<span class="nt">&lt;/useSpringBoot3&gt;</span>
+                            <span class="nt">&lt;useTags&gt;</span>true<span class="nt">&lt;/useTags&gt;</span>
+                        <span class="nt">&lt;/configOptions&gt;</span>
+                    <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;/execution&gt;</span>
+            <span class="nt">&lt;/executions&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+    <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span>
+</code></pre></div></div>
+
+<p>之後就能在 <code class="language-plaintext highlighter-rouge">build</code> 的過程中自動產生 Controller 的程式碼，但這裡要注意產生的只有 <code class="language-plaintext highlighter-rouge">interface</code> 的程式碼，
+因此還是需要自己透過 <code class="language-plaintext highlighter-rouge">implementation</code> 的方式來實現 Controller 的邏輯。</p>
+
+<p><strong>./target/generated-sources/openapi/…/RootApi.java</strong>:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.example.demo.api</span><span class="o">;</span>
+
+<span class="cm">/** ... **/</span>
+
+<span class="nd">@Validated</span>
+<span class="nd">@Tag</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"root"</span><span class="o">,</span> <span class="n">description</span> <span class="o">=</span> <span class="s">"the root API"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">RootApi</span> <span class="o">{</span>
+    
+    <span class="cm">/** ... **/</span>
+
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">"/"</span><span class="o">,</span> <span class="n">produces</span> <span class="o">=</span> <span class="o">{</span><span class="s">"application/json"</span><span class="o">})</span>
+
+    <span class="k">default</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">RootResponse</span><span class="o">&gt;</span> <span class="nf">getRoot</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">getRequest</span><span class="o">().</span><span class="na">ifPresent</span><span class="o">(</span><span class="n">request</span> <span class="o">-&gt;</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">MediaType</span> <span class="n">mediaType</span> <span class="o">:</span> <span class="nc">MediaType</span><span class="o">.</span><span class="na">parseMediaTypes</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Accept"</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mediaType</span><span class="o">.</span><span class="na">isCompatibleWith</span><span class="o">(</span><span class="nc">MediaType</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="s">"application/json"</span><span class="o">)))</span> <span class="o">{</span>
+                    <span class="nc">String</span> <span class="n">exampleString</span> <span class="o">=</span> <span class="s">"{ \"message\" : \"message\" }"</span><span class="o">;</span>
+                    <span class="nc">ApiUtil</span><span class="o">.</span><span class="na">setExampleResponse</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="s">"application/json"</span><span class="o">,</span> <span class="n">exampleString</span><span class="o">);</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">ResponseEntity</span><span class="o">&lt;&gt;(</span><span class="nc">HttpStatus</span><span class="o">.</span><span class="na">NOT_IMPLEMENTED</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Controller 依然是由開發者透過 <strong>implementation</strong> 與 <strong>Override</strong> 的方式來實現的，
+同時我們也有了 DTO 的類別定義，這裡的 <code class="language-plaintext highlighter-rouge">RootResponse</code> 就是從 OpenAPI 定義中轉換過來的 DTO 類別。</p>
+
+<p><strong>./src/main/java/…/RootApiController.java</strong>:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.example.demo.controller</span><span class="o">;</span>
+
+<span class="cm">/** ... **/</span>
+
+<span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RootApiController</span> <span class="kd">implements</span> <span class="nc">RootApi</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">RootResponse</span><span class="o">&gt;</span> <span class="nf">getRoot</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">RootResponse</span> <span class="n">response</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RootResponse</span><span class="o">().</span><span class="na">message</span><span class="o">(</span><span class="s">"hello, word"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">ResponseEntity</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>以上就是我們如何從 OpenAPI 的定義來產生 Spring Boot Controller 的程式碼，這份 OpenAPI 不只能用於產生 Controller 的程式碼，
+也能用於產生 Client 的程式碼，或者是用於產生 API 的文件。</p>
+
+<blockquote class="block-danger">
+  <p>注意一個原則，新手常會犯的錯誤是去修改了自動產生的程式碼，應該要把這些自動產生的程式碼當成是可以被覆蓋的，
+然後在自己的 Controller 中去實現這些程式碼的邏輯，不管是 Swagger 或者其他工具都是一樣的原則</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>這樣我們就大致了解了 Swagger 的使用方式，以及如何從 OpenAPI 的定義來產生 Spring Boot Controller 的程式碼，
+下次開發新服務時就可以考慮使用 Specification First 的方式來開發 RESTful API。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>02-07-2026 18:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="restful api" /><category term="swagger" /><summary type="html"><![CDATA[Swagger 是一個非常流行的工具，可以幫助我們以 Specification First 的方式來開發 RESTful API， Swagger 允許我們使用 YAML 或 JSON 來定義 API 的規格，然後我們可以直接透過 Specification 來產生 Controller 的程式碼， 這樣就能夠讓 API 的定義和實現分離，提升開發效率和 API 的可維護性。]]></summary></entry><entry><title type="html">Pattern | Inversion of Control</title><link href="https://hotshot824.github.io/jekyll/2026-02-02-inversion_of_control.html" rel="alternate" type="text/html" title="Pattern | Inversion of Control" /><published>2026-02-02T00:00:00+00:00</published><updated>2026-02-02T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/inversion_of_control</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-02-02-inversion_of_control.html"><![CDATA[<blockquote class="block-tip">
+  <p><a href="https://en.wikipedia.org/wiki/Inversion_of_control">Inversion of Control</a> (IoC) 具體來說是一種 Design Principle，而不是 Design Pattern，IoC 的核心思想是將對象的控制權從傳統的流程控制轉移到外部容器或框架，
+這樣可以實現更好的模組化、可測試性和靈活性。而 Design Pattern 是更具體的實現 IoC 的方式，例如 Dependency Injection 就是一種實現 IoC 的 Design Pattern。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>這篇文章偏向概念性的說明 IoC 的核心思想，以及如何透過一些簡單的範例來實現 IoC</p>
+</blockquote>
+
+<blockquote>
+  <p>不過如果沒有真的實踐過，其實對於 IoC 的理解可能會流於表面，會覺得 IoC 就是把控制權交給框架或容器，而沒辦法理解這樣做的好處</p>
+</blockquote>
+
+<h3 id="1-overview">1. Overview</h3>
+
+<p>首先我們先理解字面意思上「Inversion of Control」的意思，這個反轉的意思其實是基於傳統的程式設計模式，
+其控制權發生了「Inversion」，也就是說傳統的程式設計模式中，對象的控制權通常是由程式碼本身來掌握的，而在 IoC 中，這個控制權被反轉了，
+由外部的容器或框架來掌握，而不是呼叫者自己來控制。</p>
+
+<blockquote class="block-danger">
+  <p>這種說法依然是比較抽象的，想要理解用具體案例來說明會更清楚</p>
+</blockquote>
+
+<h4 id="11-example">1.1 Example</h4>
+
+<p>如果有一個 <code class="language-plaintext highlighter-rouge">Class A</code> 他需要透過 <code class="language-plaintext highlighter-rouge">Class B</code> 來印出訊息，傳統的做法會是 <code class="language-plaintext highlighter-rouge">Class A</code> 直接 new 一個 <code class="language-plaintext highlighter-rouge">Class B</code> 的實例，
+然後呼叫 <code class="language-plaintext highlighter-rouge">Class B</code> 的方法來印出訊息，如下所示：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassA</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">ClassB</span> <span class="n">classB</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">ClassA</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">classB</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassB</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">classB</span><span class="o">.</span><span class="na">printMessage</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassB</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello, World!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>上面的程式碼問題在於 <code class="language-plaintext highlighter-rouge">Class A</code> 與 <code class="language-plaintext highlighter-rouge">Class B</code> 之間是強耦合的，如果未來需要更換 <code class="language-plaintext highlighter-rouge">Class B</code> 的實現，
+我們需要進入 <code class="language-plaintext highlighter-rouge">Class A</code> 的程式碼來修改，那如果再整個系統中有多處使用 <code class="language-plaintext highlighter-rouge">Class B</code> 的地方，那麼修改的成本就會非常高，
+這就是傳統的程式設計模式中控制權沒有反轉的問題，<code class="language-plaintext highlighter-rouge">Class A</code> 擁有 <code class="language-plaintext highlighter-rouge">Class B</code> 的實例，並且直接控制 <code class="language-plaintext highlighter-rouge">Class B</code> 的行為。</p>
+
+<blockquote class="block-danger">
+  <p>同時有可能 A, B 是循環耦合的關係，例如 B 需要取得 A 的某些資訊來完成他的工作，這樣就會如<strong>下圖左</strong> A, B 是循環依賴的，
+當未來需要更換 A 或 B 的實現時，變成兩邊的修改都要進行，並且在測試時需要同時 mock A 和 B</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>如果有 100 個類別需要使用 Class B 的功能，難道我要修改 100 個類別的硬編碼來更換 Class B 的實現嗎？</p>
+</blockquote>
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2026/02-02-inversion_of_control/1.jpg" width="50%" height="50%" />
+    <img src="/image/2026/02-02-inversion_of_control/2.jpg" width="50%" height="50%" />
+</div>
+
+<p>於是聰明的你立刻想到了，有沒有可能由第三方的容器來管理 A 和 B 的實例，這樣就能打破 A 和 B 之間的循環依賴，
+讓 A 和 B 都不直接擁有對方的實例，而是由容器來管理並提供給 A 和 B，這樣就實現了控制權的反轉，如<strong>上圖右</strong>所示。</p>
+
+<p>但是這樣其實還是無法看出 IoC 的好處，因為我們只是把 A, B 的實例管理交給了容器，
+A 還是需要知道 B 的存在，並且直接呼叫 B 的方法來印出訊息，這樣的設計依然是強耦合的，A 和 B 之間的依賴關係沒有被解決。
+<strong>如果要修改 A 或 B 的實現，仍然需要修改 A 的程式碼，這樣就沒有真正實現 IoC 的好處。</strong></p>
+
+<h4 id="12-abstraction-layer">1.2 Abstraction Layer</h4>
+
+<blockquote class="block-danger">
+  <p>加入抽象層是實現 IoC 的必要條件，這樣才能使 A 與 B 真正的解耦合</p>
+</blockquote>
+
+<p>此時我們需要加入一個抽象層，讓 A 和 B 之間不是直接依賴對方的實現，而是依賴對方的抽象介面，如<strong>下圖</strong>所示：</p>
+
+<p><img src="/image/2026/02-02-inversion_of_control/3.jpg" alt="" height="80%" width="80%" /></p>
+
+<p>這樣 A 與 B 的實作之間完全是解耦合的，A 只依賴 B 的抽象介面，而 B 也只依賴 A 的抽象介面，
+底層實作只要滿足抽象介面的定義就可以了，這樣我們就可以隨時替換 A 或 B 的實現，這個替換可以是第三方的程式碼或者設定檔來決定使用哪一種實現。
+這樣如果有 100 個類別需要使用不同的 B 實現，我們只需要改變設定檔就能一次改變所有實際類別。</p>
+
+<blockquote class="block-warning">
+  <p>這樣的優點是如果我們在某個特定環境，例如測試環境，我們要將 A 獨立單元測試時，對於 B 的依賴就不需要真正的 B 實現，
+而是可以使用一個 Mock 的 B 來滿足 A 對 B 的依賴，而不需要依賴 B 的實際行為。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-implementation">2. Implementation</h3>
+
+<blockquote class="block-tip">
+  <p>實際上 IoC 的實現方式有很多種，最常見的就是 Dependency Injection (DI)，還有 Service Locator 等等，不同的實現方式有不同的優缺點，
+不過最重要的是要理解 IoC 的核心思想，而不是被具體的實現方式所限制，因為 IoC 的核心思想是將控制權反轉，而不是具體的實現方式。</p>
+</blockquote>
+
+<blockquote>
+  <p>能講的實現方法太多，可以另外寫一篇文章來介紹不同的實現方式，這裡只會著重在 DI 的實現方式</p>
+</blockquote>
+
+<p>在理解 DI 的實現方法之前我們要先了解 A 如何獲得 B 的實例，實際上在 Spring 中，這個賦予通常是一次性的，
+因此 A 並不會動態的獲得 B 的實例，而是由 Spring 在啟動時就將 B 的實例注入到 A 中。</p>
+
+<p>在寫程式上我們能透過以下幾種方式來實現 A 獲得 B 的實例:</p>
+
+<ol>
+  <li><strong>Constructor Injection:</strong>
+    <ul>
+      <li>透過建構子來注入 B 的實例到 A 中</li>
+    </ul>
+  </li>
+  <li><strong>Field Injection:</strong>
+    <ul>
+      <li>直接將 B 的實例注入到 A 的欄位中</li>
+    </ul>
+  </li>
+  <li><strong>Setter Injection:</strong>
+    <ul>
+      <li>透過 setter 方法來注入 B 的實例到 A 中</li>
+    </ul>
+  </li>
+  <li><strong>Method Injection:</strong>
+    <ul>
+      <li>透過方法參數來注入 B 的實例到 A 中</li>
+    </ul>
+  </li>
+  <li><strong>ObjectProvider Injection:</strong>
+    <ul>
+      <li>透過第三方的程式碼來獲得 B 的實例，但 A 會依賴 ObjectProvider 來獲得 B 的實例</li>
+      <li>這種方式很接近 [Service Locator ]的實現方式，因為 A 需要依賴 ObjectProvider 來獲得 B 的實例
+        <ul>
+          <li>這種方法由於 A 需要依賴 ObjectProvider 來獲得 B 的實例，實際在上不一定是更好的設計</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Lookup Method Injection:</strong>
+    <ul>
+      <li>可以使用 <a href="https://github.com/cglib/cglib?tab=readme-ov-file">CGLIB</a> 來實現動態代理，讓 A 在呼叫 B 的方法時，實際上是呼叫一個代理物件，這個代理物件會在呼叫時動態的獲得 B 的實例
+        <ul>
+          <li>這種方式通常自己手動寫起來會比較麻煩，會透過框架來實現，例如 Spring 就提供了這樣的功能</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p><a href="https://github.com/cglib/cglib?tab=readme-ov-file">CGLIB</a> 是一個 Java lib，可以用來動態生成 Java 類別，這樣就可以在運行時動態的創建類別，並且可以在類別中定義方法，這樣就可以實現動態代理的功能。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>總之無論透過哪種方式，實際上還是會需要執行一個代碼將 B 賦予 A，差別只是由框架提供或者我們可以自己寫一個簡單的程式碼來實現這個賦予的過程</p>
+</blockquote>
+
+<h4 id="21-dependency-injection">2.1 Dependency Injection</h4>
+
+<p><strong>Constructor Injection</strong></p>
+
+<p>一個最簡單的實現方式就是透過建構子來注入 B 的實例到 A 中，如下所示:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassC</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ClassB</span> <span class="n">classB</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassB</span><span class="o">();</span>
+        <span class="nc">ClassA</span> <span class="n">classA</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassA</span><span class="o">(</span><span class="n">classB</span><span class="o">);</span>
+        <span class="n">classA</span><span class="o">.</span><span class="na">printMessage</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>這是手動實現 DI 的方式，雖然很簡單，但這也完成了 IoC 的核心定義，Class B 與 Class A 都是由 Class C 的 main 方法控制的。</p>
+</blockquote>
+
+<p>實際上我們也可以透過 Reflection 來實現 DI 的方式，透過例如 <code class="language-plaintext highlighter-rouge">@Autowired</code> 這樣的註解來告訴框架需要注入的類別，
+然後由框架來透過 Reflection 來實現 DI 的過程，這樣我們就可以寫一個程式來自動化的實現 DI 的過程，而不需要手動寫一個程式碼來實現這個過程。</p>
+
+<p>當然這樣的方法就不可能是數行程式碼就能實現的了，通常會需要一個完整的框架來實現這樣的功能，
+例如 Spring 就提供了這樣的功能，讓我們可以透過註解來實現 DI 的過程。</p>
+
+<p><strong>Field Injection</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ClassA</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nc">ClassB</span> <span class="n">classB</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">classB</span><span class="o">.</span><span class="na">printMessage</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="nc">Class</span> <span class="nc">ClassC</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ClassA</span> <span class="n">classA</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassA</span><span class="o">();</span>
+        <span class="n">classA</span><span class="o">.</span><span class="na">classB</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassB</span><span class="o">();</span>
+        <span class="n">classA</span><span class="o">.</span><span class="na">printMessage</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Field Injection 的方式是直接將 B 的實例注入到 A 的欄位中，這樣就不需要透過建構子來注入了，這裡為了模擬自己實作而使用 <code class="language-plaintext highlighter-rouge">public</code> 欄位來直接注入，
+實際上在 Spring 中是透過 Reflection 來實現，會繞過 Java 的存取控制來注入私有欄位的，因此可以保持欄位為 <code class="language-plaintext highlighter-rouge">private</code> 或者 <code class="language-plaintext highlighter-rouge">protected</code>。</p>
+
+<p>其餘方法如 Setter Injection 是透過 setter 方法來注入 B 的實例到 A 中，Method Injection 是透過方法參數來注入 B 的實例到 A 中，這兩種方式的實現方式與 Constructor Injection 類似，只是注入的方式不同而已，實際上在 Spring 中這兩種方式也是被支持的。</p>
+
+<h4 id="22-spring-implementation">2.2 Spring Implementation</h4>
+
+<blockquote class="block-tip">
+  <p><a href="https://docs.spring.io/spring-framework/reference/core/beans/annotation-config/autowired.html">Using @Autowired</a> 是 Spring 中最常見的實現 DI 的方式</p>
+</blockquote>
+
+<p>Spring 是依照你的 Class 寫法來決定使用哪一種注入方式，有以下規則:</p>
+
+<ol>
+  <li>Class 只有一個 Constructor，並且 Constructor 的參數都是 Spring 管理的 Bean
+    <ul>
+      <li>Spring 就會使用 Constructor Injection 的方式來注入 Bean。</li>
+    </ul>
+  </li>
+  <li>Class 有多個建構子，而且都有 Bean 作為參數，那麼需要使用 <code class="language-plaintext highlighter-rouge">@Autowired</code> 來指定使用哪一個建構子來注入 Bean。</li>
+  <li>只有欄位有 <code class="language-plaintext highlighter-rouge">@Autowired</code> 註解，那麼 Spring 就會使用 Field Injection 的方式來注入 Bean。</li>
+  <li>如果有 Method 有 <code class="language-plaintext highlighter-rouge">@Autowired</code> 註解，那麼 Spring 就會使用 Method Injection 的方式來注入 Bean。
+    <ul>
+      <li>當 Method 是 setter 方法的時候，就稱為 Setter Injection</li>
+    </ul>
+  </li>
+</ol>
+
+<p>雖然有這麼多種注入方式，<strong>但 Spring 官方推薦的是使用 Constructor Injection 的方式來實現 DI</strong>，
+也就是只有一個 Constructor，並且 Constructor 的參數都是 Spring 管理的 Bean，
+這樣的方式是顯式的，盡量減少 <code class="language-plaintext highlighter-rouge">@Autowired</code> 的使用，這樣就能讓程式碼更清晰，並且更容易測試。</p>
+
+<blockquote>
+  <p>Since you can mix constructor-based and setter-based DI, it is a good rule of thumb to use constructors for mandatory dependencies and setter methods or configuration methods for optional dependencies.</p>
+</blockquote>
+
+<blockquote>
+  <p>一個良好的經驗法則是，對於「必要（mandatory）」的依賴，應使用建構子注入；對於「可選（optional）」的依賴，則使用 setter 方法或設定方法來注入。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html">Dependency Injection</a></p>
+</blockquote>
+
+<p>這裡給一個範例，假設我們有 <code class="language-plaintext highlighter-rouge">stripe</code> 與 <code class="language-plaintext highlighter-rouge">paypal</code> 兩個支付系統的實現，透過 <code class="language-plaintext highlighter-rouge">PaymentService</code> 這個抽象介面來定義支付服務:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PaymentService</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">pay</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="nd">@Service</span>
+<span class="nd">@Profile</span><span class="o">(</span><span class="s">"stripe"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StripePaymentService</span> <span class="kd">implements</span> <span class="nc">PaymentService</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pay</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Stripe paid: "</span> <span class="o">+</span> <span class="n">amount</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="nd">@Service</span>
+<span class="nd">@Profile</span><span class="o">(</span><span class="s">"paypal"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PaypalPaymentService</span> <span class="kd">implements</span> <span class="nc">PaymentService</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pay</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Paypal paid: "</span> <span class="o">+</span> <span class="n">amount</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderService</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PaymentService</span> <span class="n">paymentService</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">OrderService</span><span class="o">(</span><span class="nc">PaymentService</span> <span class="n">paymentService</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">paymentService</span> <span class="o">=</span> <span class="n">paymentService</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createOrder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">paymentService</span><span class="o">.</span><span class="na">pay</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">spring</span><span class="pi">:</span>
+  <span class="na">profiles</span><span class="pi">:</span>
+    <span class="na">active</span><span class="pi">:</span> <span class="s">stripe</span>
+</code></pre></div></div>
+
+<p>或者透過啟動參數 <code class="language-plaintext highlighter-rouge">-Dspring.profiles.active=paypal</code> 來切換使用 <code class="language-plaintext highlighter-rouge">paypal</code> 的實現，
+這樣就能夠在不修改程式碼的情況下切換支付系統的實現了。</p>
+
+<h3 id="3-conclusion">3. Conclusion</h3>
+
+<p>最後我們總結一下 IoC 到底帶來開發上那些好處，主要有以下幾點:</p>
+
+<ol>
+  <li><strong>降低耦合度:</strong>
+    <ul>
+      <li>A 和 B 之間的依賴關係被解決了，這樣就能夠降低 A 和 B 之間的耦合度</li>
+      <li>在實作時我們可以關注於 A 和 B 的行為，而不需要關注 A 和 B 之間的依賴關係</li>
+    </ul>
+  </li>
+  <li><strong>提高可測試性:</strong>
+    <ul>
+      <li>我們不必為了測試而特別去建構 B 的實例，更容易區分測試環境的使用與生產環境的使用</li>
+      <li>可以專門為測試環境提供一個 Mock 的 B 的實現，這樣就能夠更容易的測試 A 的行為</li>
+    </ul>
+  </li>
+  <li><strong>生命週期管理:</strong>
+    <ul>
+      <li>將物件統一交由容器來管理，這樣就能夠統一管理物件的生命週期</li>
+      <li>在 Spring 中，Bean 的生命週期是由 Spring 來管理的，這樣就能夠統一管理 Bean 的創建、銷毀等過程
+        <ul>
+          <li>例如物件銷毀的時候需要釋放資源，這樣就能夠統一管理資源的釋放過程</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>以上說明了 IoC 的核心思想，以及如何透過 DI 的方式來實現 IoC，但其實要實現 Dependency Injection 的方式還有很多可以說明，
+之後會考慮要不要說 Spring Boot 如何具體實現 DI，會涉及到 Spring 的 BeanFactory、ApplicationContext、BeanDefinition，
+以及三層 Cache 如何去解決 Bean 的循環依賴問題，這些都是實現 DI 的細節，會在之後考慮要不要寫一篇文章來說明。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>02-03-2026 18:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="design pattern" /><summary type="html"><![CDATA[Inversion of Control (IoC) 具體來說是一種 Design Principle，而不是 Design Pattern，IoC 的核心思想是將對象的控制權從傳統的流程控制轉移到外部容器或框架， 這樣可以實現更好的模組化、可測試性和靈活性。而 Design Pattern 是更具體的實現 IoC 的方式，例如 Dependency Injection 就是一種實現 IoC 的 Design Pattern。]]></summary></entry><entry><title type="html">Backend | The 12-Factor App</title><link href="https://hotshot824.github.io/jekyll/2026-01-29-the_12_factor_app.html" rel="alternate" type="text/html" title="Backend | The 12-Factor App" /><published>2026-01-29T00:00:00+00:00</published><updated>2026-01-29T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/the_12_factor_app</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-01-29-the_12_factor_app.html"><![CDATA[<blockquote class="block-tip">
+  <p>The Twelve-Factor App 是一套用於構建現代雲端應用程式的最佳實踐方法論，由 Heroku 團隊的聯合創始人 Adam Wiggins 在 2011 年提出，
+這是開發 SaaS（Software as a Service）的方法論，旨在幫助開發者構建可擴展、可維護和可部署的應用程式。</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>不過畢竟是 2011 年提出的原則了，當時的技術環境與現在已經有很大的差異了，例如當時還沒有 Docker、Kubernetes 等容器化技術，
+目前很多看來是常識的原則在當時還不是那麼普遍的作法，因此這些原則在當時是非常具有前瞻性的，
+並且在當前的 Cloud Native 環境中仍然具有很高的指導意義。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://12factor.net/">THE TWELVE-FACTOR APP</a></p>
+</blockquote>
+
+<h3 id="basic-principles">Basic Principles</h3>
+
+<ul>
+  <li><strong>使用宣告式（declarative）的設定格式來進行自動化部署與配置，以降低新成員加入專案所需的時間與成本</strong>
+    <ul>
+      <li>過去我喜歡用半成品的 Image 來部署應用程式，透過 Entry Script 來完成初始化，但這樣會有以下問題:
+        <ul>
+          <li>Container 變為半成品，破壞可重現性，有可能在 CI/CD 上影響穩定性</li>
+          <li>Shell Script 只可以負責初始化與啟動程式，不應該負責環境與配置的管理，這是 .yaml 的工作</li>
+        </ul>
+      </li>
+      <li>環境變數、連線資訊、容器之間的依賴、捲軸掛載、重啟政策、複製數量都應該在 .yaml 中宣告
+        <ul>
+          <li>在正式環境中請使用乾淨的 Image，並且在 .yaml 中宣告所有的設定與依賴</li>
+          <li>Image 要確保 Immutable，即使是 <a href="https://docs.gitops.weaveworks.org/docs/intro-weave-gitops/">GitOps</a> 的部屬方式，也要確保 Image 的版本是固定的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://docs.gitops.weaveworks.org/docs/intro-weave-gitops/">GitOps</a> 會另外考慮要不要寫一篇文章介紹，但目前中文介紹 GitOps 的相關已經很多了</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://hackmd.io/@mopcon/2023/%2F%40mopcon%2Fr1hRhwdXT">2023 MOPCON Git 和 DevOps：在混亂的流星群開發流程中找到小確幸 高見龍</a></p>
+</blockquote>
+
+<ul>
+  <li><strong>與底層作業系統維持清晰的契約關係，確保在不同執行環境之間具有高度可攜性</strong>
+    <ul>
+      <li>不依賴於特定發行版的工具或特性，確保應用程式能夠在任何符合標準的環境中運行</li>
+      <li>這裡我們以 Debian 與 Ubuntu 中固定 Timezone 為例:
+        <ul>
+          <li>Ubuntu 或許有 tzdata 但 Debian 沒有，這樣就會降低移植性</li>
+          <li>比較好的做法是例如 Spring 可以設定 time-zone，這樣 TZ 設定是綁定在應用程式內部的，
+而不是依賴於底層作業系統的工具，這樣就能確保在不同的 Linux 發行版上都能正常運行</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>適合部署於現代雲端平台，減少對傳統伺服器管理與系統維運的依賴</strong>
+    <ul>
+      <li>應用程式應該設計為無狀態（stateless），並且將任何持久化的資料存儲在外部服務中，例如資料庫或物件存儲</li>
+    </ul>
+  </li>
+  <li><strong>最小化開發環境與生產環境之間的差異，使持續部署 (Continuous Deployment) 得以實現，提升開發敏捷性</strong>
+    <ul>
+      <li>開發環境與生產環境的差異越小，部屬風險就越小，部屬頻率才能提高</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>軟體工程師最常甩鍋的一句話是 “It works on my machine”</p>
+</blockquote>
+
+<ul>
+  <li><strong>能夠在不大幅改動工具鏈、系統架構或開發流程的情況下進行水平擴展(scale up)</strong>
+    <ul>
+      <li>水平擴展意味著能夠通過增加更多的實例來處理增加的負載，而不是依賴於升級單一實例的硬體資源</li>
+      <li>這需要應用程式設計為無狀態，並且能夠在多個實例之間共享狀態，例如使用外部資料庫或分布式快取</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="i-codebase">I. Codebase</h3>
+
+<blockquote class="block-tip">
+  <p>One codebase tracked in revision control, many deploys</p>
+</blockquote>
+
+<blockquote>
+  <p>一個代碼庫被版本控制系統追蹤，並且可以部署到多個環境中</p>
+</blockquote>
+
+<p><img src="https://12factor.net/images/codebase-deploys.png" alt="" /></p>
+
+<p>有點類似於 <a href="https://docs.gitops.weaveworks.org/docs/intro-weave-gitops/">GitOps</a> 的概念，所有的部署都來自同一個版本控制系統中的單一代碼庫，這樣可以確保部署的一致性和可追溯性。
+保持單一來源將程式碼集中在 Git 中，無論部屬多少實例，都來自同一個代碼庫，這樣可以確保所有的實例都運行相同的程式碼版本，並且可以輕鬆地追蹤和回滾變更。</p>
+
+<blockquote class="block-danger">
+  <p>即使有可能版本有所不同，例如在不同機器上部署不同版本的應用程式，但這些版本仍然來自同一個代碼庫，並且可以通過 Git 的分支或標籤來管理和追蹤。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="ii-dependencies">II. Dependencies</h3>
+
+<blockquote class="block-tip">
+  <p>Explicitly declare and isolate dependencies</p>
+</blockquote>
+
+<blockquote>
+  <p>顯式宣告並且隔離依賴</p>
+</blockquote>
+
+<p>所有的依賴都應該明確宣告並且隔離，這樣可以確保應用程式在任何環境中都能夠正確運行，而不會受到底層系統環境的影響。
+不過我不太相信 2026 年的當下還有程式開發者會不依賴賴於套件管理工具來管理依賴，這樣會導致開發環境與生產環境之間的差異，增加部署的風險。</p>
+
+<p>例如 Java Maven 中的 pom.xml 就是一個明確宣告依賴的例子，這樣不論是在開發環境還是生產環境中，只要使用相同的 pom.xml，就能確保依賴的一致性。
+或者 Python 的 requirements.txt、Go 的 go.mod，這些工具都明確宣告了依賴。</p>
+
+<blockquote>
+  <p>在這裡額外有強調隔離性(isolation)，但通常 container 之間都是相互隔離的，所以除非特別設計通常 container 之內不會有汙染問題。
+例如一個 pod 只跑一個 python 程式，使用 venv 感覺有點在砸自己的腳</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>避免使用 curl 或者 ImageMagick 這樣或許系統中存在的工具，如果要用就應該確實的打包在 Image 中</p>
+</blockquote>
+
+<hr />
+
+<h3 id="iii-config">III. Config</h3>
+
+<blockquote class="block-tip">
+  <p>Store config in the environment</p>
+</blockquote>
+
+<blockquote>
+  <p>將配置存儲在環境變數中</p>
+</blockquote>
+
+<p>很簡單的原則，將配置存儲在環境變數中，而不是硬編碼在程式碼中，這樣可以確保應用程式在不同環境中具有高度的可配置性和靈活性。
+一個很簡單的判斷原則是: 如果 codebase 是開源的，但不會洩漏任何敏感資訊，就代表設定正確從程式碼中抽離。</p>
+
+<p>例如某個程式需要使用 Public Key 來連接特定資源，該資源應該在 Runtime 中注入，由部屬工具來管理，
+例如 Github Actions 的 Secrets，或者 Kubernetes 的 Secret，這樣就能確保敏感資訊不會洩漏在程式碼庫中。</p>
+
+<blockquote class="block-danger">
+  <p>不同環境可能有不同的 env 設定，每個環境就獨立一組 env 設定，這樣就能確保在不同環境中應用程式的行為可以根據需要進行調整，而不需要修改程式碼</p>
+</blockquote>
+
+<hr />
+
+<h3 id="iv-backing-services">IV. Backing Services</h3>
+
+<blockquote class="block-tip">
+  <p>Treat backing services as attached resources</p>
+</blockquote>
+
+<blockquote>
+  <p>將後端服務視為附加資源</p>
+</blockquote>
+
+<p><img src="https://12factor.net/images/attached-resources.png" alt="" /></p>
+
+<p>後端服務是指在應用程式運行中，所有透過網路存取的外部資源，例如:</p>
+<ul>
+  <li>Database (MySQL, PostgreSQL, MongoDB)</li>
+  <li>Message Queue (RabbitMQ, Kafka)</li>
+  <li>Caching Service (Redis, Memcached)</li>
+  <li>Mail Service (SendGrid, {Amazon SES})</li>
+  <li>External APIs (<a href="https://aws.amazon.com/s3/">AWS S3</a>, <a href="https://cloud.google.com/storage">Google Cloud Storage</a>)</li>
+</ul>
+
+<p>程式碼不應該區分是本地提供的服務還是第三方服務，對這些服務都透過 URL 或者其他定位方式來存取，
+一個最直接的例子是將本地的 MySQL 服務換為 AWS RDS，但不需要修改程式碼，只需要修改配置中的 URL 即可，
+這樣就能確保應用程式的靈活性和可擴展性。</p>
+
+<blockquote>
+  <p>這樣每個服務只依賴於接口、只關心自己內部的實現，不依賴於外部資源的實現方式</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>每一個獨立的服務都應該被視為一個獨立的資源，並且可以通過配置來切換不同的服務提供者，這樣就能確保應用程式在不同環境中具有高度的可配置性和靈活性。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="v-build-release-run">V. Build, release, run</h3>
+
+<blockquote class="block-tip">
+  <p>Strictly separate build and run stages</p>
+</blockquote>
+
+<blockquote>
+  <p>嚴格區分構建和運行階段</p>
+</blockquote>
+
+<p><img src="https://12factor.net/images/release.png" alt="" /></p>
+
+<p>在 Twelve-Factor App 中，Build、Release 和 Run 是三個獨立的階段，每個階段都有明確的職責和流程，
+這樣可以確保應用程式的部署過程具有高度的可控性和可靠性。</p>
+
+<ul>
+  <li>Build Stage: 在這個階段，應用程式的原始碼被轉換為一個可執行的 Image 或者 Executable
+    <ul>
+      <li>Maven, Gradle 等構建工具會在這個階段負責編譯程式碼、打包依賴、生成可執行的 Artifact</li>
+    </ul>
+  </li>
+  <li>Release Stage: 在這個階段，構建好的 Image 或者 Executable 發送到對應的 Registry
+    <ul>
+      <li>Docker Hub、AWS ECR、Google Container Registry</li>
+    </ul>
+  </li>
+  <li>Run Stage: 在這個階段，構建好的 Image 或者 Executable 被部署到對應的環境中運行
+    <ul>
+      <li>Kubernetes、AWS ECS、Google Cloud Run</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這三個階段要嚴格的分離，例如在 RunTime 中程式碼已經是不可修改的狀態，不允許在 RunTime 中自行修改 Source Code 或 Compiled Code，
+這樣就違反了 Build 和 Run 的分離原則。</p>
+
+<blockquote class="block-danger">
+  <p>每個 Release 都應該有其唯一的 ID，這樣就能確保每次部署都是 Rollbackable</p>
+</blockquote>
+
+<hr />
+
+<h3 id="vi-processes">VI. Processes</h3>
+
+<blockquote class="block-tip">
+  <p>Execute the app as one or more stateless processes</p>
+</blockquote>
+
+<blockquote>
+  <p>將應用程式作為一個或多個無狀態的進程來執行</p>
+</blockquote>
+
+<p>程式應該是無狀態的，這樣就能確保應用程式在不同實例之間具有高度的可擴展性和可靠性。
+所有資料應該透過 <a href="./2026-01-29-the_12_factor_app#iv-backing-services">IV. Backing Services</a> 中定義的外部服務來存儲，這樣就能確保應用程式的狀態不會依賴於特定的實例，
+並且可以在需要時輕鬆地擴展或縮減實例的數量。</p>
+
+<blockquote>
+  <p>無狀態的應用程式可以更容易地實現水平擴展，因為每個實例都不依賴於其他實例的狀態</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>這裡要特別提到即使是 Session 也要存放在外部服務中，例如 Redis，這樣就能確保在多實例的環境中，
+使用者的 Session 可以在不同實例之間共享，提升使用者體驗。而不是放於 <code class="language-plaintext highlighter-rouge">/tmp</code> 或者 Memory</p>
+</blockquote>
+
+<hr />
+
+<h3 id="vii-port-binding">VII. Port binding</h3>
+
+<blockquote class="block-tip">
+  <p>Export services via port binding</p>
+</blockquote>
+
+<blockquote>
+  <p>透過端口綁定來導出服務</p>
+</blockquote>
+
+<p>應用程式應該要自包含 Port Binding 的能力，這樣就能確保應用程式在不同環境中具有高度的可移植性和靈活性。
+最好的反例就是 Apache HTTP Server，這種傳統的 Web Server 需要在配置文件中指定 Port Binding 的方式，
+因此要修改 Port Binding 的方式就需要修改 Apache HTTP Server 的配置，這樣就降低了應用程式的靈活性。</p>
+
+<blockquote>
+  <p>傳統 Http server 需要自己去特定配置檔案目錄中修改 Port Binding 位置，不方便也容易造成複雜度上升</p>
+</blockquote>
+
+<p>以 Spring Boot 為例，現在主流的方式不再是 Tomcat 然後再部署 Spring Boot，而是在 Spring Boot 中內嵌入 Tomcat，
+這樣 Spring Boot 本身就具有 Port Binding 的能力，無論在哪個環境中都能夠直接運行，而不需要依賴 Web Server。</p>
+
+<blockquote class="block-danger">
+  <p>現代後端框架目前基本都已經內建 Port Binding 的能力了，畢竟 12-Factor App 的原則已經提出了十多年了，這個原則也已經成為現代後端框架的標準設計模式了。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="viii-concurrency">VIII. Concurrency</h3>
+
+<blockquote class="block-tip">
+  <p>Scale out via the process model</p>
+</blockquote>
+
+<blockquote>
+  <p>通過進程模型來實現水平擴展</p>
+</blockquote>
+
+<p><img src="https://12factor.net/images/process-types.png" alt="" /></p>
+
+<p>水平擴展已經是現代雲端應用程式的基本需求了，由於應用程式是無狀態的，因此水平擴展可以通過增加更多的實例來實現。
+目前水平擴展也有其層級，例如以下:</p>
+<ol>
+  <li>Infrastructure Level: 例如增加更多的 VM 來運行應用程式
+    <ul>
+      <li>AWS EC2</li>
+    </ul>
+  </li>
+  <li>Orchestration Level: 例如使用 Kubernetes 來管理和擴展 Pod 的數量
+    <ul>
+      <li>Kubernetes Horizontal Pod Autoscaler</li>
+    </ul>
+  </li>
+  <li>Application Level: 例如在應用程式內部使用多線程或者非同步的方式來處理更多的請求
+    <ul>
+      <li>通常在 Microservice 的架構下，應用程式內部的水平擴展已經不是主要的擴展方式</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>IaaS (Infrastructure as a Service) 的架構下程式開發者依然要自己負責 HPA 這個層級的擴展</p>
+</blockquote>
+
+<blockquote>
+  <p>PaaS (Platform as a Service) 的架構下程式開發者不需要自己負責 HPA 這個層級的擴展</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>在 Twelve-Factor App 提出的時間 2011，Docker、Kubernetes 等容器化技術還沒有出現，因此當時的水平擴展主要是通過增加更多的進程來實現的，
+不過在當前的雲原生環境中，水平擴展更多是通過增加更多的容器實例來實現的，但這個原則仍然適用，因為每個容器實例本質上也是一個獨立的進程。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="ix-disposability">IX. Disposability</h3>
+
+<blockquote class="block-tip">
+  <p>Maximize robustness with fast startup and graceful shutdown</p>
+</blockquote>
+
+<blockquote>
+  <p>通過快速啟動和優雅關閉來最大化應用程式的健壯性</p>
+</blockquote>
+
+<p>實際上大多數程式開發者能控制的是 Graceful Shutdown 的部分，因為快速啟動通常是由底層的框架或者容器來控制的，
+例如 Spring Boot 的啟動時間通常是由 JVM 與 Tomcat 的啟動時間來決定的，開發者能做的優化空間有限。
+但是 Graceful Shutdown 是完全由開發者來控制的，這裡的原則是當應用程式接收到終止信號時，應該能夠優雅地關閉，例如:</p>
+<ul>
+  <li>在接收到 SIGTERM 信號時，目前正在處裡的請求是否要完成?</li>
+  <li>如果是交易類的應用程式，應該要確保交易的 Atomicity</li>
+  <li>是否要在關閉前釋放資源，例如資料庫連線等 …</li>
+</ul>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Crash-only_software">Crash-only software</a> 的設計理念，應用程式應該能夠在崩潰後快速重啟，並且能夠自動恢復到正常狀態，這樣就能確保應用程式的高可用性和可靠性</p>
+</blockquote>
+
+<blockquote>
+  <p>Docker 在關閉容器時會先發送 SIGTERM 信號給容器內的應用程式，讓它有機會進行優雅關閉，如果應用程式沒有在指定的時間內完成關閉，Docker 才會強制終止容器，這樣就能確保應用程式在關閉時能夠有機會釋放資源並且完成正在處理的請求</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>除此之外當然也要應對 Sudden Death 的情況，例如當容器被強制終止時，應用程式應該能夠在下次啟動時自動恢復到正常狀態，而不會因為之前的非正常關閉而導致資料損壞或者其他問題</p>
+</blockquote>
+
+<hr />
+
+<h3 id="x-devprod-parity">X. Dev/prod parity</h3>
+
+<blockquote class="block-tip">
+  <p>Keep development, staging, and production as similar as possible</p>
+</blockquote>
+
+<blockquote>
+  <p>保持開發、測試和生產環境盡可能相似</p>
+</blockquote>
+
+<p>開發環境、測試環境和生產環境之間的差異越小，部署的風險就越小，這樣就能確保應用程式在生產環境中能夠正常運行，而不會因為環境差異而導致問題。
+例如在開發環境中使用 Docker Compose 來模擬生產環境中的 Kubernetes 部署，
+這樣就能確保在開發環境中測試的配置和依賴與生產環境中的一致，從而降低部署的風險。</p>
+
+<ul>
+  <li>Time gap: 開發者要多久才能將代碼使用在生產環境中?</li>
+  <li>Personnel gap: 開發者和運維人員之間的溝通和協作是否順暢，是否分離了開發和運維的職責</li>
+  <li>Tools gap: 開發環境和生產環境使用的工具和技術是否一致，例如使用相同的容器化技術、相同的配置管理工具等
+    <ul>
+      <li>開發時使用 SQLite，正式上線卻使用 MySQL 就是一個 Tools gap 的例子</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Traditional app</th>
+      <th>Twelve-Factor App</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Time between deploys</td>
+      <td>Weeks</td>
+      <td>Hours</td>
+    </tr>
+    <tr>
+      <td>Code author vs code deployer</td>
+      <td>Different people</td>
+      <td>Same people</td>
+    </tr>
+    <tr>
+      <td>Dev vs production environment</td>
+      <td>Divergent</td>
+      <td>As similar as possible</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>上述的三個 gap 都會增加部署的風險，因為開發環境和生產環境之間的差異越大，就越有可能在部署時遇到問題，
+例如配置錯誤、依賴不一致等，從而導致應用程式在生產環境中無法正常運行</p>
+</blockquote>
+
+<p>例如程式可以使用抽象層來支援不同後端服務，但還是要盡量保持與生產環境中使用的服務一致，例如以下的表格:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Type</td>
+      <td>Language</td>
+      <td>Library</td>
+      <td>Adapter</td>
+    </tr>
+    <tr>
+      <td>Database</td>
+      <td>Ruby/Rails</td>
+      <td>ActiveRecord</td>
+      <td>MySQL, PostgreSQL, SQLite</td>
+    </tr>
+    <tr>
+      <td>Queue</td>
+      <td>Python/Django</td>
+      <td>Celery</td>
+      <td>Redis, RabbitMQ, Beanstalkd</td>
+    </tr>
+    <tr>
+      <td>Cache</td>
+      <td>Ruby/Rails</td>
+      <td>ActiveSupport::Cache</td>
+      <td>Memory, Filesystem, Memcached</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="block-danger">
+  <p>其中尤其是 Backing Services 的差異會導致部署的風險增加，例如在開發環境中使用本地的 MySQL 服務，
+而在生產環境中使用 AWS RDS，這樣就會導致配置和依賴的差異，從而增加部署的風險。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="xi-logs">XI. Logs</h3>
+
+<blockquote class="block-tip">
+  <p>Treat logs as event streams</p>
+</blockquote>
+
+<blockquote>
+  <p>將日誌視為事件流</p>
+</blockquote>
+
+<p>Microservice 的架構下，Log 應該有同一管理的方式，例如 ELK, Graylog, Cloudwatch 等等。
+開發時期可以透過 console 來查看時間排序下的 log，上到環境則應該透過集中服務來收集、聚合和分析 log。</p>
+
+<p>這裡 Log 應該透過結構化的方式進行儲存 (例如 JSON)，這樣就能確保 log 的可讀性和可分析性，並且可以更容易地進行搜尋和過濾。
+但在 stdout 中依然可以保持文字格式的輸出，這樣可以即時查看 log 的內容。</p>
+
+<blockquote>
+  <p>傳統作法會是每個服務自己控制 log 的輸出位置，例如寫在本地的檔案系統中，這樣就會導致 log 分散在不同的實例中，難以集中管理和分析</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>12-Factor App 的原則是將 log 視為事件流，應該將 log 輸出到專用服務，這樣就能確保 log 的集中管理和分析，並且可以更容易地追蹤和調試應用程式的行為。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="xii-admin-processes">XII. Admin processes</h3>
+
+<blockquote class="block-tip">
+  <p>Run admin/management tasks as one-off processes</p>
+</blockquote>
+
+<blockquote>
+  <p>將維護/管理任務作為一次性進程來運行</p>
+</blockquote>
+
+<p>即使是管理任務也應該遵循前面提到的原則，例如使用相同的代碼庫、相同的配置、相同的依賴等，這樣就能確保管理任務在不同環境中具有高度的一致性和可靠性。
+例如在 Kubernetes 中，可以使用 Job 來運行一次性的管理任務，這樣就能確保管理任務的執行環境與應用程式的運行環境一致，從而降低管理任務的風險。</p>
+
+<p>這些一次性任務應該要有例如 Shell Script 的工具來啟動，並且在 Script 中確保使用與應用程式相同的配置和依賴，例如:</p>
+<ul>
+  <li>Django: <code class="language-plaintext highlighter-rouge">python manage.py migrate</code>
+    <ul>
+      <li>該指令將 Python 中的模型配置與資料庫中的結構進行同步，確保資料庫的 Schema 與 Django 的模型定義保持一致，這是一個典型的管理任務</li>
+    </ul>
+  </li>
+  <li>Spring Boot: <code class="language-plaintext highlighter-rouge">java -jar app.jar --spring.profiles.active=prod</code>
+    <ul>
+      <li>該指令將 Spring Boot 應用程式啟動，並且指定使用 prod 的配置，這樣就能確保管理任務在與應用程式相同的環境中運行</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>這些一次性任務應該也要跟 Release 同樣發布，這樣就能確保管理任務的版本與應用程式的版本一致，從而降低管理任務的風險。</p>
+</blockquote>
+
+<blockquote class="block-danger">
+  <p>例如每次部署後都需要初始化資料庫，那麼初始化的腳本應該也要跟應用程式的 Release 一起發布，
+這樣就能在每次部屬後自動執行初始化腳本，確保資料庫的狀態與應用程式的版本保持一致，從而降低部署的風險。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>以上就是 12-Factor App 的十二個原則，這些原則幫助開發者構建可擴展、可維護和可部署的應用程式。
+所以如果未來要開發一個 Cloud Native 的應用程式，建議一定要遵循這些原則，這樣就能確保應用程式在不同環境中具有高度的可移植性和可靠性。</p>
+  <h5 id="last-edit">Last Edit</h5>
+  <p>01-29-2026 00:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="software" /><category term="design" /><category term="architecture" /><category term="cloud native" /></entry><entry><title type="html">Note | ACPI States</title><link href="https://hotshot824.github.io/jekyll/2026-01-26-ACPI_States.html" rel="alternate" type="text/html" title="Note | ACPI States" /><published>2026-01-26T00:00:00+00:00</published><updated>2026-01-26T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/ACPI_States</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-01-26-ACPI_States.html"><![CDATA[<blockquote class="block-tip">
+  <p><a href="https://en.wikipedia.org/wiki/Advanced_Configuration_and_Power_Interface">ACPI</a> 全名為 Advanced Configuration and Power Interface，是一個開放標準，用於管理電腦的電源與硬體配置。</p>
+</blockquote>
+
+<p>與 BIOS 密切相關的另一個重要標準就是 ACPI，ACPI 定義了一套電源管理與硬體配置的規範，讓作業系統能夠更有效地控制硬體資源與電源使用。
+定義 ACPI 的目的是不以 BIOS 為中心，而是讓作業系統能夠直接管理硬體資源與電源狀態，提升系統的靈活性與效能。</p>
+
+<blockquote>
+  <p>這裡一定會有疑問，既然 UEFI Runtime Services 已經提供 OS 與韌體服務，為什麼要另外定義 ACPI。</p>
+</blockquote>
+
+<ol>
+  <li>電池與電源管理是一個高度動態與 OS 策略深度綁定的問題
+    <ul>
+      <li>電池管理會隨著時間頻繁變化，並且會影響 OS 的行為
+        <ul>
+          <li>例如: 當電池電量低時，OS 可能會選擇降低效能以延長續航時間</li>
+        </ul>
+      </li>
+      <li>如果把這類功能放在韌體層面，會導致韌體變得過於複雜，並且難以適應不同的 OS 策略</li>
+    </ul>
+  </li>
+  <li>跨 OS 的標準化
+    <ul>
+      <li>韌體僅需要以 ACPI Table 描述硬體能力與電源模型</li>
+      <li>如何實作則完全交由 OS 實作</li>
+    </ul>
+  </li>
+</ol>
+
+<p>如果改由 UEFI Runtime Services 來處理這些電源管理功能，就代表 Linux, Windows 都需要依賴於同一組韌體 API，
+如果韌體設計不良或者有 Bug，會導致 OS 幾乎無法繞過這些問題，並且電源管理的策略會被韌體的更新速度綁定。</p>
+
+<blockquote>
+  <p>ACPI 簡單可以這樣理解，韌體描述事實 (what hardware can do)，OS 決定策略 (what to do)</p>
+</blockquote>
+
+<blockquote>
+  <p>如果沒有 ACPI，OS 就需要為各種硬體平台時做特定的驅動程式，失去硬體抽象化的好處</p>
+</blockquote>
+
+<hr />
+
+<h3 id="acpi-states-overview">ACPI States Overview</h3>
+
+<blockquote class="block-danger">
+  <p>這份筆記主要目標僅在描述 ACPI 定義的各種電源狀態，並不會深入探討 ACPI Table 的結構等內容。有興趣可以參考 <a href="https://uefi.org/specifications">ACPI Specification</a>。</p>
+</blockquote>
+
+<p>ACPI 所定義的 States 包含以下幾種:</p>
+<ul>
+  <li>Global System Power States (G-States G0 - G3)</li>
+  <li>System Sleeping States (S-States S0 - S5)</li>
+  <li>Device Power States (D-States D0 - D3)</li>
+  <li>Processor Power States (C-States C0 - Cn)</li>
+  <li>Throttling States (T-States)</li>
+</ul>
+
+<p><img src="/image/2026/01-26-ACPI_States/1.png" alt="" height="75%" width="75%" /></p>
+
+<h4 id="global-system-power-states-g-states">Global System Power States (G-States)</h4>
+
+<blockquote class="block-tip">
+  <p>G-States 定義了整個系統的電源狀態，從完全開啟到完全關閉。</p>
+</blockquote>
+
+<ol>
+  <li>G0 (Working)：系統完全開啟並運作中。</li>
+  <li>G1 (Sleeping)：系統處於睡眠狀態，包含 S1 - S4 狀態。</li>
+  <li>G2 (Soft Off)：系統關閉，但仍有部分電源供應給某些元件 (如 Wake-on-LAN)。
+    <ul>
+      <li>電腦插著電源但卻關機的狀態</li>
+    </ul>
+  </li>
+  <li>G3 (Mechanical Off)：系統完全關閉，沒有任何電源供應。</li>
+</ol>
+
+<blockquote>
+  <p>G-States 是最高層級的電源狀態，決定了系統整體的電源管理策略。G-State 所解決的是這台機器目前處於什麼狀態，
+因此在 G 的層級上，我們不清楚 RAM 或 CPU 的細節，只清楚系統是什麼狀態。</p>
+</blockquote>
+
+<h4 id="system-sleeping-states-s-states">System Sleeping States (S-States)</h4>
+
+<blockquote class="block-tip">
+  <p>S-States 通常是最常被提及的 ACPI 狀態，定義了系統的睡眠深度。</p>
+</blockquote>
+
+<ol>
+  <li>S0 (Working)：系統完全開啟並運作中。</li>
+  <li>S1 (Sleep)：CPU 停止執行，但 CPU 與 RAM 依然供電</li>
+  <li>S2 (Deeper Sleep)：CPU 停止供電，Cache 保存至 RAM
+    <ul>
+      <li>S1 更常被使用在短暫待機狀態，而 S2 則較少見，因為它在節能效果與恢復速度之間的平衡較差</li>
+    </ul>
+  </li>
+  <li>S3 (Suspend to RAM)：大部分元件關閉，僅 RAM 保持供電，以便快速恢復。
+    <ul>
+      <li>常用的睡眠狀態，能在低功耗與快速恢復之間取得平衡</li>
+      <li>此階段風扇等周邊元件也會關閉，只保留 RAM 讓系統狀態得以保存</li>
+    </ul>
+  </li>
+  <li>S4 (Hibernate)：系統狀態保存到硬碟，然後完全關閉電源
+    <ul>
+      <li>既然 RAM 都不供電了，系統狀態就必須保存到非揮發性儲存裝置</li>
+      <li>很直接能想到回復時間會比 S3 長，因為需要從硬碟讀取系統狀態</li>
+    </ul>
+  </li>
+  <li>S5 (Soft Off)：系統完全關閉，但可以透過特定事件喚醒。</li>
+</ol>
+
+<blockquote>
+  <p>S-State 處理的是 OS 實作層級的睡眠狀態，OS 並無法直接操作 G-State 這種 G1 = Sleeping 的模糊概念。</p>
+</blockquote>
+
+<h4 id="processor-power-states-c-states">Processor Power States (C-States)</h4>
+
+<p><img src="/image/2026/01-26-ACPI_States/2.png" alt="" height="75%" width="75%" /></p>
+
+<p>C-States 描述的是 CPU 在 IDLE 狀態下的不同省電模式，因此 C-States 主要描述的是 CPU 層級的電源管理。
+因此 C-States 基本上只會在 G0/S0 狀態下被使用，因為在此之外 IDLE 狀態就沒有意義了。</p>
+
+<ol>
+  <li>C0 (Active)：CPU 完全運作中，執行指令。</li>
+  <li>C1 (Halt)：CPU 停止執行指令，但幾乎可以瞬間恢復。
+    <ul>
+      <li>在某些處理器中，額外支援 C1E (Enhanced Halt) 狀態，進一步降低功耗</li>
+      <li>實作上通常包含 Pipeline Stall、Clock Gating</li>
+      <li>但電壓保持不變 Vcore 維持，Cache、TLB、Register 都保持供電</li>
+      <li>在此階段任何 Interrupt、<a href="https://en.wikipedia.org/wiki/Inter-processor_interrupt">IPI</a>、Timer Event 都能讓 CPU 立即恢復 C0 狀態</li>
+      <li>可想而知這樣的省電效果有限，但恢復速度非常快</li>
+    </ul>
+  </li>
+  <li>C2 (Stop-Clock)：CPU 停止時鐘訊號，降低更多功耗。
+    <ul>
+      <li>此階段更多的 Clock Domain 被關閉</li>
+      <li>Cache 還是保留，但 <a href="https://en.wikipedia.org/wiki/Phase-locked_loop">PLL</a> 可能會停止</li>
+      <li>很多平台不會實作 C2 狀態，被折疊進 C1 / C3</li>
+    </ul>
+  </li>
+  <li>C3 (Sleep)：CPU 會停止對 Register 與 Cache 的供電，進一步降低功耗。
+    <ul>
+      <li>此階段 CPU 內部大部分的電路都會關閉</li>
+      <li>Cache 的資料要保持 coherence，直接 Write Back 到 RAM</li>
+      <li>TLB 內容也會被清除</li>
+      <li>只有 Uncore 部分保持供電，例如 Memory Controller</li>
+      <li>這個階段的喚醒需要較長時間，因為需要重新載入 Cache 與 TLB
+        <ul>
+          <li>Interrupt -&gt; Power Rail Restore -&gt; Clock Restart -&gt; Cache/TLB Rebuild -&gt; Resume</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>更深的 C-States (C4, C5, …) 則會進一步關閉更多的 CPU 元件，這部分通常是廠商自定義的，並不在 ACPI 規範中明確定義。</p>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Inter-processor_interrupt">IPI</a> (Inter-processor interrupt) 讓一個處理器核心能夠向另一個核心發送中斷請求。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Phase-locked_loop">PLL</a> (Phase-locked loop) 是一種電子電路，用於生成穩定的時鐘訊號，確保處理器和其他元件能夠同步運作。</p>
+</blockquote>
+
+<h4 id="device-power-states-d-states">Device Power States (D-States)</h4>
+
+<blockquote class="block-tip">
+  <p>D-States 定義了個別裝置的電源狀態，通常裝置不一定有所有的 D-States。</p>
+</blockquote>
+
+<p>這裡的裝置可以是任何硬體元件，例如: NIC, GPU, Sound Card …</p>
+
+<ol>
+  <li>D0 (Fully On)：裝置完全開啟並運作中。</li>
+  <li>D1 (Low Power)：裝置進入低功耗狀態。</li>
+  <li>D2 (Standby)：裝置進入軟體關閉狀態，但仍可快速恢復。</li>
+  <li>D3 (Off)：裝置完全斷電。</li>
+</ol>
+
+<h4 id="throttling-states-t-states">Throttling States (T-States)</h4>
+
+<blockquote class="block-tip">
+  <p>T-State 全稱 Processor Throttling States，定義了 CPU 在高負載或高溫時的降頻狀態。</p>
+</blockquote>
+
+<p>T-State 主要透過調整單位時間內 CPU 的 Clock On / Clock Off 比例來達到降頻效果，以降低功耗與熱量產生。
+例如一段時間內只允許一半的 Clock cycle 真正被送入 Pipeline 執行指令，其餘時間強制 IDLE 來達到降頻效果。</p>
+
+<p>T-State 的存在原因是:</p>
+<ol>
+  <li>反映速度快，相較於 P-State 不需要調整電壓或 PLL，在極短時間內限制 CPU 效能</li>
+  <li>平台強制控制，例如 EC / Firmware 監控到過熱時，能夠快速降低 CPU 熱量產生，即使 OS 不配合</li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>以上就是所有 ACPI 定義的主要電源狀態，這些狀態讓作業系統能夠更靈活地管理硬體資源與電源使用，
+提升系統的效能與續航能力。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="how-os-read-the-battery-infomation">How OS Read the Battery Infomation</h3>
+
+<p>作業系統通常透過 ACPI 提供的 Methods 來讀取電池資訊，例如 _BIF (Battery Information) 與 _BST (Battery Status)。
+這些 Methods 定義在 ACPI Table 中，OS 可以透過 ACPI 介面呼叫這些 Methods 來取得電池的詳細資訊。
+並且通常是由 <a href="https://en.wikipedia.org/wiki/ACPI_Machine_Language">AML</a> (ACPI Machine Language) 來實作這些 Methods 的邏輯。</p>
+
+<p>AML 是一種專門用於描述 ACPI 功能的低階語言，用來定義 ACPI Table 中的各種 Methods 與物件。
+ACPI Tables 由 BIOS / UEFI 事先定義，系統啟動時由韌體將其放置於記憶體並提供給 OS。
+OS 在運行時透過 ACPI Driver 來解析並執行這些 AML 程式碼。</p>
+
+<p>以 Linux 為例子，電池資訊位於 <code class="language-plaintext highlighter-rouge">/sys/class/power_supply/BAT0/</code> 目錄下，OS 透過檔案來表示電池狀態與資訊。
+通常會以 polling 或 event-driven 的方式來監控電池狀態變化，並根據電池狀態調整系統行為，例如降低效能以延長續航時間。</p>
+
+<p><strong>ACPI Control Method</strong></p>
+
+<blockquote>
+  <p><a href="https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#control-methods-and-the-acpi-source-language-asl">OEMs and platform firmware vendors write definition blocks using the ACPI Source Language (ASL) and use a translator to produce the byte stream encoding described in Definition Block Encoding .</a></p>
+</blockquote>
+
+<p>ACPI 定義了一些標準的 Control Methods，其中以下是與電池相關的 Methods:</p>
+
+<ul>
+  <li><strong>_STA</strong>: (Status)<br />
+報告電池裝置的狀態 (存在、啟用等)。</li>
+  <li><strong>_BIF</strong>: (Battery Information)<br />
+提供電池的靜態資訊，例如: 設計容量、電壓、型號、序號 …</li>
+  <li><strong>_BST</strong>: (Battery Status)<br />
+提供電池的動態狀態資訊，例如: 充放電狀態、剩餘容量、當前電壓、充放電速率 …</li>
+  <li><strong>_BTP</strong>: (Battery Trip Point) 
+由 OS 設定一個剩餘容量的閾值，當電池容量低於此值時觸發 ACPI Notify。</li>
+</ul>
+
+<p>這裡要指出 EC (Embedded Controller) 在電池管理中的角色，EC 負責提供原始電池資訊。
+而 AML 是由 BIOS / UEFI 開發者撰寫，並且寫入 ACPI Table 中，OS 透過 ACPI Driver 來解析並執行這些 AML 程式碼。</p>
+
+<p>從 User 可以觀察 DSDT (Differentiated System Description Table) 來了解系統的 ACPI 結構。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">ls</span> /sys/firmware/acpi/tables/DSDT
+<span class="nb">sudo cat</span> /sys/firmware/acpi/tables/DSDT <span class="o">&gt;</span> dsdt.dat
+<span class="nb">sudo </span>apt <span class="nb">install </span>acpica-tools
+iasl <span class="nt">-d</span> dsdt.dat
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <p>反組譯後的 DSDT 就會是 ASL，可以看到裡面定義了許多 ACPI Methods，例如 _BIF, _BST 等等。</p>
+</blockquote>
+
+<pre><code class="language-asl">Device (_SB.EPC)
+{
+    Name (_HID, EisaId ("INT0E0C"))  // _HID: Hardware ID
+    Name (_STR, Unicode ("Enclave Page Cache 1.0"))  // _STR: Description String
+    Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+    {
+        VendorShort ()      // Length = 0x07
+        {
+                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF         // .......
+        }
+    })
+    Method (_STA, 0, NotSerialized)  // _STA: Status
+    {
+        Return (0x0F)
+    }
+}
+</code></pre>
+
+<blockquote>
+  <p>手邊只有虛擬機可以測試，實體機器的 DSDT 會更複雜，這裡以 SGX Enclave Page Cache 為例子</p>
+</blockquote>
+
+<p>會看到 DSDT 裡面定義了一個 Device (_SB.EPC)，並且有一個 Method (_STA) 用來回傳裝置狀態。
+該 _STA Method 回傳 0x0F，表示該裝置永遠存在且啟用。
+kernel sapce 可以透過 <code class="language-plaintext highlighter-rouge">#include &lt;linux/acpi.h&gt;</code> 來呼叫這些 ACPI Method。</p>
+
+<p>例如寫一個簡單的 Kernel Module 來讀取 _SB.EPC 裝置的 _STA 狀態:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+#include</span> <span class="cpf">&lt;linux/acpi.h&gt;</span><span class="cp">
+</span>
+<span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">epc_sta_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">acpi_device</span> <span class="o">*</span><span class="n">adev</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">sta</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="p">;</span>
+
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"epc_sta: init</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+    <span class="cm">/* Find the EPC device by its HID */</span>
+    <span class="n">adev</span> <span class="o">=</span> <span class="n">acpi_dev_get_first_match_dev</span><span class="p">(</span><span class="s">"INT0E0C"</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">adev</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pr_err</span><span class="p">(</span><span class="s">"epc_sta: EPC device not found</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">ENODEV</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* Get the _STA status */</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">acpi_bus_get_status</span><span class="p">(</span><span class="n">adev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sta</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">pr_err</span><span class="p">(</span><span class="s">"epc_sta: acpi_bus_get_status failed: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">ret</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"epc_sta: EPC _STA = 0x%lx</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">sta</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">epc_sta_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pr_info</span><span class="p">(</span><span class="s">"epc_sta: exit</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">module_init</span><span class="p">(</span><span class="n">epc_sta_init</span><span class="p">);</span>
+<span class="n">module_exit</span><span class="p">(</span><span class="n">epc_sta_exit</span><span class="p">);</span>
+
+<span class="n">MODULE_LICENSE</span><span class="p">(</span><span class="s">"GPL"</span><span class="p">);</span>
+<span class="n">MODULE_AUTHOR</span><span class="p">(</span><span class="s">"benson"</span><span class="p">);</span>
+<span class="n">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">"Test ACPI _SB.EPC _STA"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>剩下的要寫 Kernel Module 這邊就不做測試了，主要是了解如何透過 ACPI Method 來取得裝置資訊。</p>
+
+<blockquote class="block-danger">
+  <p>以上就是 ACPI 定義的各種電源狀態與 OS 讀取電池資訊的方式，如果有後續研究再補充相關內容。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>01-27-2026 20:32</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="bios" /><category term="acpi" /><summary type="html"><![CDATA[ACPI 全名為 Advanced Configuration and Power Interface，是一個開放標準，用於管理電腦的電源與硬體配置。]]></summary></entry><entry><title type="html">Note | BIOS Introduction</title><link href="https://hotshot824.github.io/jekyll/2026-01-24-BIOS_introduction.html" rel="alternate" type="text/html" title="Note | BIOS Introduction" /><published>2026-01-24T00:00:00+00:00</published><updated>2026-01-24T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/BIOS_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-01-24-BIOS_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>BIOS 全名為 (Basic Input/Output System)，負責在電腦開機時初始化硬體並呼叫 Bootloader 來載入作業系統。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>PC 電源按下去難道 OS 會自己飛進 DRAM 自己啟動嗎？當然不會，這時間點 DRAM 還沒初始化也無法使用，這時候就需要 BIOS 做最初的初始化工作。</p>
+</blockquote>
+
+<h3 id="1-pc-architecture-overview">1. PC Architecture Overview</h3>
+
+<blockquote class="block-tip">
+  <p>通常 Computer Introduction 或者 Computer Architecture 會把這部分講的很詳細，
+這裡還是整理一下簡單複習，算盤本通常會更加強調硬體架構與運作原理。</p>
+</blockquote>
+
+<p>在開始介紹 BIOS 之前我們應該要先清楚現代電腦的基本架構，以下是一個簡化的 Notebook / Desktop 架構圖：</p>
+
+<p><img src="/image/2026/01-24-BIOS_introduction/1.svg" alt="" /></p>
+
+<blockquote>
+  <p>這張圖蠻難得把 BIOS 跟南北橋都畫出來的，現代架構通常會把北橋整合進 CPU 裡面，或不畫出 Flash ROM。</p>
+</blockquote>
+
+<p><strong>CPU Level</strong></p>
+
+<ol>
+  <li>CPU (Central Processing Unit)：負責執行程式指令與處理資料，是電腦的核心運算單元。</li>
+  <li>Register：CPU 內部的高速儲存單元，用於暫存指令與資料。</li>
+  <li>Cache：位於 CPU 與主記憶體之間的高速緩存，用於加速資料存取。
+    <ul>
+      <li>L1、L2、L3 Cache：即使是 Cache 也有分層，L1 最快但容量最小，L3 最慢但容量最大。</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Memory Hierarchy</strong></p>
+
+<ol>
+  <li>主記憶體 (RAM)：用於暫存正在執行的程式與資料，速度較快但斷電後資料會消失。</li>
+  <li>次級儲存裝置 (SSD/HDD)：用於長期儲存資料，速度較慢但容量較大且斷電後資料不會消失。</li>
+  <li>ROM / Flash Memory：用於儲存韌體 (Firmware)，如 BIOS，資料在斷電後仍然保留。
+    <ul>
+      <li>ROM 就真的是 Read-Only Memory，無法寫入資料。</li>
+      <li>但 BIOS 通常會使用 Flash Memory，可以透過韌體更新來修改 BIOS 內容。</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Bus Architecture / Chipset</strong></p>
+
+<p><img src="/image/2026/01-24-BIOS_introduction/2.png" alt="" height="50%" width="50%" /></p>
+
+<ol>
+  <li>數據匯流排 (Data Bus)：用於傳輸資料的通道，連接 CPU、記憶體與周邊裝置。</li>
+  <li>地址匯流排 (Address Bus)：用於傳輸記憶體地址的通道，CPU 使用地址匯流排來定位記憶體位置。</li>
+  <li>控制匯流排 (Control Bus)：用於傳輸控制訊號的通道，協調各個元件之間的操作。</li>
+</ol>
+
+<p><strong>Chipset</strong></p>
+
+<ol>
+  <li>北橋 (Northbridge)：負責連接 CPU、記憶體與高速周邊裝置，如顯示卡。</li>
+  <li>南橋 (Southbridge)：負責連接較慢的周邊裝置，如硬碟、USB 裝置與音效卡。</li>
+</ol>
+
+<p>現代架構通常把 北橋整合進 CPU 裡面，這很合理因為北橋控制的基本上就是 CPU 相關的高速周邊元件，
+而南橋則通常較複雜，會負責更多週邊裝置的管理。</p>
+
+<blockquote class="block-tip">
+  <p>Bus 定義了系統中資料、位址與控制訊號的傳輸規範與通道，而 Chipset 則是實體硬體，負責解碼、仲裁並實作這些 Bus 間的連接與轉換。</p>
+</blockquote>
+
+<p><strong>I/O Devices</strong></p>
+
+<p>剩餘的就是各種周邊 I/O 裝置 (Input/Output Devices)，像是鍵盤、滑鼠、顯示器、網路卡、音效卡等等。</p>
+
+<hr />
+
+<h3 id="2-bios-overview">2. BIOS Overview</h3>
+
+<blockquote>
+  <p>BIOS (Basic Input/Output System)</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>現代 PC 通常運行在 OS 環境下執行程式，OS 同時也是一個程式，在 Von Neumann 架構下，
+程式必須先被載入到記憶體中才能執行，在 OS 載入之前，PC 就是一個沒有作業系統的硬體平台，
+此時運行的第一個程式就是 BIOS。</p>
+</blockquote>
+
+<p>因此 BIOS 需要在開機後尚未載入 OS 之前，完成硬體初始化與檢測，其包含以下主要功能：</p>
+
+<ol>
+  <li>硬體初始化 (Hardware Initialization)：<br />
+BIOS 在電腦開機時會初始化 CPU、記憶體、顯示卡等硬體元件，確保它們能正常運作。</li>
+  <li>自檢程序 (Power-On Self Test, POST)：<br />
+BIOS 會執行一系列的自檢程序，檢查硬體是否正常運作，若有問題會發出錯誤訊號或顯示錯誤訊息。</li>
+  <li>引導程序 (Bootloader)：<br />
+BIOS 會尋找並載入作業系統的引導程式，通常是從硬碟、SSD 或其他可引導裝置中尋找，並將控制權交給作業系統。</li>
+  <li>硬體設定 (Hardware Configuration)：<br />
+BIOS 提供一個介面讓使用者可以設定硬體參數，如系統時間、啟動順序等。</li>
+  <li>提供基本 I/O 服務 (Basic I/O Services)：<br />
+BIOS 提供一組基本的輸入/輸出服務，這樣在 OS 載入之前，程式仍然可以透過 BIOS 來存取硬體資源。</li>
+</ol>
+
+<p><img src="/image/2026/01-24-BIOS_introduction/3.png" alt="" /></p>
+
+<blockquote>
+  <p>BIOS/UEFI 的主要任務是在系統開機時初始化硬體、建立啟動環境，並將控制權交給 bootloader，由 bootloader 載入並啟動作業系統。</p>
+</blockquote>
+
+<p>BIOS 的執行階段是沒有 DRAM 可以使用的，此時 PC 上的唯一可用記憶體是 CPU 內部的 Register 與 Cache，
+指令與資料都必須從 Flash ROM 中讀取，因此 BIOS 程式碼通常會被設計得非常精簡，以確保能在有限的資源下順利執行。</p>
+
+<p>這與我們所認知的 C 執行環境有很大差異，因此幾乎沒有或者非常少的 Stack 可以使用，不使用 Heap，
+這階段叫做 Cache-as-RAM (CAR)，BIOS 會把 CPU Cache 當作暫時的記憶體來使用。</p>
+
+<p>直到 BIOS 初始化完畢並啟動 DRAM 後，才會切換到正常的記憶體環境，此時才會有完整的 Stack 與 Heap 可用。</p>
+
+<blockquote class="block-tip">
+  <p>這裡會依照 BIOS 的實作不同而有所差異，但大致上都是這樣的流程。</p>
+</blockquote>
+
+<p>BIOS 作為 PC 架構中的關鍵韌體，扮演著硬體與作業系統之間的橋樑。在 PC 開機的最初階段，
+BIOS 必須在極度受限的環境下完成硬體初始化與自檢程序，為作業系統的載入建立起必要的執行環境。</p>
+
+<blockquote class="block-warning">
+  <p>這樣就大致說明了 BIOS 的基本概念與功能，接下來有興趣再進一步探討 BIOS 的工作流程與技術細節。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="3-uefi-stages-overview">3. UEFI Stages Overview</h3>
+
+<blockquote class="block-tip">
+  <p>UEFI (Unified Extensible Firmware Interface) 是較於 Legacy BIOS 更加現代化的韌體介面。</p>
+</blockquote>
+
+<blockquote>
+  <p>Reference: <a href="https://uefi.org/specifications">UEFI Specification</a></p>
+</blockquote>
+
+<p>Leagcy BIOS 的執行環境都是在 16-bit 下運行，因此即使 CPU 支援 64-bit 還是必須額外實作 16-bit 的執行環境來支援 BIOS，
+因此廠商開始想改變這個狀況。16-bit 的 Memory Addressing 極限就是 1MB，這就大大限制了 BIOS 可以做的事情。
+並且對開發者來說 Legacy BIOS 的開發多以 Assembly 為主，開發難度較高且不易維護。</p>
+
+<p>當然 UEFI 作為現代化的韌體介面，當然要劃分多個 Phase 來處理不同的任務，以下是 UEFI 的主要階段：</p>
+
+<p><img src="/image/2026/01-24-BIOS_introduction/4.png" alt="" /></p>
+
+<p><strong>SEC (Security Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>UEFI 的第一個階段，在 Power 或者 Reset 後執行</li>
+      <li>這個階段的主要任務驗證 Firmware 的完整性與安全性，確保韌體未被篡改</li>
+      <li>建立最小的執行環境，初始化 CPU 基本狀態</li>
+      <li>傳遞控制權到下一個階段 PEI</li>
+    </ul>
+  </li>
+  <li>執行環境:
+    <ul>
+      <li>在這個階段必須建立一塊臨時的記憶體區域 (Temporary RAM)
+        <ul>
+          <li>通常使用 CAR (Cache-as-RAM) 或者 SRAM</li>
+        </ul>
+      </li>
+      <li>此時的執行代碼位於 ROM 中，並且只能使用非常有限的資源</li>
+      <li>CPU 從 Reset Vector (0xFFFFFFF0) 開始執行，這是 CPU 啟動後的預設位置</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>SEC 階段最初是用 Assembly 編寫的，CPU 在剛啟用時只能運行 Real Mode</p>
+</blockquote>
+
+<p><strong>PEI (Pre-EFI Initialization Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>DRAM 初始化，這樣才能在 DEX 階段使用 DRAM
+        <ul>
+          <li>通常 DRAM init 會由 Vendor 提供的程式碼來完成</li>
+        </ul>
+      </li>
+      <li>CPU 初始化，將記憶體控制器 (Memory Controller) 設定好
+        <ul>
+          <li>重新指向 Stack，設定 Exception</li>
+        </ul>
+      </li>
+      <li>Chipset 初始化，設定南北橋等晶片</li>
+      <li>DXE 會被解壓縮搬移到 DRAM 中</li>
+      <li>透過 Hand-off Block (HOB) 傳遞系統資訊到 DXE 階段</li>
+    </ul>
+  </li>
+  <li>執行環境:
+    <ul>
+      <li>在這個階段之後都是用 C 作為主要編寫語言</li>
+      <li>在這個階段還是沒有 DRAM 可用，因此必須繼續使用 CAR</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>這些 Init 基本上都是由 PEI Module (PEIM) 來完成，PEI Code 負責管理</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>PEI 最主要的目的是初始化 DRAM，這樣後續的階段才能使用記憶體支援</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://uefi.org/specs/PI/1.8/V1_Overview.html#pre-efi-initialization-pei-phase">The design for the Pre-EFI Initialization (PEI) phase of a PI Architecture-compliant boot is as an essentially miniature version of the DXE phase of the PI Architecture and addresses many of the same issues.</a></p>
+</blockquote>
+
+<blockquote>
+  <p>可以說 PEI 是為了進入 DXE 階段的一個不得已而為之的妥協，其目標是為了準備好 DXE 階段的執行環境</p>
+</blockquote>
+
+<p><strong>DXE (Driver Execution Environment Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>DXE 階段才真正的初始化大部分的硬體元件</li>
+      <li>載入並執行各種驅動程式 (Driver) 來支援不同的硬體
+        <ul>
+          <li>GPU、NIC、SATA/NVMe Controller、USB Controller …</li>
+        </ul>
+      </li>
+      <li>建立 UEFI Boot Services 與 Runtime Services
+        <ul>
+          <li>提供一組標準化的服務介面給後續的 Bootloader 與 OS 使用</li>
+        </ul>
+      </li>
+      <li>建立 ACPI Table、SMBIOS Table 等系統資訊</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://uefi.org/specs/UEFI/2.9_A/07_Services_Boot_Services.html">Boot Services</a> 提供在 OS 載入前使用的服務，而 <a href="https://uefi.org/specs/UEFI/2.9_A/08_Services_Runtime_Services.html">Runtime Services</a> 則是在 OS 載入後仍然可用的服務</p>
+</blockquote>
+
+<ul>
+  <li>執行環境:
+    <ul>
+      <li>在這個階段已經可以使用 DRAM，因此可以使用完整的 C 執行環境</li>
+      <li>可以使用 Stack 與 Heap，並且可以使用標準的 C 函式庫</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>DXE 可以說是 BIOS 的主戰場，在這個階段可以進行大量的硬體初始化與設定</p>
+</blockquote>
+
+<p><strong>BDS (Boot Device Selection Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>根據 Boot Order 選擇開機裝置</li>
+      <li>嘗試從選定的裝置載入 Bootloader (GRUB、Windows Boot Manager …)
+        <ul>
+          <li>可載入的 EFI 並不限於 OS Bootloader，也可以是其他的 EFI 應用程式</li>
+          <li>UEFI Shell, Firmware Update Utility, Diagnostics Tool …</li>
+        </ul>
+      </li>
+      <li>這個階段就提供使用者 Boot Menu 來選擇開機裝置</li>
+    </ul>
+  </li>
+  <li>執行環境:
+    <ul>
+      <li>繼續使用 DXE 階段建立的執行環境</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>BDS 是使用者與 UEFI 互動的主要階段，包括 BIOS Setup 介面、Boot Menu 都在這裡處理</p>
+</blockquote>
+
+<p><strong>TSL (Transient System Load Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>Bootloader 已經被 BDS 載入並執行</li>
+      <li>將控制權交給 Bootloader，但在這個階段 UEFI Boot Services 仍然可用</li>
+      <li>為 OS 準備好啟動環境</li>
+    </ul>
+  </li>
+</ul>
+
+<p>在這個階段 Bootloader 可以透過 UEFI 提供的 Boot Services 來存取硬體資源，
+並建立 OS 所需的啟動環境，例如 Memory Map、ACPI Table 等。</p>
+
+<blockquote>
+  <p>此階段的關鍵是當 ExitBootServices() 被呼叫後，至此進入 Runtime Phase，由作業系統接管系統控制權。</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>在這個階段是 Bootloader 執行期間、ExitBootServices 之前的過渡階段，其實就是 BIOS 與 OS kernel 的交接點。</p>
+</blockquote>
+
+<p><strong>RT (Runtime Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>OS 已經被載入並執行，在這個階段 UEFI Boot Services 不再可用</li>
+      <li>但 UEFI Runtime Services 仍然可用，提供一些系統資訊與服務給 OS 使用
+        <ul>
+          <li>UEFI Variable Services: 某些廠商的特殊功能變數 (RGB LED Control …)</li>
+          <li>RTC (Real-Time Clock) Read/Write</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>執行環境:
+    <ul>
+      <li>由 OS 接管系統控制權，UEFI 僅提供 Runtime Services</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在 ExitBootServices() 被呼叫後 BIOS 在 DRAM 中的區塊會被釋放，僅保留 Runtime Services 所需的部分</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>RT 階段基本上就是 OS 執行期間，UEFI 僅提供有限的 Runtime Services 給 OS 使用</p>
+</blockquote>
+
+<p><strong>AL (After Life Phase)：</strong></p>
+<ul>
+  <li>主要功能:
+    <ul>
+      <li>處理 OS 的關機或重啟請求</li>
+      <li>S3 / S4 / S5 等電源狀態管理</li>
+      <li>在這個階段 UEFI 會協助 OS 進行系統關機或重啟</li>
+    </ul>
+  </li>
+  <li>執行環境:
+    <ul>
+      <li>由 OS 控制系統電源狀態</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>AL 階段主要是處理系統關機或重啟的相關工作，只負責 Reset 或 Power Off，為下一次開機做準備</p>
+</blockquote>
+
+<hr />
+
+<blockquote class="block-warning">
+  <p>以上說明了一個 BIOS 在 PC 中的主要腳色與 UEFI 的各個階段功能概述，後續要研究的話可以從各個階段的細節開始著手，
+了解每個階段的工作流程與技術細節。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>01-24-2026 18:36</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="bios" /><summary type="html"><![CDATA[BIOS 全名為 (Basic Input/Output System)，負責在電腦開機時初始化硬體並呼叫 Bootloader 來載入作業系統。]]></summary></entry><entry><title type="html">Note | I2C Introduction</title><link href="https://hotshot824.github.io/jekyll/2026-01-17-I2C_introduction.html" rel="alternate" type="text/html" title="Note | I2C Introduction" /><published>2026-01-17T00:00:00+00:00</published><updated>2026-01-17T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/I2C_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2026-01-17-I2C_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>I2C 全名為 (Inter-Integrated Circuit)，是一種串列通訊匯流排，由 Philips 在 1980 年代開發，用於主機板、嵌入式系統用於連接低速周邊裝置而發展。</p>
+</blockquote>
+
+<blockquote>
+  <p>Reference: <a href="https://wiki.csie.ncku.edu.tw/embedded/I2C?revision=5e42ddc4b3a26836bde79930f3b4e6fe69d14cc0">成大資工 I2C: Inter-Integrated Circuit</a>, <a href="https://www.digikey.tw/zh/maker/projects/getting-started-with-stm32-i2c-example/ba8c2bfef2024654b5dd10012425fa23">Getting Started with STM32 - I2C Example</a></p>
+</blockquote>
+
+<h3 id="1-i2c-introduction">1. I2C Introduction</h3>
+
+<p>首先要記住 I2C 是一種同步串列通訊協定，在嵌入式系統常見的通訊協定有 SPI、UART、I2C 三種，
+在使用場景上通常會有以下分類：</p>
+
+<ol>
+  <li>I<sup>2</sup>C：適合連接多個低速裝置，使用兩條線 (SDA、SCL)，支援多主多從架構，適合短距離通訊。
+    <ul>
+      <li>低速周邊裝置：多個溫度感測器、RTC、EEPROM</li>
+      <li>可以只要用兩條線就能連接多個裝置，節省 GPIO 腳位</li>
+    </ul>
+  </li>
+  <li>SPI：適合高速通訊，使用四條線 (MOSI、MISO、SCLK、SS)，支援全雙工通訊，適合較長距離通訊。
+    <ul>
+      <li>高速周邊裝置：高速感測器如: 觸控、螢幕、SD Card …</li>
+      <li>全雙工並且高速，實作簡單，Protocol 需要自訂封包格式</li>
+    </ul>
+  </li>
+  <li>UART：適合點對點通訊，使用兩條線 (TX、RX)，不需要時鐘訊號，適合長距離通訊。
+    <ul>
+      <li>點對點裝置：Debug Console、Bootloader 傳輸韌體</li>
+      <li>非同步通訊，適合長距離通訊，但需要額外的協定來確保資料完整性 (Error bit …)</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>I2C 的應用場景通常是連接多個低速週邊裝置，並且只要使用兩條線就能達成通訊，節省 GPIO 腳位。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>同步代表通訊雙方會共享一個時鐘訊號 (SCL)，以確保資料傳輸的同步性。不用像 UART 需要確認雙方的傳輸速率 (Baud Rate) 是否一致。</p>
+</blockquote>
+
+<p><strong>I2C Bus</strong></p>
+
+<p><img src="https://wiki.csie.ncku.edu.tw/embedded/i2c_structure.gif" alt="" /></p>
+
+<p>I2C 主要由 SDA (Serial Data Line) 與 SCL (Serial Clock Line) 兩條線組成，SDA 負責傳輸資料，SCL 負責提供時鐘訊號。
+由於要連接多個裝置，因此會有定址空間，I2C 裝置會有一個唯一的 7-bit 或 10-bit 位址，用於識別不同的裝置。</p>
+
+<blockquote class="block-danger">
+  <p>定址空間要去除保留位址 (Reserved Address)，例如 7-bit 位址中，0x00 與 0x7F 是保留位址，不能用於裝置定址。因此最多只能支援 2<sup>7</sup> - 2<sup>4</sup> = 112 個裝置。</p>
+</blockquote>
+
+<p>I2C 是主從式 (Master-Slave) 通訊協定，主裝置 (Master) 負責產生時鐘訊號並控制通訊流程，從裝置 (Slave) 回應主裝置的請求。
+因此所有的主動發起通訊的裝置都必須是主裝置，而從裝置只能被動回應。</p>
+
+<p>I2C 的 I/O 通常是 Open-Drain (或 Open-Collector)，這表示裝置只能將線路拉低 (Low)，而無法主動拉高 (High)。 因此需要外部的上拉電阻 (Pull-up Resistor) 將線路拉高，確保線路在閒置狀態下為高電位。</p>
+
+<blockquote>
+  <p>I2C 通常使用 5v 或 3.3v 的電壓等級，具體取決於所使用的 microcontroller 與周邊裝置的規格。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-i2c-transmission">2. I2C Transmission</h3>
+
+<p>I2C 的資料傳輸包含四個部分: 啟動條件 (Start Condition)、位址傳輸 (Address Transmission)、資料傳輸 (Data Transmission)、
+停止條件 (Stop Condition)。注意 I2C 是傳輸協議，不是資料協議，因此資料的封包格式需要自行定義。每次傳送與接收都需要事先定義好資料格式。</p>
+
+<blockquote class="block-tip">
+  <p>傳輸與接收的的處理需要事先定義好資料格式 (Data Frame)，I2C 本身並沒有定義資料的封包格式。</p>
+</blockquote>
+
+<ol>
+  <li>I2C 在 Idle 狀態下，SDA 與 SCL 都為高電位。</li>
+  <li>啟動條件 (Start Condition)：主裝置將 SDA 從高電位拉低，同時 SCL 維持高電位，表示開始一個新的傳輸。</li>
+  <li>位址傳輸 (Address Transmission)：主裝置傳送從裝置的位址 (7-bit 或 10-bit)，並附加一個讀/寫位 (R/W bit)，表示是要讀取還是寫入資料。從裝置收到位址後，會回應一個確認位 (ACK bit)。</li>
+  <li>資料傳輸 (Data Transmission)：主裝置與從裝置根據 R/W bit 進行資料傳輸。每次傳送一個位元組 (8 bits)，傳送後從裝置會回應一個確認位 (ACK bit)。可以連續傳送多個位元組。</li>
+  <li>停止條件 (Stop Condition)：主裝置將 SDA 從低電位拉高，同時 SCL 維持高電位，表示結束傳輸。</li>
+</ol>
+
+<p>下圖是 TMP102 溫度感測器的 I2C 通訊範例，包含讀取溫度資料的流程:
+<img src="/image/2026/01-17-I2C_introduction/1.jpg" alt="" /></p>
+
+<p>SCL 會在每次位元傳輸前產生一個時鐘週期，確保資料的同步性。只有 SCL 為低電位時，SDA 的狀態才可以改變，SCL 為高電位時，SDA 的狀態必須保持穩定。
+I2C 的資料讀取在 SCL 上升沿 Low -&gt; High 時進行取樣。</p>
+
+<blockquote class="block-danger">
+  <p>唯一可以在 SCL 為高電位時改變 SDA 狀態的情況是啟動條件與停止條件，這兩個條件用來標示傳輸的開始與結束。
+這樣在設計上可以區分資料傳輸與控制訊號，確保通訊的正確性。</p>
+</blockquote>
+
+<p><strong>ACK/NACK</strong></p>
+
+<p>在每次位元組傳輸後，接收端需要回應一個確認位 (ACK bit) 或非確認位 (NACK bit)。
+ACK 表示資料已正確接收，NACK 表示資料接收失敗或不需要更多資料。</p>
+
+<p>在資料傳輸後 SCL 下一個週期中，接收端可以透過 SDA 線回應 ACK 或 NACK:</p>
+<ol>
+  <li>ACK: 接收端將 SDA 拉低，表示資料已正確接收。</li>
+  <li>NACK: 接收端將 SDA 維持高電位，表示資料接收失敗或不需要更多資料。</li>
+</ol>
+
+<p>在這之後的 SCL 週期則會繼續進行下一個 Byte 的傳輸或結束傳輸。</p>
+
+<p>通常 Embedded System 在寫這類 Tramsmission Code 時，都是使用 FSM (Finite State Machine) 的方式來實作 Communication Protocol。例如 UART 通常 4 個 State: IDLE、START、DATA、STOP。I2C 則依照傳輸設計的不同，State 數量會更多。例如: IDLE、START、ADDRESS、ACK、DATA、ACK/NACK、STOP 等等。</p>
+
+<blockquote class="block-tip">
+  <p>例如多個 8051 沒有 I2C IP，需要透過 GPIO 模擬 I2C 通訊協定來讀取多個 I2C 溫度感測器的資料，
+而不同 I2C 裝置上都需要設計好 FSM 來處理 I2C 傳輸流程。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>這裡簡單紀錄 I2C 通訊協定的基本概念與傳輸流程，至少在面試上能回答 I2C 是什麼、有什麼應用場景、基本傳輸流程。
+詳細的 I2C 細節可以繼續看成大資工的 I2C 教學文章。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>01-17-2026 18:36</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="i2c" /><category term="embedded" /><summary type="html"><![CDATA[I2C 全名為 (Inter-Integrated Circuit)，是一種串列通訊匯流排，由 Philips 在 1980 年代開發，用於主機板、嵌入式系統用於連接低速周邊裝置而發展。]]></summary></entry><entry><title type="html">LLVM | CPU0 Create Backend Machine</title><link href="https://hotshot824.github.io/jekyll/2025-11-21-llvm_cpu0_create_backend.html" rel="alternate" type="text/html" title="LLVM | CPU0 Create Backend Machine" /><published>2025-11-21T00:00:00+00:00</published><updated>2025-11-21T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/llvm_cpu0_create_backend</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-21-llvm_cpu0_create_backend.html"><![CDATA[<blockquote class="block-tip">
+  <p>CPU0 是一個 LLVM 教學用的目標架構，主要用來展示 LLVM 從中間表示（IR）到目標機器碼的轉換過程。在這篇文章中，我們將介紹如何為 CPU0 架構創建 LLVM 後端。</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://jonathan2251.github.io/lbd/index.html#">Tutorial: Creating an LLVM Backend for the Cpu0 Architecture</a></p>
+</blockquote>
+
+<h3 id="11-introduction">1.1 Introduction</h3>
+
+<p>在 LLVM IR 之前，不管什麼語言都將轉換成 LLVM IR，然後再 LLVM IR 階段會進行與目標無關的最佳化，這些階段的輸入輸出都是 LLVM IR。在進入 Codegen 階段之後，就開始目標相關的最佳化。這個最佳化的過程我們可以簡單分成幾個步驟:</p>
+
+<ol>
+  <li>Selection DAG Lowering
+    <ul>
+      <li>將 LLVM IR 轉換成 SelectionDAG</li>
+      <li>每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Selection
+    <ul>
+      <li>對於 IR 中的每個 Basic Block 都會產生一個 SelectionDAG</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling
+    <ul>
+      <li>在 2 的階段 SelectionDAG 會被轉換成 MachineInstr</li>
+      <li>在此階段 Physical Register 仍未分配，可以做 Pre-RA Scheduling</li>
+    </ul>
+  </li>
+  <li>Register Allocation
+    <ul>
+      <li>將 Virtual Register 分配到 Physical Register</li>
+    </ul>
+  </li>
+  <li>Instruction Scheduling (Again)
+    <ul>
+      <li>在 Register Allocation 後，會再次進行 Instruction Scheduling</li>
+      <li>此處才能根據 Pipeline 的特性來進行 Scheduling</li>
+    </ul>
+  </li>
+  <li>Code Emission
+    <ul>
+      <li>此處將 MachineInstr 轉換 MCInst</li>
+      <li>最後將 MCInst 轉換成 Assembly Code 或 Machine Code</li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="/image/2025/11-20-llvm_cpu0_instructionSelect/1.png" alt="" /></p>
+
+<p><strong>CPU0</strong></p>
+
+<p>CPU0 是一個 32bit 的 RISC 架構，具有簡單的指令集和固定長度的指令格式。詳細的 CPU0 架構規格可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html">CPU0 Architecture</a>。主要有三種指令類型，分別是 R-Type、I-Type 和 J-Type 指令。</p>
+
+<ul>
+  <li>L-type instructions: Primarily used for memory operations.</li>
+  <li>A-type instructions: Designed for arithmetic operations.</li>
+  <li>J-type instructions: Typically used for altering control flow (e.g., jumps).</li>
+</ul>
+
+<hr />
+
+<h3 id="12-cpu0-backend-machine-id-and-relocation-records">1.2 Cpu0 Backend Machine ID and Relocation Records</h3>
+
+<blockquote class="block-tip">
+  <p>這些修改的目的是讓 LLVM 認識 CPU0 架構，並能夠正確處理與 CPU0 相關的機器碼和重定位資訊</p>
+</blockquote>
+
+<p>在 CPU0 的教學中，首先要為 CPU0 定義 Backend Machine ID 和 Relocation Records。這些檔案位於 <code class="language-plaintext highlighter-rouge">lbdex/llvm/modify</code> 在編譯過程中會直接替換 LLVM Source Code 中對應的檔案。其中包含以下檔案：</p>
+
+<ul>
+  <li>llvm/config-ix.cmake
+    <ul>
+      <li>LLVM Cmake 的配置檔案，負責 LLVM_NATIVE_ARCH 依照 Host 的系統來設定在什麼架構下編譯</li>
+      <li>它決定了 LLVM 自己在建置階段該使用哪個目標架構，例如啟用哪些最佳化或平台特定的邏輯</li>
+      <li>此設定只影響 LLVM 本身的建置行為，不影響 LLVM 是否支援其它平台</li>
+    </ul>
+  </li>
+  <li>llvm/CMakeLists.txt
+    <ul>
+      <li>LLVM 的主要 CMake 配置檔案，負責定義 LLVM 的建置過程和模組</li>
+      <li>將 <code class="language-plaintext highlighter-rouge">Cpu0</code> 加入 <code class="language-plaintext highlighter-rouge">LLVM_ALL_TARGETS</code> 列表後，才會觸發編譯 <code class="language-plaintext highlighter-rouge">lib/Target/Cpu0</code> 目錄下的後端模組</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/ADT/Triple.h
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Triple</code> 是 LLVM 中用來表示<strong>目標平台</strong>的標準格式，格式為 <code class="language-plaintext highlighter-rouge">arch-vendor-os-abi</code>
+        <ul>
+          <li>x86_64-pc-linux-gnu</li>
+          <li>cpu0-unknown-none</li>
+        </ul>
+      </li>
+      <li>LLVM 會依照 Triple 來選擇合適的 TargetMachine、TargetLowering、TargetInstrInfo 等元件</li>
+    </ul>
+  </li>
+  <li>llvm/lib/Support/Triple.cpp
+    <ul>
+      <li>實作 Triple 的 string, enum 的查詢邏輯</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELF.h
+    <ul>
+      <li>這裡說明了 CPU0 的 ELF 中的 Machine ID, e_flags, relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Support/ELFRelocs/Cpu0.def
+    <ul>
+      <li>定義 CPU0 架構的 ELF 重定位類型，例如:
+        <div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_32</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ELF_RELOC</span><span class="p">(</span><span class="n">R_CPU0_LO16</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/include/llvm/Object/ELFObjectFile.h
+    <ul>
+      <li>定義解析 ELF object file 的功能，例如:
+        <ul>
+          <li>getArch() 透過 ELF header 取得 Machine ID</li>
+          <li>getFileFormatName() 取得 ELF file format name
+            <ul>
+              <li>輸出像 <code class="language-plaintext highlighter-rouge">"ELF32-cpu0"</code> 的格式名</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>llvm/lib/Object/ELF.cpp
+    <ul>
+      <li>實作 ELF relocation 的編號與名稱對應邏輯</li>
+      <li>在 CPU0 中這裡是在 switch case 中 include Cpu0.def 來處理 CPU0 的 relocation types</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/MCSubtargetInfo.cpp
+    <ul>
+      <li>處理 subtarget 的 CPU 名稱與 feature string 的對應</li>
+    </ul>
+  </li>
+  <li>llvm/lib/MC/SubtargetFeature.cpp
+    <ul>
+      <li>實作了 LLVM SubtargetFeature 的 string 處理邏輯</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>完整的修改可以參考 <a href="https://jonathan2251.github.io/lbd/llvmstructure.html#cpu0-backend-machine-id-and-relocation-records">Cpu0 Backend Machine ID and Relocation Records</a></p>
+</blockquote>
+
+<p>這個階段的修改目標是讓 LLVM 能識別 Cpu0 架構，必須做到以下幾點:</p>
+<ol>
+  <li>註冊 triple 名稱 <code class="language-plaintext highlighter-rouge">cpu0-unknown-none</code></li>
+  <li>註冊它的 ELF Machine ID (EM_CPU0) 與 Relocation 類型</li>
+  <li>支援 llvm-objdump, llvm-mc 等工具能正確處理 ELF32-cpu0 格式
+    <ul>
+      <li>否則只會出現 “unknown file format” 的錯誤訊息</li>
+    </ul>
+  </li>
+  <li>避免報錯（例如 feature string 沒定義時跳出 unrecognized 警告）</li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這些修改在目前的階段只要完全照著做就可以了，如果想要深入這部分的研究，要補充 ELF format、LLVM Triple、LLVM MC layer、Relocation types 等相關知識</p>
+</blockquote>
+
+<hr />
+
+<h3 id="13-cpu0td-files">1.3 Cpu0.td Files</h3>
+
+<p><strong>LLVM’s Target Description Files: .td</strong></p>
+
+<blockquote>
+  <p><a href="https://llvm.org/docs/TableGen/">TableGen Overview</a> 官方的文件介紹了 TableGen 的基本概念</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>詳細的 TableGen 介紹可以參考 <a href="./2025-11-20-tablegen_introduction">TableGen Introduction</a></p>
+</blockquote>
+
+<p>LLVM 使用 TableGen (.td) 文件來描述目標架構的指令集、寄存器和其他相關資訊。這些文件定義了 CPU0 的指令格式、操作數類型以及指令的語義。這些描述檔案通常放在 LLVM 的目標目錄下，在 <code class="language-plaintext highlighter-rouge">llvm-project/llvm/lib/Target</code> 下，我們可以找到這些不同目標的檔案，如 <code class="language-plaintext highlighter-rouge">RISCV</code>, <code class="language-plaintext highlighter-rouge">ARM</code>, <code class="language-plaintext highlighter-rouge">X86</code> 等等。實際上要在 LLVM 中新增一個目標架構，主要就是撰寫這些 TableGen 檔案。</p>
+
+<p>CPU0 td 檔案的主要入口是 <code class="language-plaintext highlighter-rouge">Cpu0Other.td</code>，在此之前需要先完成 CmakeLists.txt 的設定，讓 LLVM 能夠編譯 Cpu0 後端模組。CPU0 是一個章節式的教學範例，可以透過更改 <code class="language-plaintext highlighter-rouge">Cpu0SetChapter.h</code> 中的 <code class="language-plaintext highlighter-rouge">#define CH       CH2</code> 來選擇哪個章節的功能要被編譯進去，更改完後重新編譯 LLVM。</p>
+
+<h4 id="131-cpu0td">1.3.1 Cpu0.td</h4>
+
+<blockquote class="block-danger">
+  <p>完整的程式碼請參考 CPU0 Cpu0 Architecture and LLVM Structure 章節，接下來逐小節說明該檔案的內容</p>
+</blockquote>
+
+<p><strong>SubtargetFeature</strong></p>
+
+<pre><code class="language-td">def FeatureChapter3_1  : SubtargetFeature&lt;"ch3_1", "HasChapterDummy","true", "Enable Chapter instructions."&gt;;
+</code></pre>
+
+<ul>
+  <li>SubtargetFeature: 是 LLVM TableGen 中用來定義子目標特性的類型
+    <ul>
+      <li>這些特性可以用來描述目標架構的不同變體或功能</li>
+      <li>例如，某些 CPU 可能支援特定的指令集擴展，這些擴展可以透過 SubtargetFeature 來表示</li>
+    </ul>
+  </li>
+  <li>SubtargetFeature 的格式在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中、是字串形式的表格
+    <pre><code class="language-td">class SubtargetFeature&lt;string n, string f, string v, string d, list&lt;SubtargetFeature&gt; i = []&gt; {
+    string Name = n;
+    string FieldName = f;
+    string Value = v;
+    string Desc = d;
+    list&lt;SubtargetFeature&gt; Implies = i;
+}
+</code></pre>
+  </li>
+  <li>CPU0 透過 SubtargetFeature 來定義不同功能的開啟與關閉，例如:
+    <pre><code class="language-td">def FeatureCmp         : SubtargetFeature&lt;"cmp", "HasCmp", "true",
+                            "Enable 'cmp' instructions."&gt;;
+...
+def FeatureCpu032II    : SubtargetFeature&lt;"cpu032II", "Cpu0ArchVersion",                      
+                        "Cpu032II", "Cpu032II ISA Support (slt)",
+                            [FeatureCmp, FeatureSlt, FeatureChapterAll]&gt;;
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCmp</code>: 啟用 cmp 指令</li>
+      <li><code class="language-plaintext highlighter-rouge">FeatureCpu032II</code>: 啟用所有章節的內容與 Cmp、Slt 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Processor</strong></p>
+
+<pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Processor</code> 是 LLVM TableGen 中用來定義處理器的類型
+    <ul>
+      <li>它描述了一個具體的處理器模型，包含其名稱、行程安排、子目標特性、微架構最佳化特性</li>
+      <li><code class="language-plaintext highlighter-rouge">class Processor&lt;string n, ProcessorItineraries pi, list&lt;SubtargetFeature&gt; f,list&lt;SubtargetFeature&gt; tunef = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>CPU0 定義了兩個 Processor，並加入 <code class="language-plaintext highlighter-rouge">Cpu0GenericItineraries</code> Pipelines:
+    <pre><code class="language-td">class Proc&lt;string Name, list&lt;SubtargetFeature&gt; Features&gt; : Processor&lt;Name, Cpu0GenericItineraries, Features&gt;;
+
+def : Proc&lt;"cpu032I",  [FeatureCpu032I]&gt;;
+def : Proc&lt;"cpu032II", [FeatureCpu032II]&gt;;
+</code></pre>
+  </li>
+</ul>
+
+<p><strong>Target</strong></p>
+
+<pre><code class="language-td">def Cpu0 : Target {
+  let InstructionSet = Cpu0InstrInfo;
+}
+</code></pre>
+
+<ul>
+  <li>最後 CPU0 定義了 Target，並指定它的 InstructionSet 為 <code class="language-plaintext highlighter-rouge">Cpu0InstrInfo</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Target</code> 是 LLVM TableGen 中用來定義目標架構的類型，其中包含以下欄位:
+    <ul>
+      <li>InstructionSet: 指定該 Target 使用哪個 InstructionInfo</li>
+      <li>AssemblyParsers: 指定該 Target 使用哪個 Assembly Parser
+        <ul>
+          <li>通常預留 DefaultAsmParser</li>
+        </ul>
+      </li>
+      <li>AssemblyParserVariants: 支援哪幾種 Assembly 變體如: AT&amp;T, Intel Style</li>
+      <li>AsmWriters: 此 Target 對應的 Assembly Writer 變體，用於 Assembly Code 的輸出</li>
+      <li>AllowRegisterRenaming: 是否允許 Register Renaming，Default 為 0</li>
+    </ul>
+  </li>
+</ul>
+
+<p>以上的 <code class="language-plaintext highlighter-rouge">SubtargetFeature</code>、<code class="language-plaintext highlighter-rouge">Processor</code>、<code class="language-plaintext highlighter-rouge">Target</code> 都位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，可以參考該檔案了解更多細節。</p>
+
+<h3 id="14-cpu0-register">1.4 Cpu0 Register</h3>
+
+<h4 id="141-cpu0registerinfotd">1.4.1 Cpu0RegisterInfo.td</h4>
+
+<p><strong>Register</strong></p>
+
+<blockquote class="block-tip">
+  <p>Cpu0RegisterInfo.td 定義了 CPU0 架構的 Register Set 和 Register Classes</p>
+</blockquote>
+
+<pre><code class="language-td">// We have banks of 16 registers each.
+class Cpu0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Register&lt;n&gt; {
+  // For tablegen(... -gen-emitter)  in CMakeLists.txt
+  let HWEncoding = Enc;
+  
+  let Namespace = "Cpu0";
+}
+
+// Cpu0 CPU Registers
+class Cpu0GPRReg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+
+// Co-processor 0 Registers
+class Cpu0C0Reg&lt;bits&lt;16&gt; Enc, string n&gt; : Cpu0Reg&lt;Enc, n&gt;;
+</code></pre>
+
+<ul>
+  <li>在 CPU0 中定義了兩種 Register 類型:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0GPRReg</code>: General Purpose Registers (GPRs)
+        <ul>
+          <li>R0 ~ R15 共 16 個通用暫存器</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Cpu0C0Reg</code>: Co-processor 0 Registers (C0Rs)
+        <ul>
+          <li>PC, EPC 協處理器暫存器</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Register</code> 是 LLVM TableGen 中用來定義寄存器的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Register&lt;string n, list&lt;string&gt; altNames = []&gt;</code></li>
+    </ul>
+  </li>
+  <li>位址同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 中，其包含以下重要欄位:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">string namespace</code>: 命名空間
+        <ul>
+          <li>“Cpu0”, “X86”</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">list&lt;string&gt; AltNames</code>: 別名清單
+        <ul>
+          <li>MIPS <code class="language-plaintext highlighter-rouge">a0, r4</code></li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">AsmName</code>: 實際在 Assembly code 中使用的名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">bits&lt;16&gt; HWEncoding</code>: 此 Register 在機器碼中的硬體編碼，
+        <ul>
+          <li>RISC-V 為 5 bits</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">DwarfNumbers</code>: DWARF Debugging 用的 Register 編號</li>
+      <li><code class="language-plaintext highlighter-rouge">CostPerUse</code>: 指令使用該 Register 的額外代價，與 Codesize 有關、影響 Register Allocation</li>
+      <li><code class="language-plaintext highlighter-rouge">isArtificial</code>: 若表示為 true，表示此 Register 是虛擬的、非實體存在的
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">EFLAGS</code>、<code class="language-plaintext highlighter-rouge">RIP</code> 等特殊用途的 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegs</code>: 定義此 Register 的子 Register
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 有 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 等子 Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">SubRegIndices</code>: 對應 <code class="language-plaintext highlighter-rouge">SubRegs</code> 的 Index
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">sub_16bit_hi</code>, <code class="language-plaintext highlighter-rouge">sub_lo</code> 等</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">Aliases</code>: 與此 Register 記憶體位置相同的其他 Register
+        <ul>
+          <li><code class="language-plaintext highlighter-rouge">SP</code> 可能 alias 某個 General Purpose Register</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">CoveredBySubRegs</code>: 若為 true，表示此 Register 的值完全由其 sub-registers 決定
+        <ul>
+          <li>x86 的 <code class="language-plaintext highlighter-rouge">RAX</code> 為 true，因為其值由 <code class="language-plaintext highlighter-rouge">EAX</code>, <code class="language-plaintext highlighter-rouge">AX</code>, <code class="language-plaintext highlighter-rouge">AL</code>, <code class="language-plaintext highlighter-rouge">AH</code> 決定</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<pre><code class="language-td">// The register string, such as "9" or "gp" will show on "llvm-objdump -d"
+//@ All registers definition
+let Namespace = "Cpu0" in {
+  //@ General Purpose Registers
+  def ZERO : Cpu0GPRReg&lt;0,  "zero"&gt;, DwarfRegNum&lt;[0]&gt;;
+  def AT   : Cpu0GPRReg&lt;1,  "1"&gt;,    DwarfRegNum&lt;[1]&gt;;
+  def V0   : Cpu0GPRReg&lt;2,  "2"&gt;,    DwarfRegNum&lt;[2]&gt;;
+  def V1   : Cpu0GPRReg&lt;3,  "3"&gt;,    DwarfRegNum&lt;[3]&gt;;
+  def A0   : Cpu0GPRReg&lt;4,  "4"&gt;,    DwarfRegNum&lt;[4]&gt;;
+  def A1   : Cpu0GPRReg&lt;5,  "5"&gt;,    DwarfRegNum&lt;[5]&gt;;
+  def T9   : Cpu0GPRReg&lt;6,  "t9"&gt;,   DwarfRegNum&lt;[6]&gt;;
+  def T0   : Cpu0GPRReg&lt;7,  "7"&gt;,    DwarfRegNum&lt;[7]&gt;;
+  def T1   : Cpu0GPRReg&lt;8,  "8"&gt;,    DwarfRegNum&lt;[8]&gt;;
+  def S0   : Cpu0GPRReg&lt;9,  "9"&gt;,    DwarfRegNum&lt;[9]&gt;;
+  def S1   : Cpu0GPRReg&lt;10, "10"&gt;,   DwarfRegNum&lt;[10]&gt;;
+  def GP   : Cpu0GPRReg&lt;11, "gp"&gt;,   DwarfRegNum&lt;[11]&gt;;
+  def FP   : Cpu0GPRReg&lt;12, "fp"&gt;,   DwarfRegNum&lt;[12]&gt;;
+  def SP   : Cpu0GPRReg&lt;13, "sp"&gt;,   DwarfRegNum&lt;[13]&gt;;
+  def LR   : Cpu0GPRReg&lt;14, "lr"&gt;,   DwarfRegNum&lt;[14]&gt;;
+  def SW   : Cpu0GPRReg&lt;15, "sw"&gt;,   DwarfRegNum&lt;[15]&gt;;
+  def PC   : Cpu0C0Reg&lt;0, "pc"&gt;,  DwarfRegNum&lt;[20]&gt;;
+  def EPC  : Cpu0C0Reg&lt;1, "epc"&gt;, DwarfRegNum&lt;[21]&gt;;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>Register 命名原則幾乎與 MIPS 相同，因為 CPU0 是基於 MIPS 架構設計的。</p>
+</blockquote>
+
+<blockquote>
+  <p>AT = Assembler Temporary, V = Value registers, A = Argument registers, T = Temporary registers, S = Saved registers, GP = Global Pointer, FP = Frame Pointer, SP = Stack Pointer, LR = Link Register, SW = Status Word</p>
+</blockquote>
+
+<p><strong>DwarfRegNum</strong></p>
+
+<ul>
+  <li>CPU0 的 Register 同時繼承了 <code class="language-plaintext highlighter-rouge">DwarfRegNum</code>，用來指定 DWARF Debugging 中的 Register 編號
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">ZERO</code> Register 在 DWARF 中的編號為 0</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">DwarfRegNum</code> 定義在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class DwarfRegNum&lt;list&lt;int&gt; Numbers&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/DWARF">DWARF</a> 是一套廣泛使用的除錯資訊格式標準，用於在 object/executable 中描述符號、型別、source line、變數位置等除錯所需資訊。</p>
+</blockquote>
+
+<p><strong>RegisterClass</strong></p>
+
+<pre><code class="language-td">def CPURegs : RegisterClass&lt;"Cpu0", [i32], 32, (add
+  // Reserved
+  ZERO, AT, 
+  // Return Values and Arguments
+  V0, V1, A0, A1, 
+  // Not preserved across procedure calls
+  T9, T0, T1,
+  // Callee save
+  S0, S1,
+  // Reserved
+  GP, FP, 
+  SP, LR, SW)&gt;;
+
+//@Status Registers class
+def SR     : RegisterClass&lt;"Cpu0", [i32], 32, (add SW)&gt;;
+
+//@Co-processor 0 Registers class
+def C0Regs : RegisterClass&lt;"Cpu0", [i32], 32, (add PC, EPC)&gt;;
+</code></pre>
+
+<ul>
+  <li>RegisterClass 用於分類和組織 Register Set</li>
+  <li>其定義同樣位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code>
+    <pre><code class="language-td">class RegisterClass&lt;
+    string namespace, 
+    list&lt;ValueType&gt; regTypes, 
+    int alignment, 
+    dag regList, 
+    RegAltNameIndex idx = NoRegAltName
+    &gt; : DAGOperand
+</code></pre>
+  </li>
+  <li>Cpu0RegisterInfo.td 定義了三個 RegisterClass:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 包含所有通用暫存器</li>
+      <li><code class="language-plaintext highlighter-rouge">SR</code>: 包含狀態暫存器 SW</li>
+      <li><code class="language-plaintext highlighter-rouge">C0Regs</code>: 包含協處理器 0 的暫存器 PC 和 EPC</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>以上就是 Cpu0RegisterInfo.td 的主要內容，這些定義讓 LLVM 能夠識別和操作 CPU0 架構的 Register</p>
+</blockquote>
+
+<hr />
+
+<h4 id="142-cpu0registerinfogproutforothertd">1.4.2 Cpu0RegisterInfoGPROutForOther.td</h4>
+
+<blockquote class="block-tip">
+  <p>同一個 Register 可以有多個 RegisterClass 的定義</p>
+</blockquote>
+
+<p>其中，GPROut 這個 Register Class 定義於 Cpu0RegisterInfoGPROutForOther.td，其內容包含 CPURegs 中除了 SW 以外的所有暫存器。這樣的設計可確保在 Register Allocation 階段中，SW 不會被配置為輸出暫存器（ output register ）。</p>
+
+<pre><code class="language-td">def GPROut : RegisterClass&lt;"Cpu0", [i32], 32, (add (sub CPURegs, SW))&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sub</code>: is subtraction operation for DAG or list</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: is addition operation for DAG or list</li>
+</ul>
+
+<p>SW 通常不是作為顯式的 Register 使用，而是用於保存 CPU 狀態的特殊 Register。因此，在某些情況下，我們希望避免將 SW 分配為輸出暫存器，以防止不必要的干擾或錯誤。</p>
+
+<pre><code class="language-mips">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+ADD  r3, r4     ; explicit-def r3, implicit-def SW
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>SW 通常是與 ALU 操作相關聯的，因此更接近於 GPR 而不是 C0Reg (Co-processor 0 Register)</p>
+</blockquote>
+
+<hr />
+
+<h3 id="15-cpu0-instruction">1.5 Cpu0 Instruction</h3>
+
+<h4 id="151-cpu0instrformatstd">1.5.1 Cpu0InstrFormats.td</h4>
+
+<p>首先第一步要定義的是 CPU0 的指令格式 (Instruction Formats)，這些格式定義了每種指令的結構和操作數類型。CPU0 有三種主要的指令格式: R-type、I-type 和 J-type。</p>
+
+<p><strong>Custom Format</strong></p>
+
+<pre><code class="language-td">// Format specifies the encoding used by the instruction.  This is part of the
+// ad-hoc solution used to emit machine instruction encodings by our machine
+// code emitter.
+class Format&lt;bits&lt;4&gt; val&gt; {
+  bits&lt;4&gt; Value = val;
+}
+
+def Pseudo    : Format&lt;0&gt;;
+def FrmA      : Format&lt;1&gt;;
+def FrmL      : Format&lt;2&gt;;
+def FrmJ      : Format&lt;3&gt;;
+def FrmOther  : Format&lt;4&gt;; // Instruction w/ a custom format
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Format</code> 是 Cpu0 自訂義的欄位，用來表示指令的格式類型
+    <ul>
+      <li>利用該欄位可以在指令編碼和解碼時區分不同的指令格式</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Instruction</strong></p>
+
+<blockquote class="block-tip">
+  <p>一條具體的 Instruction 是從上自下從 Base Class -&gt; Instruction Type -&gt; Instruction 來繼承實現的</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Instruction</code> 位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code> 欄位眾多，此處直接講解 Cpu0Inst 設計</li>
+</ul>
+
+<pre><code class="language-td">// Generic Cpu0 Format
+class Cpu0Inst&lt;dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+               InstrItinClass itin, Format f&gt;: Instruction
+{
+  // Inst and Size: for tablegen(... -gen-emitter) and 
+  // tablegen(... -gen-disassembler) in CMakeLists.txt
+  field bits&lt;32&gt; Inst;
+  Format Form = f;
+
+  let Namespace = "Cpu0";
+
+  let Size = 4;
+
+  bits&lt;8&gt; Opcode = 0;
+
+  // Top 8 bits are the 'opcode' field
+  let Inst{31-24} = Opcode;
+
+  let OutOperandList = outs;
+  let InOperandList  = ins;
+
+  let AsmString   = asmstr;
+  let Pattern     = pattern;
+  let Itinerary   = itin;
+
+  //
+  // Attributes specific to Cpu0 instructions...
+  //
+  bits&lt;4&gt; FormBits = Form.Value;
+
+  // TSFlags layout should be kept in sync with Cpu0InstrInfo.h.
+  let TSFlags{3-0}   = FormBits;
+
+  let DecoderNamespace = "Cpu0";
+
+  field bits&lt;32&gt; SoftFail = 0;
+}
+</code></pre>
+
+<blockquote class="block-tip">
+  <p>field 是 TableGen 中的可變欄位，可以被多次修改與覆蓋</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Cpu0Inst</code> 是所有 CPU0 指令的基類，定義了指令的基本結構和屬性
+    <ul>
+      <li>包含輸入輸出操作數、組合語言表示、指令模式、行程安排類別和格式等欄位</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; Inst;</code>: 定義 Instruction 的 32 位元編碼
+    <ul>
+      <li>LLVM 沒有內建 Inst 這樣的欄位，並不會刻意提供 Instruction 的 bit layout 這種欄位，
+因為 LLVM 必須支援任何 ISA 的形狀</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">Format Form = f;</code>: 指定指令的格式類型，此為 Cpu0 自訂義的欄位</li>
+  <li><code class="language-plaintext highlighter-rouge">let Size = 4;</code>: 定義指令的大小為 4 bytes</li>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; Opcode = 0;</code>: 定義指令的 Opcode 欄位為 8 bits</li>
+  <li><code class="language-plaintext highlighter-rouge">let Inst{31-24} = Opcode;</code>: 指定 Opcode 在指令編碼中的位置，這裡是最高的 8 位元</li>
+  <li><code class="language-plaintext highlighter-rouge">let OutOperandList = outs;</code> 定義指令的輸出操作數列表，也就是 Register Class
+    <ul>
+      <li>常見寫法如: <code class="language-plaintext highlighter-rouge">(outs R32:$rd, R32:$rs)</code>，表示 $dst 必須從 GPROut 類別挑 physical reg</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let InOperandList  = ins;</code> 定義指令的輸入操作數列表，也是 Register Class</li>
+  <li><code class="language-plaintext highlighter-rouge">let AsmString   = asmstr;</code> 指定指令的組合語言表示</li>
+  <li><code class="language-plaintext highlighter-rouge">let Pattern     = pattern;</code> 定義指令的模式，用於指令選擇和生成
+    <ul>
+      <li>在 Instruction Selection 階段會用到</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let Itinerary   = itin;</code> 指定指令的行程安排類別，用於指令調度</li>
+  <li><code class="language-plaintext highlighter-rouge">let TSFlags{3-0}   = FormBits;</code> 定義指令的目標特定標誌，這裡用於存儲指令格式資訊
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">Target-Specific Flags</code> 是每條指令可以攜帶的額外資訊，LLVM 並不了解這些標誌的意義</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">field bits&lt;32&gt; SoftFail = 0;</code> 定義一個可變欄位，用於指示指令是否允許軟失敗</li>
+</ul>
+
+<p>以上定義了 Cpu0Inst 的基本結構，接下來可以基於此類別定義 Instruction Type</p>
+
+<blockquote>
+  <p>SoftFail 是提供給 disassembler 使用的機制，用於標示「編碼合法，但語意或 operand 組合不完全合法」的情況，不影響執行階段行為，也不涉及程式是否崩潰</p>
+</blockquote>
+
+<p><strong>Instruction Type</strong></p>
+
+<blockquote class="block-tip">
+  <p>此處僅以 Type A 為例，其他 Type 類似</p>
+</blockquote>
+
+<pre><code class="language-td">class FA&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr,
+         list&lt;dag&gt; pattern, InstrItinClass itin&gt;:
+      Cpu0Inst&lt;outs, ins, asmstr, pattern, itin, FrmA&gt;
+{
+  bits&lt;4&gt;  ra;
+  bits&lt;4&gt;  rb;
+  bits&lt;4&gt;  rc;
+  bits&lt;12&gt; shamt;
+
+  let Opcode = op;
+
+  let Inst{23-20} = ra;
+  let Inst{19-16} = rb;
+  let Inst{15-12} = rc;
+  let Inst{11-0}  = shamt;
+}
+</code></pre>
+
+<p>A-type (Arithmetic type) 指令格式，主要用於算術運算指令。以 3 地址運算的指令模板，
+同時包含一個 shift amount 欄位 (shift amount)。其餘 L-type、J-type 都是類似的定義方式。</p>
+
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; margin: auto; text-align: center;">
+  <thead>
+    <tr>
+      <th rowspan="2">Type</th>
+      <th colspan="6">Instruction Encoding (Bits)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- A-type -->
+    <tr>
+      <td rowspan="2"><b>A-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td>Rc</td>
+      <td>Shamt</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td>15–12</td>
+      <td>11–0</td>
+    </tr>
+
+    <!-- L-type -->
+    <tr>
+      <td rowspan="2"><b>L-type</b></td>
+      <td>Op</td>
+      <td>Ra</td>
+      <td>Rb</td>
+      <td colspan="3">Cx (16 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td>23–20</td>
+      <td>19–16</td>
+      <td colspan="3">15–0</td>
+    </tr>
+
+    <!-- J-type -->
+    <tr>
+      <td rowspan="2"><b>J-type</b></td>
+      <td>Op</td>
+      <td colspan="5">Cx (24 bits)</td>
+    </tr>
+    <tr>
+      <td>31–24</td>
+      <td colspan="5">23–0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<blockquote>
+  <p>透過上述定義，我們定義了 Cpu0 指令的格式和結構，這些定義將用於後續的指令實現和編碼過程中</p>
+</blockquote>
+
+<h4 id="152-cpu0instrinfotd">1.5.2 Cpu0InstrInfo.td</h4>
+
+<p class="block-tip">Cpu0InstrInfo.td 定義了 CPU0 架構的具體指令</p>
+
+<p><strong>SDTypeProfile</strong></p>
+
+<pre><code class="language-td">def SDT_Cpu0Ret          : SDTypeProfile&lt;0, 1, [SDTCisInt&lt;0&gt;]&gt;;
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTypeProfile</code> 的作用是在 SelectionDAG 層級檢查 SDNode 的型別與結構是否合法</li>
+  <li>其定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>
+    <pre><code class="language-td">// SDTypeProfile - This profile describes the type requirements of a Selection
+// DAG node.
+class SDTypeProfile&lt;int numresults, int numoperands,
+                    list&lt;SDTypeConstraint&gt; constraints&gt; {
+int NumResults = numresults;
+int NumOperands = numoperands;
+list&lt;SDTypeConstraint&gt; Constraints = constraints;
+}
+</code></pre>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">numresults</code>: 指定 SDNode 的 Result 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">numoperands</code>: 指定 SDNode 的 Operand 數量</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTypeConstraint</code>: 是用於描述每個 Result 和 Operand 的型別約束</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>在 CPU0 雖然定義了 SDTypeProfile，但目前並沒有實際應用在指令定義中，後續將使用 SDTNone 來跳過檢查</p>
+</blockquote>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDTNone</code>: 是一個特殊的 SDTypeProfile，表示不對 SDNode 的型別和結構進行任何檢查
+    <pre><code class="language-td">def SDTNone : SDTypeProfile&lt;0, 0, []&gt;;
+</code></pre>
+  </li>
+  <li>在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code> 中有許多預設的 SDTypeProfile，例如:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">SDTisInt</code>: 用於表示整數型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisFloat</code>: 用於表示浮點型別的 SDNode</li>
+      <li><code class="language-plaintext highlighter-rouge">SDTisVector</code>: 用於表示向量型別的 SDNode</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>SDNodeProperty</strong></p>
+
+<p>SDNodeProperty 是用來描述 SDNode 行為的 flag，是 SDNode 的第三個參數。例如:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">SDNPHasChain</code>: 表示該 SDNode 有 chain 輸入輸出、不能被重新排序
+    <ul>
+      <li>常見於 load, store, call, ret 或具有 branch with side effect 的指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">SDNPInGlue</code>: 表示該 SDNode 有 glue 輸入輸出，用於指令調度階段的依賴管理
+    <ul>
+      <li>常見於需要緊密相鄰執行的指令，例如 compare 與 branch 指令</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如以下的指令:</p>
+<pre><code class="language-MIPS">CMP  r1, r2     ; implicit-def SW
+BEQ  label      ; implicit-use SW
+</code></pre>
+
+<p>如果只有 chain 而沒有 Glue 則只能保證 BEQ 在 CMP 之後執行，但無法保證 BEQ 一定要在 CMP 之後的下一個指令執行，可能會被插入其他的指令。因此要加入表示 <code class="language-plaintext highlighter-rouge">CMP -- glue --&gt; BEQ</code> 來確保 BEQ 一定緊接在 CMP 之後執行。</p>
+
+<blockquote>
+  <p>branch with side effect 代表這個 branch 不只是「決定控制流往哪走」，它本身還具有可觀察的副作用。例如會影響 Memory 中的值，因此不能隨意移動、排序或者刪除</p>
+</blockquote>
+
+<p><strong>SDNode</strong></p>
+
+<blockquote>
+  <p>之後會另外寫一篇專門介紹 SDNode 的文章，再詳細說明 SDNodeProperty 的使用，可以先參考 <a href="https://zhuanlan.zhihu.com/p/649629353">LLVM后端技术浅谈-自定义SDNode</a></p>
+</blockquote>
+
+<pre><code class="language-td">def Cpu0Ret : SDNode&lt;"Cpu0ISD::Ret", SDTNone,
+                     [SDNPHasChain, SDNPOptInGlue, SDNPVariadic]&gt;;
+</code></pre>
+
+<p>此處定義了 Cpu0Ret 的 SDNode，表示 CPU0 的返回 SDNode。大多數 ISA 都會自訂義 Ret SDNode 來表示函式返回，而不是使用預設的 ISD::RET。因為 Ret 幾乎完全是 ABI 相關的行為，不同架構的 Ret 行為差異很大，因此 <code class="language-plaintext highlighter-rouge">ISD::RET</code> 很少被直接使用。</p>
+
+<blockquote>
+  <p>Ret 通常涉及 Return address、Calling convention、Delay slot、Stack adjustment 等等，這些都是與 ABI 密切相關的行為</p>
+</blockquote>
+
+<p><strong>Operand</strong></p>
+
+<blockquote class="block-tip">
+  <p>Operand 用於定義 Instruction 的操作數 (Operand) 類型</p>
+</blockquote>
+
+<p>操作數 (Operand) 是指令中的參數，可以是寄存器、
+立即數 (immediate) 或記憶體地址 (memory address) 等，
+但 Register 已經由 RegisterClass 隱式提供，
+因此在 Operand 中需要額外定義的是立即數和記憶體地址。</p>
+
+<pre><code class="language-td">// Signed Operand
+def simm16      : Operand&lt;i32&gt; {
+  let DecoderMethod= "DecodeSimm16";
+}
+
+// Address operand
+def mem : Operand&lt;iPTR&gt; {
+  let PrintMethod = "printMemOperand";
+  let MIOperandInfo = (ops GPROut, simm16);
+  let EncoderMethod = "getMemEncoding";
+}
+</code></pre>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Operand</code> 是 LLVM TableGen 中用來定義指令操作數的類型
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">class Operand&lt;ValueType ty&gt; : DAGOperand</code></li>
+      <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/Target.td</code></li>
+    </ul>
+  </li>
+  <li>此處介紹在 CPU0 中所使用到的 field:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">PrintMethod</code>: 指定用於打印操作數的函式名稱
+        <ul>
+          <li>例如 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 用於打印記憶體操作數</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">MIOperandInfo</code>: 定義操作數的組成部分，例如記憶體操作數由 GPROut 和 simm16 組成</li>
+      <li><code class="language-plaintext highlighter-rouge">DecoderMethod</code>: 指定用於解碼操作數的函式名稱</li>
+      <li><code class="language-plaintext highlighter-rouge">EncoderMethod</code>: 指定用於編碼操作數的函式名稱</li>
+    </ul>
+  </li>
+</ul>
+
+<p>在 Cpu0 中定義了兩個額外的 Operand:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 定義了一個 16 位元的有號立即數操作數
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">DecodeSimm16</code> 函式來解碼該操作數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">mem</code>: 定義了一個記憶體地址操作數，由 GPROut 和 simm16 組成
+    <ul>
+      <li>使用 <code class="language-plaintext highlighter-rouge">printMemOperand</code> 函式來打印該操作數</li>
+      <li>由 GPROut 和 simm16 組成
+        <ul>
+          <li>代表該記憶體地址是由一個 GRPOut Register 和一個 16 位元的有號立即數偏移量組成</li>
+        </ul>
+      </li>
+      <li>使用 <code class="language-plaintext highlighter-rouge">getMemEncoding</code> 函式來編碼該操作數</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>Zero 同樣包含在 GPROut 中，並且可以被用於記憶體地址計算，代表從地址 0 開始偏移，通常使用於絕對地址存取</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatLeaf</strong></p>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 用於在 Instruction Selection 階段中 DAG pattern matching 時的過濾條件</p>
+</blockquote>
+
+<pre><code class="language-td">// Node immediate fits as 16-bit sign extended on target immediate.
+// e.g. addi, andi
+def immSExt16  : PatLeaf&lt;(imm), [{ return isInt&lt;16&gt;(N-&gt;getSExtValue()); }]&gt;;
+</code></pre>
+
+<p>PatLeaf 是用於在 Instruction Selection 階段中表示指令操作數的類型。這裡將 <code class="language-plaintext highlighter-rouge">imm</code> 作為過濾條件，</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">imm</code> 是 SelectionDAG 中的 Immediate 節點
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">def imm : SDNode&lt;"ISD::Constant", SDTIntLeaf, [], "ConstantSDNode"&gt;;</code></li>
+    </ul>
+  </li>
+  <li>其位置於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code></li>
+</ul>
+
+<p>因此 immSExt16 的作用是在 imm 上進行過濾，<code class="language-plaintext highlighter-rouge">isInt&lt;N&gt;</code> 是 LLVM 的輔助 Template 函數，
+用於檢查一個整數值是否能夠被表示為 N 位元的有號整數。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/llvm/include/llvm/Support/MathExtras.h</code> 中定義了這個函式:
+    <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// Checks if an integer fits into the given bit width.</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="kt">unsigned</span> <span class="n">N</span><span class="p">&gt;</span> <span class="k">constexpr</span> <span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isInt</span><span class="p">(</span><span class="kt">int64_t</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="n">N</span> <span class="o">&gt;=</span> <span class="mi">64</span> <span class="o">||</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">INT64_C</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">getSExtValue()</code> 是 <code class="language-plaintext highlighter-rouge">ConstantSDNode</code> 的成員函式，用於取得該節點的有號擴展值</li>
+</ul>
+
+<p>因此 immSExt16 定義表示，檢查一個 Immediate 節點的值是否能夠被表示為 16 位元的有號整數。</p>
+
+<hr />
+
+<p><strong>ComplexPattern</strong></p>
+
+<blockquote class="block-tip">
+  <p>在 PatLeaf 處理時通常只看 SDNode，但在 ComplexPattern 中則需要去顯式聲明 SDNode 的內部欄位</p>
+</blockquote>
+
+<pre><code class="language-to">def addr : ComplexPattern&lt;iPTR, 2, "SelectAddr", [frameindex], [SDNPWantParent]&gt;;
+</code></pre>
+
+<ul>
+  <li>ComplexPattern 用於處理更複雜的情況，先觀察 ComplexPattern 的定義:</li>
+  <li>定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">// Complex pattern definitions.
+//
+
+// Complex patterns, e.g. X86 addressing mode, requires pattern matching code
+// in C++. NumOperands is the number of operands returned by the select function;
+// SelectFunc is the name of the function used to pattern match the max. pattern;
+// RootNodes are the list of possible root nodes of the sub-dags to match.
+// e.g. X86 addressing mode - def addr : ComplexPattern&lt;4, "SelectAddr", [add]&gt;;
+//
+class ComplexPattern&lt;ValueType ty, int numops, string fn,
+                    list&lt;SDNode&gt; roots = [], list&lt;SDNodeProperty&gt; props = [],
+                    int complexity = -1&gt; {
+ValueType Ty = ty;
+int NumOperands = numops;
+string SelectFunc = fn;
+list&lt;SDNode&gt; RootNodes = roots;
+list&lt;SDNodeProperty&gt; Properties = props;
+int Complexity = complexity;
+}
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">ValueType ty</code>: 這個 Pattern 所期待的結果型別</li>
+  <li><code class="language-plaintext highlighter-rouge">int numops</code>: 該 Pattern 所產生的 Operand 數量
+    <ul>
+      <li>CPU0 address 為 base + offset = 2</li>
+      <li>X86 address 為 base + index * scale + displacement = 4</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">string fn</code>: 真正進行 Pattern match 後的處理函式名稱
+    <ul>
+      <li>這個函式會在 C++ 端實作，這裡會呼叫該函式來進行匹配</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNode&gt; roots</code>: 允許的根節點類型列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[add, frameindex]</code>，該 SDNode opcode 必須是 add 或 frameindex</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">list&lt;SDNodeProperty&gt; props</code>: 該 Pattern 所需的 SDNodeProperty 列表
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>，代表 fn 函式需要父節點作為額外參數</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">int complexity</code>: 多個 ComplexPattern 時的優先順序，數值越小優先匹配
+    <ul>
+      <li>同一個根節點可能會有多個 ComplexPattern，透過 complexity 來決定優先匹配哪一個</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這樣我們回頭去看 Cpu0 中的 addr ComplexPattern:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">iPTR</code>: 表示該 SDNode 的 ValueType 為指標型別</li>
+  <li><code class="language-plaintext highlighter-rouge">2</code>: 該 Pattern 處理後會產生兩個 Operand (base, offset)</li>
+  <li><code class="language-plaintext highlighter-rouge">"SelectAddr"</code>: 用於處理該 Pattern 的函式名稱</li>
+  <li><code class="language-plaintext highlighter-rouge">[frameindex]</code>: 只允許根節點為 frameindex 的 SDNode</li>
+  <li><code class="language-plaintext highlighter-rouge">[SDNPWantParent]</code>: 將父節點傳遞給 SelectAddr 函式</li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>PatLeaf 和 ComplexPattern 都是用於 Instruction Selection 階段的 Pattern matching，但 PatLeaf 通常用於較簡單的過濾條件，而 ComplexPattern 則用於處理更複雜的情況</p>
+</blockquote>
+
+<hr />
+
+<p><strong>PatFrag</strong></p>
+
+<pre><code class="language-td">class AlignedLoad&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$ptr), (Node node:$ptr), [{
+  LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);
+  return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();
+}]&gt;;
+
+class AlignedStore&lt;PatFrag Node&gt; :
+  PatFrag&lt;(ops node:$val, node:$ptr), (Node node:$val, node:$ptr), [{
+  StoreSDNode *SD = cast&lt;StoreSDNode&gt;(N);
+  return SD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= SD-&gt;getAlignment();
+}]&gt;;
+
+// Load/Store PatFrags.
+def load_a          : AlignedLoad&lt;load&gt;;
+def store_a         : AlignedStore&lt;store&gt;;
+</code></pre>
+
+<p>要理解這段 TableGen 代碼，首先需要了解 PatFrag 的概念。PatFrag 是用於定義可重用的模式片段 (pattern fragments)，這些片段可以在多個指令定義中被引用，以避免重複定義相同的模式。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">PatFrag</code> 的定義位於 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/Target/TargetSelectionDAG.td</code>:
+    <pre><code class="language-td">class PatFrag&lt;dag ops, dag frag, code pred = [{}], SDNodeXForm xform = NOOP_SDNodeXForm&gt;
+</code></pre>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">dag ops</code>: 定義該 PatFrag 將會有哪些參數</li>
+  <li><code class="language-plaintext highlighter-rouge">dag frag</code>: 該 PatFrag 應該匹配的模式</li>
+  <li><code class="language-plaintext highlighter-rouge">code pred</code>: 一個可選的條件，用於在匹配後以 C++ 代碼做進一步的過濾</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNodeXForm xform</code>: 用於在匹配後對 SDNode 進行轉換的函式</li>
+</ul>
+
+<p>這樣我們先回頭看 Cpu0 中的 AlignedLoad:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">(ops node:$ptr)</code>: 定義了該 PatFrag 接受一個參數 node，名稱為 $ptr</li>
+  <li><code class="language-plaintext highlighter-rouge">(Node node:$ptr)</code>: 定義了該 PatFrag 應該匹配的模式，這裡是匹配由使用者傳入的 PatFrag Node</li>
+  <li><code class="language-plaintext highlighter-rouge">[{ ... }]</code>: 這段 C++ 代碼用於在匹配後進行進一步的過濾
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">LoadSDNode *LD = cast&lt;LoadSDNode&gt;(N);</code>
+        <ul>
+          <li>將匹配到的 SDNode N 強制轉換為 LoadSDNode</li>
+        </ul>
+      </li>
+      <li><code class="language-plaintext highlighter-rouge">return LD-&gt;getMemoryVT().getSizeInBits()/8 &lt;= LD-&gt;getAlignment();</code>
+        <ul>
+          <li>檢查該 Load 指令的記憶體型別大小是否小於等於其對齊要求</li>
+          <li>例如左側為 load i32 (4 bytes), 則右側的記憶體對齊至少也要 4 bytes</li>
+          <li>存取大小 &lt;= 對齊要求，表示該 Load 是對齊的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>因為 LLVM IR 的 Load/Store 包含多種存取/對齊方式，因此需要在 PatFrag 中進行過濾，確保只匹配符合對齊要求的 Load/Store 指令</p>
+</blockquote>
+
+<blockquote>
+  <p>SD 基本上與 LD 是相同的，差別是 SD 在 DAG 中是有兩個 Operand (val, ptr) 所以需要兩個參數，而 LD 只有一個參數 (ptr) 剩下的是 Result</p>
+</blockquote>
+
+<hr />
+
+<h3 id="16-instructions-specific-format">1.6 Instructions Specific Format</h3>
+
+<p>在完成了上述基礎設置後，接下來定義的是指令的具體格式，雖然指令可以被分為 R-type、I-type 和 J-type，但還是有許多指令具有特殊的格式需求，因此需要進一步細分成更具體可重用的格式。</p>
+
+<p><strong>Arithmetic &amp; Logical</strong></p>
+
+<p>算數和邏輯指令的模板，使用之前定義好的 FL 來定義算術和邏輯指令的模板:</p>
+
+<pre><code class="language-td">// Arithmetic and logical instructions with 2 register operands.
+class ArithLogicI&lt;bits&lt;8&gt; op, string instr_asm, SDNode OpNode,
+                  Operand Od, PatLeaf imm_type, RegisterClass RC&gt; :
+  FL&lt;op, (outs GPROut:$ra), (ins RC:$rb, Od:$imm16),
+     !strconcat(instr_asm, "\t$ra, $rb, $imm16"),
+     [(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))], IIAlu&gt; {
+  let isReMaterializable = 1;
+}
+
+/// Arithmetic Instructions (ALU Immediate)
+// IR "add" defined in include/llvm/Target/TargetSelectionDAG.td, line 315 (def add).
+def ADDiu   : ArithLogicI&lt;0x09, "addiu", add, simm16, immSExt16, CPURegs&gt;;
+</code></pre>
+
+<p>ArithLogicI 相對來說比較簡單，我們觀察 ArithLogicI 的設計一共有六個參數:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">bits&lt;8&gt; op</code>: 指令的 Opcode</li>
+  <li><code class="language-plaintext highlighter-rouge">string instr_asm</code>: 指令的組合語言表示，以 String 形式傳入</li>
+  <li><code class="language-plaintext highlighter-rouge">SDNode OpNode</code>: 指令對應的 SDNode，用於指令選擇階段</li>
+  <li><code class="language-plaintext highlighter-rouge">Operand Od</code>: 立即值運算元的 Operand 類型，用於在 MachineInstr 中表示立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">PatLeaf imm_type</code>: 立即值的 PatLeaf 類型，用於在 Instruction Selection 階段過濾立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">RegisterClass RC</code>: 來源暫存器所屬的暫存器類別</li>
+</ol>
+
+<p>在 ArithLogicI 的定義中:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FL&lt;...&gt;</code>: 繼承自之前定義的 FL (Format L-type)</li>
+  <li><code class="language-plaintext highlighter-rouge">(outs GPROut:$ra)</code>: 定義指令的輸出操作數為 GPROut 類別的暫存器 $ra</li>
+  <li><code class="language-plaintext highlighter-rouge">(ins RC:$rb, Od:$imm16)</code>: 定義指令的輸入操作數為 RC 類別的暫存器 $rb 和 Od 類別的立即值 $imm16</li>
+  <li><code class="language-plaintext highlighter-rouge">!strconcat(instr_asm, "\t$ra, $rb, $imm16")</code>:
+    <ul>
+      <li>傳入的 instr_asm 格式化輸出為 <code class="language-plaintext highlighter-rouge">instr_asm $ra, $rb, $imm16</code></li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">[(set GPROut:$ra, (OpNode RC:$rb, imm_type:$imm16))]</code>: 匹配模式</li>
+  <li><code class="language-plaintext highlighter-rouge">IIAlu</code>: 指令的行程安排類別，在之後小節會介紹</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReMaterializable = 1;</code>: 指示該指令是可重構的 (rematerializable)，表示該指令的結果可以在需要時重新計算，而不需要保存到暫存器或記憶體中</li>
+</ul>
+
+<blockquote>
+  <p>rematerialization 代表如果這個值在之後很長一段時間沒有被使用到，compiler 可以選擇不保留這個值，而是在之後需要使用的時候重新計算它，這樣可以節省 register 或 memory 的使用。但如果是 side-effect 指令 (例如 store)，就不能 rematerialize，因為它改變了程式的狀態必須透過保存來維持正確性</p>
+</blockquote>
+
+<p>這樣我們來看 ADDiu 的定義:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">0x09</code>: 指令的 Opcode 為 0x09</li>
+  <li><code class="language-plaintext highlighter-rouge">"addiu"</code>: 指令的組合語言表示為 “addiu”</li>
+  <li><code class="language-plaintext highlighter-rouge">add</code>: 指令對應的 SDNode 為 ISD::ADD</li>
+  <li><code class="language-plaintext highlighter-rouge">simm16</code>: 立即值運算元的 Operand 要透過 simm16 來表示在 MachineInstr 中</li>
+  <li><code class="language-plaintext highlighter-rouge">immSExt16</code>: 立即值的 PatLeaf 類型為 immSExt16，用於過濾 16 位元有號立即值</li>
+  <li><code class="language-plaintext highlighter-rouge">CPURegs</code>: 來源暫存器所屬的暫存器類別為 CPURegs</li>
+</ul>
+
+<p><strong>Load &amp; Store</strong></p>
+
+<pre><code class="language-td">class FMem&lt;bits&lt;8&gt; op, dag outs, dag ins, string asmstr, list&lt;dag&gt; pattern,
+          InstrItinClass itin&gt;: FL&lt;op, outs, ins, asmstr, pattern, itin&gt; {
+  bits&lt;20&gt; addr;
+  let Inst{19-16} = addr{19-16};
+  let Inst{15-0}  = addr{15-0};
+  let DecoderMethod = "DecodeMem";
+}
+
+// Memory Load/Store
+let canFoldAsLoad = 1 in
+class LoadM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+            Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs RC:$ra), (ins MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(set RC:$ra, (OpNode addr:$addr))], IILoad&gt; {
+  let isPseudo = Pseudo;
+}
+
+class StoreM&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode, RegisterClass RC,
+             Operand MemOpnd, bit Pseudo&gt;:
+  FMem&lt;op, (outs), (ins RC:$ra, MemOpnd:$addr),
+     !strconcat(instr_asm, "\t$ra, $addr"),
+     [(OpNode RC:$ra, addr:$addr)], IIStore&gt; {
+  let isPseudo = Pseudo;
+}
+
+//@ 32-bit load.
+class LoadM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                   bit Pseudo = 0&gt;
+  : LoadM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+// 32-bit store.
+class StoreM32&lt;bits&lt;8&gt; op, string instr_asm, PatFrag OpNode,
+                    bit Pseudo = 0&gt;
+  : StoreM&lt;op, instr_asm, OpNode, GPROut, mem, Pseudo&gt; {
+}
+
+/// Load and Store Instructions
+///  aligned
+def LD     : LoadM32&lt;0x01,  "ld",  load_a&gt;;
+def ST     : StoreM32&lt;0x02, "st",  store_a&gt;;
+</code></pre>
+
+<p>這裡定義了多層次的 Load 和 Store 指令模板，首先是 FMem 類別，然後是 LoadM 和 StoreM 類別，最後是 LoadM32 和 StoreM32 類別。</p>
+
+<ol>
+  <li>FMem (Load/Store Memory 的基礎類別):
+    <ul>
+      <li>繼承自之前定義的 FL (Format L-type)</li>
+      <li>定義了記憶體地址欄位 addr，並指定其在指令編碼中的位置</li>
+      <li><code class="language-plaintext highlighter-rouge">let DecoderMethod = "DecodeMem";</code>: 指定用於解碼記憶體操作數的函式名稱</li>
+    </ul>
+  </li>
+  <li>LoadM (Load 指令模板):
+    <ul>
+      <li>繼承自 FMem，定義了 Load 指令的模板</li>
+      <li>定義了輸出操作數為 RC 類別的暫存器 $ra，輸入操作數為 MemOpnd 類別的記憶體地址 $addr</li>
+      <li><code class="language-plaintext highlighter-rouge">let isPseudo = Pseudo;</code>: 指示該指令是否為偽指令</li>
+      <li><code class="language-plaintext highlighter-rouge">let canFoldAsLoad = 1;</code>: 指示該 Load 指令可以被折疊 (folded) 成其他指令
+        <ul>
+          <li>例如如果 addiu 支援記憶體存取，則可以將 load + addiu 折疊成一條 addiu 指令</li>
+          <li><code class="language-plaintext highlighter-rouge">addiu $rd, 0($addr), imm</code> 直接從記憶體做加法運算，省略 load 指令</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>LoadM32 (32 位元 Load 指令模板):
+    <ul>
+      <li>繼承自 LoadM，專門用於 32 位元的 Load 指令</li>
+      <li>預設使用 GPROut 作為暫存器類別，mem 作為記憶體操作數類別</li>
+    </ul>
+  </li>
+  <li>最後定義了具體的 Load 指令 LD:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">0x01</code>: 指令的 Opcode 為 0x01</li>
+      <li><code class="language-plaintext highlighter-rouge">"ld"</code>: 指令的組合語言表示為 “ld”</li>
+      <li><code class="language-plaintext highlighter-rouge">load_a</code>: 使用之前定義的 load_a PatFrag 來過濾記憶體地址模式</li>
+    </ul>
+  </li>
+</ol>
+
+<p>設計多層次的 Load 和 Store 指令模板，其目的是為了提高指令定義的靈活性和可重用性。通過這種方式，可以透過更改 RegisterClass 或 Operand 類型來輕鬆定義不同變體的 Load 和 Store 指令，而不需要重複定義相同的指令結構。</p>
+
+<blockquote>
+  <p>例如要擴展為 i8 load/store，只要改變以下定義: 1. 定義新的 memory Operand (例如 mem8) 2. 重新定義對應的 PatFrag 3. 建立新的 LoadM8/StoreM8 類別繼承自 LoadM/StoreM 4. 定義具體的 LB/ SB 指令</p>
+</blockquote>
+
+<p>這種設計的好處是最後的具體指令定義變得非常簡潔，只需要指定 Opcode、組合語言表示和 PatFrag。</p>
+
+<p><strong>Jump</strong></p>
+
+<pre><code class="language-td">//@JumpFR {
+let isBranch=1, isTerminator=1, isBarrier=1, imm16=0, hasDelaySlot = 1,
+    isIndirectBranch = 1 in
+class JumpFR&lt;bits&lt;8&gt; op, string instr_asm, RegisterClass RC&gt;:
+  FL&lt;op, (outs), (ins RC:$ra),
+     !strconcat(instr_asm, "\t$ra"), [(brind RC:$ra)], IIBranch&gt; {
+  let rb = 0;
+  let imm16 = 0;
+}
+//@JumpFR }
+
+def JR      : JumpFR&lt;0x3c, "jr", GPROut&gt;;
+</code></pre>
+
+<p>Jump 雖然是 FL 但通常只使用一個 Register 作為目標地址，因此定義了一個 JumpFR 類別來表示這種情況。</p>
+<ul>
+  <li>以下是 TableGen Instruction 的欄位:
+    <ol>
+      <li><code class="language-plaintext highlighter-rouge">isBranch=1</code>: 指示該指令是一個分支指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isTerminator=1</code>: 指示該指令是一個 Basic Block 的終止指令</li>
+      <li><code class="language-plaintext highlighter-rouge">isBarrier=1</code>: 指示該指令是一個屏障指令，在此之後的指令不會被執行到</li>
+      <li><code class="language-plaintext highlighter-rouge">hasDelaySlot = 1</code>: 指示該指令具有延遲槽 (delay slot)</li>
+      <li><code class="language-plaintext highlighter-rouge">isIndirectBranch = 1</code>: 指示該指令是一個間接分支指令，跳轉地址由 Register 提供</li>
+    </ol>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">imm16</code>, <code class="language-plaintext highlighter-rouge">rb</code> 是在 FL 中定義的欄位，這裡將它們設為 0，因為 JumpFR 不需要這些欄位</li>
+  <li>最後定義 JR 指令: <code class="language-plaintext highlighter-rouge">0x3c</code>, <code class="language-plaintext highlighter-rouge">"jr"</code>, <code class="language-plaintext highlighter-rouge">GPROut</code></li>
+</ul>
+
+<blockquote>
+  <p>delay slot 是允許執行在分支指令之後的下一條指令，無論分支是否被採取都會執行該指令，如果要跳轉則直接改變 PC，否則繼續執行下一條指令</p>
+</blockquote>
+
+<p><strong>Return</strong></p>
+
+<pre><code class="language-td">// Return instruction
+class RetBase&lt;RegisterClass RC&gt;: JumpFR&lt;0x3c, "ret", RC&gt; {
+  let isReturn = 1;
+  let isCodeGenOnly = 1;
+  let hasCtrlDep = 1;
+  let hasExtraSrcRegAllocReq = 1;
+}
+
+def RET : RetBase&lt;GPROut&gt;;
+</code></pre>
+
+<ul>
+  <li>定義了一個 RetBase 類別，繼承自 JumpFR，表示返回指令的基類</li>
+  <li><code class="language-plaintext highlighter-rouge">let isReturn = 1;</code>: 指示該指令是一個返回指令</li>
+  <li><code class="language-plaintext highlighter-rouge">let isCodeGenOnly = 1;</code>: 指示該指令僅在程式碼生成階段使用，最終的 ASM 不會包含該指令
+    <ul>
+      <li>例如直接以 <code class="language-plaintext highlighter-rouge">jr $ra</code> 來實現返回，而不需要額外的 RET 指令</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">let hasCtrlDep = 1;</code>: 指示該指令具有控制依賴</li>
+  <li><code class="language-plaintext highlighter-rouge">let hasExtraSrcRegAllocReq = 1;</code>: 指示該指令在暫存器分配階段有額外的來源暫存器需求</li>
+  <li>最後定義 RET 指令，使用 GPROut 作為暫存器類別</li>
+</ul>
+
+<p><strong>No Operation (NOP)</strong></p>
+
+<pre><code class="language-td">/// No operation
+let addr=0 in
+  def NOP   : FJ&lt;0, (outs), (ins), "nop", [], IIAlu&gt;;
+</code></pre>
+
+<p>空操作指令 (NOP) 的定義非常簡單，使用 FJ 類別來表示沒有任何操作的指令。</p>
+
+<p><strong>Pat</strong></p>
+
+<pre><code class="language-td">def : Pat&lt;(i32 immSExt16:$in),
+          (ADDiu ZERO, imm:$in)&gt;;
+</code></pre>
+
+<p>最後這段用於定義一個 Pat (Pattern)，表示將一個 16 位元有號立即值的 i32 型別映射到 ADDiu 指令，並將結果存入 ZERO 寄存器。因為 CPU0 沒有設計專門的 load immediate 指令，因此使用 ADDiu ZERO, imm 來實現載入立即值的功能。</p>
+
+<hr />
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-21-2025 22:13</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="llvm" /><category term="backend" /><category term="cpu0" /><summary type="html"><![CDATA[CPU0 是一個 LLVM 教學用的目標架構，主要用來展示 LLVM 從中間表示（IR）到目標機器碼的轉換過程。在這篇文章中，我們將介紹如何為 CPU0 架構創建 LLVM 後端。]]></summary></entry><entry><title type="html">LLVM | TableGen Introduction</title><link href="https://hotshot824.github.io/jekyll/2025-11-20-tablegen_introduction.html" rel="alternate" type="text/html" title="LLVM | TableGen Introduction" /><published>2025-11-20T00:00:00+00:00</published><updated>2025-11-20T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/tablegen_introduction</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-20-tablegen_introduction.html"><![CDATA[<blockquote class="block-tip">
+  <p>TableGen 是一個 DSL (Domain-Specific Language)，廣泛用於 LLVM 的編譯器開發中。</p>
+</blockquote>
+
+<ul>
+  <li>TableGen 使用類似於 C++ 的語法，描述資料、資料結構</li>
+  <li>用於自動化產生減少重複性高的程式碼
+    <ul>
+      <li>例如：Register definitions、Instruction definitions、Intrinsic definitions…</li>
+    </ul>
+  </li>
+  <li>TableGen 檔案通常以 .td 為副檔名</li>
+</ul>
+
+<p>目前 llvm-project 中包含的 tablegen 有四種：</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">llvm-tblgen</code>
+    <ul>
+      <li>在 LLVM Codegen 中用於描述 Target</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">lldb-tblgen</code></li>
+  <li><code class="language-plaintext highlighter-rouge">clang-tblgen</code></li>
+  <li><code class="language-plaintext highlighter-rouge">mlir-tblgen</code>
+    <ul>
+      <li>用於描述 MLIR Dialects</li>
+    </ul>
+  </li>
+</ul>
+
+<p>TableGen 通常輸出 .inc 後綴的 C++ 檔案。並且 TableGen 本身也是前後端分離的結構設計。</p>
+
+<blockquote class="block-tip">
+  <p>後端不同 Target 盡管有不同 Register, Instruction 等定義，但演算法上大同小異</p>
+</blockquote>
+
+<h3 id="11-tablegen-language-basics">1.1 TableGen Language Basics</h3>
+
+<blockquote class="block-warning">
+  <p>TableGen 的型別類似於 C++，但並不完全相同</p>
+</blockquote>
+
+<p><strong>class</strong></p>
+
+<p>class 是用於定義資料結構的 fields，也可以進行 Inheritance，Override。
+透過 def 來實例化 class，let 用於設定 field 的值。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Stuff {
+    string Name;
+    int Quantity;
+    string Description;
+}
+
+def water_bottle : Stuff {
+    let Name = "Water Bottle";
+    let Quantity = 1;
+    let Description = "A bottle of water.";
+}
+</code></pre></div></div>
+
+<p>例如 CPU0 Target 的 Register，透過 <code class="language-plaintext highlighter-rouge">llvm-tblgen Cpu0Other.td -I ${LLVM_SRC_DIR}/llvm/include -print-enums -class=Register</code> 可以把 CPU0 中所有的 Register 都列印出來。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># LLVM_SRC_DIR point to the root of llvm-project</span>
+<span class="nv">$ </span>llvm-tblgen Cpu0Other.td <span class="nt">-I</span> <span class="k">${</span><span class="nv">LLVM_SRC_DIR</span><span class="k">}</span>/llvm/include <span class="nt">-print-enums</span> <span class="nt">-class</span><span class="o">=</span>Register
+A0, A1, AT, EPC, FP, GP, LR, PC, S0, S1, SP, SW, T0, T1, T9, V0, V1, ZERO, 
+</code></pre></div></div>
+
+<p><strong>let … in</strong></p>
+
+<blockquote class="block-tip">
+  <p>let … in 用於在區塊中定義變數，並且只在該區塊內有效</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Without let ... in
+def R0 : Cpu0GPRReg&lt;0, "r0"&gt; { let Namespace = "Cpu0"; }
+def R1 : Cpu0GPRReg&lt;1, "r1"&gt; { let Namespace = "Cpu0"; }
+def R2 : Cpu0GPRReg&lt;2, "r2"&gt; { let Namespace = "Cpu0"; }
+
+// With let ... in
+let Namespace = "Cpu0" in {
+  def R0 : Cpu0GPRReg&lt;0, "r0"&gt;;
+  def R1 : Cpu0GPRReg&lt;1, "r1"&gt;;
+  def R2 : Cpu0GPRReg&lt;2, "r2"&gt;;
+}
+</code></pre></div></div>
+
+<p>如果不使用 let … in，必須在每個 def 中重複設定 Namespace，
+使用 let … in 可以讓程式碼更簡潔。</p>
+
+<p><strong>types</strong></p>
+
+<p>TableGen 支援以下 Primitive Types：</p>
+<ul>
+  <li>bit
+    <ul>
+      <li>Single bit value (0 or 1)</li>
+      <li>bit truebit = 1;</li>
+    </ul>
+  </li>
+  <li>bits<N>
+</N>    <ul>
+      <li>N-bit wide value</li>
+      <li>bits&lt;8&gt; byteValue = 0xFF;</li>
+      <li>bits&lt;16&gt; Enc = 16; // Enc = 0x0010</li>
+    </ul>
+  </li>
+  <li>int
+    <ul>
+      <li>Integer value</li>
+    </ul>
+  </li>
+  <li>string
+    <ul>
+      <li>String value</li>
+    </ul>
+  </li>
+  <li>code
+    <ul>
+      <li>Code fragment</li>
+      <li>let ParserMethod = [{…}];</li>
+    </ul>
+  </li>
+  <li>dag
+    <ul>
+      <li>Directed Acyclic Graph</li>
+      <li>Used for pattern matching in instruction selection</li>
+      <li>dag (add R1, R2)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Composite Types：</p>
+<ul>
+  <li>list<type>
+</type>    <ul>
+      <li>List of elements of specified type</li>
+      <li>list<int> RegList = [1, 2, 3, 4];</int></li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>更多 TableGen Language Basics 可以參考官方文件: <a href="https://llvm.org/docs/TableGen/ProgRef.html#types">1.4 Types</a></p>
+</blockquote>
+
+<p><strong>multiclass with defm</strong></p>
+
+<blockquote class="block-tip">
+  <p>multiclass 可以用來定義一組相關的 class，並且可以透過 defm 來實例化多個物件</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://llvm.org/docs/TableGen/ProgRef.html#multiclass-define-multiple-records">1.6.5 multiclass — define multiple records</a></p>
+</blockquote>
+
+<p>例如同時要定義 rr, ri 兩種 format 的 instruction，可以使用 multiclass 來定義共用的部分。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def ops;
+def GPR;
+def Imm;
+class inst &lt;int opc, string asmstr, dag operandlist&gt;;
+
+multiclass ri_inst &lt;int opc, string asmstr&gt; {
+  def _rr : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+                   (ops GPR:$dst, GPR:$src1, GPR:$src2)&gt;;
+  def _ri : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+                   (ops GPR:$dst, GPR:$src1, Imm:$src2)&gt;;
+}
+
+// Define records for each instruction in the RR and RI formats.
+defm ADD : ri_inst&lt;0b111, "add"&gt;;
+defm SUB : ri_inst&lt;0b101, "sub"&gt;;
+defm MUL : ri_inst&lt;0b100, "mul"&gt;;
+</code></pre></div></div>
+
+<p>如果不使用 multiclass，必須分別定義 rr 與 ri 兩種 format 的 instruction，
+然後重複 def 相同的部分。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def ops;
+def GPR;
+def Imm;
+class inst &lt;int opc, string asmstr, dag operandlist&gt;;
+
+class rrinst &lt;int opc, string asmstr&gt;
+  : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+           (ops GPR:$dst, GPR:$src1, GPR:$src2)&gt;;
+
+class riinst &lt;int opc, string asmstr&gt;
+  : inst&lt;opc, !strconcat(asmstr, " $dst, $src1, $src2"),
+           (ops GPR:$dst, GPR:$src1, Imm:$src2)&gt;;
+
+// Define records for each instruction in the RR and RI formats.
+def ADD_rr : rrinst&lt;0b111, "add"&gt;;
+def ADD_ri : riinst&lt;0b111, "add"&gt;;
+def SUB_rr : rrinst&lt;0b101, "sub"&gt;;
+def SUB_ri : riinst&lt;0b101, "sub"&gt;;
+def MUL_rr : rrinst&lt;0b100, "mul"&gt;;
+def MUL_ri : riinst&lt;0b100, "mul"&gt;;
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="12-bang--operator">1.2 bang (!) operator</h3>
+
+<blockquote class="block-tip">
+  <p>Bang Operator 都是在編譯期執行的，在最終的 .inc 中不會看到相關的程式碼</p>
+</blockquote>
+
+<p>Bang Operator 是 TableGen 中提供的 <strong>編譯期運算 (Compile-time operation)</strong>，
+因為 TableGen 是在編譯期執行的，所以無法使用一般程式語言的運算符號。
+可以用來進行條件判斷、數值計算、字串處理與 list 操作等。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BangOperator ::=  one of
+                  !add         !and         !cast         !con         !dag
+                  !div         !empty       !eq           !exists      !filter
+                  !find        !foldl       !foreach      !ge          !getdagarg
+                  !getdagname  !getdagop    !getdagopname !gt          !head
+                  !if          !initialized !instances    !interleave  !isa
+                  !le          !listconcat  !listflatten  !listremove  !listsplat
+                  !logtwo      !lt          !match        !mul         !ne
+                  !not         !or          !range        !repr        !setdagarg
+                  !setdagname  !setdagop    !setdagopname !shl         !size
+                  !sra         !srl         !strconcat    !sub         !subst
+                  !substr      !tail        !tolower      !toupper     !xor
+</code></pre></div></div>
+
+<blockquote>
+  <p>完整的 Bang Operator 列表可以參考官方文件: <a href="https://llvm.org/docs/TableGen/ProgRef.html#bang-operators">1.3.3 Bang operators</a>, <a href="https://llvm.org/docs/TableGen/ProgRef.html#appendix-a-bang-operators">1.10 Appendix A: Bang Operators</a></p>
+</blockquote>
+
+<h3 id="13-tablegen-file-structure">1.3 TableGen File Structure</h3>
+
+<blockquote class="block-tip">
+  <p>同樣的 TableGen 通常是由多個 .td 檔案組成，一般來說會有一個主要入口將其他檔案 include 進來</p>
+</blockquote>
+
+<p>在 TableGen 中，可以使用 <code class="language-plaintext highlighter-rouge">include</code> 指令來包含其他 TableGen 檔案，但只需要在主要檔案入口 include，
+其他檔案中不需要重複 include。LLVM 中對於 target-independent interfaces 的定義在 <code class="language-plaintext highlighter-rouge">llvm/include/llvm/</code> 目錄下。在定義 backend 時會使用這些 interfaces 來實作 target-specific 的內容。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~/llvm/test/llvm/include/llvm/Target<span class="nv">$ </span><span class="nb">ls
+</span>CGPassBuilderOption.h  GenericOpcodes.td  TargetCallingConv.td     TargetIntrinsicInfo.h  TargetLoweringObjectFile.h  TargetOptions.h       TargetSchedule.td      Target.td
+CodeGenCWrappers.h     GlobalISel         TargetInstrPredicate.td  TargetItinerary.td     TargetMachine.h             TargetPfmCounters.td  TargetSelectionDAG.td
+~/llvm/test/llvm/include/llvm/Target<span class="nv">$ </span>
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>更多詳細的 TableGen 後端開發可以參考這份投影片 <a href="https://llvm.org/devmtg/2021-11/slides/2021-how-to-write-a-tablegen-backend.pdf">How to write a TableGen backend</a>，與官方文件，
+到目前為止應該足夠去閱讀 CPU0 Target 的 TableGen 檔案了
+11-20-2025 23:42</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="llvm" /><category term="tablegen" /><summary type="html"><![CDATA[TableGen 是一個 DSL (Domain-Specific Language)，廣泛用於 LLVM 的編譯器開發中。]]></summary></entry><entry><title type="html">Computer Organization | Pipelines Hazards</title><link href="https://hotshot824.github.io/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" rel="alternate" type="text/html" title="Computer Organization | Pipelines Hazards" /><published>2025-11-14T00:00:00+00:00</published><updated>2025-11-14T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/computer_organization_pipeline_hazards</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-14-computer_organization_pipeline_hazards.html"><![CDATA[<blockquote class="block-tip">
+  <p>雖然 Pipeline 可以提升指令吞吐量，但在實作上會遇到各種 hazards 問題，必須透過硬體與編譯器的合作來解決這些問題，才能真正發揮 Pipeline 的效能。</p>
+</blockquote>
+
+<blockquote>
+  <p>這篇文章是從 Organization 的角度去思考 Pipeline Hazards，因此著重在硬體層面的解決方法。</p>
+</blockquote>
+
+<h3 id="14-overview-of-hazards">1.4 Overview of Hazards</h3>
+
+<p>Pipeline processors 在控制指令於 pipeline 上順暢且高效率地執行時，會遇到數種相關問題。這些問題通常統稱為 hazards，主要可分為以下三種類型:</p>
+
+<ol>
+  <li>Structural Hazards
+    <ul>
+      <li>不同指令在 Pipeline 的同一 Segment 需要使用相同的硬體資源，導致衝突</li>
+      <li>此類 hazard 可以透過發生衝突的 Segments 中配置重複的硬體資源來緩解</li>
+      <li>也可以透過插入 Stalls 或 Re-Ordering 指令來避免衝突</li>
+    </ul>
+  </li>
+  <li>Data Hazards
+    <ul>
+      <li>指令之間存在資料相依性，導致後續指令需要等待前一指令完成才能繼續執行</li>
+      <li>最簡單的解決方式是在執行序列中插入 Stalls (但會降低效能)</li>
+      <li>另一種方法是使用 Forwarding (Bypassing)，提前將 ALU 的結果 Forward 給需要的指令，避免等待</li>
+      <li>在特定情況下可以 Re-Ordering 指令順序以避免 Data Hazards</li>
+    </ul>
+  </li>
+  <li>Control Hazards
+    <ul>
+      <li>Control Hazards 通常由 Branch instructions 引起，因為在 Branch 指令執行期間，處理器無法確定下一條要執行的指令是哪一條</li>
+      <li>最簡單的解決方式是在 Branch 指令後插入 Stalls，做局部的等待事件直到 Branch 結果確定 (但會降低效能)</li>
+      <li>另一種方法是使用 Branch Prediction，預測 Branch 的結果並提前載入預測的指令 (但實作上相當困難)</li>
+      <li>或者 Delay Branch，將 Branch 指令的效果延後到後續的指令執行完畢後再決定 (需要編譯器支援)</li>
+    </ul>
+  </li>
+</ol>
+
+<p>接下來我門會針對每一種 Hazard 類型進行詳細說明，並介紹相應的解決方法。</p>
+
+<blockquote class="block-tip">
+  <p>在上述的三種 Hazards 中，Data Hazards 是最常見且影響最大的，因為指令之間的資料相依性非常普遍，而有效地解決 Data Hazards 可以顯著提升 Pipeline 的效能。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>而從編譯器的角度來看實際上可以處裡的只有 Data Hazards 與 Control Hazards，Structural Hazards 通常需要硬體層面的支援來解決。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="15-data-hazards">1.5 Data Hazards</h3>
+
+<p><strong>Definition:</strong><br />
+如果我們需要前一條指令的結果，但 Pipeline 中沒有足夠的 Segments 能在目前 Instruction 讀取該結果之前完成計算並寫回 Register，就會發生 Data Hazard。</p>
+
+<p>通常使用以下三種方式來解決 Data Hazards：</p>
+
+<ol>
+  <li>Forwarding (Bypassing)
+    <ul>
+      <li>為了處理 Dependency Hazard，可以在 Pipeline 中加入特殊電路，由 wires 與 switches 組成，將所需要的值 Forward 給該值進行計算的 Pipeline Segment。但這會增加硬體與控制電路的複雜度，但此方法有效，時間上遠小於完成 Pipeline 所需的時間。</li>
+    </ul>
+  </li>
+  <li>Code Re-Ordering
+    <ul>
+      <li>由 Compiler 來重新排序 Source code 的 Statements，或者由 Assembler 重新排序 Object code。將一條或多條 Instruction 插入到兩條有 Data Hazard 的 Instruction 之間，讓 Pipeline 有足夠的時間完成前一條 Instruction 的計算並寫回 Register，避免 Data Hazard 的發生。</li>
+      <li>這需要一個強大的 compiler 或 assembler，其必須具備 pipeline 結構與時序的詳細資訊，才能判斷 data hazard 可能發生的位置。我們將這類軟體稱為 hardware-dependent compiler。</li>
+    </ul>
+  </li>
+  <li>Stalls
+    <ul>
+      <li>最簡單的解決方式是在發生 Data Hazard 的地方插入 NOP 指令，讓 Pipeline 有足夠的時間完成前一條 Instruction 的計算並寫回 Register，避免 Data Hazard 的發生。但這會降低 Pipeline 的效能。</li>
+      <li>這種方法是最後手段，只有 Compiler 無法處理或者 Hardware/Software 不支援 Forwarding 時才會使用。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Example:</p>
+
+<pre><code class="language-riscv">0 sub     x2,  x1,  x3    // Register x2 set by sub
+1 and     x12, x2,  x5    // 1st operand(z2) set by sub
+2 or      x13, x6,  x2    // 2nd operand(x2) set by sub
+3 add     x14, x2,  x2    // 1st(x2) &amp; 2nd(x2) set by sub
+4 sd      x15, 100(x2)    // Index(x2) set by sub
+</code></pre>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/1.png" alt="" /></p>
+
+<ul>
+  <li>以上的問題出在 sub 指令在 CC 5 才會將 x2 的結果寫回 x2，如果未使用任何解決方法則所有要使用 x2 的指令都必須在 CC 6 之後才能執行</li>
+  <li>這裡的解決方式是使用 Forwarding，將 ALU 的結果直接 Forward 給需要的指令，避免等待寫回 Register 的時間，這樣 and, or, add 三個使用 x2 的指令就可以在 CC 6, 7, 8 執行，而不需要等待到 CC 5 之後才能執行</li>
+</ul>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/2.png" alt="" /></p>
+
+<hr />
+
+<h3 id="16-structural-hazards">1.6 Structural Hazards</h3>
+
+<p><strong>Definition:</strong>
+在某一個 Pipeline Segment 中，如果有兩條或以上的指令同時需要使用同一個硬體資源，就會發生 Structural Hazard。</p>
+
+<p>這裡我們使用相同的程式碼來說明 Structural Hazard 的問題：</p>
+<ul>
+  <li>在 0 sub x2, x1, x3 指令的 CC 5 時間需要將結果寫回 Register</li>
+  <li>在 3 add x14, x2, x2 指令的 CC 5 時間也需要從 Register 讀取 x2 的值</li>
+</ul>
+
+<p>也就是說在 CC 5 的時間點，write back 與 read 兩個動作同時需要使用 Register
+x2 這個硬體資源，導致 Structural Hazard 的發生。在某一個 clock cycle 中，Register 可能產生不同的值，這種不一致是不可以被接受的。</p>
+
+<ol>
+  <li>修改 Register File 的設計，例如在 clock cycle 的前半段進行讀取，後半段進行寫入，這樣就可以避免 read 與 write 同時發生的問題。但這會增加 Register File 的複雜度與成本。
+    <ul>
+      <li>硬體設計者有時會在 write 與 read 之間插入相對於 clock cycle 很短的延遲，以確保 write 完成後 read 才會發生</li>
+    </ul>
+  </li>
+  <li>另一種 Hazard 可能發生在 Branch Instructions 的執行期間，例如只有一個 ALU 但必須同時進行 BTA (Branch Target Address) 計算與條件判斷。這必須要至少有兩個 adder 才有辦法解決這個問題。( 新增硬體資源 )</li>
+  <li>同樣的如果 instruct 與 data 共用同一個 memory，可能會發生 Instruction Fetch 與 Data Memory Access 同時需要使用 memory 的情況。
+    <ul>
+      <li>第一種方法是跟 1 的解決方式類似，在同一個 clock cycle 中分開進行 read 與 write，讓 read 與 write 可以在一個 clock cycle 中分別完成。</li>
+      <li>第二種方法是使用兩個 High speed Cache，一個用於 instruction，一個用於 data，兩者都存取同一個 Memory。</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>第三種作法就是 I-Cache 與 D-Cache 分開設計，這樣就可以避免 Instruction Fetch 與 Data Memory Access 同時需要使用同一個 memory 的問題。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>現代計算機的處理方式大多是後者，CPU 使用兩種 <a href="https://en.wikipedia.org/wiki/CPU_cache">Cache</a> 來分別處理 Instruction 與 Data，這樣可以大幅提升記憶體存取的效率，並且避免 Structural Hazards 的發生。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="17-control-hazards">1.7 Control Hazards</h3>
+
+<p><strong>Definition:</strong>
+Control Hazards 發生在 Branch Instructions 的執行期間，因為在 Branch 指令執行期間，處理器無法確定下一條要執行的指令是哪一條。</p>
+
+<p>Control Hazards 是 Pipeline 中最難解決的問題之一，因為它涉及到指令流的改變，這會影響到整個 Pipeline 的運作。</p>
+
+<p>Branch 的問題在於我們無法知道哪一種結果會發生，直到 Branch condition 被計算完成，並且往往 Branch 指令會依賴前面的指令結果，這使得預測變得更加困難。</p>
+
+<p>主要有四種策略來處理 Control Hazards：</p>
+
+<h5 id="171-assume-branch-not-taken">1.7.1 Assume Branch Not Taken</h5>
+
+<p>這個策略就是無論如何都假設 Branch 不會發生，繼續往下執行下一條指令。如果 Branch 最終被採取，則必須清除 Pipeline 中已經載入的錯誤指令，並重新載入正確的指令。
+很顯而易見的這樣的策略就是 50% 的機率會成功，另外 50% 的機率會失敗，失敗的代價是清除 Pipeline 中的錯誤指令，並重新載入正確的指令，這會導致 Pipeline Stalls。</p>
+
+<h5 id="172-reducing-branch-delay">1.7.2 Reducing Branch Delay</h5>
+
+<p>另一種策略是將 Branch condition 的計算提前，例如在 ID 階段就計算 Branch condition，這樣已經跑入 ID 之後階段的 Instructions 被 Flush 的指令數量就可以減少。</p>
+
+<p>以下圖為例，假如我們要到 WB 才寫回 Register，那麼在 CC 5 時才知道 Branch 的結果，這樣至少要有 4 個 Stalls 才能重新載入正確的指令。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: right">Cycle</th>
+      <th>IF</th>
+      <th>ID</th>
+      <th>EXE</th>
+      <th>MEM</th>
+      <th>WB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: right">CC1</td>
+      <td>beq</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC2</td>
+      <td>stall₁</td>
+      <td><strong>beq</strong></td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC3</td>
+      <td>stall₂</td>
+      <td>stall₁</td>
+      <td>beq</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC4</td>
+      <td>stall₃</td>
+      <td>stall₂</td>
+      <td>stall₁</td>
+      <td>beq</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: right">CC5</td>
+      <td>add</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td><strong>beq</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>這裡把 <strong>beq</strong> 提前到 ID 階段就計算 Branch condition，這樣就可以提前知道 Branch 的結果，減少 Stalls 的數量。</li>
+  <li>以 <strong>beq</strong> 為例只要加入 XOR 與 Zero 檢測器就可以在 ID 階段計算 Branch condition，這樣在 CC 3 時就可以知道 Branch 的結果，減少 Stalls 的數量。
+    <ul>
+      <li>A xor B -&gt; if Zero -&gt; Branch Taken else Branch Not Taken</li>
+      <li>只加入專用的硬體來計算 Branch condition，不需要完整的 ALU 來計算</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Xor 為零代表兩個輸入相等，因此 Branch condition 為真，Branch Taken</p>
+</blockquote>
+
+<blockquote class="block-tip">
+  <p>這種方法需要再 ID 加入一些額外的硬體來計算 Branch condition，但可以顯著減少 Control Hazards 的影響。</p>
+</blockquote>
+
+<p>即使有可能 Branch 的值須要其他 Instruction 的結果才能計算出來，這樣我們就有可能造成 Data Hazard，但將 Branch condition 提前到 ID 階段計算，依然是一種改進。</p>
+
+<h5 id="173-dynamic-branch-prediction">1.7.3 Dynamic Branch Prediction</h5>
+
+<p>如果可以預測大多數 Branch 是 Taken 或 Not Taken，將會很有幫助。這可以透過 Software ( Compiler )，也可以在 Runtime ( Hardware ) 進行。這邊會先看軟體的方法，因為軟體方法實作成本相當低。</p>
+
+<pre><code class="language-rsicv">0   add x5, x5, x6          # One of the registers used in the beq comparison is modified here
+1   sub x4, x3, x6          # Nothing important to the branch here
+2   and x7, x8, x6          # Nothing important to the branch here
+3   and x9, x6, x6          # Nothing important to the branch here
+4   beq x5, x6, target      # Branch compares the updated x5 with x6
+</code></pre>
+
+<p><strong>Pre-executing the branch condition</strong></p>
+
+<p>Branch 會比較 x5, x6 的值，但這兩個 Register 最後一次修改是在 add 指令中，因此可以事先計算 sub x10, x5, x6 並檢查 x10 是否為零，來預測 Branch 的結果。</p>
+
+<p><strong>History-based prediction</strong></p>
+
+<p>這種作法的一種實作方式，是 branch prediction buffer 或 branch history table，這是一個小型的 Cache，記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。通常會使用 Branch Instruction 的低位元作為 index 去查詢 Branch History Table，並根據歷史結果來預測 Branch 的結果。</p>
+
+<blockquote class="block-tip">
+  <p>這個 cache 通常稱為 Branch History Table (BHT)，它會記錄每個 Branch 指令的歷史結果，並使用這些結果來預測未來的 Branch 結果。</p>
+</blockquote>
+
+<p>這種預測方式當然有可能遇到該 Bit 是由另一個相同低位元的 Branch 指令所更新，但 Prediction 只是希望去猜測 Branch 的結果，如果該次錯誤刪除預測並更新 BHT 即可，這樣保證長期來看 BHT 的準確率會提升。</p>
+
+<p>算盤本上會介紹 1-bit predictor 與 2-bit predictor:</p>
+
+<ul>
+  <li>1-bit predictor:
+    <ul>
+      <li>使用一個 Bit 來記錄上一次 Branch 的結果，0 代表 Not Taken，1 代表 Taken。每次 Branch 執行後，根據實際結果更新該 Bit。</li>
+      <li>優點是實作很簡單</li>
+      <li>缺點是容易受到單一錯誤預測的影響，導致連續錯誤預測</li>
+    </ul>
+  </li>
+  <li>2-bit predictor:
+    <ul>
+      <li>使用兩個 Bit 來記錄 Branch 的歷史結果，形成四個狀態:
+        <ul>
+          <li>00: Strongly Not Taken</li>
+          <li>01: Weakly Not Taken</li>
+          <li>10: Weakly Taken</li>
+          <li>11: Strongly Taken</li>
+        </ul>
+      </li>
+      <li>2-bit 可以讓預測器在遇到單一錯誤預測時不會立即改變預測結果，必須連續兩次錯誤預測才會改變狀態，這樣可以減少錯誤預測的影響，並且成本不會比 1-bit predictor 高太多。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-13-computer_organization_pipeline_hazards/3.png" alt="" /></p>
+
+<blockquote class="block-tip">
+  <p>尤其是在 Loop 結構中，往往 Branch 會連續多次被採取直到 Loop 結束，Dynamic Branch Prediction 可以有效提升這類情況的預測準確率。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>剩下 Exception Hazards 的部分之後再補充，Hazards 的內容先 focus 在 Compiler 比較關注的部分。<br />
+11-14-2025 00:42</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="computer_organization" /><category term="pipelines" /><summary type="html"><![CDATA[雖然 Pipeline 可以提升指令吞吐量，但在實作上會遇到各種 hazards 問題，必須透過硬體與編譯器的合作來解決這些問題，才能真正發揮 Pipeline 的效能。]]></summary></entry><entry><title type="html">Computer Organization | Pipelines</title><link href="https://hotshot824.github.io/jekyll/2025-11-12-computer_organization_pipeline.html" rel="alternate" type="text/html" title="Computer Organization | Pipelines" /><published>2025-11-12T00:00:00+00:00</published><updated>2025-11-12T00:00:00+00:00</updated><id>https://hotshot824.github.io/jekyll/computer_organization_pipeline</id><content type="html" xml:base="https://hotshot824.github.io/jekyll/2025-11-12-computer_organization_pipeline.html"><![CDATA[<h3 id="11-pipelines-overview">1.1 Pipelines Overview</h3>
+
+<blockquote class="block-tip">
+  <p>Pipeline 是現代 CPU 提升指令吞吐量的核心機制，而編譯器則必須透過指令排程與最佳化來配合 pipeline，避免 hazards，才能真正發揮硬體效能。</p>
+</blockquote>
+
+<p>Pipelines 是現代處理器中常用的一種技術，用來提高指令的執行效率。透過將指令的執行過程分成多個階段，處理器可以同時處理多條指令，從而提升整體的吞吐量。
+這樣的好處是減少閒置，讓多條指令可以同時在不同的階段進行處理。</p>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/1.png" alt="" /></p>
+
+<p><strong>Pipeline 總是拿 Laundry 的例子來說明</strong> 如果 A, B, C, D 四個人都分別做洗衣、烘乾、摺衣服、收納將會花費 12 time units、但如果使用 Pipeline 的方式，四個人可以同時進行不同的工作，總共只需要 7 time units 就能完成所有人的工作。</p>
+
+<p>因此在 Pipeline 中主要有三點要注意：</p>
+<ol>
+  <li>The work (in a computer, the ISA) is divided up into pieces that more or less fit into the segments alloted for them.</li>
+  <li>This implies that in order for the pipeline to work efficiently and smoothly, the work partitions must each take about the same time to complete.</li>
+  <li>In order for the pipeline to work smoothly, there must be few (if any) exceptions or hazards that cause errors or delays within the pipeline.</li>
+</ol>
+
+<blockquote class="block-tip">
+  <p>Pipeline 是增加 Throughput 的一種技術，對 Latency 沒有幫助</p>
+</blockquote>
+
+<hr />
+
+<h3 id="12-work-partitioning">1.2 Work Partitioning</h3>
+
+<ul>
+  <li>Pipeline 可以被分為主個 Stages：
+    <ul>
+      <li>Instruction Fetch (IF) : fetch instruction from memory</li>
+      <li>Instruction Decode (ID) : decode instruction and read registers</li>
+      <li>Execute (EX) : execute the operation or calculate address</li>
+      <li>Memory Access (MEM) : access an operand in data memory</li>
+      <li>Write Back (WB) : write the result back to a register</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/2.png" alt="" /></p>
+
+<p>上面的圖是很理想的 Pipeline 狀況，每個 Stage 都剛好在一個 Clock Cycle 內完成工作。</p>
+
+<p>複習一下 Single-Cycle Processor 的工作流程：</p>
+
+<ul>
+  <li>IF:
+    <ul>
+      <li>階段透過 MUX 選擇下一個指令的位置，由 Program Counter (PC) 指向下一個指令的位址</li>
+      <li>從 Instruction Memory 中讀取指令，並將 PC 加 4 指向下一個指令或者跳轉位置</li>
+    </ul>
+  </li>
+  <li>ID:
+    <ul>
+      <li>將指令解碼，並從 Register File 中讀取所需的 Read Registers / Write Registers</li>
+      <li>讀取 Register 中的資料由 Read Data 1 / Read Data 2 輸出</li>
+      <li>imm Generator 會根據指令類型產生立即數 (32-bit / 64-bit)</li>
+    </ul>
+  </li>
+  <li>EX:
+    <ul>
+      <li>ALU 根據 ALU Control 的控制，對 Read Data 1 / Read Data 2 或立即數進行運算</li>
+    </ul>
+  </li>
+  <li>MEM:
+    <ul>
+      <li>根據指令類型，決定是否要對 Data Memory 進行讀取或寫入</li>
+    </ul>
+  </li>
+  <li>WB:
+    <ul>
+      <li>將結果寫回 Register File</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pipeline registers</strong></p>
+
+<p>為了確保 Single-Cycle Processor 符合每個 Stage 都在一個 Clock Cycle 內完成工作，我們需要在每個 Stage 之間加入 Pipeline registers，這些 Buffer 用來暫存每個 Stage 的輸出，並在下一個 Clock Cycle 開始時提供給下一個 Stage 使用。</p>
+
+<p>Pipeline register 的功能，是在每個 clock cycle 結束時，儲存該 stage 的輸出資料與對應的控制資訊，並在下一個 cycle 將這些穩定的值提供給下一個 stage 使用。藉由這種「先存、再用」的機制，多條指令才能在同一條 datapath 上同時處於不同 stages，讓 pipeline 在時間上並行運作，而結果仍然正確。</p>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/3.png" alt="" /></p>
+
+<hr />
+
+<h3 id="13-pipeline-control">1.3 Pipeline Control</h3>
+
+<blockquote class="block-tip">
+  <p>Pipeline control 的作用，是把「這條指令未來每個 stage 要做什麼」的控制決策，在 ID 階段產生後隨指令一起經由 Pipeline registers 傳遞</p>
+</blockquote>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/4.png" alt="" /></p>
+
+<p>同樣的我們也需要 Control Unit 來產生控制訊號，這些控制訊號會被傳遞到各個 Stage 的控制邏輯中，確保每個 Stage 都能正確地執行其功能。</p>
+
+<ul>
+  <li>IF/ID:
+    <ul>
+      <li>將指令的 rs、rt、rd 欄位，以及 opcode、funct 欄位傳遞給 control circuitry</li>
+      <li>用於初始化該指令後續所需的控制資訊</li>
+    </ul>
+  </li>
+  <li>ID/EX:
+    <ul>
+      <li>Buffer EX、MEM、WB 三個階段的控制訊號</li>
+      <li>同時執行 EX 階段的控制</li>
+      <li>決定 ALU 的輸入 operand、ALU operation 類型</li>
+      <li>根據 ALU 的 Zero 輸出判斷是否進行 branch</li>
+    </ul>
+  </li>
+  <li>EX/MEM:
+    <ul>
+      <li>Buffer MEM、WB 階段的控制訊號</li>
+      <li>同時執行 MEM 階段的控制</li>
+      <li>設定 memory read / write</li>
+      <li>決定寫入 memory 的資料來源</li>
+      <li>包含 branch control logic</li>
+    </ul>
+  </li>
+  <li>MEM/WB:
+    <ul>
+      <li>Buffer 並執行 WB 階段的控制</li>
+      <li>決定要寫回 register file 的資料來源</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/image/2025/11-12-computer_organization_pipeline/5.png" alt="" /></p>
+
+<hr />
+
+<blockquote class="block-warning">
+  <p>上面說的是理想狀況下的 Pipeline 運作方式，但實際上在 Pipeline 運作過程中會遇到各種問題，這些問題會導致 Pipeline 無法順利運作，這些問題稱為 Hazards，下一篇文章將介紹 Pipeline 中常見的 Hazards 以及解決方法。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>11-12-2025 01:50</p>
+</blockquote>]]></content><author><name>Benson Hsu</name></author><category term="Jekyll" /><category term="computer_organization" /><category term="pipelines" /><summary type="html"><![CDATA[1.1 Pipelines Overview]]></summary></entry></feed>

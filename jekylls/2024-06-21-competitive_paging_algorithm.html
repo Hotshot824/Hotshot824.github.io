@@ -1,0 +1,1542 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Algorithm | Competitive Paging Algorithm · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekylls/2024-06-09-arch_user_repository.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#1-introduction" onclick="mobilePageScrollToAnchor(this)" >1. Introduction</a></li><li><a href="#2-paging-problem" onclick="mobilePageScrollToAnchor(this)" >2. Paging Problem</a></li><li><a href="#3-preliminaries" onclick="mobilePageScrollToAnchor(this)" >3. Preliminaries</a></li><li><a href="#4-analysis" onclick="mobilePageScrollToAnchor(this)" >4. Analysis</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Algorithm | Competitive Paging Algorithm</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">June 21, 2024 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekylls/competitive_paging_algorithm">Algorithm | Competitive Paging Algorithm</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Notes for <a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm#Marking_algorithms">Marking algorithms</a> Analysis, Reference:
+<strong>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</strong> Fiat, A., Karp, R. M., Luby, M., McGeoch, L. A., Sleator, D. D., &amp; Young, N. E. (1991). Competitive paging algorithms.<br />
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> Achlioptas, D., Chrobak, M., &amp; Noga, J. (2000). Competitive analysis of randomized paging algorithms.</p>
+</blockquote>
+
+<h3 id="1-introduction">1. Introduction</h3>
+
+<p>這篇介紹 Competitive Paging Algorithm，Marking Algorithm 是一種 Online Paging Algorithm，並且是 Randomized Algorithm，
+主要目的是用來說明分析這些 Online Paging Algorithm 的工具。詳細的原始論文可以參考 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 和 [<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]。</p>
+
+<p>所以 Marking Alogrithm 並不是一個實際在 OS 中被廣泛使用的演算法，但透過這對於 Marking Algorithm 的分析，可以更好的了解 Competitive Algorithm 的特性。</p>
+<ul>
+  <li>例如: LRU(Last Recently Used) 就是一種 Marking Algorithm，FIFO(First In First Out) 則不是。</li>
+</ul>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 是首次提出 Competitive Paging Algorithm 與 Marking Algorithm 分析的論文</p>
+</blockquote>
+
+<blockquote>
+  <p>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>] 則在前三章有對於 Marking Algorithm 的更詳細與緻密的分析</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-paging-problem">2. Paging Problem</h3>
+
+<blockquote class="block-tip">
+  <p>從最開始的 Paging Problem Definition 開始到 Offline Optimal Algorithm, Marking Algorithm 的介紹。</p>
+</blockquote>
+
+<p><strong>Paging Problem Definition:</strong></p>
+<ol>
+  <li>A two-level memory system, capable of holding $K$ items in the Cache.</li>
+  <li>At each time step, a request to an item is issued.</li>
+  <li>If the item $p$ exists in the Cache, then the cost is 0.</li>
+  <li>If the item $p$ does not exist in the Cache:
+    <ul>
+      <li>Choose an item $q$ to replace it, and the cost is 1.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>這個問題是一個 Online Problem，因為沒有辦法知道未來的 Request，所以只能根據目前的 Request 來做決策。
+但是我們可以先從 Offline Algorithm 開始，來了解這個問題的 Optimal。</p>
+
+<h4 id="21-optimal-algorithm">2.1 Optimal Algorithm</h4>
+
+<ul>
+  <li>目前被證明的 Belady’s Optimal Algorithm 被證明是 Optimal Algorithm
+    <ul>
+      <li>Belady’s Optimal Algorithm 也被稱為 Longest Forward Distance(LFD) Algorithm</li>
+    </ul>
+  </li>
+  <li>簡單來說就是把未來最久才會被 Request 的 Item replace</li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/1.jpg" alt="" height="80%" width="80%" /></p>
+
+<blockquote class="block-warning">
+  <p>關於 Optimal Algorithm 的證明可以參考 <a href="https://stackoverflow.com/questions/47642881/proof-for-optimal-page-replacement-opt">stack overflow:Proof for optimal page replacement (OPT)</a>，使用 Contradiction 來證明 Optimal Algorithm 是最佳的。</p>
+</blockquote>
+
+<p>但是在現實中我們無法得知一個 item 多久才會被 Request，這個演算法也被稱為 clairvoyant replacement algorithm，因為要做到 Optimal 需要透視未來的 Request。</p>
+
+<hr />
+
+<h4 id="22-marking-algorithm">2.2 Marking Algorithm</h4>
+
+<p>這邊我們先給出一個基本的 Marking Algorithm，這是從 [<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>] 中提出的。</p>
+
+<ul>
+  <li>假設有一個 Cache，跟大小相同的 Marking Bit Array，用來記錄 <strong>p</strong> 是否在 Cache 中</li>
+  <li>發生 Request 時，如果 <strong>p</strong> 已經被 Marked，則 Cost = 0</li>
+  <li>如果 <strong>p</strong> 沒有被 Marked，則 Cost = 1
+    <ul>
+      <li>Total marked item &lt; k，則 Mark <strong>p</strong></li>
+      <li>Total marked item = k，則 Unmark all items，然後再 Mark <strong>p</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Example:</strong></p>
+<ul>
+  <li>Cache Size = 3, Request Seq = { 1,2,3,4,1,2,5,1,2,3,4,5 }</li>
+</ul>
+
+<p><img src="/image/2024/06-21-competitive_paging_algorithm/2.jpg" alt="" height="80%" width="80%" /></p>
+
+<p>這個 Seq 是故意設計的最糟情況，可以看到 Marking Algorithm 不斷填滿 Array，然後清空。注意我們的重點在於對 Marking Algorithm 的分析，而不是實際的使用。</p>
+
+<hr />
+
+<h3 id="3-preliminaries">3. Preliminaries</h3>
+
+<blockquote class="block-tip">
+  <p>在分析上會以 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 為主要的論文，相較於 <em>[<a href="https://www.sciencedirect.com/science/article/abs/pii/019667749190041V">1</a>]</em> 在 1991 剛被提出，到了 <em>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</em> 2000 年已經有更多的分析工具。</p>
+</blockquote>
+
+<p>Throughout this node:</p>
+<ul>
+  <li>$k$ denote the size of the cache</li>
+  <li>$ALG(𝛼)$ denote the online algorithm</li>
+</ul>
+
+<p><strong>Definition.</strong> An online algorithm $ALG$ is $c-competitive$ if, for any instance $I$, $ALG(I) \leq c \cdot OPT(I)$.</p>
+
+<ul>
+  <li>先定義 $c-competitive$ 的概念，$OPT(I)$ 是最佳的，而 $ALG(I)$ 是 Online Algorithm
+    <ul>
+      <li>$\text{If c = 1, ALG is equivalent to OPT}$</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="31-bounds-k-competitive">3.1 Bounds k-competitive</h4>
+
+<blockquote class="block-tip">
+  <p>首先我們先證明任何 Online Algorithm 都是 $k-competitive$，證明其最糟情況下至少是 OPT 的 $k$ 倍。</p>
+</blockquote>
+
+<p><strong>Theorem.</strong> For any $k$ and any deterministic online algorithm $ALG$, the competitive ratio of $ALG \geq k$.</p>
+
+<ol>
+  <li>A always request the page that is not currently in the cache, This causes a page fault in every access.</li>
+  <li>The total cost of $ALG$ is $|𝛼|$</li>
+  <li>The total cost of $OPT$ is at most $|𝛼|/k$
+    <ul>
+      <li>Becase $OPT$ can only a single page fault in any $k$ accesses</li>
+    </ul>
+  </li>
+  <li>The base competitive ration is $k$</li>
+</ol>
+
+<p>簡單來說有一個無論如何都會產生 Page fault 的輸入，這樣就可以證明任何 $\text{ALG}$ 最糟情況下都是 $k-competitive$。</p>
+
+<h4 id="32-potential-method">3.2 Potential Method</h4>
+
+<p>在 Randomized online algorithm 的分析中常常會使用 Amortized Analysis，Paging Problem 也是如此，
+<strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中就使用了 Potential Method 來分析 Marking Algorithm 的 Upper Bound。</p>
+
+<ul>
+  <li>Each operation has state $w \text{(work function), } A\text{(ALG conguration), } \text{r(request)}$</li>
+  <li>$Δcost_A$ is the cost of $ALG$</li>
+  <li>$Δopt$ is the cost of $OPT$</li>
+  <li>$Δϕ$ is the potential function change</li>
+</ul>
+
+<p>首先定義每次的操作都會有狀態 $w, A, \text{r}$，然後定義 $Δcost_A, Δopt, Δϕ$ 來分析每次操作的成本。這樣我們就能給出公式:</p>
+
+\[Δcost_A + Δϕ \leq c \cdot Δopt\]
+
+<p>這個公式就是 Competitive Ratio 的定義，每次操作的成本加上 Potential Function 的變化都應該小於等於 $c$ 倍的 $OPT$。</p>
+
+<h4 id="33-work-function">3.3 Work Function</h4>
+
+<blockquote class="block-tip">
+  <p>Work Function 是一個用來描述每次操作的狀態或者是成本的函數，這裡定義 $w(A)$ 來描述 $A$ 的狀態</p>
+</blockquote>
+
+<p><strong>Lemma.</strong> Every offset function is coned up from the set of configurations for which its value is zero.
+Moreover, if $\omega$ is the current offset function and $r$ is the last request,
+then there is a sequence of sets $L_1, L_2, \ldots, L_k$, with $L_1 = r$,
+such that $\omega(X) = 0$ if and only if $|X \cap \bigcup_{i \le j} L_i| \ge j$ for all $1 \le j \le k$.</p>
+
+<p>這裡的 $L$ 代表的是一組 Request 的集合，稱作 Layer，例如: $w(X)=0$ 代表之前的輸入都在 Cache 中，所以 Cost = 0，同樣也有該輸入的 item 數量一定比 $k$ 小。
+這裡定義三種集合:</p>
+
+<ul>
+  <li>$V(w) \text{ is mean valid, no cost occurs so the cost is 0}$</li>
+  <li>$S(w)=⋃_{i \leq j}L_i \text{ is the set of all requests for this work function}$</li>
+  <li>$N(w) \text{ is non-revealed item in } S(w)$</li>
+</ul>
+
+<p><strong>After Request</strong></p>
+
+<p>然後是在 Request 之後的狀態變化，這裡定義 $\omega’$ 來描述 Request 之後的狀態變化。</p>
+
+\[Let \ \omega = (L_1 | \cdots | L_k) \text{, If} \ r \text{ is a new request.}\]
+
+\[\omega' = 
+\begin{cases} 
+(r | L_1 | \cdots | L_{j-1} | L_j \cup L_{j+1} - r | L_{j+2} | \cdots | L_k) &amp; \text{if } r \in L_j \text{ and } j &lt; k, \\
+(r | L_1 | \cdots | L_{k-1}) &amp; \text{if } r \in L_k, \\
+(r | L_1 | L_2 | L_3 | \cdots | L_k) &amp; \text{if } r \notin S(\omega).
+\end{cases}\]
+
+<ul>
+  <li>$r \in L_j$ 中，則將 $r$ 移到最前面，而 $L_j$ 之後的 Layer 都移除 $r$ 並且加入到 $L_{j+1}$</li>
+  <li>$r \in L_k$ 中，則將 $r$ 移到最前面，並且移除 $L_k$</li>
+  <li>$r \notin S(\omega)$，則將 $r$ 移到最前面</li>
+</ul>
+
+<p>在之後的分析中，我們會使用這個 Work Function 來描述每次操作的狀態變化，下面會給出一個例子。</p>
+
+<blockquote>
+  <p>這裡也能看處 Request 實際上就 3 種情況</p>
+</blockquote>
+
+<p><strong>example:</strong></p>
+<ul>
+  <li>$\text{Let } k = 3,\text{ {a,b,c} in cache, Request = {d,e,b}}$</li>
+</ul>
+
+\[(a|b|c) \rightarrow (d|a,b|c) \rightarrow (e|a,b,d|c) \rightarrow (b|e|a,c,d) \\\]
+
+<ul>
+  <li>$\text{The optimal cost is 2.}$</li>
+</ul>
+
+<hr />
+
+<h3 id="4-analysis">4. Analysis</h3>
+
+<p>首先我們已經清楚了 Marking Algorithm 的過程，所以有兩個 $Fact$:</p>
+
+<p><strong>Fact 1.</strong> The cache contains only marked items and active items. All marked items are in the cache. If there are $m$ marked items and $v$ active items then each active item is in the cache with probability $(k-m)/v$.</p>
+
+<p><strong>Fact 2.</strong> Let $w = (L_1|L_2|…|L_k)$ If $L_i$ contains a marked item then all item in $⋃_{j \leq i}L_j$ are marked.</p>
+
+<ul>
+  <li>Fact 1 可以得知 Cache 中的 Active Item 在 Cache 中的機率</li>
+  <li>Fact 2 則是說明如果 Layer 中有 Marked Item，則之後的 Layer 都會有 Marked Item</li>
+</ul>
+
+<p><strong>Theorem 2.</strong> The competitive ratio of the marking algorithm is $2H_k - 1$.</p>
+
+<h4 id="41-lower-bound">4.1 Lower Bound</h4>
+
+<blockquote class="block-danger">
+  <p>透過最糟情況的設計，來證明 Competitive Ratio 的 Lower Bound。</p>
+</blockquote>
+
+<p><strong>Proof.</strong> A cycle of request $k+1$ items, where the optimal cost 1, while the cost on the Marking Algorithm is $2H_k - 1$.</p>
+
+<ol>
+  <li>$w = (x_1|x_2|…|x_k)$, Active set $X = {x_1, x_2, …, x_k}$, Marked set $M = {x_1}$</li>
+  <li>$w^y = (y|x_1, x_2| … |x_k)$, Marked set $M = {y, x_1}$</li>
+  <li>Continuous request $x_2, …, x_{k-1}$
+    <ul>
+      <li>When ends $w^{k-1}=(x_{k-1}|…|x_2|y|x_1,x_k)$</li>
+      <li>Marked set $M = {x_{k-1},…,x_2,x_1,y}$, size $k-1$</li>
+    </ul>
+  </li>
+  <li>Last Request $x_k$
+    <ul>
+      <li>Marked set is full, so unmark all items.</li>
+      <li>The cost must be 1.</li>
+    </ul>
+  </li>
+</ol>
+
+\[1 + \frac{2}{k} + \frac{2}{k-1} + \cdots + \frac{2}{3} + \frac{2}{2} = 2H_k - 1\]
+
+<p>先設計一個 k+1 個 Request，首先 cache 中已經存在 $x_1$。首先 Request $y$ 然後再 Request $x_2, …, x_k$，
+因為是從 $k_2, …, x_k$ 不斷去請求，因此分母會不斷減少，最後一次 Request $x_k$ 則必然會產生 Cost = 1。以此得到以上的公式，是一個 Harmonic Number，
+所以可以得到 $\text{Competitive Ratio} = 2H_k - 1 \approx 2ln(k) - 1$。</p>
+
+<h4 id="42-upper-bound">4.2 Upper Bound</h4>
+
+<blockquote class="block-danger">
+  <p>在 <strong>[<a href="https://www.sciencedirect.com/science/article/pii/S0304397598001169">2</a>]</strong> 中更使用 Potential Method 來證明 Competitive Ratio 的 Upper Bound，證明了 $2H_k - 1$ 是 Tight</p>
+</blockquote>
+
+<p><strong>Proof.</strong> Prove that Marking Algorithm is $2H_k - 1$ competitive, using Potential Method.</p>
+
+<p>如果當前的 Work Function 有 $s$ 個 Layer，且包含未標記的 Item，則 Potential Function 為:</p>
+<ul>
+  <li><strong>Potential Function</strong> $ϕ(w) = s(H_k - H_s + 1)$
+    <ul>
+      <li>$H_k, H_s$ is Harmonic Number of $k, s$</li>
+      <li>$s$ is the number of layers for work function $w$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>首先把 Request 分成 3 種情況:</p>
+<ul>
+  <li>(a) Request outside the $S(w)$, $t$ is the number of (a)</li>
+  <li>(b) Request in the $S(w)$ but not in the cache, $l$ is the number of (b)</li>
+  <li>(c) Request in the cache</li>
+</ul>
+
+<p>最後是我們證明的目標:</p>
+
+\[Δcost_A + Δϕ \leq (2H_{k-1}) \cdot Δopt\]
+
+<p>完成以上的定義後我們就能來分析 Request 的情況。</p>
+
+<p><strong>Class (a)</strong></p>
+
+<p>$r \notin S(w)$, 這裡給個例子來說明什麼是 Class (a) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b, c}}, \text{Request} = \text{{d}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (d|a,b|c)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡可以看出 (a) 其實就是一定會產生 Cost 的 Request，並且從此我們能看出 $Δopt = t$，實際上 $t$ 就是 OPT 的 Cost。</p>
+
+<p><strong>Class (b)</strong></p>
+
+<p>$r \in S(w), r \notin M(w)$, 同樣用例子來說明 Class (b) 的 Request:</p>
+<ul>
+  <li>Example $k = 3, M = \text{{a, b}}, Request = \text{{c}}$
+    <ul>
+      <li>$(a|b|c) \rightarrow (c|a,b|)$</li>
+    </ul>
+  </li>
+</ul>
+
+<p>這裡根據 <strong>Fact 2.</strong> Class (b) 可以使 $s$ 減少 1，所以將會有 $l \leq s$。</p>
+
+<p><strong>Class (c)</strong></p>
+
+<p>$r \in S(w), r \in M(w)$, C 是已經被 Marked 的 Item，所以實際上不會有變化。</p>
+<ul>
+  <li>如果出現一個 $\text{Class (c) i}$ Request，則最多會有 $l+t+i-1$ 個 Marked Item
+    <ul>
+      <li>因為 (a), (b) 最多貢獻 $l+t$ 個 Marked Item，而 $i$ 則是 Class (c) 的 Request</li>
+    </ul>
+  </li>
+  <li>同時 Active item 的數量會是 $k-i+1$</li>
+  <li>根據 <strong>Fact 1.</strong> 得出這次請求的 Cost = 1 的機率是 $(l+t+i-1)/(k-i+1) = (l+i)/(k-i+1)$</li>
+</ul>
+
+<p>因為 i 的範圍是從 1 到 $k-l-t$，所以可以得到以下公式:</p>
+
+\[\Delta \text{cost} = \sum_{i=1}^{k-l-t} \frac{l + t}{k - i + 1} = (l + t)(H_k - H_{l+t})\]
+
+<blockquote>
+  <p>上面用 Harmonic Number 來表示，這裡的 $H_k - H_{l+t}$ 是因為 $\sum_{i=1}^{k} \frac{1}{i} = H_k$，所以這裡是 $H_k - H_{l+t}$</p>
+</blockquote>
+
+<p><strong>Upper bound</strong></p>
+
+<p>這樣我們就算出了所有的 Request 的 Cost，然後再加上 Potential Function 的變化，就能得到 $(2H_{k-1}) \cdot Δopt$ 的部分，
+跟以下的不等式:</p>
+
+\[\begin{aligned} 
+\Delta \text{cost} + \Delta \Phi &amp; \leq (l + t)(H_k - H_{l+t}) + s'(H_k - H_{s'} + 1) - s(H_k - H_{s} + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - s(H_k - H_s + 1) \\
+&amp; \leq (l + t)(H_k - H_{l+t}) + s' H_k - l(H_k - H_{l+1}) \\
+&amp; = (2H_k - 1)t + 2t - (l + t)H_{l+t} + 1H_{l} - (t - s') H_k \\
+&amp; \leq (2H_k - 1)t \\
+&amp; = (2H_k - 1)\Delta \text{opt}
+\end{aligned}\]
+
+<ul>
+  <li>(1) 是來自於 $\Delta cost$ 的界線以及 $\Phi ,s,s’$ 的定義</li>
+  <li>(2) $l \leq s$ 並且 $\Phi$ 隨著 $s$ 增加而增加</li>
+  <li>(3) 因為 $2t - (l+t)H_{l+t} \leq -lH_{l+1}$ 跟 $s’ \leq t$</li>
+</ul>
+
+<p>以上就是透過分析 Marking Algorithm 的 Upper/Lower Bound，Competitive Ratio = $2H_k - 1$ 並且是 Tight 的證明。</p>
+
+<hr />
+
+<p>這個 Marking Algorithm 只是一個最簡單的例子來說明 Competitive Paging Algorithm 的分析，實際上在 OS 中 Marking Algorithm 還有更多的變化，
+通常更多的透過 Learning strategy 來做決策，例如: Clock-PRO，在分析上大部分是基於實驗的方式。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-21-2024 09:07</p>
+</blockquote>
+
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                Algorithm
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Note | Arch User Repository">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekylls/2024-06-09-arch_user_repository.html" class="navigation navigation-next navigation-unique" aria-label="Next page: PDS | Introduction of Parallel and Distributed Systems">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "PDS | Introduction of Parallel and Distributed Systems",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2024/2024-07-28-parallel_and_distributed_systems_introduction.md",
+            "ref": "_posts/2024/2024-07-28-parallel_and_distributed_systems_introduction.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2024/2024-06-21-competitive_paging_algorithm.md",
+        "mtime": "2024-06-21 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

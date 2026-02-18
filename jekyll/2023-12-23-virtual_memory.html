@@ -1,0 +1,1938 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>OS | Virtual Memory · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2023-12-20-system_testing.html" />
+        
+
+        
+            <link rel="next" href="/jekylls/2023-12-26-code_generation.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#what-is-virtual-memory" onclick="mobilePageScrollToAnchor(this)" >What is Virtual Memory</a></li><li><a href="#virtual-memory-example" onclick="mobilePageScrollToAnchor(this)" >Virtual Memory Example</a></li><li><a href="#page-replacement" onclick="mobilePageScrollToAnchor(this)" >Page Replacement</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >OS | Virtual Memory</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">December 23, 2023 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/virtual_memory">OS | Virtual Memory</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>Operating System: Design and Implementation course notes from CCU, lecturer Shiwu-Lo.</p>
+</blockquote>
+
+<p>本章節會主要介紹 Virtual Memory 這是這章節的討論範圍</p>
+
+<ul>
+  <li>Virtual Memory Hardware and Software</li>
+  <li>Virtual Memory Example</li>
+  <li>Page Replacement</li>
+  <li>Working Set</li>
+  <li>open, read, writ vs. mmap
+    <ul>
+      <li>Differences between these system calls</li>
+    </ul>
+  </li>
+  <li>TLB miss</li>
+</ul>
+
+<h5 id="mmu-main-function">MMU Main Function</h5>
+
+<ul>
+  <li>MMU 主要處理記憶體分配的問題
+    <ul>
+      <li>消除了 External fragmentation(外部碎片)</li>
+      <li>由於 Page size 僅有 4KB，所以 Internal fragmentation(內部碎片)很輕微</li>
+    </ul>
+  </li>
+  <li>如果 TLB miss
+    <ul>
+      <li>假設該 TLB 要去 Mapping 的 Page 在 Memory 中只要將 Virtual memory to Physical memory 的 Mapping 加入 TLB 即可</li>
+      <li>上述的動作可以使用 Hardware 來完成，或使用 Software 來完成</li>
+    </ul>
+  </li>
+  <li>如果 TLB miss 並且 Hardware 的表格也查不到呢
+    <ul>
+      <li>稱之為 Page fault</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="what-is-virtual-memory">What is Virtual Memory</h3>
+
+<h5 id="81-define-the-virtual-memory">8.1 Define the Virtual Memory</h5>
+
+<p>嚴格的定義: <strong>由軟體重新定義 Page fault</strong></p>
+<ul>
+  <li>當 CPU 所要存取的 Memory 根本不存在於 DRAM 中時，就稱作為 Page fault
+    <ul>
+      <li>如果我們啟動 Software 此時該 Software 所要存取的 Memory 根本不存在於 DRAM 中，就稱作為 Page fault，例如 Segmentation fault</li>
+    </ul>
+  </li>
+  <li>OS 設計者重新詮釋了 Page fault 的意義，例如:
+    <ul>
+      <li>OS 暫時還沒把該 Page 載入到 DRAM 中，重新載入就好
+        <ul>
+          <li>例如: Execl 假如有 500MB 的資料要放入 DRAM 中以供執行，但硬碟的讀取速度有他的極限例如 20MB/s，不可能每次執行 Execl 都要花 25 秒鐘去讀取資料</li>
+          <li>先把必要的程式碼放入 DRAM 就好，等使用者真的需要使用其他功能時再去載入該功能</li>
+        </ul>
+      </li>
+      <li>OS 讓不同的 Process 隱形共用內容相同的 Page
+        <ul>
+          <li>唯讀，不會有任何問題發生，還可以減少記憶體使用量，例如: fork() 使用 Copy-on-write 的技術來實作</li>
+          <li>寫入，OS 必須確保每個 Process 在邏輯上都有自己的 Page，例如: 即使 fork() 使用同一份 Memory，但是要確保程式的 Logic address 上是不同的</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>稍微寬鬆一點的定義: <strong>讓 Mapping 變得更加靈活</strong></p>
+<ul>
+  <li>透過設定 MMU，使 Memory Mapping 更加靈活的例子
+    <ul>
+      <li>Shard Memory，讓不同的 Process 可以共用同一份 Memory</li>
+      <li>可以將檔案 Mapping 到 Process 的 Memory Space，讓 Process 可以直接存取檔案</li>
+      <li>可以將部分 I/O 的記憶體 Mapping 到 Process 的 Memory Space，讓 Process 可以直接控制 I/O
+        <ul>
+          <li>Linux 中使用 mmap 存取 <code class="language-plaintext highlighter-rouge">/dev/mem</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="82-virtual-memory-components">8.2 Virtual Memory Components</h5>
+
+<blockquote>
+  <p>下圖是 Virtual Memory 中會需要的組件</p>
+</blockquote>
+
+<p><img src="/image/2023/12-23-virtual_memory/1.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Hardware table(Page table)
+    <ul>
+      <li>這部分由 OS 來寫入硬體所設計的表格，由 MMU 來讀取，例如: x86 定義表格，Linux 依照 x86 的定義來實作</li>
+      <li>每個 Process 都有自己的 Page table</li>
+      <li>如果 TLB miss 硬體查詢 Page table 還是找不到，此時觸發 Page fault exception</li>
+    </ul>
+  </li>
+  <li>Software table(mm_struct, kerne mapping table)
+    <ul>
+      <li>每個 Process 甚至 Linux Kernel 都需要一個查詢表，快速的查詢每個 Memory 是否正確</li>
+      <li>如果正確還發生 Page fault 如何處理？</li>
+    </ul>
+  </li>
+  <li>處理 Page fault
+    <ul>
+      <li>OS 必須有 Page fault handler(Interrupt service routine)</li>
+      <li>並且要能紀錄: 錯誤的原因，錯誤的 Address</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="virtual-memory-example">Virtual Memory Example</h3>
+
+<p><a href="#83-shard-memory">8.3 Shard Memory</a><br />
+<a href="#84-demand-paging">8.4 Demand Paging</a><br />
+<a href="#85-linux-pure-demand-paging">8.5 Linux Pure Demand Paging</a><br />
+<a href="#86-performance-of-demand-paging">8.6 Performance of Demand Paging</a>
+<a href="#87-copy-on-write">8.7 Copy-on-Write</a><br />
+<a href="#88-kernel-same-page-merging">8.8 Kernel same-page merging</a><br />
+<a href="#89-page-table-entry-attributes">8.9 Page Table Entry Attributes</a></p>
+
+<h5 id="83-shard-memory">8.3 Shard Memory</h5>
+
+<p><img src="/image/2023/12-23-virtual_memory/2.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>stack, heap 這部分是程式自己獨有的</li>
+  <li>黑色的部分是共享的:
+    <ul>
+      <li>code, libc: 這兩個是同一個程式但是開了兩個 Process
+        <ul>
+          <li>因為在執行時會去 Mapping 硬碟上的執行檔，這樣 OS 就能知道其實這兩個 Process 完全是一樣的</li>
+          <li>並且這部分只能 Read，這樣就沒有 Locked 所造成的效能瓶頸</li>
+        </ul>
+      </li>
+      <li>mmap: 這部分不是由 Kernel 去分享的，當 Shell 去呼叫 mmap syscall，後得到一個符號這樣就可以將該記憶體映射至自己的 Memory
+        <ul>
+          <li>shell-1 將資料傳給 shell-2 要傳的是資料在 mmap 中的 offset</li>
+          <li>盡量不要去指定 mmap 要被映射的 Address</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Virtual Memory 允許 Code, Data 共享
+    <ul>
+      <li>多個程式使用相同的 Library，例如: libc</li>
+      <li>應用程式透過 Shared memory 共享資料，例如: mmap</li>
+      <li>Parent 和 Child 都沒呼叫 execv 的話，記憶體內容幾乎一樣，例如: Copy-on-Write</li>
+    </ul>
+  </li>
+  <li>Linux 允許隱含式的共享
+    <ul>
+      <li>Linux kernel 可能會掃描 Memory，將內容一樣的 Page 隱含共享</li>
+      <li>例如: 電腦的桌布跟登入畫面使用同一張圖片，記憶體內容是一樣的</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="84-demand-paging">8.4 Demand Paging</h5>
+
+<p><strong>Define of Demand paging</strong></p>
+
+<ul>
+  <li>作業系統不會立刻將使用者所需要的 Memory 配置給 User</li>
+  <li>發生 Page fault 時，才會載入該段記憶體的資料</li>
+</ul>
+
+<p><strong>Demand paging advantage</strong></p>
+
+<p>因為只需要載入需要的資料</p>
+<ul>
+  <li>Less I/O needed</li>
+  <li>Less memory needed</li>
+  <li>Faster response
+    <ul>
+      <li>啟動時間，只需要載入需要的資料就能啟動了</li>
+    </ul>
+  </li>
+  <li>More users/programs
+    <ul>
+      <li>因為每個程式需要的記憶體較少，因此可以載入更多的應用程式</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Demand paging shortcoming</strong></p>
+
+<ul>
+  <li>對於 Disk system，Demand paging 雖然減少了讀取的量，但是會引發大量的 Random access
+    <ul>
+      <li>例如: 執行兩個程式，這兩個程式一共 100 MB，OS 可以驅動 Disk 使用兩秒鐘的時間來載入這兩個應用程式。</li>
+      <li>如果使用 Pure demand paging，假設兩個程式輪流執行，一共需要 20 MB 5120 個 pages，並且執行的程式碼<strong>「隨機散布」</strong>，
+目前 Disk 的 IOPS 約為 200，則載入兩個程式的時間變為 25.6 Sec</li>
+    </ul>
+  </li>
+  <li>除了引發大量的 Random access 以外，Demand paging 也可能會造成執行期間有些 Lag
+    <ul>
+      <li>例如: 不希望玩遊戲時會有延遲，就要一次把遊戲所要用的資料全部載入</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Random access 對 SSD 的速度大約是 Sequential access 的 1/2 ~ 1/3，HDD 則有可能從 200MB 降低到 1MB</p>
+</blockquote>
+
+<blockquote>
+  <p>IOPS: Input/Output Operations Per Second(每秒輸入/輸出次數)</p>
+</blockquote>
+
+<p>Linux 在這方面的處理方式是假如要 1個 Page，就會一次載入周遭 8 個 Page，因為通常同一個程式會連續使用到相同的 Page，這樣就能減少 Random access 的問題。</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/3.png" alt="" height="100%" width="100%" /></p>
+
+<p>上面張圖表示了一個程式配置到 DRAM 的情況</p>
+<ul>
+  <li>OS 會透過 process 的 kernel mapping table 來看要去哪裡找資料
+    <ul>
+      <li>code, libc: disk</li>
+      <li>stack, mmap, heap: zero-out page pool</li>
+    </ul>
+  </li>
+  <li>zero-out page pool: OS 會維護一個 pool 在這裡面都是已經預先初始化(0)的 page，用來分配給 stack, mmap 使用
+    <ul>
+      <li>這是為了避免資訊，例如: 上個程式的資料還留在 DRAM 中，下個程式可以從 DRAM 讀取到上個程式的資料</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+</blockquote>
+
+<p><strong>Valid-invalid</strong></p>
+
+<p>下圖是一個 x86 的 Page table entry，後面的 12 個 bit 就是 attribute</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/4.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Present: 0 的話表示該 Page 不在 DRAM 中，此時可能代表 OS 還沒有將該 page 載入 DRAM 中，或者該 page 本來就不在 DRAM 中(程式寫錯)</li>
+  <li>不管是在 page table 中的第一層或第二層，只要有一個是 0(invalid)，就會觸發 exception</li>
+  <li>此時 OS 會去查詢 process 的軟體表格(Linux mm_struct)
+    <ul>
+      <li>查詢成功: 配置 physical page 給該 address，然後修改 page table 重新執行</li>
+      <li>查詢失敗: 程式發生錯誤，例如: pointer 指向錯誤的 address，此時繼續錯誤處理(終止或呼叫 GDB)</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>大部分的 valid-invalid bit 都在 PTE 的最右邊，這是 CPU 設計時如果指向不存在的 page，在此時前變得 bit 都可以任意使用，
+Linux 就使用這些 bit 來協助解決 backing storage 為 swap space 的 page fult</p>
+</blockquote>
+
+<h5 id="85-linux-pure-demand-paging">8.5 Linux Pure Demand Paging</h5>
+
+<blockquote>
+  <p>Pure demand paging 的意思是在執行新的程式時，並不會分配任何 page 給 task，直到該 task 索取</p>
+</blockquote>
+
+<p>以 Linux 為例子，使用 execve() 將執行檔放入當前 process 的 memory space</p>
+<ol>
+  <li>先在該 task 的 mm_struct 中設定 section 映射的資訊
+    <ul>
+      <li>code, data 對應到執行檔案</li>
+      <li>bss section 對應到 zero-out page pool</li>
+      <li>lib 對應到相對的 library</li>
+      <li>只分配少量的 stack space(8KB) 給該 task</li>
+    </ul>
+  </li>
+  <li>執行程式</li>
+</ol>
+
+<p>Linux 並沒有分配任何 page 先給該 task，因此是 pure demand paging</p>
+
+<h5 id="86-performance-of-demand-paging">8.6 Performance of Demand Paging</h5>
+
+<p>怎麼估算 Demand Paging 的效能，如下:</p>
+<ul>
+  <li>Page fault rate: 0 &lt;= p &lt;= 1
+    <ul>
+      <li>估算一個 Page fault 發生的機率</li>
+    </ul>
+  </li>
+  <li>Effective Access Time(EAT)
+$EAT = (1 - p) * memory\,access + p(page\,fault\,overhead + swap\,page\,out + swap\,page\,in + restart\,overhead)$
+    <ul>
+      <li>swap page out: Free space 不夠就需要將某些 page 從 DRAM 寫入 disk
+        <ul>
+          <li>優化方式: 無論如何都保持一定的 free space</li>
+        </ul>
+      </li>
+      <li>swap page in: 當 page fault 發生時，需要將某些 page 從 disk 讀入 DRAM
+        <ul>
+          <li>常用的 page 就先放入 page cache 中，例如: <code class="language-plaintext highlighter-rouge">ls</code></li>
+        </ul>
+      </li>
+      <li>page fault overhead, restart overhead: 這兩個 overhead 通常是硬體相關的問題，或 ISR 的部分 assembly 寫的夠不夠好</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>OS 上主要能優化的就是 swap page out/in 這兩種方式</p>
+</blockquote>
+
+<p><strong>Example</strong></p>
+
+<ul>
+  <li>Memory access time: 200 nanoseconds</li>
+  <li>Average page-fault service time: 8 milliseconds
+    <ul>
+      <li>EAT = (1 - p) * 200 + p(8,000,000)<br />
+= 200 + p * 7,999,800</li>
+    </ul>
+  </li>
+  <li>如果每 1000 次 memory access 有 1 次 page fault，那麼速度將變為原本的 1/40</li>
+</ul>
+
+<blockquote>
+  <p>以上的例子是說明，在可能的情況下盡量少用 swap space，這樣可能會造成 CPU 大量的時間都在 idle</p>
+</blockquote>
+
+<h5 id="87-copy-on-write">8.7 Copy-on-Write</h5>
+
+<p>在 Physical memory 中也會使用 Copy-on-Write 的技術，例如: 在剛 fork() 出來的 child process，如果 child process 沒有修改任何資料，
+就不會真的複製一份 parent process 的資料，而是共用同一份資料，這樣就能減少記憶體的使用量。</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/5.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>通常 fork 之後的 parent 與 child
+    <ul>
+      <li>在 register 之外都是一樣的，因此直接 copy parent 的 mm_struct 給 child</li>
+      <li>將 parent 與 child 的 page table 都設定為 read-only</li>
+    </ul>
+  </li>
+  <li>在 read-only 之後如果其中一個 task 去作出修改，就會觸發 page fault
+    <ul>
+      <li>Linux 把造成 page fault 的 page 改成 writeable，並且複製一份 page 給 child</li>
+      <li>這樣 parent 與 child 就重新各自擁有一份可 write 的 page</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>這樣的技術也可以用在 File System 上，例如: Linux 的 Btrfs</p>
+</blockquote>
+
+<h5 id="88-kernel-same-page-merging">8.8 Kernel same-page merging</h5>
+
+<ul>
+  <li>Kernel virtual memory(KVM) 中會有許多不同的 VM 都會用到相同的 page
+    <ul>
+      <li>例如: 都是執行 Win10，那麼這些 VM 中的 OS Kernel 應該都是一樣的</li>
+    </ul>
+  </li>
+  <li>在一般的 OS 也可能會有相同的 Page
+    <ul>
+      <li>例如: 桌面與登入畫面使用相同的圖片，這樣就會有相同的 Page</li>
+    </ul>
+  </li>
+  <li>上面的情況都比較難有真正的事件發生，因此需要 OS 去主動掃描才能發現共用記憶體，節省記憶體的使用量</li>
+</ul>
+
+<h5 id="89-page-table-entry-attributes">8.9 Page Table Entry Attributes</h5>
+
+<p>在 Main Memory 中介紹的是 PTE 的前 20 個 bit，這邊會更詳細的說明後 12 個 bit 的意義</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/4.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>Present: 是否在 DRAM 中</li>
+  <li>Read/Write: 0 表示 read-only，1 表示 read/write</li>
+  <li>User/Supervisor: 表示是否需要 kernel mode 權限才能存取</li>
+  <li>Write-through: 決定 page 使用的是 write-back 或 write-through</li>
+  <li>Cache Disable: 如果是 1 則禁止該 page 被 cache</li>
+  <li>Accessed: 表示該 page 是否被存取過</li>
+  <li>Dirty: 表示該 page 是否被修改過</li>
+  <li>Page Table Attribute Index: 跟 Write-through/Cache Disable 有關，可以設置更細緻的 Cache 設定</li>
+  <li>Global: 表示該 page 是否是 global page，例如: 共享的 library</li>
+  <li>Available: 這 3 個 bit 可以讓 OS 自由使用</li>
+</ul>
+
+<p>而一個 4KB 的 Page table 可以放入 1024 個 PTE，然後在 Main memory 提過的 Hierarchical pading 在這裡可以更詳細的說明，
+這樣的話架構就會如下(以 4 個 PTE 組成一層 Page table 為例):</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/6.png" alt="" height="100%" width="100%" /></p>
+
+<p>這樣我們就能把 Page table, TLB, Virtual memory, Physical memory 組合起來，如下:</p>
+
+<p><img src="/image/2023/12-23-virtual_memory/7.png" alt="" height="100%" width="100%" /></p>
+
+<ol>
+  <li>Virtual address 透過 TLB 轉換成 Physical address
+    <ul>
+      <li>TLB 紀錄 virtual address 與 physical address 的 mapping</li>
+      <li>attribute 也會紀錄在 TLB 中</li>
+    </ul>
+  </li>
+  <li>TLB miss 會觸發 page fault，透過 CR3 register 找到 page table</li>
+  <li>Page table 紀錄 virtual address 與 physical address 的 mapping
+    <ul>
+      <li>page table 找到 physical address 後去更新 TLB，然後重新查詢</li>
+      <li>如果 PTE 是 invalid，就會觸發 page fault，再去載入該 page 到 DRAM 中</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>到這裡為止就是完整的 Virtual memory 到 Physical memory 的運作方式</p>
+</blockquote>
+
+<hr />
+
+<h3 id="page-replacement">Page Replacement</h3>
+
+<blockquote class="block-tip">
+  <p>在這之前所討論的都是在 DRAM 足夠滿足程式大小的情況，但是實際上 DRAM 並不一定能滿足程式所需要的大小</p>
+</blockquote>
+
+<p><a href="#810-why-need-page-replacement">8.10 Why Need Page Replacement</a><br />
+<a href="#811-page-replacement-concept">8.11 Page Replacement Concept</a><br />
+<a href="#812-page-replacement-algorithm">8.12 Page Replacement Algorithm</a><br />
+<a href="#813-algorithm-evaluation-example">8.13 Algorithm Evaluation Example</a><br />
+<a href="#814-linuxs-page-replacement">8.14 Linux’s Page Replacement</a></p>
+
+<h5 id="810-why-need-page-replacement">8.10 Why Need Page Replacement</h5>
+
+<p>主要的原因就是 DRAM 有限，例如: 使用者同時執行了 Excel, Word, Chrome，這三個程式的大小加起來超過了 DRAM 的大小，
+或者是使用者正在看一部影片，但是這部影片的大小超過了 DRAM 的大小。</p>
+
+<blockquote>
+  <p>例如一個 6.2GB 的影片，使用者只有 6GB 的 DRAM，就先把 200MB 的資料寫入 swap space，需要時再從 swap space 讀取</p>
+</blockquote>
+
+<ul>
+  <li>因為 Virtual memory 的存在，所以 OS 可以只載入目前所需要的資料
+    <ul>
+      <li>隨著程式的執行，過去所需要的資料會不斷累積，但不代表這些資料可以被丟棄</li>
+      <li>因此當 DRAM 不足時，OS 要考慮是否把這些資料寫出到 secondary storage 或丟棄</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>例如: 一個 word 的程式用來初始化 word，但是接下來不會再使用，這時就可以把這些資料丟棄</p>
+</blockquote>
+
+<h5 id="811-page-replacement-concept">8.11 Page Replacement Concept</h5>
+
+<p>在 memory 中我們怎麼找出最近不會使用到的 page，這就是 page replacement algorithm 的目的</p>
+<ul>
+  <li>這個 algorithm 設計的好可以讓使用者感覺不到 page replacement 的存在
+    <ul>
+      <li>當然也有可能設計的不好，造成使用者感覺到 lag</li>
+    </ul>
+  </li>
+  <li>在不考慮 page-out/page-in overhead 的情況下，user 可以使用的 memory 遠超 DRAM 的大小
+    <ul>
+      <li>假設 user 執行的應用程式共需要 12GB 的記憶體，但 user 只有 4GB 的 DRAM</li>
+      <li>依照未來會存取的順序來對 12GB 的記憶體做排序，就可以知道哪些 page 優先被放入 DRAM</li>
+    </ul>
+  </li>
+  <li>為什麼只要仔入部分資料就可以
+    <ul>
+      <li>例如: 10秒鐘內，user 能存取的資料不會超過 4GB(locality)</li>
+      <li>如果超過 4GB，那麼就把部分資料 page-out，然後 page-in 需要的資料</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>實際在 Linux 執行中可以使用 free -h 去查看使用的 Men, Swap，Linux 並不會真的把 Men 使用光，而是會保留一部分的 Men 做為 page cache，
+available 則是在不使用 swap 的情況下可以分配多少記憶體</p>
+</blockquote>
+
+<p>那麼在 512MB 的電腦上執行 6.3 GB 的程式，會發生什麼</p>
+
+<ul>
+  <li>理論上系統的所有被使用的記憶體大小不能超過 DRAM + Swap</li>
+  <li>OS kernel 本身是 non-swappable
+    <ul>
+      <li>所以 OS 本身所需要的記憶體都會直接配置在 DRAM 中，這裡並不是 kernel 不能被設計成 swappable，而是這樣的設計不合理</li>
+    </ul>
+  </li>
+  <li>OS 會在必要時 kill 掉一些 task，稱為 OOM killer(out-of-memory killer)</li>
+</ul>
+
+<h5 id="812-page-replacement-algorithm">8.12 Page Replacement Algorithm</h5>
+
+<p>這裡要討論的就是那些 page 應該被丟棄，這就需要 page replacement algorithm 來決定</p>
+
+<ul>
+  <li>Algorithm 的目標: 最小化 page fault 的數量
+    <ul>
+      <li>這裡要看優化的目標是什麼，在這裡討論的是最小化 page fault 的數量</li>
+    </ul>
+  </li>
+  <li>在這裡會討論以下幾種 algorithm
+    <ul>
+      <li>FIFO: First-in-first-out</li>
+      <li>Optimal algorithm
+        <ul>
+          <li>概念上的最佳化，必需假設知道未來的 Page access pattern</li>
+        </ul>
+      </li>
+      <li>LRU: Least-recently-used
+        <ul>
+          <li>過去不曾用到的 page，未來也不太可能會用到</li>
+          <li>實現時會增加硬體上的成本，因為要加入一個時間戳記</li>
+        </ul>
+      </li>
+      <li><strong>Second-chance</strong>
+        <ul>
+          <li>有效且低成本的方式來實現接近 LRU 的效果</li>
+        </ul>
+      </li>
+      <li>LFU: Least-frequently-used
+        <ul>
+          <li>過去最不常用的 page，未來也不太可能會用到</li>
+        </ul>
+      </li>
+      <li>MFU: Most-frequently-used
+        <ul>
+          <li>過去最常用的 page，可能代表已經使用結束了，所以之後不會用到</li>
+        </ul>
+      </li>
+      <li><strong>Linux’s page replacement</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Basic assessment method</strong></p>
+
+<p>在等等評估演算法的方式中，會使用以下的方式來評估:</p>
+<ul>
+  <li>在給定的 Reference string 中，計算 page fault 的數量</li>
+  <li>Reference string:
+    <ul>
+      <li>7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1</li>
+      <li>這個 reference string 代表了一個程式的 page access pattern</li>
+    </ul>
+  </li>
+  <li>在這裡假設系統只有 3 個 frame</li>
+</ul>
+
+<h5 id="813-algorithm-evaluation-example">8.13 Algorithm Evaluation Example</h5>
+
+<p><strong>FIFO</strong></p>
+
+<p><img src="/image/2023/12-23-virtual_memory/8.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>替換掉最早進入的 page
+    <ul>
+      <li>所以當 4, 0, 1, 2 時，將 4 Swap out</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Optimal algorithm</strong></p>
+
+<p><img src="/image/2023/12-23-virtual_memory/9.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>提早替換掉未來最久不會使用到的 page
+    <ul>
+      <li>所以當 4, 0, 1, 2 時，發現未來不會使用到 1，因此將 1 Swap out</li>
+      <li>接下來到 0, 3 時發現 0 還有三次 Access 才會使用，最久因此將 0 Swap out</li>
+    </ul>
+  </li>
+  <li>實際上這樣的演算法是不可能的，因為我們不可能知道未來的 Access pattern</li>
+</ul>
+
+<p><strong>LRU</strong></p>
+
+<blockquote class="block-tip">
+  <p>我們無法得知未來的 Access pattern，但是可以知道過去的 Access pattern</p>
+</blockquote>
+
+<p><img src="/image/2023/12-23-virtual_memory/10.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>替換掉最久沒有使用的 page
+    <ul>
+      <li>所以當 4, 0, 1, 2 時，將 4 Swap out</li>
+      <li>接下來到 0, 3 時發現 1 是最後使用的，因此將 1 Swap out</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Second-chance(clock algorithm)</strong></p>
+
+<blockquote class="block-tip">
+  <p>LRU 如果要在硬體上實現，需要一個時間戳記，但是這樣會增加硬體的成本，因此有了 Second-chance</p>
+</blockquote>
+
+<p><img src="/image/2023/12-23-virtual_memory/4.png" alt="" height="100%" width="100%" /></p>
+
+<p>Second-chance 可以用 PTE 中的</p>
+<ul>
+  <li><strong>Accessed bit</strong>(也稱為 Reference bit)來實現，當 page 被存取時，OS 會將 Accessed bit 設為 1，OS 會定期去清除 Accessed bit 改為 0。</li>
+  <li><strong>Dirty bit</strong> 則是在 page 被修改時，OS 會將 Dirty bit 設為 1，如果把 Dirty bit 為 1 的 page-out，就代表必須要跟 disk 做同步，因此會增加 page-out 的時間。</li>
+  <li>如果以上兩個 bit 都是 0，就代表這個 page 是可以被 page-out 並且成本低的</li>
+</ul>
+
+<p><img src="/image/2023/12-23-virtual_memory/11.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>實際上剛載入的 memory 的 page accessed bit 都是 0，因此會先被替換掉
+    <ul>
+      <li>這樣假設 A 剛載入一個 page p, 此時 B ctx 他有可能會把 A 的 page p 替換掉，這樣回到 A 又要重新載入 p</li>
+      <li>解決方式是在一些 OS 上會有 young bit，或者是在載入時就將 accessed bit 設為 1</li>
+    </ul>
+  </li>
+  <li>紅色的字體就是剛 Access 的 page，在實作上可以有很多方式
+    <ul>
+      <li>這裡使用一個 Pointer 依序指向 page，當 page 被指向第二次時並且 accessed bit 為 0，這個可以 page-out</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-danger">
+  <p>Second-chance 有很多種實作方式，這裡只是其中一種</p>
+</blockquote>
+
+<p><strong>LFU</strong></p>
+
+<p><img src="/image/2023/12-23-virtual_memory/12.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>上方的橘色區塊代表該 page 被使用的次數
+    <ul>
+      <li>當需要 swap out 時，就會找到使用次數最少的 page page-out</li>
+    </ul>
+  </li>
+  <li>如果使用次數都一樣這裡就假設 FIFO</li>
+</ul>
+
+<p><strong>MFU</strong></p>
+
+<p><img src="/image/2023/12-23-virtual_memory/13.png" alt="" height="100%" width="100%" /></p>
+
+<ul>
+  <li>與 LFU 相反，找到使用次數最多的 page page-out</li>
+</ul>
+
+<p><strong>Conclusion</strong></p>
+
+<ul>
+  <li>Optimal algorithm: 理論上最佳化，但是不可能知道未來的 Access pattern</li>
+  <li>LRU: 基於過去預測未來，實際上的效能不錯
+    <ul>
+      <li>但是要完全實現 LRU 需要增加硬體成本，例如: 紀錄 page 上次被存取的時間</li>
+    </ul>
+  </li>
+  <li>Second-chance: 有效且低成本的方式來實現接近 LRU 的效果
+    <ul>
+      <li>如果經常被存取，那 Access bit 會一直被設為 1</li>
+      <li>要 replancement 的時候會給有 Access bit 的 page 一個 second chance</li>
+      <li>很接進 LRU 的方式，相當於使用 1 個 bit 來當作時間戳記</li>
+    </ul>
+  </li>
+  <li>FIFO: 簡單，但是效能不好
+    <ul>
+      <li>因為放在 memory 中多久跟 page 是否會被使用沒有直接關係</li>
+    </ul>
+  </li>
+  <li>LFU: 保留過去常用的 page，需要一些機制來消除累積的 page 次數，不然有可能造成某些 page 一直被留在 DRAM 中</li>
+  <li>MFU: 提除過去常用的 page，通常是在特定情況下才會有較好的效果</li>
+</ul>
+
+<h5 id="814-linuxs-page-replacement">8.14 Linux’s Page Replacement</h5>
+
+<blockquote class="block-tip">
+  <p>Linux 使用了兩個 LRU list 來實現 page replacement</p>
+</blockquote>
+
+<p><img src="https://www.kernel.org/doc/gorman/html/understand/understand-html059.png" alt="" height="100%" width="100%" /></p>
+
+<p>設計兩個 LRU 的好處是避免一些 page 去汙染 active list，例如: 一個一次性但很大的程式，那有可能就會把 active list 中真正需要的 page 踢出去，
+有 inacitve list 就可以讓這些一次性的 page 保留在 inactive list 中，不會影響到 active list。</p>
+
+<ul>
+  <li>兩個 LRU list: active, inactive list
+    <ul>
+      <li>Active list: 最近比較活耀的 page</li>
+      <li>Inactive list: 最近比較不活耀的 page
+        <ul>
+          <li>incative list 會定期的去檢查在一段時間內是否有 page 被存取過兩次，如果有就會被移動到 active list head</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>從 Active/Inactive list 移除 page 使用的是 <strong>Second-chance algorithm</strong></p>
+</blockquote>
+
+<ul>
+  <li>New page 通常會被放入 inactive list 的 head</li>
+  <li>Inactive list 被填滿，就會將 tail 的部分 page 移到 swap space</li>
+  <li>Active list 被填滿，就會將最 tail 的 page 移到 inactive list head
+    <ul>
+      <li>這樣的好處是，page 在 inactive list 中一直沒有被存取，就會慢慢移動到 tail，最後就會被移出 DRAM</li>
+    </ul>
+  </li>
+  <li>page 離開 inactive list 時，會把該 page 紀錄在 table 中，這個 table 只會紀錄最近丟棄的 page
+    <ul>
+      <li>如果有 new page 進入時，就會檢查 table 中是否有相同的 page，如果有就把該 page 移到 active list head</li>
+    </ul>
+  </li>
+</ul>
+
+<p>如果最近讀入的 page 剛好在 swap-out table 中，就表示演算法有失誤，例如: 這個 page 會被常常使用，只是存取的間隔比 inactive list 的時間長。</p>
+
+<ul>
+  <li>所以這裡會選擇把這個 page 移到 active list
+    <ul>
+      <li>丟進 active list 可以給他比在 inactive list 更長的時間有機會被存取</li>
+    </ul>
+  </li>
+  <li>這裡可以討論的是是否要記錄這個間隔有多長，要不要以此去調整 inactive list 的時間</li>
+</ul>
+
+<blockquote>
+  <p>延伸閱讀: <a href="https://www.kernel.org/doc/gorman/html/understand/understand013.html">Linux Page Replacement</a></p>
+</blockquote>
+
+<ul>
+  <li>關於這個 Swap-out table 的設計，他的靈感或許來自 「Adaptive Replacement Cache」(IBM)</li>
+  <li>使用 Active + Inactive
+    <ul>
+      <li>融合了 LRU + LFU，只要常常被存取，即使不是最近被存取的也不太容易被移出 DRAM</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在此之下可以思考的是，是否可以把 Active + Inactive 變成更多層的結構</p>
+</blockquote>
+
+<p><strong>Linux Page Replacement Steps</strong></p>
+
+<p>要注意這裡所提到的 Active/Inactive list 是 OS 上的資料結構，所以真正的 Asecced bit 是在 page table 上，
+這兩個 list 所儲存的是 DRAM 中的 physical address。</p>
+
+<p>在 OS 上的資料結構如何去知道 Access bit 的變化，實際的 Access bit 是存在 task 的 page table 上:</p>
+<ol>
+  <li>掃描 Inactive list，要反向的從 physical page 去找出對應的 page tabe</li>
+  <li>從 page table 中把該 Page 的 Access bit mapping 到 Inactive list 的 page</li>
+</ol>
+
+<p>因為 Linux 中的 Inactive list 是使用 Second-chance algorithm，因此是沿著 circular list 不斷往下掃描每一個 entry，
+逐一去更新 entry 中的 Access bit 即可。</p>
+
+<p>這樣移除的時候也要反向的去找出對應的 page table，然後更新 page table 中的 valid bit，然後就將該 page 移到 swap space，
+mm_struct 中的 page table 會記錄這個 page 的使用情況是在 swap space 還是在 disk 中。</p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>1-31-2023 21:14</p>
+</blockquote>
+
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                OS
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekylls/2023-12-26-code_generation.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Testing | System Testing">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2023-12-20-system_testing.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Compiler | Code Generation (Unfinished)">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Compiler | Code Generation (Unfinished)",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2023/2023-12-26-code_generation.md",
+            "ref": "_posts/2023/2023-12-26-code_generation.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2023/2023-12-23-virtual_memory.md",
+        "mtime": "2023-12-23 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-02-18 08:41:21 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>
