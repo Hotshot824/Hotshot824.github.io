@@ -104,6 +104,72 @@ Master-Slave Replication 是一種常見的資料庫擴展策略，其中 Master
 
 > 雖然透過增加 Replication 節點可以提升系統的可用性與讀取能力，但這並不代表系統可以無限制地擴展，增加過多的 Replication 節點可能會導致系統的性能下降
 
+---
+
+### 3. Federated Database
+
+上面的兩種方法都是以 Replication 的方式來實現 Database Scale Out，這種方式始終無法避免 CAP 中的 CP，
+只要增加了 Replication 節點，就會增加資料同步的複雜度和延遲，所以如果想要降低資料同步的複雜度和延遲，我們可以考慮其他方式來分散資料庫的負載。
+
+> [Federated Database] (聯邦式資料庫系統) 將多個獨立的資料庫組合成一個邏輯資料庫
+{: .block-tip }
+
+[Federated Database]: https://en.wikipedia.org/wiki/Federated_database_system
+
+Federated 的核心概念是依照功能來區分資料庫，例如一個線上購物平台可能有:
+-   User Database: 儲存使用者的資料
+    -   帳號、密碼、個人資訊 ...
+-   Product Database: 儲存商品的資料
+    -   名稱、價格、庫存 ...
+-   Order Database: 儲存訂單的資料
+    -   訂單編號、商品清單、訂單狀態 ...
+
+而在這些獨立的資料庫下，還可以使用 Master-Slave 的架構來進行 Replication，以提升讀取的性能。
+這樣的策略是避免 Centralized Database 的瓶頸問題，將資料分散到不同的資料庫中，讓每個資料庫專注於處理特定的功能，
+同時有機會做到多個資料庫平行寫入 (Writer in parallel)，例如特定情境下只需要改變 User Database 的資料，
+就不需要等待 Product Database 或 Order Database 的資料同步完成，這樣就可以提升吞吐量。
+
+![](/image/2026/03-31-database_scale_out/3.jpg)
+
+**Advantages:**
+-   依照 Domain 來分散資料庫的負載，讓每個資料庫專注於處理特定的功能
+-   可以做到多個資料庫平行寫入，提升吞吐量
+    -   在低藕荷的情況下，吞吐量可以隨著資料庫的增加而線性提升
+    -   避免單一資料庫的瓶頸問題，提升系統的可用性和擴展性
+-   降低資料同步的複雜度和延遲，因為每個資料庫只需要處理特定的功能，資料之間的依賴性較低
+-   故障隔離性較好，當某個資料庫發生故障時，不會影響到其他資料庫的運作
+-   符合 Domain-Driven Design 的原則，讓資料庫的設計更符合業務需求
+    -   也可以說是一種 Microservices 的資料庫設計
+-   資料庫之間可以異質化，例如加入 NoSQL 的資料庫來處理特定的資料類型，提升系統的彈性和適應性
+
+**Disadvantages:**
+-   跨資料庫 JOIN 的效率非常差，無法像單一資料庫那樣進行高效的 JOIN 操作，這可能會導致查詢性能的下降
+    -   例如 `JOIN user, order, product`
+-   如果要實現 ACID 的特性，跨資料庫的交易會非常複雜，因為需要確保多個資料庫之間的資料一致性，這可能會導致性能的下降
+    -   2-Phase Commit (2PC), Saga Pattern
+-   查詢效能不穩定，因為跨資料庫的查詢需要進行資料傳輸和整合，這可能會導致查詢的延遲和不穩定性
+    -   最慢的資料庫會成為整個查詢的瓶頸，導致查詢性能的下降
+    -   在中間層進行資料整合的過程中，需要使用 CPU / Memory 來處理資料
+-   系統複雜性增加，因為需要管理多個資料庫的運作和維護
+    -   Query Routing, Schema Mapping, Service Boundary, Failure handling, Observability ...
+-   資料模型的設計要更加謹慎
+    -   必須避免大量的 Cross-domain dependency
+    -   常見策略是 denormalization / data duplication 在不同的資料庫中儲存相同的資料，但會增加資料同步的成本
+
+> 在單一資料庫中做 JOIN 是非常高效的，最大的問題是如果資料量大，在 JOIN 之前勢必得將資料庫抓取至某個節點上進行 JOIN 的操作，
+> 這樣資料傳輸就是無法避免的成本消耗，如何設計 JOIN 的策略也是一個重要的議題
+
+[2-Phase Commit (2PC)]: https://en.wikipedia.org/wiki/Two-phase_commit_protocol
+[Saga Pattern]: https://microservices.io/patterns/data/saga.html
+
+**Use Cases:**
+-   Business Logic 可以明確區分 Domain 的場景
+-   多數請求只需要存取特定資料庫的場景，例如 User Database 的請求只需要存取 User Database 的資料
+    -   不需要大量的 JOIN 操作，例如 OLAP (Online Analytical Processing) 的場景
+-   不需要 Strong Consistency 的場景，例如金融核心業務就不適合使用 Federated Database 的架構
+
+> 本質上 Federated Database 是用系統複雜度 (Complexity) 與一致性 (Consistency) 來換取寫入分流 (Write Scalability) 與解耦合 (Decoupling)
+
 > ##### Last Edit
 > 03-31-2026 17:04
 {: .block-warning }
