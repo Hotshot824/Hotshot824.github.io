@@ -1,0 +1,1489 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Backend | Database Scale Out · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2026-02-05-swagger.html" />
+        
+
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2026-03-31-database_scale_out.html">
+                        
+                            <a href="/jekyll/2026-03-31-database_scale_out.html" onclick="pageScrollToTop(this)">
+                                Backend | Database Scale Out
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#1-overview" onclick="mobilePageScrollToAnchor(this)" >1. Overview</a></li><li><a href="#2-master-slave-replication" onclick="mobilePageScrollToAnchor(this)" >2. Master-Slave Replication</a></li><li><a href="#21-master-master-replication" onclick="mobilePageScrollToAnchor(this)" >2.1 Master-Master Replication</a></li><li><a href="#3-federated-database" onclick="mobilePageScrollToAnchor(this)" >3. Federated Database</a></li><li><a href="#4-sharding" onclick="mobilePageScrollToAnchor(this)" >4. Sharding</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Backend | Database Scale Out</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">March 31, 2026 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/database_scale_out">Backend | Database Scale Out</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>後端處理中心的 Database Scale Out 是一個重要的議題，相較於 Web Application 無狀態的水平擴展，
+Database 的水平擴展會困難的多，Database 需要維持 ACID 的特性。</p>
+</blockquote>
+
+<h3 id="1-overview">1. Overview</h3>
+
+<blockquote class="block-tip">
+  <p><a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP Theorem</a> (Consistency, Availability, Partition Tolerance)</p>
+</blockquote>
+
+<p>既然在多個節點上使用 Database 也就是分散式儲存，對於分散式儲存的設計來說核心原則就是 <a href="https://en.wikipedia.org/wiki/CAP_theorem">CAP Theorem</a>，也就是說在分散式系統中，無法同時滿足一致性 (Consistency)、可用性 (Availability) 和分區容錯性 (Partition Tolerance)，只能選擇其中的兩個特性來優先考慮。</p>
+
+<p><a href="https://en.wikipedia.org/wiki/ACID">ACID</a> 是 Database 在關聯式資料庫中維持資料一致性和可靠性的四個基本特性，分別是:</p>
+
+<ol>
+  <li>Atomicity (原子性): 交易中的所有操作要麼全部完成，要麼全部不完成
+    <ul>
+      <li>如果交易中的任何一個操作失敗，整個交易都會被回滾，資料庫將保持不變</li>
+      <li>交易沒有中間狀態，要麼完全成功，要麼完全失敗</li>
+    </ul>
+  </li>
+  <li>Consistency (一致性): 交易必須使資料庫從一個一致的狀態轉換到另一個一致的狀態
+    <ul>
+      <li>當前一個交易完成後，資料庫應該處於一致的狀態，下一個交易開始前，資料庫也應該處於一致的狀態</li>
+    </ul>
+  </li>
+  <li>Isolation (隔離性): 交易的執行不應該受到其他交易的干擾
+    <ul>
+      <li>交易應該像是獨立執行的一樣，即使多個交易同時執行，也不應該互相干擾</li>
+    </ul>
+  </li>
+  <li>Durability (持久性): 一旦交易完成，對資料庫的修改應該是永久性的，即使系統崩潰也不會丟失</li>
+</ol>
+
+<p>如果要把 Database 分散到多個節點上，要維持上面所說的特性非常困難，尤其是在分散式系統中，
+網路延遲、節點失效、資料同步等問題都會對 ACID 的維持造成挑戰。</p>
+
+<p>Database 遵從 <a href="https://en.wikipedia.org/wiki/ACID">ACID</a> 代表優先考慮資料庫的一致性而非可用性，當然也可以遵從 <a href="https://en.wikipedia.org/wiki/Eventual_consistency">BASE</a>，優先考慮可用性，資料只保證最終會達到一致性，
+因此可能會有不一致的狀態存在，但這樣就不適合用在需要強一致性的場景，例如金融交易系統。</p>
+
+<blockquote>
+  <p><a href="https://en.wikipedia.org/wiki/Eventual_consistency">BASE</a> (Basically Available, Soft state, Eventual consistency) 強調系統的可用性和彈性，而不是強一致性</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>我們可以說 BASE 是選擇 CAP 中的 AP 模式，而 ACID 是選擇 CP 模式</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-master-slave-replication">2. Master-Slave Replication</h3>
+
+<blockquote class="block-tip">
+  <p>從資料庫的行為來看，可以分為讀取和寫入兩種操作，Master-Slave 就是針對這兩種需求的明確分工</p>
+</blockquote>
+
+<p>Master-Slave Replication 是一種常見的資料庫擴展策略，其中 Master 節點負責處理所有的寫入操作，
+而 Slave 節點則負責處理讀取操作。在常見的 CRUD 操作中，讀取操作通常比寫入操作更頻繁，
+因此這種架構可以有效地分散讀取負載，提高系統的整體性能。</p>
+
+<p><img src="/image/2026/03-31-database_scale_out/1.jpg" alt="" /></p>
+
+<blockquote>
+  <p>當 Master 故障或不可用時，Slave 節點可以被提升為新的 Master 節點，以確保系統的可用性</p>
+</blockquote>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+  <li>架構相對來說簡單，是比較容易實現的 Database Scale Out 策略</li>
+  <li>所有節點的資料都是相同的，不需要修改資料模型</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+  <li>寫入依然受限於 Master 節點的性能，無法真正實現寫入的水平擴展</li>
+  <li>Slave 節點的資料是從 Master 節點複製過來因此可能會是 Replication Lag 的狀態</li>
+</ul>
+
+<p><strong>Use Cases:</strong></p>
+<ul>
+  <li>適用於讀取操作遠多於寫入操作的場景</li>
+  <li>例如: 不需要即時性的查詢，統計報表、歷史資料查詢等</li>
+</ul>
+
+<p>在 MariaDB 通常使用 Binlog 來實現 Master-Slave Replication，Master 節點會將所有的寫入操作記錄在 Binlog 中，Slave 節點則會定期從 Master 節點拉取 Binlog 並執行其中的操作，以保持資料的一致性。</p>
+
+<hr />
+
+<h3 id="21-master-master-replication">2.1 Master-Master Replication</h3>
+
+<blockquote class="block-tip">
+  <p>既然 Master-Slave 的架構中寫入依然受限於 Master 節點的性能，那麼我們可以考慮讓多個 Master 節點同時處理寫入操作，這就是 Master-Master Replication</p>
+</blockquote>
+
+<p>雖然概念上多個 Master 好像就能解決寫入的瓶頸問題，但實際上 Master-Master Replication 的實現非常複雜，
+多個 Writer 之間的資料同步和衝突解決是一個非常大的挑戰，尤其是在高併發的場景下，資料衝突的機率會大大增加。</p>
+
+<ul>
+  <li>多個 Master 節點之間的資料一致性非常困難，通常會違背 ACID 的特性或是為了同步而提高寫入的延遲</li>
+  <li>越多的 Master 節點，只會導致延遲越高，資料衝突的機率越大</li>
+</ul>
+
+<p>在 Master-Slave 保持同步只要保持 Slave 從 Master 拉取 Binlog 就可以了，但在 Master-Master 的架構中有可能產生資料衝突，
+例如兩個 Master 節點同時寫入相同的資料，這就需要一個機制來解決衝突，這是一大挑戰。如果處理得不好有可能效能比單一 Master 節點還差。</p>
+
+<p><img src="/image/2026/03-31-database_scale_out/2.jpg" alt="" /></p>
+
+<blockquote>
+  <p>加入越多的 Master 節點，資料衝突的機率就會越大，延遲也會越高</p>
+</blockquote>
+
+<p>對於 Master-Master Replication 或者 Master-Slave Replication 的架構來說，都會有以下的缺點:</p>
+<ul>
+  <li>在 Copy 還沒完成之前如果節點故障了，有可能喪失資料</li>
+  <li>有越多 Replication 節點，要複製的資料就越多，延遲也會越高</li>
+  <li>如果 Master 節點的寫入量非常大，Slave 節點可能會無法跟上 Master 的寫入速度，導致 Replication Lag 的問題
+    <ul>
+      <li>在現代資料庫通常已支援 Multi-Threaded 並行複製來減少 Replication Lag 的問題，但在高併發的場景下仍然可能會有延遲</li>
+      <li>Slave 也可能為了處理資料同步的問題導致當下無法提供太多的讀取服務</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>雖然透過增加 Replication 節點可以提升系統的可用性與讀取能力，但這並不代表系統可以無限制地擴展，增加過多的 Replication 節點可能會導致系統的性能下降</p>
+</blockquote>
+
+<blockquote>
+  <p>後續我們將這種以 Replication 為基礎的 Database Scale Out 策略稱為 (M/S/R) 架構，因為它的核心概念就是 Master-Slave Replication</p>
+</blockquote>
+
+<hr />
+
+<h3 id="3-federated-database">3. Federated Database</h3>
+
+<p>上面的兩種方法都是以 Replication 的方式來實現 Database Scale Out，這種方式始終無法避免 CAP 中的 CP，
+只要增加了 Replication 節點，就會增加資料同步的複雜度和延遲，所以如果想要降低資料同步的複雜度和延遲，我們可以考慮其他方式來分散資料庫的負載。</p>
+
+<blockquote class="block-tip">
+  <p><a href="https://en.wikipedia.org/wiki/Federated_database_system">Federated Database</a> (聯邦式資料庫系統) 將多個獨立的資料庫組合成一個邏輯資料庫</p>
+</blockquote>
+
+<p>Federated 的核心概念是依照功能來區分資料庫，例如一個線上購物平台可能有:</p>
+<ul>
+  <li>User Database: 儲存使用者的資料
+    <ul>
+      <li>帳號、密碼、個人資訊 …</li>
+    </ul>
+  </li>
+  <li>Product Database: 儲存商品的資料
+    <ul>
+      <li>名稱、價格、庫存 …</li>
+    </ul>
+  </li>
+  <li>Order Database: 儲存訂單的資料
+    <ul>
+      <li>訂單編號、商品清單、訂單狀態 …</li>
+    </ul>
+  </li>
+</ul>
+
+<p>而在這些獨立的資料庫下，還可以使用 Master-Slave 的架構來進行 Replication，以提升讀取的性能。
+這樣的策略是避免 Centralized Database 的瓶頸問題，將資料分散到不同的資料庫中，讓每個資料庫專注於處理特定的功能，
+同時有機會做到多個資料庫平行寫入 (Writer in parallel)，例如特定情境下只需要改變 User Database 的資料，
+就不需要等待 Product Database 或 Order Database 的資料同步完成，這樣就可以提升吞吐量。</p>
+
+<p><img src="/image/2026/03-31-database_scale_out/3.jpg" alt="" /></p>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+  <li>依照 Domain 來分散資料庫的負載，讓每個資料庫專注於處理特定的功能</li>
+  <li>可以做到多個資料庫平行寫入，提升吞吐量
+    <ul>
+      <li>在低藕荷的情況下，吞吐量可以隨著資料庫的增加而線性提升</li>
+      <li>避免單一資料庫的瓶頸問題，提升系統的可用性和擴展性</li>
+    </ul>
+  </li>
+  <li>降低資料同步的複雜度和延遲，因為每個資料庫只需要處理特定的功能，資料之間的依賴性較低</li>
+  <li>故障隔離性較好，當某個資料庫發生故障時，不會影響到其他資料庫的運作</li>
+  <li>符合 Domain-Driven Design 的原則，讓資料庫的設計更符合業務需求
+    <ul>
+      <li>也可以說是一種 Microservices 的資料庫設計</li>
+    </ul>
+  </li>
+  <li>資料庫之間可以異質化，例如加入 NoSQL 的資料庫來處理特定的資料類型，提升系統的彈性和適應性</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+  <li>跨資料庫 JOIN 的效率非常差，無法像單一資料庫那樣進行高效的 JOIN 操作，這可能會導致查詢性能的下降
+    <ul>
+      <li>例如 <code class="language-plaintext highlighter-rouge">JOIN user, order, product</code></li>
+    </ul>
+  </li>
+  <li>如果要實現 ACID 的特性，跨資料庫的交易會非常複雜，因為需要確保多個資料庫之間的資料一致性，這可能會導致性能的下降
+    <ul>
+      <li>2-Phase Commit (2PC), Saga Pattern</li>
+    </ul>
+  </li>
+  <li>查詢效能不穩定，因為跨資料庫的查詢需要進行資料傳輸和整合，這可能會導致查詢的延遲和不穩定性
+    <ul>
+      <li>最慢的資料庫會成為整個查詢的瓶頸，導致查詢性能的下降</li>
+      <li>在中間層進行資料整合的過程中，需要使用 CPU / Memory 來處理資料</li>
+    </ul>
+  </li>
+  <li>系統複雜性增加，因為需要管理多個資料庫的運作和維護
+    <ul>
+      <li>Query Routing, Schema Mapping, Service Boundary, Failure handling, Observability …</li>
+    </ul>
+  </li>
+  <li>資料模型的設計要更加謹慎
+    <ul>
+      <li>必須避免大量的 Cross-domain dependency</li>
+      <li>常見策略是 denormalization / data duplication 在不同的資料庫中儲存相同的資料，但會增加資料同步的成本</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>在單一資料庫中做 JOIN 是非常高效的，最大的問題是如果資料量大，在 JOIN 之前勢必得將資料庫抓取至某個節點上進行 JOIN 的操作，
+這樣資料傳輸就是無法避免的成本消耗，如何設計 JOIN 的策略也是一個重要的議題</p>
+</blockquote>
+
+<p><strong>Use Cases:</strong></p>
+<ul>
+  <li>Business Logic 可以明確區分 Domain 的場景</li>
+  <li>多數請求只需要存取特定資料庫的場景，例如 User Database 的請求只需要存取 User Database 的資料
+    <ul>
+      <li>不需要大量的 JOIN 操作，例如 OLAP (Online Analytical Processing) 的場景</li>
+    </ul>
+  </li>
+  <li>不需要 Strong Consistency 的場景，例如金融核心業務就不適合使用 Federated Database 的架構</li>
+</ul>
+
+<blockquote>
+  <p>本質上 Federated Database 是用系統複雜度 (Complexity) 與一致性 (Consistency) 來換取寫入分流 (Write Scalability) 與解耦合 (Decoupling)</p>
+</blockquote>
+
+<hr />
+
+<h3 id="4-sharding">4. Sharding</h3>
+
+<blockquote class="block-tip">
+  <p><a href="https://en.wikipedia.org/wiki/Shard_(database_architecture)">Sharding</a> 是另一種常見的 Database Scale Out 策略，與 Federated Database 不同的是，Sharding 是將資料水平切分 (Horizontal Partitioning)，
+將資料分散到多個節點上，所以每個節點上都會有相同的資料模型</p>
+</blockquote>
+
+<p>Sharding (分片) 與 Federated Database 很類似，最主要的差異是 Sharding 是同質化的分散，例如我們有一個 User Database，
+我們可以依照 User ID 來將資料分散到不同的 Shard 上，例如:</p>
+<ul>
+  <li>Shard 1: User ID 1-1000</li>
+  <li>Shard 2: User ID 1001-2000</li>
+  <li>Shard 3: User ID 2001-3000</li>
+</ul>
+
+<p>這樣可以讓每個 Shard 專注於處理特定範圍的資料，提升系統的可用性和擴展性，同時也可以做到多個 Shard 平行寫入，提升吞吐量。
+常見的作法是依照用戶的地理位址或者姓名、ID 來作為 Sharding 的依據。</p>
+
+<p><img src="/image/2026/03-31-database_scale_out/4.jpg" alt="" /></p>
+
+<blockquote>
+  <p>Sharding 的核心挑戰在於如何設計一個好的 Shard key，這需要對業務和資料的特性有深入的理解，選擇一個好的 Shard key 可以讓資料分布均勻，
+提升系統的性能和可用性</p>
+</blockquote>
+
+<p><strong>Advantages:</strong></p>
+<ul>
+  <li>水平擴展能力強，可以隨著 Shard 的增加而線性提升系統的性能
+    <ul>
+      <li>如果每個 Shard 的資料量較小，可以提升寫入與查詢的性能</li>
+    </ul>
+  </li>
+  <li>儲存成本低，可以分散儲存資料到多個節點上，避免單一節點的儲存大量資料</li>
+  <li>同時每個 Shard 都可以配合 (M/S/R) 的架構來提升讀取的性能</li>
+  <li>Less Replication，因為每個 Shard 的資料量較小，可以減少 Replication 的成本和延遲</li>
+</ul>
+
+<p><strong>Disadvantages:</strong></p>
+<ul>
+  <li>跨 Shard 的 JOIN 非常複雜，因為資料分散在不同的 Shard 上，這可能會導致查詢性能的下降
+    <ul>
+      <li>這是 Federated Database 和 Sharding 共同的問題，跨節點的 JOIN 都會有性能的問題</li>
+    </ul>
+  </li>
+  <li>Shard key 設計困難，選擇一個好的 Shard key 是非常重要的，因為它會影響到資料的分布和查詢的性能
+    <ul>
+      <li>可能會導致資料分布不均，某些 Shard 的負載過重，而其他 Shard 的負載過輕，這會導致性能的下降</li>
+      <li>例如台灣人姓氏分布不均，如果以姓氏作為 Shard key，可能會導致熱門姓氏的 Shard 負載過重</li>
+    </ul>
+  </li>
+  <li>Resharding 的成本高，當資料量增加或者 Shard key 的設計不合理時，可能需要進行 Resharding，也就是重新分配資料到不同的 Shard 上，這是一個非常複雜和昂貴的過程
+    <ul>
+      <li>需要停機維護，或者使用 Online Resharding 的方式來減少停機時間，但仍然會有性能的影響</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Use Cases:</strong></p>
+<ul>
+  <li>資料量極大的場景，單機資料庫無法承受的場景
+    <ul>
+      <li>需要高寫入性能的場景，例如社交媒體平台、線上遊戲等</li>
+      <li>查詢有明確的 Shard key 的場景，例如用戶 ID、地理位置等</li>
+    </ul>
+  </li>
+  <li>同樣不適合需要大量 Cross-Shard JOIN 的場景，例如 OLAP 的場景</li>
+  <li>在 Strong Consistency 不重要的場景，例如社交媒體平台的貼文和留言等</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>要注意 Shard 適合的是單一資料表資料量太大，如果確定瓶頸在某個資料表的話，才適合使用 Sharding 的策略，如果是整個資料庫的負載過重，
+可能就不適合使用 Sharding 的策略，反而是 Federated Database 的策略比較適合</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>03-31-2026 17:04</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                software,
+                
+                database
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Home">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2026-02-05-swagger.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2026/2026-03-31-database_scale_out.md",
+        "mtime": "2026-03-31 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-04-13 15:45:58 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>
