@@ -223,6 +223,53 @@ Sharding (分片) 與 Federated Database 很類似，最主要的差異是 Shard
 > 可能就不適合使用 Sharding 的策略，反而是 Federated Database 的策略比較適合
 {: .block-warning }
 
+#### 4.1 Rebalancing
+
+> Sharding 的一大挑戰就是當資料量增加或者 Shard key 的設計不合理時，可能需要進行 Rebalancing，也就是重新分配資料到不同的 Shard
+{: .block-tip }
+
+Rebalancing 最主要的目的就是讓資料分布更均勻，Shard 有可能因為 Key 設計或者運行一段時間後，由於資料分布不均導致 Shard 成為新的瓶頸，
+Rebalancing 就是將資料重新分配到不同的 Shard 上，讓每個 Shard 的負載更均勻，提升系統的性能和可用性。
+
+> 即使最初 Key 設計得再好，隨著時間的推移，資料庫在運行中其內容也會發生變化，這可能會導致資料分布不均，因此 Rebalancing 是 Sharding 架構中不可避免的一個過程
+
+這些 Rebalance 方法這裡用分類策略來簡單非為兩類:
+1.  Static Rebalancing: 
+    -   分類規則是固定的，如果 Shard 改變要重新設計資料分布
+    -   例如使用 Hash 來決定資料要如何分布，當 Hash 改變時就需要重新分布資料
+    -   Full Resharding, Range-based Rebalancing, Hash-based Rebalancing
+        -   比較早期的做法，目前大型系統很少直接使用，部分做法需要停機維護，對於線上服務來說是非常不友善的
+2.  Dynamic Rebalancing:
+    -   分類規則是動態的，根據資料的特性來決定資料要如何分布
+    -   例如使用 Consistent Hashing 來決定資料要如何分布，當 Shard 改變時只需要重新分布部分資料
+    -   Consistent Hashing, Virtual Nodes 
+    -   **Auto-Sharding** (MongoDB sharding cluster, DynamoDB fully managed partitioning, etc.)
+        -   目前大型系統常用的做法，可以減少 Rebalancing 的成本和影響，適合線上服務的需求
+
+實際上這種分類是很粗略的，因為 Rebalancing 畢竟是一個分類問題，實際上可以使用的演算法策略非常多，用制式想法來解決 Rebalancing 的問題是非常呆版的，
+需要根據業務和資料的特性來設計一個適合的 Rebalancing 策略，這也是 Sharding 架構中非常重要的一個議題。
+
+> 目前很多主流 Database 都已經支援 Auto-Sharding 的功能，這些 Database 會自動根據資料的特性來決定資料要如何分布，並且在需要 Rebalancing 的時候自動進行 Rebalancing
+
+##### 4.1.1 [Consistent Hashing]
+
+[Consistent Hashing]: https://en.wikipedia.org/wiki/Consistent_hashing
+
+Consistent Hashing 是一種常見的 Dynamic Rebalancing 的策略，主要的概念是將資料和 Shard 映射到一個環狀的 Hash 空間中，當 Shard 改變時，只需要重新分布部分資料，而不需要重新分布所有資料，這樣就可以減少 Rebalancing 的成本和影響。每次重新分布只需要對 K/n 的資料進行重新分布，其中 K 是資料的總量，n 是 Shard 的數量。
+
+<div style="display: flex; flex-direction: row; align-items: center;">
+    <img src="/image/2026/03-31-database_scale_out/5.jpg"
+    width="50%" height="50%">
+    <img src="/image/2026/03-31-database_scale_out/6.jpg"
+    width="50%" height="50%">
+</div>
+
+<br>
+
+如上圖我們把 Consistent Hashing 想像成一個環形的 Hash 空間，BLOB 在計算完 Hash 後會儲存在 139 這個 Shard 上，
+假如我們之後要擴充 139 Shard 的容量，我們可以新增一個 Shard 170，這樣只有 Hash 值在 139 和 170 之間的資料需要重新分布到 170 上，
+其他資料則不需要重新分布，這樣就可以減少 Rebalancing 的成本和影響。
+
 > ##### Last Edit
 > 03-31-2026 17:04
 {: .block-warning }
