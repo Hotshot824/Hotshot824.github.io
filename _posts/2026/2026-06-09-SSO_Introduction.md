@@ -1,5 +1,5 @@
 ---
-title: "Backend | SSO Introduction with OIDC and NextAuth"
+title: "Backend | SSO Introduction"
 author: Benson Hsu
 date: 2026-06-09
 category: Jekyll
@@ -7,45 +7,64 @@ layout: post
 tags: [software, authentication, oauth, jwt, nextauth, sso]
 ---
 
-> 這篇文章會從 SSO（Single Sign-On，單一登入）的基本概念開始介紹，接著說明 JWT 的結構，然後進入 OIDC（OpenID Connect），最後再解釋 NextAuth 在整個流程中的角色。
+> 這篇文章會從 SSO（Single Sign-On，單一登入）的基本概念開始介紹，接著說明 JWT 的結構，然後進入 OIDC（OpenID Connect），最後再解釋 NextAuth 在整個流程中的角色
 {:.block-tip}
 
-> 本文的目標是依照協定堆疊（protocol stack）的層次，由上而下逐步說明，讓讀者能夠清楚理解各個技術之間的關係，而不是將概念與實作細節混在一起討論。
+> 本文的目標是依照協定堆疊（Protocol Stack）的層次，由上而下逐步說明，讓讀者能夠清楚理解各個技術之間的關係，逐步了解概念到實作的過程
+{:.block-warning}
 
 ### 1. SSO Introduction
 
-> SSO 的重點是把登入集中到同一個 IdP，讓多個應用共用同一組驗證結果，而不是讓每個系統自己各做一套登入流程。
+> SSO 的重點是把登入集中到同一個 IdP (Identity Provider)，讓多個應用共用同一組驗證結果，而不是讓每個系統自己各做一套登入流程
 {:.block-tip}
 
-SSO 的核心不是「一次登入就永遠不用登入」，而是「讓多個系統共用同一個身分提供者（Identity Provider, IdP）與同一組登入結果」。對使用者來說，這表示少輸入一次密碼；對系統來說，這表示各服務不必各自處理帳密驗證、找回密碼、風險控管與登入狀態同步。{:.block-tip}
+[Single Sign-On (SSO)] 的核心不是 **「一次登入就永遠不用登入」**，而是 **「讓多個系統共用同一個身分提供者（Identity Provider, IdP）與同一組登入結果」**。
+對使用者來說，這表示少輸入一次密碼；對系統來說，這表示各服務不必各自處理帳密驗證、找回密碼、風險控管與登入狀態同步。
 
-#### 1.1 What problems does SSO solve?
+[Single Sign-On (SSO)]: https://en.wikipedia.org/wiki/Single_sign-on
 
+因此 SSO 的主要解決的問題是：
 - 使用者在多個產品間切換時，不需要重複登入
 - 每個應用程式不必自己保存密碼驗證邏輯
 - 登入政策可以集中在 IdP 上做，例如 MFA、裝置信任、封鎖風險帳號
 
-#### 1.2 SSO's main roles
+**在這個流程裡面，主要的角色與概念如下：**
 
-- IdP：真正處理登入的人，像是 Google、Microsoft Entra ID、Auth0、Keycloak
-- RP / Client：想要使用這個登入結果的應用程式
-- Session：IdP 或應用程式內部保存的登入狀態
+| Role | Description |
+| :---: | --- |
+| IdP (Identity Provider) | 負責驗證使用者身份的服務，例如 Google、Microsoft Entra ID、Auth0、Keycloak 等。 |
+| RP (Relying Party) / Client | 想要使用 IdP 提供的登入結果的應用程式，例如你的網站或應用。 |
+| Session | IdP 或應用程式內部保存的登入狀態，用來記錄使用者是否已經登入，以及相關的資訊。 |
+| User | 最終使用者，透過 IdP 進行身份驗證，並希望在多個應用程式間無縫切換。 |
 
-如果把它講得更直白一點，SSO 其實就是「把登入這件事外包給一個大家都信任的地方」。後面的 OIDC 只是把這個外包流程標準化。
+實際上依然會使用到傳統的 Cookie、Session 等技術，但 SSO 的重點是把「驗證」這件事交給一個大家都信任的 IdP，
+讓應用程式專注在「授權」和「使用者體驗」上，而不是自己處理帳密驗證的細節。
 
-#### 1.3 A typical SSO flow
+> 因此如果本來就理解傳統的登入流程設計，在理解 SSO 的機制上會更快上手，因為基本的概念並沒有改變
 
-1. 使用者打開網站，網站發現自己沒有 session
-2. 網站把使用者導向 IdP 的登入頁
-3. 使用者在 IdP 完成驗證與同意
-4. IdP 把結果帶回應用程式
+**典型的 SSO 工作流程：**
+
+1. 使用者打開網站 (Client)，網站發現自己沒有該使用者的登入狀態
+2. 網站把使用者導向 IdP 的登入頁面
+3. 使用者在 IdP 完成驗證與同意，並且 IdP 建立自己的 session
+	-	IdP 的 session 在之後登入其他的 Client 時會被重用，此時就能直接省略第三步的驗證過程，直接進到第四步
+4. IdP 把結果帶回 Client，通常會帶一個 token 或 code
 5. 應用程式建立自己的 session，之後就不用再問 IdP 一次
+
+> 如果把它講得更直白一點，SSO 其實就是 **「把登入這件事外包給一個大家都信任的地方」**。後面的 OIDC 只是把這個外包流程標準化
 
 ---
 
 ### 2. JWT format
 
-JWT 是 OIDC 裡最容易被誤解的部分。它看起來像一串亂碼，但本質上只是三段式字串：header、payload、signature。JWT 本身不是「加密格式」，大多數情況下它只是可驗簽的 JSON 封裝；如果需要保密，才會進到 JWE 的領域。這裡的定義可對照 [RFC 7519][rfc7519]。{:.block-warning}
+> JWT 的前兩段只是 Base64url 編碼的 JSON 物件，真正重要的部分是簽章，因為它決定了這個 token 是不是可信的
+{:.block-tip}
+
+[JWT (JSON Web Token)] 是 OIDC 裡最容易被誤解的部分。它看起來像一串亂碼，但本質上只是三段式字串：header、payload、signature。
+JWT 本身不是「加密格式」，大多數情況下它只是可驗簽的 JSON 封裝；如果需要保密，才會進到 JWE 的領域。這裡的定義可對照 [RFC 7519]。
+
+[JWT (JSON Web Token)]: https://en.wikipedia.org/wiki/JSON_Web_Token
+[RFC 7519]: https://www.rfc-editor.org/rfc/rfc7519
 
 #### 2.1 JWT Structure
 
