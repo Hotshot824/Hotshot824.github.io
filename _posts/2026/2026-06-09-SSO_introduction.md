@@ -106,7 +106,7 @@ JWT 其實就跟傳統的 Cookie + Session 沒有本質上的差別；同樣是�
 {
 "iss":"https://idp.example.com",
 "sub":"248289761001",
-"aud":"Backend-id-123",
+"aud":"client-id-123",
 "exp":1910000000,
 "iat":1909996400
 }
@@ -153,8 +153,6 @@ JWT 其實就跟傳統的 Cookie + Session 沒有本質上的差別；同樣是�
 OIDC 是建立在 OAuth 2.0 上的 identity layer。OAuth 2.0 本來主要處理「授權」，也就是你能不能存取資源；OIDC 則是在這個流程上再補上「身份驗證」，
 讓 Backend 可以知道使用者到底是誰。OpenID Connect Core 直接把它定義成 OAuth 2.0 上的一層簡單 identity layer。
 
-#### 3.1 SSO 主流協定比較 (SAML vs OAuth 2.0 vs OIDC)
-
 #### 3.1 SSO Main Protocols Comparison
 
 雖然我們常在 SSO 的語境下提到這三者，但它們的設計初衷與應用場景有所不同：
@@ -192,11 +190,11 @@ OAuth 2.0 是一個**授權框架**，只關心 Backend 能不能獲取 IdP 的�
 
 [Authorization Code Flow]: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
 
-[Phase 1: Authorization Request (Front-channel)](./2026-06-09-SSO_Introduction.html#phase-1-authorization-request-front-channel)  
-[Phase 2: Authentication & Consent](./2026-06-09-SSO_Introduction.html#phase-2-authentication--consent)  
-[Phase 3: Authorization Response (Front-channel)](./2026-06-09-SSO_Introduction.html#phase-3-authorization-response-front-channel)  
-[Phase 4: Token Exchange (Back-channel)](./2026-06-09-SSO_Introduction.html#phase-4-token-exchange-back-channel)  
-[Phase 5: Session Establishment](./2026-06-09-SSO_Introduction.html#phase-5-session-establishment)  
+[Phase 1: Authorization Request (Front-channel)](#phase-1-authorization-request-front-channel)  
+[Phase 2: Authentication & Consent](#phase-2-authentication--consent)  
+[Phase 3: Authorization Response (Front-channel)](#phase-3-authorization-response-front-channel)  
+[Phase 4: Token Exchange (Back-channel)](#phase-4-token-exchange-back-channel)  
+[Phase 5: Session Establishment](#phase-5-session-establishment)  
 
 ```mermaid
 %%{init: {'themeVariables': { 'fontSize': '16px' }}}%%
@@ -213,7 +211,7 @@ sequenceDiagram
     User->>Frontend: Visit Client Frontend website
     Frontend->>Backend: Request protected resource (or click login)
     Backend->>Frontend: 302 Redirect to IdP
-    Note right of Backend: With Backend_id, scope=openid,<br/>redirect_uri, state, nonce
+    Note right of Backend: With client_id, scope=openid,<br/>redirect_uri, state, nonce
     Frontend->>IdP: GET /authorize?params...
     end
 
@@ -234,7 +232,7 @@ sequenceDiagram
 
     rect rgb(255, 240, 245)
     Note over Backend, IdP: Phase 4: Token Exchange (Back-channel)
-    Backend->>IdP: POST /token (Using code + Backend_secret)
+    Backend->>IdP: POST /token (Using code + client_secret)
     Note right of Backend: Secure back-channel communication
     IdP->>Backend: Return ID Token & Access Token
     end
@@ -256,11 +254,11 @@ sequenceDiagram
 通常在這個階段會看到一個類似下面的 HTTP 請求，這是 Backend 把 User 導向 IdP 的 `/authorize` 端點，並且帶上必要的參數：
 
 ```http
-GET /authorize?response_type=code&scope=openid%20email%20profile&Backend_id=Backend-id-123&redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&state=abc123&nonce=n-0S6_WzA2Mj HTTP/1.1
+GET /authorize?response_type=code&scope=openid%20email%20profile&client_id=client-id-123&redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&state=abc123&nonce=n-0S6_WzA2Mj HTTP/1.1
 Host: idp.example.com
 ```
 
-類似上面這段 Http 將使用者導向 IdP 的 `/authorize` 端點，並且帶上必要的參數，例如 `response_type=code`、`scope=openid`、`Backend_id`、`redirect_uri`、`state` 說明 Backend 的身份、回調 URL、以及防止 CSRF 的 state 和 nonce
+類似上面這段 Http 將使用者導向 IdP 的 `/authorize` 端點，並且帶上必要的參數，例如 `response_type=code`、`scope=openid`、`client_id`、`redirect_uri`、`state` 說明 Backend 的身份、回調 URL、以及防止 CSRF 的 state 和 nonce
 
 ##### Phase 2: Authentication & Consent
 
@@ -283,14 +281,14 @@ Backend 收到後必須立即比對 `state` 是否與發起請求時一致，以
 ##### Phase 4: Token Exchange (Back-channel)
 
 這是 OIDC 最安全的步驟之一。Backend 取得 `code` 後，會直接從後端（Back-channel）向 IdP 的 `/token` 端點發送 POST 請求，
-用授權碼換取真正的 Token。由於這是伺服器對伺服器的通訊，`Backend_secret` 可以安全地包含在請求中而不被瀏覽器看見。
+用授權碼換取真正的 Token。由於這是伺服器對伺服器的通訊，`client_secret` 可以安全地包含在請求中而不被瀏覽器看見。
 
 ```http
 POST /token HTTP/1.1
 Host: idp.example.com
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&Backend_id=Backend-id-123&Backend_secret=secret
+grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&client_id=client-id-123&client_secret=secret
 ```
 
 上面是一個 Client Backend 向 IdP 換取 Token 的範例請求，IdP 驗證這個請求無誤後會回傳 `id_token` (JWT) 與 `access_token`，
@@ -301,16 +299,24 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=https%3A%
 最後，Backend 會解析並驗證 `id_token` 的內容與簽章。確認使用者身份後，Backend 會在自己的系統中建立登入狀態（Session），
 通常是發送一個加密且具備 `HttpOnly` 屬性的 Cookie 給瀏覽器。至此，使用者成功登入並可以存取受保護資源。
 
-目前通常不會建議把 JWT 直接放在前端 Cookie 裡面，因為這樣會增加被竊取的風險；通常還是會存放在後端的 Session 裡面，
-前端只拿到一個 session cookie，這樣如果想要竊取 JWT 就必須同時攻擊到 Backend 的 session 管理，難度會大幅增加；
+目前通常不會建議把 JWT 直接放在前端 Non-HttpOnly Cookie 裡面，因為這樣會增加被竊取的風險，攻擊者可以直接使用 JWT 來冒充使用者。
+相對地，如果把 JWT 放在後端的 Session 裡面，前端只拿到一個 session cookie，這樣如果想要竊取 JWT 就必須同時攻擊到 Backend 的 session 管理，難度會大幅增加；
 
-> 如果直接把 JWT 放在前端，就算是 HttpOnly Cookie 也可能被竊取（例如 XSS 攻擊），因為 JWT 本身就是一個可被直接使用的 token，
-攻擊者可以直接使用 JWT 來冒充使用者
+> 但很多實作依然將 JWT 放在前端 Cookie 裡面，這部分涉及很多 Cookie 上的安全因素，最主要的因素還是 Session ID 相較於 JWT 來說殺傷力較小，有興趣的可以去另外查閱這部分的內容
 {:.block-warning}
 
-> 這部分涉及很多 Cookie 上的安全因素，最主要的因素還是 Session ID 相較於 JWT 來說殺傷力較小，有興趣的可以去另外查閱這部分的內容
+目前主流的最佳實務有以下兩種：
+1.  BFF (Backend For Frontend)：
+    -   把 JWT 放在 Backend 的 Session 裡面，前端只拿到一個 session cookie，這樣如果想要竊取 JWT 就必須同時攻擊到 Backend 的 session 管理，難度會大幅增加。
+2.  JWT in HttpOnly Cookie：
+    -   把 JWT 放在前端 Cookie 裡面，但一定要加上 `HttpOnly`, `Secure`, `SameSite` 等屬性，來防止 JWT 被 XSS 攻擊竊取。
+
+> [HttpOnly] 是一個 Cookie 屬性，表示這個 Cookie 只能被伺服器讀取，無法透過 Frontend 執行 JavaScript 來存取
+
+> [Secure] 是一個 Cookie 屬性，表示這個 Cookie 只能在 HTTPS 連線中傳送
 
 [HttpOnly]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#httponly
+[Secure]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#secure
 
 ---
 
@@ -349,7 +355,7 @@ grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA&redirect_uri=https%3A%
 > 後端在驗證 OIDC 流程中收到的 `id_token` 時，必須嚴格按照 OIDC 的規定來驗證內容，這些驗證不是裝飾，而是確保安全性的核心防線
 {:.block-tip}
 
-OIDC 規格要求 Backend 驗證 `iss` 必須和 discovery 回來的 issuer 一致，`aud` 必須包含自己的 Backend id，
+OIDC 規格要求 Backend 驗證 `iss` 必須和 discovery 回來的 issuer 一致，`aud` 必須包含自己的 client_id，
 `exp` 不能過期，`nonce` 也要對得上。這些不是裝飾，而是避免 token substitution、replay、和錯誤受眾使用的核心防線。
 
 最實際的做法是：

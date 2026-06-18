@@ -17,3 +17,7 @@ Gemfile.lock
 
 # Skills 
 .github/skills/
+
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
