@@ -1,0 +1,1725 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Note | Exception Handling Best Practices · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2026-07-08-MQTT_introduction.html" />
+        
+
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2026-09-03-Exception_Practices.html">
+                        
+                            <a href="/jekyll/2026-09-03-Exception_Practices.html" onclick="pageScrollToTop(this)">
+                                Note | Exception Handling Best Practices
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#1-overview" onclick="mobilePageScrollToAnchor(this)" >1. Overview</a></li><li><a href="#2-when-to-add-an-exception-message" onclick="mobilePageScrollToAnchor(this)" >2. When to Add an Exception Message</a></li><li><a href="#3-when-to-write-try-catch" onclick="mobilePageScrollToAnchor(this)" >3. When to Write try-catch</a></li><li><a href="#4-real-examples" onclick="mobilePageScrollToAnchor(this)" >4. Real Examples</a></li><li><a href="#5-conclusion" onclick="mobilePageScrollToAnchor(this)" >5. Conclusion</a></li><li><a href="#references" onclick="mobilePageScrollToAnchor(this)" >References</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-07-08-MQTT_introduction.html">
+                        
+                            <a href="/jekyll/2026-07-08-MQTT_introduction.html" onclick="pageScrollToTop(this)">
+                                IoT | MQTT Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-06-11-nextauth.html">
+                        
+                            <a href="/jekyll/2026-06-11-nextauth.html" onclick="pageScrollToTop(this)">
+                                Note | NextAuth &amp; OIDC Practical Example
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-06-09-SSO_introduction.html">
+                        
+                            <a href="/jekyll/2026-06-09-SSO_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | SSO Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-03-31-database_scale_out.html">
+                        
+                            <a href="/jekyll/2026-03-31-database_scale_out.html" onclick="pageScrollToTop(this)">
+                                Backend | Database Scale Out
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Note | Exception Handling Best Practices</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">September 03, 2026 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/Exception_Practices">Note | Exception Handling Best Practices</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>在設計例外處理機制時，我們應該將其劃分為兩個獨立的維度：<strong>Exception Message</strong>（拋出時附加的 context）與 <strong>try-catch</strong>（攔截異常的 interception point）。
+一個好的 Exception Message 告訴你 <em>what</em> failed；而一個好的 catch 則告訴你 <em>why</em> you’re allowed to handle it。</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>這篇文章主要探討何時應該為例外加入訊息，以及何時與何地應該撰寫 try-catch 區塊。文章內容會使用 Java 程式碼作為範例，
+但核心概念在大多數語言中都是通用的。</p>
+</blockquote>
+
+<h3 id="1-overview">1. Overview</h3>
+
+<blockquote class="block-tip">
+  <p>這兩個維度在設計上是正交（orthogonal）的：Message（at throw time）× Catch（at handle time）。拋出例外的當下與處理例外的階段應該分開思考。</p>
+</blockquote>
+
+<p>在實際開發中，我們常常看到將這兩者混為一談的糟糕設計。</p>
+
+<blockquote class="block-danger">
+  <p>最常見的錯誤就是隨意拋出 <code class="language-plaintext highlighter-rouge">throw new Exception("error")</code>，然後在不知情的外層盲目地 <code class="language-plaintext highlighter-rouge">catch (Exception e)</code>。這樣不僅讓系統丟失了真正的錯誤細節，還可能掩蓋了致命的問題。</p>
+</blockquote>
+
+<p>為了更好地理解，我們可以根據系統的內部邏輯（Internal）與邊界（Boundary），來判斷是否需要附加訊息與是否需要捕捉。簡單一句話：你需要根據當下所處的位置來決定例外的處理策略。以下是一個 2×2 的預覽表格：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Scope</th>
+      <th style="text-align: left">Needs Message?</th>
+      <th style="text-align: left">Needs Catch?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Internal</strong></td>
+      <td style="text-align: left"><strong>Sometimes.</strong> 取決於 Exception Type 的命名是否已經足夠明確。</td>
+      <td style="text-align: left"><strong>No.</strong> 除非你能就地修復它，否則應該讓它往上拋。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Boundary</strong></td>
+      <td style="text-align: left"><strong>Yes.</strong> 必須包含足夠的 context 讓呼叫端能理解並回應。</td>
+      <td style="text-align: left"><strong>Yes.</strong> 必須捕捉所有例外，並轉換為標準的回應格式。</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="2-when-to-add-an-exception-message">2. When to Add an Exception Message</h3>
+
+<blockquote class="block-tip">
+  <p><strong>核心原則</strong>：Exception Message 的目標不是「記錄錯誤」，而是「提供上下文」。好的 Message 應該要讓維護者在看到 Log 的當下，就能準確判斷發生了什麼，而不需要重新執行或 Debug。</p>
+</blockquote>
+
+<h4 id="21-什麼是好的-message--3w-原則">2.1 什麼是好的 Message — 3W 原則</h4>
+
+<p>要寫出有意義的 Message，建議遵循 3W 原則：</p>
+
+<ul>
+  <li><strong>What</strong>: 發生了什麼具體錯誤？</li>
+  <li><strong>Where</strong>: 發生在哪個特定的 Context 下？</li>
+  <li><strong>Why</strong>: 為什麼這會導致問題？（如果不是顯而易見的話）</li>
+  <li><strong>Actionable info</strong>: 提供導致錯誤的 Offending value 或關鍵參數。</li>
+</ul>
+
+<p>讓我們比較一下兩者的差異：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Bad: too vague, tells us nothing</span>
+<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Invalid ID"</span><span class="o">);</span>
+
+<span class="c1">// Good: includes What (ID format error), Where (User update),</span>
+<span class="c1">//       Why (too short) and Offending Value</span>
+<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span>
+    <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Failed to update user: ID '%s' is too short. Expected at least 8 chars."</span><span class="o">,</span> <span class="n">userId</span><span class="o">)</span>
+<span class="o">);</span>
+</code></pre></div></div>
+
+<p>簡單來說，當你寫 Message 時，試著想像你是在給「未來的自己」留言。如果他在深夜收到這條 Error Log，他會感謝你提供了這些關鍵資訊，而不是罵你為什麼只留下一句 meaningless 的廢話。</p>
+
+<h4 id="22-應該加-message-的情境">2.2 應該加 Message 的情境</h4>
+
+<p>並非所有 Exception 都需要冗長的解釋，但在以下場景中，Message 是不可或缺的：</p>
+
+<ul>
+  <li><strong>Boundary crossing (Public API / Library)</strong>: 給外部使用者看的錯誤，必須解釋為什麼他們的請求被拒絕。</li>
+  <li><strong>Async / Logging scenarios</strong>: 當 Exception 會被丟到外部系統（如 ELK, Sentry）時，因為你無法直接 Debug 記憶體，Message 就是唯一的診斷資料。</li>
+  <li><strong>Validation failures</strong>: 必須明確指出導致驗證失敗的那個值。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Boundary crossing: clear error message for API callers</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">input</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span>
+        <span class="s">"Request payload cannot be null at OrderService.createOrder()"</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// Async scenario: no immediate Stack trace available, must carry its own context</span>
+<span class="nc">CompletableFuture</span><span class="o">.</span><span class="na">runAsync</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">dbConnection</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span>
+            <span class="s">"Database connection lost during background batch processing"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="c1">// Validation failure: include the offending value</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">email</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">email</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"@"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nf">ValidationException</span><span class="o">(</span>
+        <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Invalid email format: '%s' does not contain '@'"</span><span class="o">,</span> <span class="n">email</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="23-不需要冗長-message-的情境">2.3 不需要冗長 Message 的情境</h4>
+
+<p>有時候，Less is more。在某些情況下，過度描述反而是一種負擔：</p>
+
+<ul>
+  <li><strong>Internal private helpers</strong>: 這些方法的作用域很小，直接丟出 Exception 通常就夠了。</li>
+  <li><strong>Well-named Custom Exception Types</strong>: 如果你的 Exception 名稱已經是 <code class="language-plaintext highlighter-rouge">UserAlreadyExistsException</code>，那麼 Message 寫 “User already exists” 就只是重複資訊。</li>
+  <li><strong>Performance-sensitive Hot Paths</strong>: 頻繁觸發 Exception 時，String concatenation 的效能開銷不容小覷。</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p><strong>注意權衡</strong>：在極度要求效能的 Hot Paths 中，如果 Exception 經常被作為控制流程（Control flow）的一部分，建議使用 <code class="language-plaintext highlighter-rouge">static final</code> 的字串作為 Message，以避免重複的字串建立開銷。但這不代表可以完全省略有意義的 Message。</p>
+</blockquote>
+
+<h4 id="24-anti-patterns">2.4 Anti-patterns</h4>
+
+<p>有些寫法不但沒幫上忙，反而是在干擾除錯：</p>
+
+<ul>
+  <li><strong>模糊語意</strong>: 像是 “Error occurred” 或 “Something went wrong”，這等於什麼都沒說。</li>
+  <li><strong>洩漏敏感資訊</strong>: 錯誤訊息中帶有 SQL 查詢字串、密碼或用戶機敏資料（PII）。</li>
+  <li><strong>重複 Stack Trace</strong>: 把錯誤的路徑寫進 Message 裡，這完全是多此一舉，因為 Log 系統已經記錄了 Stack Trace。</li>
+</ul>
+
+<blockquote class="block-danger">
+  <p><strong>千萬別這樣做</strong>：不要在訊息中包含環境敏感資訊，或寫下毫無意義的廢話。</p>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Bad: leaking internals and meaningless info</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span>
+        <span class="s">"Something went wrong at com.myapp.internal.UserDAO.findById(): "</span>
+        <span class="o">+</span> <span class="s">"SELECT * FROM users WHERE password = '"</span> <span class="o">+</span> <span class="n">password</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>這樣的寫法除了讓 Log 變得更亂，還洩漏了資料庫查詢與密碼，對於解決問題完全沒有幫助。</p>
+
+<hr />
+
+<h3 id="3-when-to-write-try-catch">3. When to Write try-catch</h3>
+
+<blockquote class="block-tip">
+  <p>簡單一句話：<strong>只攔截你能處理的例外，並且要在正確的系統分層去攔截</strong>。如果當下的方法無法修復這個錯誤，那就應該讓它繼續往上拋。</p>
+</blockquote>
+
+<h4 id="31-只攔截你能處理的">3.1 只攔截你能處理的</h4>
+
+<p>在撰寫 <code class="language-plaintext highlighter-rouge">try-catch</code> 時，最常見的壞習慣就是為了編譯通過而隨便接住所有東西。我們應該優先攔截特定型別的 Exception，而不是一網打盡。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Good: Catch specific exceptions</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">processPayment</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">PaymentNetworkException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Retry or fallback</span>
+    <span class="n">handleNetworkFailure</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InsufficientFundsException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Alert the user</span>
+    <span class="n">notifyUserInsufficientFunds</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// Bad: Catch generic Exception</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">processPayment</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// We don't know what actually went wrong!</span>
+    <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Something went wrong"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>於是聰明的你立刻想到了，如果直接 <code class="language-plaintext highlighter-rouge">catch (Exception e)</code>，我們根本無法判斷這個錯誤是網路斷線、餘額不足還是記憶體爆掉 <code class="language-plaintext highlighter-rouge">OutOfMemoryError</code>。這會讓後續的錯誤恢復機制變得不可能。</p>
+
+<blockquote class="block-danger">
+  <p>絕對不要 <code class="language-plaintext highlighter-rouge">catch (Exception)</code>，除非你正處於系統的最高層級（例如 API 的 Global Exception Handler），那才是真正適合把所有漏網之魚全部轉換成 HTTP 500 的地方。</p>
+</blockquote>
+
+<h4 id="32-在哪裡攔截--分層邊界原則">3.2 在哪裡攔截 — 分層邊界原則</h4>
+
+<p>在現代軟體架構中，我們會將系統分層。每一層對於例外的處理職責完全不同：</p>
+
+<pre><code class="language-mermaid">%%{init: {'themeVariables': { 'fontSize': '16px' }}}%%
+
+graph TD
+    Infra["Infrastructure / Adapter&lt;br/&gt;(DB / HTTP Client)"]
+    Domain["Domain Layer&lt;br/&gt;(Business Logic)"]
+    App["Application Boundary&lt;br/&gt;(Controller / Global Handler)"]
+    User((User))
+
+    Infra --&gt;|"1. Map external errors&lt;br/&gt;to Domain errors"| Domain
+    Domain --&gt;|"2. Propagate upward"| App
+    App --&gt;|"3. Translate to&lt;br/&gt;HTTP Response &amp; Log"| User
+</code></pre>
+
+<ul>
+  <li><strong>Domain Layer</strong>：這裡只負責核心商業邏輯，通常直接 Propagate upward。遇到問題直接拋出自定義的商業例外，不需要寫一堆 <code class="language-plaintext highlighter-rouge">try-catch</code>。</li>
+  <li><strong>Infrastructure/Adapter Boundary</strong>：這裡負責跟外部系統（資料庫、第三方 API）溝通。遇到例如 <code class="language-plaintext highlighter-rouge">SQLException</code> 應該要在這裡攔截，並轉換成 Domain Layer 看得懂的例外，例如 <code class="language-plaintext highlighter-rouge">UserNotFoundException</code>。</li>
+  <li><strong>Application Boundary</strong>：系統的最外層（像是 Spring 的 <code class="language-plaintext highlighter-rouge">@ControllerAdvice</code>）。負責統一攔截所有未處理的例外，記錄錯誤日誌（Log），並轉譯成友善的對外回應（如 HTTP Status Code）。</li>
+</ul>
+
+<h4 id="33-攔截後的三種命運">3.3 攔截後的三種命運</h4>
+
+<p>當你真的寫下 <code class="language-plaintext highlighter-rouge">catch</code> 區塊時，這個例外只有三種合法的命運：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleExceptionFates</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// 1. Propagate: Rethrow as-is</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">doSomethingRisky</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SpecificException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 2. Translate: Wrap with context</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">readConfigFile</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Wrap the original exception to preserve stack trace</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConfigurationLoadException</span><span class="o">(</span><span class="s">"Failed to load app.yml"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 3. Swallow: Ignore safely</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">closeResource</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Ignored intentionally: resource is already closing</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Resource close failed, safe to ignore"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Propagate</strong>（向上拋出）：當前方法無法處理，直接原封不動往上丟。</li>
+  <li><strong>Translate</strong>（轉譯並包裝）：遇到低階的技術例外，轉譯成帶有商業語境的高階例外。記得要把原本的 Exception 當作 <code class="language-plaintext highlighter-rouge">cause</code> 傳進去，以免遺失 Stack Trace。</li>
+  <li><strong>Swallow</strong>（吞噬）：直接把錯誤吃掉，當作沒發生過。</li>
+</ul>
+
+<blockquote class="block-warning">
+  <p>Swallow（吞噬例外）是非常危險的操作！只有在「你百分之百確定這個錯誤不影響系統運行，且不需要任何恢復動作」時（例如關閉資源時的例外），才可以把它吞掉。即便如此，也建議至少保留一行 <code class="language-plaintext highlighter-rouge">log.debug</code>。</p>
+</blockquote>
+
+<h4 id="34-anti-patterns">3.4 Anti-patterns</h4>
+
+<p>很多時候我們會不自覺寫出有問題的例外處理，以下是幾種絕對要避免的 Anti-patterns：</p>
+
+<ul>
+  <li><strong>Empty catch block</strong>：什麼都不做，連 Log 都沒有，這會讓錯誤完全消失在異次元。</li>
+  <li><strong>Log-and-rethrow</strong>：先印出 Log 然後又把例外丟出去，這會導致上層再印一次，造成日誌污染（Duplicate logs）。</li>
+  <li><strong>Swallowing at the wrong layer</strong>：在底層偷偷把例外吞掉，讓上層以為一切正常，最後引發難以追蹤的 Bug。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">badPractices</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="c1">// Anti-pattern 1: Empty catch block</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="nc">Files</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="nc">Path</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">"data.txt"</span><span class="o">));</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Nothing here... the error vanishes into thin air</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Anti-pattern 2: Log-and-rethrow</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">connectToDatabase</span><span class="o">();</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// This causes duplicate logs when the caller also logs it</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Database connection failed"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// Anti-pattern 3: Swallowing at the wrong layer</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">validateUser</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">ValidationException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Swallowed! The caller thinks validation passed!</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"Validation failed"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote class="block-danger">
+  <p>上述的壞習慣會讓系統變得極難除錯。尤其 Log-and-rethrow 是最常見的錯誤，請記住：你要麼處理並記錄它，要麼拋出它，絕對不要兩者都做！</p>
+</blockquote>
+
+<hr />
+
+<h3 id="4-real-examples">4. Real Examples</h3>
+
+<blockquote class="block-tip">
+  <p>讓我們用一個完整的例子來串連前面所有的概念：一個訂單服務在處理付款時可能遇到的各種例外。</p>
+</blockquote>
+
+<h4 id="bad-example">Bad Example</h4>
+
+<p>以下是一個典型的「什麼都做錯了」的範例：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BadOrderService</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processOrder</span><span class="o">(</span><span class="nc">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">findOrder</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+            <span class="n">chargePayment</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+            <span class="n">sendConfirmation</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Anti-pattern: catch-all at the wrong layer</span>
+            <span class="c1">// Anti-pattern: log-and-rethrow</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Error"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Something went wrong"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Order</span> <span class="nf">findOrder</span><span class="o">(</span><span class="nc">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">orderRepository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Anti-pattern: swallowing at the wrong layer</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">chargePayment</span><span class="o">(</span><span class="nc">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">order</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Anti-pattern: meaningless message</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"error"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">paymentGateway</span><span class="o">.</span><span class="na">charge</span><span class="o">(</span><span class="n">order</span><span class="o">.</span><span class="na">getAmount</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>這段程式碼有多處問題：<code class="language-plaintext highlighter-rouge">findOrder</code> 在 Infrastructure 層吞掉了 <code class="language-plaintext highlighter-rouge">SQLException</code> 導致上層收到 <code class="language-plaintext highlighter-rouge">null</code>，<code class="language-plaintext highlighter-rouge">chargePayment</code> 的 Message 完全沒有意義，最外層用 <code class="language-plaintext highlighter-rouge">catch (Exception)</code> 一網打盡卻只留下 “Something went wrong”。</p>
+
+<h4 id="good-example">Good Example</h4>
+
+<p>接下來看看正確的寫法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderService</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processOrder</span><span class="o">(</span><span class="nc">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Application Boundary: catch specific exceptions, translate to response</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="n">findOrder</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+            <span class="n">chargePayment</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+            <span class="n">sendConfirmation</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">OrderNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Translate: convert to user-facing response</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ApiException</span><span class="o">(</span><span class="nc">HttpStatus</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">PaymentFailedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ApiException</span><span class="o">(</span><span class="nc">HttpStatus</span><span class="o">.</span><span class="na">PAYMENT_REQUIRED</span><span class="o">,</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nc">Order</span> <span class="nf">findOrder</span><span class="o">(</span><span class="nc">String</span> <span class="n">orderId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Infrastructure Boundary: map external error to domain error</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">orderRepository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">orderId</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">SQLException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">OrderNotFoundException</span><span class="o">(</span>
+                <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Order '%s' not found or database unavailable"</span><span class="o">,</span> <span class="n">orderId</span><span class="o">),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">chargePayment</span><span class="o">(</span><span class="nc">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Domain Layer: validate and throw with context</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">order</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span>
+                <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Cannot charge non-positive amount %d for order '%s'"</span><span class="o">,</span>
+                    <span class="n">order</span><span class="o">.</span><span class="na">getAmount</span><span class="o">(),</span> <span class="n">order</span><span class="o">.</span><span class="na">getId</span><span class="o">()));</span>
+        <span class="o">}</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">paymentGateway</span><span class="o">.</span><span class="na">charge</span><span class="o">(</span><span class="n">order</span><span class="o">.</span><span class="na">getAmount</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">PaymentGatewayException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">PaymentFailedException</span><span class="o">(</span>
+                <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"Payment of %d failed for order '%s': %s"</span><span class="o">,</span>
+                    <span class="n">order</span><span class="o">.</span><span class="na">getAmount</span><span class="o">(),</span> <span class="n">order</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">()),</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>對比一下兩者的差異：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">面向</th>
+      <th style="text-align: left">Bad Example</th>
+      <th style="text-align: left">Good Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Message</strong></td>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">"error"</code>, <code class="language-plaintext highlighter-rouge">"Something went wrong"</code></td>
+      <td style="text-align: left">包含 3W：orderId, amount, 具體失敗原因</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Catch 層級</strong></td>
+      <td style="text-align: left">最外層 catch-all</td>
+      <td style="text-align: left">每層各司其職，Infrastructure 轉譯，Application 回應</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Exception Type</strong></td>
+      <td style="text-align: left">全部用 <code class="language-plaintext highlighter-rouge">RuntimeException</code></td>
+      <td style="text-align: left">自定義 <code class="language-plaintext highlighter-rouge">OrderNotFoundException</code>, <code class="language-plaintext highlighter-rouge">PaymentFailedException</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Stack Trace</strong></td>
+      <td style="text-align: left">被 <code class="language-plaintext highlighter-rouge">new RuntimeException</code> 切斷</td>
+      <td style="text-align: left">透過 <code class="language-plaintext highlighter-rouge">cause</code> 參數完整保留</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h3 id="5-conclusion">5. Conclusion</h3>
+
+<blockquote class="block-tip">
+  <p>Exception Handling 不是「讓程式不要 crash」的防禦機制，而是「讓系統在出錯時仍然可觀察、可診斷、可恢復」的設計策略。</p>
+</blockquote>
+
+<p>這裡我們做一下總結：</p>
+
+<ol>
+  <li><strong>Exception Message 的原則</strong>：
+    <ul>
+      <li>遵循 3W 原則：What（發生什麼）、Where（在哪裡）、Why（為什麼）</li>
+      <li>在 Boundary crossing、Async 場景、Validation 失敗時必須加上有意義的 Message</li>
+      <li>如果 Exception Type 名稱已經足夠明確，就不需要重複的 Message</li>
+      <li>永遠不要寫 “Error occurred” 這種廢話，也不要洩漏敏感資訊</li>
+    </ul>
+  </li>
+  <li><strong>try-catch 的原則</strong>：
+    <ul>
+      <li>只攔截你能處理的特定型別，不要 <code class="language-plaintext highlighter-rouge">catch (Exception)</code></li>
+      <li>在正確的分層攔截：Infrastructure 轉譯、Domain 傳播、Application 回應</li>
+      <li>攔截後只有三種合法命運：Propagate、Translate、Swallow</li>
+      <li>避免 Empty catch、Log-and-rethrow、在錯誤層級吞噬例外</li>
+    </ul>
+  </li>
+  <li><strong>兩者的關係</strong>：
+    <ul>
+      <li>Message 和 Catch 是正交的兩個維度，應該獨立思考</li>
+      <li>Message 決定「拋出時帶什麼資訊」，Catch 決定「在哪裡以什麼方式處理」</li>
+      <li>好的設計是：在拋出點提供充分的上下文，在正確的邊界做適當的處理</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>後續可以延伸研究的方向：</p>
+  <ul>
+    <li><strong>Custom Exception Hierarchy</strong>：如何為你的專案設計一個合理的例外層級結構</li>
+    <li><strong>Global Exception Handler</strong>：在 Spring Boot 中如何使用 <code class="language-plaintext highlighter-rouge">@ControllerAdvice</code> 統一處理例外</li>
+    <li><strong>Checked vs Unchecked Exceptions</strong>：Java 中兩種例外的設計哲學與取捨</li>
+  </ul>
+</blockquote>
+
+<h3 id="references">References</h3>
+
+<p><a href="https://www.oracle.com/java/technologies/effective-java-3e.html">Effective Java - Chapter 10: Exceptions</a></p>
+
+<p><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/">Oracle Java Tutorials - Exceptions</a></p>
+
+<p><a href="https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc">Spring Error Handling</a></p>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>07-09-2026 23:30</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                software,
+                
+                exception,
+                
+                best practices
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = 'https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js';
+    }
+</script>
+
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Home">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2026-07-08-MQTT_introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page: ">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2026/2026-09-03-Exception_Practices.md",
+        "mtime": "2026-09-03 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-09-07 15:39:29 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

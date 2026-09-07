@@ -1,0 +1,1746 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>Note | SSO Introduction · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2026-03-31-database_scale_out.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2026-06-11-nextauth.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-09-03-Exception_Practices.html">
+                        
+                            <a href="/jekyll/2026-09-03-Exception_Practices.html" onclick="pageScrollToTop(this)">
+                                Note | Exception Handling Best Practices
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-07-08-MQTT_introduction.html">
+                        
+                            <a href="/jekyll/2026-07-08-MQTT_introduction.html" onclick="pageScrollToTop(this)">
+                                IoT | MQTT Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-06-11-nextauth.html">
+                        
+                            <a href="/jekyll/2026-06-11-nextauth.html" onclick="pageScrollToTop(this)">
+                                Note | NextAuth &amp; OIDC Practical Example
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2026-06-09-SSO_introduction.html">
+                        
+                            <a href="/jekyll/2026-06-09-SSO_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | SSO Introduction
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#1-sso-introduction" onclick="mobilePageScrollToAnchor(this)" >1. SSO Introduction</a></li><li><a href="#2-jwt-format" onclick="mobilePageScrollToAnchor(this)" >2. JWT format</a></li><li><a href="#3-oidc" onclick="mobilePageScrollToAnchor(this)" >3. OIDC</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-03-31-database_scale_out.html">
+                        
+                            <a href="/jekyll/2026-03-31-database_scale_out.html" onclick="pageScrollToTop(this)">
+                                Backend | Database Scale Out
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >Note | SSO Introduction</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">June 09, 2026 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/SSO_introduction">Note | SSO Introduction</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>這篇文章會從 SSO（Single Sign-On，單一登入）的基本概念開始介紹，接著說明 JWT 的結構，然後進入 OIDC（OpenID Connect）</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <p>本文的目標是依照協定堆疊（Protocol Stack）的層次，由上而下逐步說明，讓讀者能夠清楚理解各個技術之間的關係，逐步了解概念到實作的過程</p>
+</blockquote>
+
+<h3 id="1-sso-introduction">1. SSO Introduction</h3>
+
+<blockquote class="block-tip">
+  <p>SSO 的重點是把登入集中到同一個 IdP (Identity Provider)，讓多個應用共用同一組驗證結果，而不是讓每個系統自己各做一套登入流程</p>
+</blockquote>
+
+<p><a href="https://en.wikipedia.org/wiki/Single_sign-on">Single Sign-On (SSO)</a> 的核心不是 <strong>「一次登入就永遠不用登入」</strong>，而是 <strong>「讓多個系統共用同一個身分提供者（Identity Provider, IdP）與同一組登入結果」</strong>。
+對使用者來說，這表示少輸入一次密碼；對系統來說，這表示各服務不必各自處理帳密驗證、找回密碼、風險控管與登入狀態同步。</p>
+
+<p>因此 SSO 的主要解決的問題是：</p>
+<ul>
+  <li>使用者在多個產品間切換時，不需要重複登入</li>
+  <li>每個應用程式不必自己保存密碼驗證邏輯</li>
+  <li>登入政策可以集中在 IdP 上做，例如 MFA、裝置信任、封鎖風險帳號</li>
+</ul>
+
+<p><strong>在這個流程裡面，主要的角色與概念如下：</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Role</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">IdP (Identity Provider)</td>
+      <td>負責驗證使用者身份的服務，例如 Google、Microsoft Entra ID、Auth0、Keycloak 等。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">RP (Relying Party) / Backend</td>
+      <td>想要使用 IdP 提供的登入結果的應用程式，例如你的網站或應用。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Session</td>
+      <td>IdP 或應用程式內部保存的登入狀態，用來記錄使用者是否已經登入，以及相關的資訊。</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">User</td>
+      <td>最終使用者，透過 IdP 進行身份驗證，並希望在多個應用程式間無縫切換。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>實際上依然會使用到傳統的 Cookie、Session 等技術，但 SSO 的重點是把「驗證」這件事交給一個大家都信任的 IdP，
+讓應用程式專注在「授權」和「使用者體驗」上，而不是自己處理帳密驗證的細節。</p>
+
+<blockquote>
+  <p>因此如果本來就理解傳統的登入流程設計，在理解 SSO 的機制上會更快上手，因為基本的概念並沒有改變</p>
+</blockquote>
+
+<p><strong>典型的 SSO 工作流程：</strong></p>
+
+<ol>
+  <li>使用者打開網站 (Backend)，網站發現自己沒有該使用者的登入狀態</li>
+  <li>網站把使用者導向 IdP 的登入頁面</li>
+  <li>使用者在 IdP 完成驗證與同意，並且 IdP 建立自己的 session
+    <ul>
+      <li>IdP 的 session 在之後登入其他的 Backend 時會被重用，此時就能直接省略第三步的驗證過程，直接進到第四步</li>
+    </ul>
+  </li>
+  <li>IdP 把結果帶回 Backend，通常會帶一個 token 或 code</li>
+  <li>應用程式建立自己的 session，之後就不用再問 IdP 一次</li>
+</ol>
+
+<blockquote>
+  <p>如果把它講得更直白一點，SSO 其實就是 <strong>「把登入這件事外包給一個大家都信任的地方」</strong>。後面的 OIDC 只是把這個外包流程標準化</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-jwt-format">2. JWT format</h3>
+
+<blockquote class="block-tip">
+  <p>JWT 真正重要的部分是簽章，因為它決定了這個 token 是不是可信的</p>
+</blockquote>
+
+<p><a href="https://en.wikipedia.org/wiki/JSON_Web_Token">JWT (JSON Web Token)</a> 是 OIDC 裡最容易被誤解的部分。它看起來像一串亂碼，但本質上只是三段式字串：header、payload、signature。
+JWT 本身不是「加密格式」，大多數情況下它只是可驗簽的 JSON 封裝；如果需要保密，才會進到 JWE 的領域。這裡的定義可對照 <a href="https://www.rfc-editor.org/rfc/rfc7519">RFC 7519</a>。</p>
+
+<h4 id="21-jwt-structure">2.1 JWT Structure</h4>
+
+<blockquote class="block-tip">
+  <p>實際上 JWT 就只是兩個 JSON 物件（header 和 payload）加上一個簽章的一個結構，然後用 Base64url 編碼起來，最後用點號 . 串在一起，
+這樣就能以 Text 的形式在 HTTP header 或 URL 裡面傳遞</p>
+</blockquote>
+
+<p>JWT 其實就跟傳統的 Cookie + Session 沒有本質上的差別；同樣是存放在 Frontend Cookie 裡面。
+所以如果 JWT 被人完整取走，同樣可以被用來冒充使用者；但如果 JWT 沒有被竊取，
+幾乎是無法被偽造的，因為簽章是用 IdP 的私鑰簽的，沒有私鑰就無法產生有效的簽章。</p>
+
+<p><strong>header.payload.signature</strong></p>
+
+<p>實際上每一段都是 Base64url 編碼後的內容：</p>
+
+<ul>
+  <li>header：
+    <ul>
+      <li>描述簽章演算法，例如 <code class="language-plaintext highlighter-rouge">RS256</code>，這樣就知道要用什麼算法來驗證簽章</li>
+      <li>通常還會有 <code class="language-plaintext highlighter-rouge">typ</code>，表示這是一個 JWT</li>
+    </ul>
+  </li>
+  <li>payload：
+    <ul>
+      <li>放 claims，例如 <code class="language-plaintext highlighter-rouge">iss</code>、<code class="language-plaintext highlighter-rouge">sub</code>、<code class="language-plaintext highlighter-rouge">aud</code>、<code class="language-plaintext highlighter-rouge">exp</code></li>
+      <li>這些內容完全是由 IdP 去定義需要有哪些欄位，Backend 只能選擇相信或不相信裡面的資料
+        <ul>
+          <li>主要有幾個標準欄位是 RFC 定義的，稱為 <a href="https://www.rfc-editor.org/rfc/rfc7519#section-4.1">Registered Claim</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>signature：用來驗證內容沒有被改過
+    <ul>
+      <li>將前兩段（header 和 payload）用點號串起來，然後用 IdP 的私鑰簽章，產生 signature</li>
+      <li>Backend 拿到 JWT 後，可以用 IdP 的公開金鑰來驗證簽章，確保內容沒有被竄改過</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>header</strong></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</span><span class="nl">"alg"</span><span class="p">:</span><span class="s2">"RS256"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"typ"</span><span class="p">:</span><span class="s2">"JWT"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+<p><strong>payload</strong></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</span><span class="nl">"iss"</span><span class="p">:</span><span class="s2">"https://idp.example.com"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"sub"</span><span class="p">:</span><span class="s2">"248289761001"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"aud"</span><span class="p">:</span><span class="s2">"client-id-123"</span><span class="p">,</span><span class="w">
+</span><span class="nl">"exp"</span><span class="p">:</span><span class="mi">1910000000</span><span class="p">,</span><span class="w">
+</span><span class="nl">"iat"</span><span class="p">:</span><span class="mi">1909996400</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>前面兩個做完 Base64url 後，再加上簽章，就會變成一串像這樣的 JWT 放到 Frontend Cookie 或 HTTP header 裡面：</p>
+
+<p><code class="language-plaintext highlighter-rouge">eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2lkcC5leGFtcGxlLmNvbSIsInN1YiI6IjI0ODI4OTc2MTAwMSIsImF1ZCI6ImNsaWVudC1pZC0xMjMiLCJleHAiOjE5MTAwMDAwMDAsImlhdCI6MTkwOTk5NjQwMH0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV</code></p>
+
+<h4 id="22-common-claims">2.2 Common Claims</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">iss</code>：這顆 token 是誰發的</li>
+  <li><code class="language-plaintext highlighter-rouge">sub</code>：這顆 token 指向哪個使用者</li>
+  <li><code class="language-plaintext highlighter-rouge">aud</code>：這顆 token 是發給誰看的</li>
+  <li><code class="language-plaintext highlighter-rouge">exp</code>：過期時間</li>
+  <li><code class="language-plaintext highlighter-rouge">iat</code>：簽發時間</li>
+  <li><code class="language-plaintext highlighter-rouge">nonce</code>：把登入請求和回應綁在一起，避免 replay</li>
+</ul>
+
+<p>其中最重要的是 <code class="language-plaintext highlighter-rouge">iss + sub</code> 的組合。<code class="language-plaintext highlighter-rouge">iss</code> 先把識別範圍限定在同一個 issuer，<code class="language-plaintext highlighter-rouge">sub</code> 再當作這個 issuer 底下穩定的使用者識別子；<code class="language-plaintext highlighter-rouge">email</code>、<code class="language-plaintext highlighter-rouge">name</code>、<code class="language-plaintext highlighter-rouge">preferred_username</code> 都不適合直接當主鍵。這個判斷可直接對照 <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core</a> 的 ID Token 與 subject 定義。</p>
+
+<h4 id="23-what-to-check-when-verifying-jwts">2.3 What to Check When Verifying JWTs</h4>
+
+<blockquote class="block-tip">
+  <p>驗證 JWT 的重點不是「讀一讀裡面的資料」，而是「驗簽章確定這個 token 是可信的」，
+然後再去檢查 <code class="language-plaintext highlighter-rouge">iss</code>、<code class="language-plaintext highlighter-rouge">aud</code>、<code class="language-plaintext highlighter-rouge">exp</code>、<code class="language-plaintext highlighter-rouge">nonce</code> 等欄位來確保這個 token 是合法的、沒有過期的、而且是給自己的</p>
+</blockquote>
+
+<p><strong>以下是一個實際驗證 JWT 的流程：</strong></p>
+<ol>
+  <li>先驗簽章，確認內容真的是該 IdP 發的</li>
+  <li>再驗 <code class="language-plaintext highlighter-rouge">iss</code>、<code class="language-plaintext highlighter-rouge">aud</code>、<code class="language-plaintext highlighter-rouge">exp</code></li>
+  <li>如果流程有 <code class="language-plaintext highlighter-rouge">nonce</code>，也要比對 <code class="language-plaintext highlighter-rouge">nonce</code></li>
+  <li>不要只要拿到 payload 就直接相信裡面的資料</li>
+</ol>
+
+<blockquote>
+  <p>JWT 是整個 SSO 流程中最關鍵的部分，因為它決定了這個 token 是不是可信的；如果 JWT 被竊取了，攻擊者就可以冒充使用者；如果 JWT 沒有被竊取，但驗簽章有一定的難度，那麼就幾乎不可能被偽造</p>
+</blockquote>
+
+<hr />
+
+<h3 id="3-oidc">3. OIDC</h3>
+
+<blockquote class="block-tip">
+  <p>OIDC 是把 OAuth 2.0 的授權流程補上身分，讓系統不只知道「有沒有權限」，也知道「現在登入的人是誰」。</p>
+</blockquote>
+
+<p>OIDC 是建立在 OAuth 2.0 上的 identity layer。OAuth 2.0 本來主要處理「授權」，也就是你能不能存取資源；OIDC 則是在這個流程上再補上「身份驗證」，
+讓 Backend 可以知道使用者到底是誰。OpenID Connect Core 直接把它定義成 OAuth 2.0 上的一層簡單 identity layer。</p>
+
+<h4 id="31-sso-main-protocols-comparison">3.1 SSO Main Protocols Comparison</h4>
+
+<p>雖然我們常在 SSO 的語境下提到這三者，但它們的設計初衷與應用場景有所不同：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Feature</th>
+      <th style="text-align: left">SAML 2.0</th>
+      <th style="text-align: left">OAuth 2.0</th>
+      <th style="text-align: left">OpenID Connect (OIDC)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>核心目的</strong></td>
+      <td style="text-align: left">身份驗證 (AuthN) &amp; 授權 (AuthZ)</td>
+      <td style="text-align: left">授權 (AuthZ)</td>
+      <td style="text-align: left">身份驗證 (AuthN)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>主要角色</strong></td>
+      <td style="text-align: left">「使用者是誰」與「權限」</td>
+      <td style="text-align: left">「Backend 能不能拿到資源」</td>
+      <td style="text-align: left">「使用者是不是已被驗證」</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>資料格式</strong></td>
+      <td style="text-align: left">XML (Assertion)</td>
+      <td style="text-align: left">JSON (Access Token)</td>
+      <td style="text-align: left">JSON (ID Token + Access Token)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>傳輸協定</strong></td>
+      <td style="text-align: left">較重 (SOAP, HTTP POST)</td>
+      <td style="text-align: left">輕量 (REST / JSON)</td>
+      <td style="text-align: left">輕量 (REST / JSON)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>主流場景</strong></td>
+      <td style="text-align: left">企業級應用 (Enterprise/B2B)</td>
+      <td style="text-align: left">API 存取、第三方授權</td>
+      <td style="text-align: left">現代 Web/Mobile、社交登入</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>關鍵標識</strong></td>
+      <td style="text-align: left">XML Signature / Encryption</td>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">access_token</code></td>
+      <td style="text-align: left"><code class="language-plaintext highlighter-rouge">id_token</code> + <code class="language-plaintext highlighter-rouge">scope=openid</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>這也是為什麼 OIDC 的 authentication request 必須包含 <code class="language-plaintext highlighter-rouge">scope=openid</code>。少了 <code class="language-plaintext highlighter-rouge">openid</code>，流程就只是純粹的 OAuth 2.0 授權，
+無法提供標準化的身份資訊（Identity Layer）。可對照 <a href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core</a>。
+OAuth 2.0 是一個<strong>授權框架</strong>，只關心 Backend 能不能獲取 IdP 的資源；OIDC 則是在 OAuth 2.0 的基礎上加了一層<strong>身份驗證</strong>，
+讓 Backend 不只知道「有沒有權限」，也知道「現在登入的人是誰」，誰在獲取資源。</p>
+
+<blockquote>
+  <p>因此在 OIDC 上我們能知道使用者的身份（<code class="language-plaintext highlighter-rouge">id_token</code> 裡的 <code class="language-plaintext highlighter-rouge">sub</code>），就一併完成了 Login 的功能，Backend 可以確認登入者是 IdP 所認證的使用者</p>
+</blockquote>
+
+<h4 id="32-authorization-code-flow">3.2 Authorization Code Flow</h4>
+
+<blockquote class="block-tip">
+  <p>最簡單說明 OIDC 的方式就是用 Squence Diagram 把整個流程畫出來，這樣就能清楚看到前端、後端、IdP 之間的互動，以及 token 是在哪裡交換的</p>
+</blockquote>
+
+<p>對後端來說，OIDC 最常見、也最值得講清楚的就是 Authorization Code Flow。它的優點是 token 不會直接暴露在 user agent 裡面；相較之下，<a href="https://openid.net/specs/openid-connect-core-1_0.html#ImplicitFlowAuth">implicit flow</a> 主要是歷史包袱，現在多半不建議新系統再採用。</p>
+
+<p>下方介紹的流程就是 OIDC 的 Authorization Code Flow，這個流程的重點是把 token 的交換放在後端的安全通道裡面，避免 token 在前端暴露，增加安全性</p>
+
+<blockquote>
+  <p>implicit flow 的流程則是直接在前端拿到 token，會少去掉後端交換 token 的步驟，但同時也會讓 token 在前端暴露，增加被竊取的風險，因此現在多半不建議新系統再採用 implicit flow</p>
+</blockquote>
+
+<p><a href="#phase-1-authorization-request-front-channel">Phase 1: Authorization Request (Front-channel)</a><br />
+<a href="#phase-2-authentication--consent">Phase 2: Authentication &amp; Consent</a><br />
+<a href="#phase-3-authorization-response-front-channel">Phase 3: Authorization Response (Front-channel)</a><br />
+<a href="#phase-4-token-exchange-back-channel">Phase 4: Token Exchange (Back-channel)</a><br />
+<a href="#phase-5-session-establishment">Phase 5: Session Establishment</a></p>
+
+<pre><code class="language-mermaid">%%{init: {'themeVariables': { 'fontSize': '16px' }}}%%
+
+sequenceDiagram
+    autonumber
+    participant User as User
+    participant Frontend as Frontend
+    participant Backend as Backend
+    participant IdP as Identity Provider
+
+    rect rgb(240, 248, 255)
+    Note over User, Backend: Phase 1: Authorization Request (Front-channel)
+    User-&gt;&gt;Frontend: Visit Client Frontend website
+    Frontend-&gt;&gt;Backend: Request protected resource (or click login)
+    Backend-&gt;&gt;Frontend: 302 Redirect to IdP
+    Note right of Backend: With client_id, scope=openid,&lt;br/&gt;redirect_uri, state, nonce
+    Frontend-&gt;&gt;IdP: GET /authorize?params...
+    end
+
+    rect rgb(255, 250, 240)
+    Note over User, IdP: Phase 2: Authentication &amp; Consent
+    IdP-&gt;&gt;User: Display login page
+    User-&gt;&gt;IdP: Enter credentials for authentication
+    IdP-&gt;&gt;User: Display consent screen
+    User-&gt;&gt;IdP: Approve authorization
+    end
+
+    rect rgb(240, 255, 240)
+    Note over Frontend, IdP: Phase 3: Authorization Response (Front-channel)
+    IdP-&gt;&gt;Frontend: 302 Redirect to Backend Callback
+    Note left of IdP: With Authorization Code
+    Frontend-&gt;&gt;Backend: GET /callback?code=...&amp;state=...
+    end
+
+    rect rgb(255, 240, 245)
+    Note over Backend, IdP: Phase 4: Token Exchange (Back-channel)
+    Backend-&gt;&gt;IdP: POST /token (Using code + client_secret)
+    Note right of Backend: Secure back-channel communication
+    IdP-&gt;&gt;Backend: Return ID Token &amp; Access Token
+    end
+
+    rect rgb(245, 245, 245)
+    Note over Frontend, Backend: Phase 5: Session Establishment
+    Backend-&gt;&gt;Backend: Verify ID Token (Signature &amp; Claims)
+    Backend-&gt;&gt;Frontend: Establish Session / Set Secure Cookie
+    Frontend-&gt;&gt;User: Login successful, access protected page
+    end
+</code></pre>
+
+<h5 id="phase-1-authorization-request-front-channel">Phase 1: Authorization Request (Front-channel)</h5>
+<ol>
+  <li>首先 User 造訪 Frontend</li>
+  <li>Frontend 發現沒有登入狀態</li>
+  <li>於是 Backend 回應一個 302 Redirect</li>
+  <li>把 User 導向 IdP 的 <code class="language-plaintext highlighter-rouge">/authorize</code> 端點</li>
+</ol>
+
+<p>通常在這個階段會看到一個類似下面的 HTTP 請求，這是 Backend 把 User 導向 IdP 的 <code class="language-plaintext highlighter-rouge">/authorize</code> 端點，並且帶上必要的參數：</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">GET</span> <span class="nn">/authorize?response_type=code&amp;scope=openid%20email%20profile&amp;client_id=client-id-123&amp;redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&amp;state=abc123&amp;nonce=n-0S6_WzA2Mj</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">idp.example.com</span>
+</code></pre></div></div>
+
+<p>類似上面這段 Http 將使用者導向 IdP 的 <code class="language-plaintext highlighter-rouge">/authorize</code> 端點，並且帶上必要的參數，例如 <code class="language-plaintext highlighter-rouge">response_type=code</code>、<code class="language-plaintext highlighter-rouge">scope=openid</code>、<code class="language-plaintext highlighter-rouge">client_id</code>、<code class="language-plaintext highlighter-rouge">redirect_uri</code>、<code class="language-plaintext highlighter-rouge">state</code> 說明 Backend 的身份、回調 URL、以及防止 CSRF 的 state 和 nonce</p>
+
+<h5 id="phase-2-authentication--consent">Phase 2: Authentication &amp; Consent</h5>
+
+<blockquote class="block-tip">
+  <p>這一步其實就是我們常見的跳轉到 Google、Facebook 等社交登入頁面，輸入帳號密碼，然後同意授權的流程</p>
+</blockquote>
+
+<p>使用者抵達 IdP 後，IdP 會先檢查使用者是否已經登入。若未登入，則引導使用者完成身份驗證（如輸入帳密、MFA 等）。驗證通過後，IdP 會詢問使用者是否同意授權該應用程式存取指定的資訊（如 email, profile），這就是所謂的「同意頁面」</p>
+
+<blockquote>
+  <p>同樣的我同意第三方應用程式存取我的基本資訊，但不代表我同意他們可以存取我的所有資料，例如 Drive、Photos 等，這就是 OAuth 2.0 的授權範圍（scope）概念</p>
+</blockquote>
+
+<h5 id="phase-3-authorization-response-front-channel">Phase 3: Authorization Response (Front-channel)</h5>
+
+<p>當使用者同意授權後，IdP 會透過瀏覽器（Front-channel）發送一個 302 Redirect，將使用者導回 Backend 原先指定的 <code class="language-plaintext highlighter-rouge">redirect_uri</code>。
+此時 URL 中會包含一個臨時的 <code class="language-plaintext highlighter-rouge">code</code> (Authorization Code) 以及原先的 <code class="language-plaintext highlighter-rouge">state</code>。
+Backend 收到後必須立即比對 <code class="language-plaintext highlighter-rouge">state</code> 是否與發起請求時一致，以防止 CSRF 攻擊。</p>
+
+<blockquote class="block-warning">
+  <p>這個 Code 可以讓 Backend 在後端安全地向 IdP 換取真正的 Token，而不會直接暴露在前端，這是 Authorization Code Flow 的核心安全設計</p>
+</blockquote>
+
+<h5 id="phase-4-token-exchange-back-channel">Phase 4: Token Exchange (Back-channel)</h5>
+
+<p>這是 OIDC 最安全的步驟之一。Backend 取得 <code class="language-plaintext highlighter-rouge">code</code> 後，會直接從後端（Back-channel）向 IdP 的 <code class="language-plaintext highlighter-rouge">/token</code> 端點發送 POST 請求，
+用授權碼換取真正的 Token。由於這是伺服器對伺服器的通訊，<code class="language-plaintext highlighter-rouge">client_secret</code> 可以安全地包含在請求中而不被瀏覽器看見。</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/token</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">idp.example.com</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded</span>
+
+grant_type=authorization_code&amp;code=SplxlOBeZQQYbYS6WxSbIA&amp;redirect_uri=https%3A%2F%2Fapp.example.com%2Fcallback&amp;client_id=client-id-123&amp;client_secret=secret
+</code></pre></div></div>
+
+<p>上面是一個 Client Backend 向 IdP 換取 Token 的範例請求，IdP 驗證這個請求無誤後會回傳 <code class="language-plaintext highlighter-rouge">id_token</code> (JWT) 與 <code class="language-plaintext highlighter-rouge">access_token</code>，
+給予 Backend 用來確認使用者身份與存取資源的權限。這個過程完全在後端進行，增加了安全性，因為 token 不會暴露在前端。</p>
+
+<h5 id="phase-5-session-establishment">Phase 5: Session Establishment</h5>
+
+<p>最後，Backend 會解析並驗證 <code class="language-plaintext highlighter-rouge">id_token</code> 的內容與簽章。確認使用者身份後，Backend 會在自己的系統中建立登入狀態（Session），
+通常是發送一個加密且具備 <code class="language-plaintext highlighter-rouge">HttpOnly</code> 屬性的 Cookie 給瀏覽器。至此，使用者成功登入並可以存取受保護資源。</p>
+
+<p>目前通常不會建議把 JWT 直接放在前端 Non-HttpOnly Cookie 裡面，因為這樣會增加被竊取的風險，攻擊者可以直接使用 JWT 來冒充使用者。
+相對地，如果把 JWT 放在後端的 Session 裡面，前端只拿到一個 session cookie，這樣如果想要竊取 JWT 就必須同時攻擊到 Backend 的 session 管理，難度會大幅增加；</p>
+
+<blockquote class="block-warning">
+  <p>但很多實作依然將 JWT 放在前端 Cookie 裡面，這部分涉及很多 Cookie 上的安全因素，最主要的因素還是 Session ID 相較於 JWT 來說殺傷力較小，有興趣的可以去另外查閱這部分的內容</p>
+</blockquote>
+
+<p>目前主流的最佳實務有以下兩種：</p>
+<ol>
+  <li>BFF (Backend For Frontend)：
+    <ul>
+      <li>把 JWT 放在 Backend 的 Session 裡面，前端只拿到一個 session cookie，這樣如果想要竊取 JWT 就必須同時攻擊到 Backend 的 session 管理，難度會大幅增加。</li>
+    </ul>
+  </li>
+  <li>JWT in HttpOnly Cookie：
+    <ul>
+      <li>把 JWT 放在前端 Cookie 裡面，但一定要加上 <code class="language-plaintext highlighter-rouge">HttpOnly</code>, <code class="language-plaintext highlighter-rouge">Secure</code>, <code class="language-plaintext highlighter-rouge">SameSite</code> 等屬性，來防止 JWT 被 XSS 攻擊竊取。</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#httponly">HttpOnly</a> 是一個 Cookie 屬性，表示這個 Cookie 只能被伺服器讀取，無法透過 Frontend 執行 JavaScript 來存取</p>
+</blockquote>
+
+<blockquote>
+  <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#secure">Secure</a> 是一個 Cookie 屬性，表示這個 Cookie 只能在 HTTPS 連線中傳送</p>
+</blockquote>
+
+<hr />
+
+<h4 id="33-key-oidc-endpoints">3.3 Key OIDC Endpoints</h4>
+
+<blockquote class="block-tip">
+  <p>在 OIDC 官方標準規範 <a href="https://openid.net/specs/openid-connect-core-1_0.html">OIDC Connect core</a>、<a href="https://openid.net/specs/openid-connect-discovery-1_0.html">OIDC-Discovery</a>中定義了幾個重要的端點，或許實作上會有些差異，但基本上這些端點是 OIDC 流程中不可或缺的部分</p>
+</blockquote>
+
+<p>最重要的是 <code class="language-plaintext highlighter-rouge">.well-known/openid-configuration</code> 這個 discovery 端點，所有的 OIDC 實作都必須提供這個端點，
+讓 Backend 可以自動發現 IdP 的相關資訊，例如 issuer、authorization endpoint、token endpoint、userinfo endpoint、jwks_uri 等等。
+其餘端點可能會有路徑上的差異，但基本上都會有類似的功能。</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">/.well-known/openid-configuration</code> (Discovery)</strong>
+    <ul>
+      <li>這是 OIDC 的進入點（遵循 <a href="https://www.rfc-editor.org/rfc/rfc8414">RFC 8414</a>），IdP 會在這個路徑提供一個 JSON 檔案，列出所有支援的端點</li>
+      <li>這讓 Backend 只需要知道 Issuer 的 URL 就能自動完成大部分設定。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">/authorize</code> (Authorization Endpoint)</strong>
+    <ul>
+      <li>Backend 將 User 導向此處並帶上 <code class="language-plaintext highlighter-rouge">client_id</code>、<code class="language-plaintext highlighter-rouge">response_type=code</code>、<code class="language-plaintext highlighter-rouge">scope</code> 等參數</li>
+      <li>它的任務是完成身分驗證（AuthN）並取得使用者的授權，通常 Client 跳轉就是到這個端點</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">/token</code> (Token Endpoint)</strong>
+    <ul>
+      <li>屬於 Back-channel 的通訊端點。Backend 在取得 <code class="language-plaintext highlighter-rouge">code</code> 後，會在此端點使用 <code class="language-plaintext highlighter-rouge">client_secret</code> 進行身分驗證，
+  並換取 <code class="language-plaintext highlighter-rouge">id_token</code>（身分資訊）、<code class="language-plaintext highlighter-rouge">access_token</code>（資源存取權限）及可能的 <code class="language-plaintext highlighter-rouge">refresh_token</code></li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">/userinfo</code> (UserInfo Endpoint)</strong>
+    <ul>
+      <li>這是一個受保護的資源端點。當 Backend 拿到 <code class="language-plaintext highlighter-rouge">access_token</code> 後，可以向此端點請求更多關於使用者的詳細資料（如完整的 profile 或自定義 claims），
+  這些資料可能因為體積太大而沒有直接放在 <code class="language-plaintext highlighter-rouge">id_token</code> 中。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">jwks_uri</code> (JWKS Endpoint)</strong>
+    <ul>
+      <li>回傳 <strong>JSON Web Key Set</strong>。這是一組公開金鑰，Backend 用它來驗證 <code class="language-plaintext highlighter-rouge">id_token</code> 的簽章。
+  由於 IdP 可能會定期輪替（Rotate）金鑰，Backend 通常會快取這些金鑰並在簽章驗證失敗時重新抓取</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="34-what-the-backend-should-verify">3.4 What the Backend Should Verify</h4>
+
+<blockquote class="block-tip">
+  <p>後端在驗證 OIDC 流程中收到的 <code class="language-plaintext highlighter-rouge">id_token</code> 時，必須嚴格按照 OIDC 的規定來驗證內容，這些驗證不是裝飾，而是確保安全性的核心防線</p>
+</blockquote>
+
+<p>OIDC 規格要求 Backend 驗證 <code class="language-plaintext highlighter-rouge">iss</code> 必須和 discovery 回來的 issuer 一致，<code class="language-plaintext highlighter-rouge">aud</code> 必須包含自己的 client_id，
+<code class="language-plaintext highlighter-rouge">exp</code> 不能過期，<code class="language-plaintext highlighter-rouge">nonce</code> 也要對得上。這些不是裝飾，而是避免 token substitution、replay、和錯誤受眾使用的核心防線。</p>
+
+<p>最實際的做法是：</p>
+
+<ol>
+  <li>用 library 讀 discovery document</li>
+  <li>用 JWKS 驗證 <code class="language-plaintext highlighter-rouge">id_token</code></li>
+  <li>檢查 <code class="language-plaintext highlighter-rouge">iss</code>、<code class="language-plaintext highlighter-rouge">aud</code>、<code class="language-plaintext highlighter-rouge">exp</code>、<code class="language-plaintext highlighter-rouge">nonce</code></li>
+  <li>驗證通過後，只把你真正需要的 user identity 存進自己系統的 session</li>
+</ol>
+
+<blockquote class="block-warning">
+  <p>這樣我們就能了解 OIDC 的整個流程，從前端的授權請求，到 IdP 的驗證與同意，再到後端的 token 交換與 session 建立，
+每一步都有其安全考量與驗證要求，確保整個 SSO 流程的安全性與可靠性，後續會再寫一篇文章說明 NextAuth 的實作細節，
+這些 Library 都是幫我們把這些驗證流程包裝起來，但理解底層的機制還是很重要的</p>
+</blockquote>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>06-09-2026 23:44</p>
+</blockquote>
+
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                software,
+                
+                authentication,
+                
+                oauth,
+                
+                jwt,
+                
+                sso
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = 'https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js';
+    }
+</script>
+
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2026-06-11-nextauth.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Backend | Database Scale Out">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2026-03-31-database_scale_out.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Note | NextAuth & OIDC Practical Example">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Note | NextAuth & OIDC Practical Example",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2026/2026-06-11-nextauth.md",
+            "ref": "_posts/2026/2026-06-11-nextauth.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2026/2026-06-09-SSO_introduction.md",
+        "mtime": "2026-06-09 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-09-07 15:39:29 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>

@@ -1,0 +1,1723 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    <head><meta charset="UTF-8">
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta name="google-site-verification" content="MrJpPCJ8htzZlGpC1wo97QA1_XWns05Ez0LBsW3wj3I" /><title>IoT | MQTT Introduction · Home</title><meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="Build Jekyll site with the GitBook style.
+"><meta name="generator" content="Jekyll (using style of GitBook 3.2.3)"><meta name="author" content="Benson Hsu"><link rel="stylesheet" href="/assets/gitbook/style.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-fontsettings/website.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-search-pro/search.css">
+<link rel="stylesheet" href="/assets/gitbook/gitbook-plugin-splitter/splitter.css">
+
+<link rel="stylesheet" href="/assets/gitbook/rouge/colorful.css">
+
+<link rel="stylesheet" href="/assets/gitbook/custom.css">
+<link rel="stylesheet" href="/assets/gitbook/custom-local.css">
+
+<meta name="HandheldFriendly" content="true"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/gitbook/images/apple-touch-icon-precomposed-152.png">
+<link rel="shortcut icon" href="/assets/gitbook/images/favicon.ico" type="image/x-icon">
+
+
+
+
+            <link rel="prev" href="/jekyll/2026-06-11-nextauth.html" />
+        
+
+        
+            <link rel="next" href="/jekyll/2026-09-03-Exception_Practices.html" />
+        
+    </head>
+    <body>
+        <div class="book"><div class="book-summary">
+    <script type="text/javascript">
+        // Fixes the page links scroll problem on both desktop and mobile browsers
+        function pageScrollToTop(element) {
+            // both mobile and non-mobile
+            $('div.body-inner').animate({scrollTop: 0});
+            $(element).parent().find('li>ul>li').removeClass('active');
+            return true;  // propagate
+        }
+        // Fixes the anchor links scroll problem on mobile browsers
+        function mobilePageScrollToAnchor(element) {
+            $(element).closest('li.chapter').find('ul>li').removeClass('active');
+            $(element).parent().addClass('active');
+            if ($(document).width() <= 1240) {
+                $('div.body-inner').animate({scrollTop: $($(element).attr('href')).get(0).offsetTop});
+            }
+            return true;
+        }
+    </script>
+
+    <nav role="navigation">
+        <div id="book-search-input" role="search">
+            <input type="text" placeholder="Type to search" />
+        </div>
+        <div id="book-search-input-link" role="search">
+            <a href="/assets/search.html">Click to Search</a>
+        </div>
+        <ul class="summary">
+            
+            <li class="chapter" data-level="1.1" data-path="">
+            
+                <a href="/" onclick="pageScrollToTop(this)">
+                    Home
+                </a>
+            </li>
+
+            <li class="divider"></li>
+
+            
+                <!-- <p>pages</p> -->
+                
+                    
+
+                    
+
+                    
+                
+            
+                <!-- <p>posts</p> -->
+                
+                    
+
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-09-03-Exception_Practices.html">
+                        
+                            <a href="/jekyll/2026-09-03-Exception_Practices.html" onclick="pageScrollToTop(this)">
+                                Note | Exception Handling Best Practices
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter active" data-level="1.2" data-path="/jekyll/2026-07-08-MQTT_introduction.html">
+                        
+                            <a href="/jekyll/2026-07-08-MQTT_introduction.html" onclick="pageScrollToTop(this)">
+                                IoT | MQTT Introduction
+                            </a>
+                            
+                                
+                                    <ul><li><a href="#1-what-is-mqtt" onclick="mobilePageScrollToAnchor(this)" >1. What is MQTT?</a></li><li><a href="#2-the-publishsubscribe-model" onclick="mobilePageScrollToAnchor(this)" >2. The Publish/Subscribe Model</a></li><li><a href="#3-key-features" onclick="mobilePageScrollToAnchor(this)" >3. Key Features</a></li><li><a href="#4-mqtt-vs-http" onclick="mobilePageScrollToAnchor(this)" >4. MQTT vs. HTTP</a></li><li><a href="#5-quick-start" onclick="mobilePageScrollToAnchor(this)" >5. Quick Start</a></li><li><a href="#6-conclusion--next-steps" onclick="mobilePageScrollToAnchor(this)" >6. Conclusion &amp; Next Steps</a></li></ul>
+
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-06-11-nextauth.html">
+                        
+                            <a href="/jekyll/2026-06-11-nextauth.html" onclick="pageScrollToTop(this)">
+                                Note | NextAuth &amp; OIDC Practical Example
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-06-09-SSO_introduction.html">
+                        
+                            <a href="/jekyll/2026-06-09-SSO_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | SSO Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-03-31-database_scale_out.html">
+                        
+                            <a href="/jekyll/2026-03-31-database_scale_out.html" onclick="pageScrollToTop(this)">
+                                Backend | Database Scale Out
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-05-swagger.html">
+                        
+                            <a href="/jekyll/2026-02-05-swagger.html" onclick="pageScrollToTop(this)">
+                                Backend | Swagger
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-02-02-inversion_of_control.html">
+                        
+                            <a href="/jekyll/2026-02-02-inversion_of_control.html" onclick="pageScrollToTop(this)">
+                                Pattern | Inversion of Control
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-29-the_12_factor_app.html">
+                        
+                            <a href="/jekyll/2026-01-29-the_12_factor_app.html" onclick="pageScrollToTop(this)">
+                                Backend | The 12-Factor App
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-26-ACPI_States.html">
+                        
+                            <a href="/jekyll/2026-01-26-ACPI_States.html" onclick="pageScrollToTop(this)">
+                                Note | ACPI States
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-24-BIOS_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-24-BIOS_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | BIOS Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2026-01-17-I2C_introduction.html">
+                        
+                            <a href="/jekyll/2026-01-17-I2C_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | I2C Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-21-llvm_cpu0_create_backend.html">
+                        
+                            <a href="/jekyll/2025-11-21-llvm_cpu0_create_backend.html" onclick="pageScrollToTop(this)">
+                                LLVM | CPU0 Create Backend Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-20-tablegen_introduction.html">
+                        
+                            <a href="/jekyll/2025-11-20-tablegen_introduction.html" onclick="pageScrollToTop(this)">
+                                LLVM | TableGen Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html">
+                        
+                            <a href="/jekyll/2025-11-14-computer_organization_pipeline_hazards.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines Hazards
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-11-12-computer_organization_pipeline.html">
+                        
+                            <a href="/jekyll/2025-11-12-computer_organization_pipeline.html" onclick="pageScrollToTop(this)">
+                                Computer Organization | Pipelines
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html">
+                        
+                            <a href="/jekyll/2025-09-21-Resource_Acquisition_Is_Initialization.html" onclick="pageScrollToTop(this)">
+                                C++ | Resource Acquisition Is Initialization (RAII)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-09-13-Big_Number_Multiplication.html">
+                        
+                            <a href="/jekyll/2025-09-13-Big_Number_Multiplication.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Big Number Multiplication
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html">
+                        
+                            <a href="/jekyll/2025-08-09-how_do_cpp_compiler_gen_exe_file.html" onclick="pageScrollToTop(this)">
+                                C++ | How C++ Compiler Generates Executable File
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2025-03-21-fluent_interface.html">
+                        
+                            <a href="/jekyll/2025-03-21-fluent_interface.html" onclick="pageScrollToTop(this)">
+                                Pattern | Fluent Interface
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-10-17-KLEE_symbolic_execution.html">
+                        
+                            <a href="/jekyll/2024-10-17-KLEE_symbolic_execution.html" onclick="pageScrollToTop(this)">
+                                Paper | KLEE: Introducing Symbolic Execution
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html">
+                        
+                            <a href="/jekyll/2024-07-28-parallel_and_distributed_systems_introduction.html" onclick="pageScrollToTop(this)">
+                                PDS | Introduction of Parallel and Distributed Systems
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-21-competitive_paging_algorithm.html">
+                        
+                            <a href="/jekylls/2024-06-21-competitive_paging_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Competitive Paging Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-06-09-arch_user_repository.html">
+                        
+                            <a href="/jekylls/2024-06-09-arch_user_repository.html" onclick="pageScrollToTop(this)">
+                                Note | Arch User Repository
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-04-09-hirschbergs_algorithm.html">
+                        
+                            <a href="/jekylls/2024-04-09-hirschbergs_algorithm.html" onclick="pageScrollToTop(this)">
+                                Algorithm | Hirschberg&#39;s Algorithm
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-08-ANTLR_guide.html">
+                        
+                            <a href="/jekylls/2024-03-08-ANTLR_guide.html" onclick="pageScrollToTop(this)">
+                                Compiler | ANTLR Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-06-arch_linux_installation.html">
+                        
+                            <a href="/jekylls/2024-03-06-arch_linux_installation.html" onclick="pageScrollToTop(this)">
+                                Note | Arch Linux Installation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-03-01-maven_multi_module_project.html">
+                        
+                            <a href="/jekylls/2024-03-01-maven_multi_module_project.html" onclick="pageScrollToTop(this)">
+                                Note | Apache Maven Multi-Module Project Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2024-02-03-storage_and_file_system.html">
+                        
+                            <a href="/jekyll/2024-02-03-storage_and_file_system.html" onclick="pageScrollToTop(this)">
+                                OS | Storage and File System
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2024-01-05-debian_btrfs.html">
+                        
+                            <a href="/jekylls/2024-01-05-debian_btrfs.html" onclick="pageScrollToTop(this)">
+                                Note | Using btrfs on Debian
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-12-26-code_generation.html">
+                        
+                            <a href="/jekylls/2023-12-26-code_generation.html" onclick="pageScrollToTop(this)">
+                                Compiler | Code Generation (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-23-virtual_memory.html">
+                        
+                            <a href="/jekyll/2023-12-23-virtual_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Virtual Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-20-system_testing.html">
+                        
+                            <a href="/jekyll/2023-12-20-system_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | System Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-12-mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-12-12-mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-10-main_memory.html">
+                        
+                            <a href="/jekyll/2023-12-10-main_memory.html" onclick="pageScrollToTop(this)">
+                                OS | Main Memory
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-12-09-class_level_testing.html">
+                        
+                            <a href="/jekyll/2023-12-09-class_level_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Class-Level Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-11-29-semantic_analysis.html">
+                        
+                            <a href="/jekylls/2023-11-29-semantic_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Semantic Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-28-test_coverage_criteria.html">
+                        
+                            <a href="/jekyll/2023-11-28-test_coverage_criteria.html" onclick="pageScrollToTop(this)">
+                                Note | Test Coverage Criteria
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-25-method_level_structural_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-11-25-method_level_structural_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Structural Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-24-deadlock.html">
+                        
+                            <a href="/jekyll/2023-11-24-deadlock.html" onclick="pageScrollToTop(this)">
+                                OS | Deadlock
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-23-based_on_clp_testcases.html">
+                        
+                            <a href="/jekyll/2023-11-23-based_on_clp_testcases.html" onclick="pageScrollToTop(this)">
+                                Testing | Based on CLP Testcases
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-11-09-synchronization.html">
+                        
+                            <a href="/jekyll/2023-11-09-synchronization.html" onclick="pageScrollToTop(this)">
+                                OS | Synchronization (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-28-method_level_function_unit_testing.html">
+                        
+                            <a href="/jekyll/2023-10-28-method_level_function_unit_testing.html" onclick="pageScrollToTop(this)">
+                                Testing | Method-Level Functional Unit Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-10-26-syntax_analysis.html">
+                        
+                            <a href="/jekylls/2023-10-26-syntax_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Syntax Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-19-cpu_scheduler.html">
+                        
+                            <a href="/jekyll/2023-10-19-cpu_scheduler.html" onclick="pageScrollToTop(this)">
+                                OS | CPU Scheduler
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-18-process_thread.html">
+                        
+                            <a href="/jekyll/2023-10-18-process_thread.html" onclick="pageScrollToTop(this)">
+                                OS | Process and Thread
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-17-container_of.html">
+                        
+                            <a href="/jekyll/2023-10-17-container_of.html" onclick="pageScrollToTop(this)">
+                                Note | Linux Kernel Macro container_of &amp; offsetof
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-10-test_case_generation.html">
+                        
+                            <a href="/jekyll/2023-10-10-test_case_generation.html" onclick="pageScrollToTop(this)">
+                                Testing | Test Case Generation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-10-09-operating_system_structure.html">
+                        
+                            <a href="/jekyll/2023-10-09-operating_system_structure.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Structure
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-23-software_testing_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-23-software_testing_introduction.html" onclick="pageScrollToTop(this)">
+                                Testing | Software Testing Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekylls/2023-09-21-lexical_analysis.html">
+                        
+                            <a href="/jekylls/2023-09-21-lexical_analysis.html" onclick="pageScrollToTop(this)">
+                                Compiler | Lexical Analysis Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-20-compiler_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-20-compiler_introduction.html" onclick="pageScrollToTop(this)">
+                                Compiler | Compilers Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-12-operating_system_introduction.html">
+                        
+                            <a href="/jekyll/2023-09-12-operating_system_introduction.html" onclick="pageScrollToTop(this)">
+                                OS | Operating System Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html">
+                        
+                            <a href="/jekyll/2023-09-07-test_case_generation_based_on_constraint_logic_graph.html" onclick="pageScrollToTop(this)">
+                                Paper | Test Case Generation Based on Constraint Logic Graph
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-09-07-Introduction_OCL.html">
+                        
+                            <a href="/jekyll/2023-09-07-Introduction_OCL.html" onclick="pageScrollToTop(this)">
+                                Note | Object Constraint Language Concepts (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-06-gdb_introduction.html">
+                        
+                            <a href="/jekyll/2023-08-06-gdb_introduction.html" onclick="pageScrollToTop(this)">
+                                Note | GNU Debugger Quick Notes
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-08-05-linux_kernel_complie.html">
+                        
+                            <a href="/jekyll/2023-08-05-linux_kernel_complie.html" onclick="pageScrollToTop(this)">
+                                OS | Linux Kernel Compilation
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_structure_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_structure_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Structure Diagrams Introduction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-28-UML_behavior_diagrams.html">
+                        
+                            <a href="/jekyll/2023-07-28-UML_behavior_diagrams.html" onclick="pageScrollToTop(this)">
+                                Note | UML Behavior Diagrams Introduction (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-26-unified_modeling_language.html">
+                        
+                            <a href="/jekyll/2023-07-26-unified_modeling_language.html" onclick="pageScrollToTop(this)">
+                                Note | Unified Modeling Language Concepts
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html">
+                        
+                            <a href="/jekyll/2023-07-22-property_based_testing_entropy_guided_backbox_REST_API-_fuzzer.html" onclick="pageScrollToTop(this)">
+                                Paper | BenFuzz: A Property Based Testing and Entropy Guided Blackbox REST API Fuzzer
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html">
+                        
+                            <a href="/jekyll/2023-07-19-MVVM_modeling_methodology_user_interface.html" onclick="pageScrollToTop(this)">
+                                Paper | A MVVM Modeling Methodology for Information Systems User Interface Design
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-software_arch_pattern.html">
+                        
+                            <a href="/jekyll/2023-07-18-software_arch_pattern.html" onclick="pageScrollToTop(this)">
+                                Note | Architectural Patterns Compare MVP, MVC, MVVM
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html">
+                        
+                            <a href="/jekyll/2023-07-18-automated_gen_test_case_using_UML.html" onclick="pageScrollToTop(this)">
+                                Paper | Automated-generating test case using UML statechart diagrams (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-06-23-Intergrated_environment_sdd.html">
+                        
+                            <a href="/jekyll/2023-06-23-Intergrated_environment_sdd.html" onclick="pageScrollToTop(this)">
+                                Paper | An Integrated Environment for Specification Driven Development (Unfinished)
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-28-characteristics_of_bdd.html">
+                        
+                            <a href="/jekyll/2023-05-28-characteristics_of_bdd.html" onclick="pageScrollToTop(this)">
+                                Paper | A Study of the Characteristics of Behaviour Driven Development
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-05-20-analysis_mutation_testing.html">
+                        
+                            <a href="/jekyll/2023-05-20-analysis_mutation_testing.html" onclick="pageScrollToTop(this)">
+                                Paper | An Analysis and Survey of the Development of Mutation Testing
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-21-tdd_concepts.html">
+                        
+                            <a href="/jekyll/2023-04-21-tdd_concepts.html" onclick="pageScrollToTop(this)">
+                                Paper | Test-driven development concepts, taxonomy, and future direction
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-18-applying_isoiec25010.html">
+                        
+                            <a href="/jekyll/2023-04-18-applying_isoiec25010.html" onclick="pageScrollToTop(this)">
+                                Paper | Applying the ISO/IEC 25010 Quality Models to Software Product
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-04-13-software_standard.html">
+                        
+                            <a href="/jekyll/2023-04-13-software_standard.html" onclick="pageScrollToTop(this)">
+                                Note | Standard - ISO/IEC
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-02-04-algorithm_kmp.html">
+                        
+                            <a href="/jekyll/2023-02-04-algorithm_kmp.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Algorithm - KMP
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2023-01-12-gomoku_ai.html">
+                        
+                            <a href="/jekyll/2023-01-12-gomoku_ai.html" onclick="pageScrollToTop(this)">
+                                Note | Gomoku AI - Game Tree
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-24-git_commit.html">
+                        
+                            <a href="/jekyll/2022-11-24-git_commit.html" onclick="pageScrollToTop(this)">
+                                Note | Commit Message Format
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-08-ai_csp.html">
+                        
+                            <a href="/jekyll/2022-11-08-ai_csp.html" onclick="pageScrollToTop(this)">
+                                Note | Constraint Satisfaction Problem
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-07-network_urat.html">
+                        
+                            <a href="/jekyll/2022-11-07-network_urat.html" onclick="pageScrollToTop(this)">
+                                Note | Basic UART Concept
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/2022-11-05-docker_jekyll.html">
+                        
+                            <a href="/jekyll/2022-11-05-docker_jekyll.html" onclick="pageScrollToTop(this)">
+                                Note | Docker Build Github Pages
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-virtual_machine_tool.html">
+                        
+                            <a href="/jekyll/1970-01-01-virtual_machine_tool.html" onclick="pageScrollToTop(this)">
+                                Tool | Virtual Machine
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-linux_config.html">
+                        
+                            <a href="/jekyll/1970-01-01-linux_config.html" onclick="pageScrollToTop(this)">
+                                Tool | Linux Config
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-leetcode_guide.html">
+                        
+                            <a href="/jekyll/1970-01-01-leetcode_guide.html" onclick="pageScrollToTop(this)">
+                                Leetcode | Master Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+                        
+                        <li class="chapter" data-level="1.1" data-path="/jekyll/1970-01-01-editor_envirmnment.html">
+                        
+                            <a href="/jekyll/1970-01-01-editor_envirmnment.html" onclick="pageScrollToTop(this)">
+                                Tool | Edirot Guide
+                            </a>
+                            
+                                
+                            
+                        </li>
+                    
+
+                    
+                        <li class="divider"></li>
+                    
+                
+            
+        </ul>
+    </nav>
+</div>
+<div class="book-body">
+                <div class="book-header" role="navigation">
+                    <!-- Title -->
+                    <h1>
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                        
+                            <a href="." >IoT | MQTT Introduction</a>
+                        
+                    </h1>
+                </div>
+
+                <div class="body-inner"><div class="page-wrapper" tabindex="-1" role="main">
+    
+
+    <div class="page-inner">
+        <div class="normal">
+            
+            
+            <section class="normal">July 08, 2026 </section>
+            
+        </div>
+        <div id="book-search-results">
+            <div class="search-noresults">
+                <section class="normal markdown-section">
+                    
+                        <h1 id="/jekyll/MQTT_introduction">IoT | MQTT Introduction</h1>
+                    
+
+                    <blockquote class="block-tip">
+  <p>MQTT (Message Queuing Telemetry Transport) 是一種輕量級的訊息傳輸協定，專為物聯網 (IoT) 設計。它基於發布/訂閱模式，適合在低帶寬、不穩定的網路環境下使用。
+MQTT 的優勢在於為惡劣環境下確保傳輸成功而設計的輕量級協定，並且支援 QoS (Quality of Service) 等級，讓開發者根據需求決定「訊息到底要多可靠」。</p>
+</blockquote>
+
+<blockquote>
+  <p>尤其是在 IoT 裝置中，Header 最小可以只需要 2 bytes <a href="https://mqtt.org/">MQTT</a>，與之相對的 HTTP 協定 Header 動輒就需要 200 bytes 以上，
+對於資源有限的裝置來說，MQTT 是一個更好的選擇。</p>
+</blockquote>
+
+<blockquote>
+  <p>Reference: <a href="https://mqtt.org/">MQTT</a>, <a href="https://www.oasis-open.org/">OASIS</a></p>
+</blockquote>
+
+<h3 id="1-what-is-mqtt">1. What is MQTT?</h3>
+
+<blockquote class="block-tip">
+  <p>MQTT 的全名是 <strong>Message Queuing Telemetry Transport</strong>，但請注意：它跟傳統的 Message Queue（如 RabbitMQ、Kafka）雖然名字都有 Queue，設計哲學卻完全不同。MQTT 並不會把訊息「排隊」在 Broker 上等你去領，而是透過發布/訂閱的模式主動把訊息推給你</p>
+</blockquote>
+
+<p><a href="https://mqtt.org/">MQTT</a> 誕生於 1999 年，由 IBM 的 Andy Stanford-Clark 與 Arlen Nipper（當時在 Eurotech）為了<strong>監控橫跨荒野的石油管線</strong>而設計。當時的場景是：透過昂貴、不穩定、頻寬極低的衛星連結，把分散在各處的感測器資料傳回控制中心。</p>
+
+<p>這個背景很重要，因為它決定了 MQTT 的全部設計取向：</p>
+
+<ul>
+  <li><strong>極小的封包開銷</strong>：Header 最小只要 2 bytes，能在窄頻網路上跑。</li>
+  <li><strong>能容忍網路斷斷續續</strong>：連線不穩時不會直接崩潰。</li>
+  <li><strong>為資源受限的裝置設計</strong>：MCU 等嵌入式設備也能跑得動。</li>
+</ul>
+
+<p>後來 MQTT 在 2013 年交由 <a href="https://www.oasis-open.org/">OASIS</a> 標準化（目前主流為 3.1.1 與 5.0 版本），也因為實在太適合物聯網，逐漸成為 IoT 領域的事實標準（de facto standard）。</p>
+
+<blockquote class="block-warning">
+  <p>簡單一句話：<strong>MQTT 是為「網路很差、裝置很弱、電量很少」的場景而生的輕量級通訊協定</strong>，而這恰好就是絕大多數 IoT 應用的真實處境</p>
+</blockquote>
+
+<hr />
+
+<h3 id="2-the-publishsubscribe-model">2. The Publish/Subscribe Model</h3>
+
+<blockquote class="block-tip">
+  <p>MQTT 的核心精神是 <strong>Decouple（解耦）</strong>：發送訊息的人不需要知道誰在接收，接收訊息的人也不需要知道誰在發送。雙方唯一的交集，就是「主題（Topic）」</p>
+</blockquote>
+
+<p>傳統的 Request/Response（如 HTTP）是點對點的：A 直接呼叫 B。但 IoT 場景裡，一個溫度感測器可能要同時通知手機 App、雲端資料庫、與告警系統，若讓裝置自己維護這些連線，很快就會吃不消。</p>
+
+<p>MQTT 引入了一個中間人——<strong>Broker</strong>，把所有裝置都變成「只跟 Broker 講話」。這就是經典的 <strong>Publish/Subscribe（發布/訂閱）</strong> 模式：</p>
+
+<pre><code class="language-mermaid">%%{init: {'themeVariables': { 'fontSize': '16px' }}}%%
+
+graph LR
+    Sensor["Temperature Sensor&lt;br/&gt;(Publisher)"] --&gt;|Publish: home/livingroom/temperature| Broker((MQTT Broker))
+    App["Mobile App&lt;br/&gt;(Subscriber)"] --&gt;|Subscribe: home/+/temperature| Broker
+    DB["Cloud DB&lt;br/&gt;(Subscriber)"] --&gt;|Subscribe: home/#| Broker
+    Alert["Alert System&lt;br/&gt;(Subscriber)"] --&gt;|Subscribe: home/livingroom/temperature| Broker
+    Broker --&gt;|Push to matched subscribers| App
+    Broker --&gt;|Push to matched subscribers| DB
+    Broker --&gt;|Push to matched subscribers| Alert
+</code></pre>
+
+<h4 id="21-three-core-concepts">2.1 Three Core Concepts</h4>
+
+<dl>
+  <dt><strong>Broker（代理人 / 中介伺服器）</strong></dt>
+  <dd>整個系統的核心，負責接收所有發布的訊息，並依據 Topic 轉發給有訂閱的客戶端。常見的開源實作有 <a href="https://mosquitto.org/">Mosquitto</a>、<a href="https://www.emqx.io/">EMQX</a>（後面第六章會再提到）。</dd>
+  <dt><strong>Topic（主題）</strong></dt>
+  <dd>用 <code class="language-plaintext highlighter-rouge">/</code> 分隔的階層式路徑字串，用來標示「這則訊息是關於什麼的」。例如：
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>home/livingroom/temperature
+</code></pre></div>    </div>
+
+    <p>這條路徑可讀作「家 / 客廳 / 溫度」。訂閱時可以使用萬用字元：</p>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">+</code>：單層萬用字元，例如 <code class="language-plaintext highlighter-rouge">home/+/temperature</code> 可匹配客廳、臥室、廚房的溫度。</li>
+      <li><code class="language-plaintext highlighter-rouge">#</code>：多層萬用字元，例如 <code class="language-plaintext highlighter-rouge">home/#</code> 可匹配 home 底下所有子主題。</li>
+    </ul>
+  </dd>
+  <dt><strong>Payload（酬載 / 訊息內容）</strong></dt>
+  <dd>真正要傳遞的資料本體。MQTT 對 Payload 的格式<strong>完全不關心</strong>，它可以是 JSON、純文字、甚至是二進位資料。例如：
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "value": 26.5, "unit": "C", "ts": 1788920000 }
+</code></pre></div>    </div>
+  </dd>
+</dl>
+
+<blockquote class="block-warning">
+  <p>這裡有個常被忽略的重點：<strong>Topic 只是「地址」而不是「資料」</strong>。資料全部都放在 Payload 裡，Broker 只負責根據地址轉信，不會去解析你的內容</p>
+</blockquote>
+
+<h4 id="22-mqtt-packet-format">2.2 MQTT Packet Format</h4>
+
+<blockquote class="block-tip">
+  <p>MQTT 之所以「輕量」，關鍵就在封包格式非常精簡：一則訊息由 <strong>Fixed Header + Variable Header + Payload</strong> 三段組成，Header 最小只要 2 bytes</p>
+</blockquote>
+
+<h5 id="221-fixed-header">2.2.1 Fixed Header</h5>
+
+<p>每個 MQTT 封包<strong>一定</strong>有這個結構：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Field</th>
+      <th style="text-align: center">Size</th>
+      <th style="text-align: center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">Control Type</td>
+      <td style="text-align: center">4 bits (7–4)</td>
+      <td style="text-align: center">封包類型，例如 <code class="language-plaintext highlighter-rouge">1</code> = CONNECT、<code class="language-plaintext highlighter-rouge">3</code> = PUBLISH</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Flags</td>
+      <td style="text-align: center">4 bits (3–0)</td>
+      <td style="text-align: center">依封包類型而定，PUBLISH 用來設定 DUP、QoS、Retain</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Remaining Length</td>
+      <td style="text-align: center">1–4 bytes</td>
+      <td style="text-align: center">編碼後方資料的總長度，最小 0、最大 256 MB</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>長度欄位按需佔用 1~4 bytes，用來說明後面的 Variable Header + Payload 總共多長。這種可變長度的設計讓小封包幾乎不浪費空間，
+和 HTTP 那種固定且龐大的 Header 結構相比，差距就出來了</p>
+
+<h5 id="222-variable-header--payload-by-packet-type">2.2.2 Variable Header &amp; Payload by Packet Type</h5>
+
+<blockquote class="block-warning">
+  <p>MQTT 有幾種 Packet Type 可以參考 <a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901022">MQTT Control Packet Types</a>，每種封包的 Variable Header 與 Payload 結構都不一樣，
+總共有 15 種，透過一個 Value 來表示</p>
+</blockquote>
+
+<p>不同封包類型有不同的 Variable Header 與 Payload：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Type</th>
+      <th style="text-align: center">Variable Header</th>
+      <th style="text-align: center">Payload</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>CONNECT</strong></td>
+      <td style="text-align: center">Protocol Name (“MQTT”)、Protocol Level、Connect Flags、Keep Alive</td>
+      <td style="text-align: center">Client ID、Will Topic/Message、Username、Password</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>CONNACK</strong></td>
+      <td style="text-align: center">Session Present Flag、Connect Reason Code</td>
+      <td style="text-align: center">無</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>PUBLISH</strong></td>
+      <td style="text-align: center">Topic Name、Packet Identifier (QoS 1/2)</td>
+      <td style="text-align: center">Message Payload (JSON、text、binary)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>SUBSCRIBE</strong></td>
+      <td style="text-align: center">Packet Identifier</td>
+      <td style="text-align: center">Topic Filter + Requested QoS</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>PINGREQ / PINGRESP</strong></td>
+      <td style="text-align: center">None</td>
+      <td style="text-align: center">None</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="block-tip">
+  <p>從這張表可以看出：<strong>Topic 是寫在 Variable Header 裡的「地址」</strong>，真正的資料放在 Payload。Broker 只要解析到 Variable Header 就知道該轉給誰，
+完全不需要打開 Payload，這就是 MQTT 高效又能保持格式中立的原因</p>
+</blockquote>
+
+<h5 id="223-real-example--thingsboard-temperature-report">2.2.3 Real Example – ThingsBoard Temperature Report</h5>
+
+<p>延續 2.1 的溫度感測器範例，實際用 ThingsBoard 上傳一筆溫度的 PUBLISH 封包在 wire 上長這樣：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Byte 0:      0x30          (PUBLISH, QoS 0, No Retain)
+Byte 1:      0x37          (Remaining Length = 55)
+Byte 2–3:    0x00 0x19     (Topic Length = 25)
+Byte 4–28:   v1/devices/me/telemetry  (Topic Name, 25 bytes)
+Byte 29–83:  {"value":26.5,"unit":"C","ts":1788920000}  (Payload, 55 bytes)
+</code></pre></div></div>
+
+<blockquote class="block-tip">
+  <p>整個封包只要 <strong>84 bytes</strong>，其中 Fixed Header 僅佔 <strong>2 bytes</strong>。相比 HTTP POST 同類資料光 Header 就輕鬆超過 200 bytes，輕量差距一目了然</p>
+</blockquote>
+
+<p>如果使用 ThingsBoard 閘道器模式，多筆感測資料可以打包一起送：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Topic:   v1/gateway/telemetry
+Payload: [{"ts":1788920000,"values":{"temperature":26.5,"humidity":60}}]
+</code></pre></div></div>
+
+<blockquote class="block-warning">
+  <p>注意 Broker 只解析到 Variable Header 的 Topic 就知道要路由給 <code class="language-plaintext highlighter-rouge">v1/gateway/telemetry</code> 的訂閱者，完全不打開 Payload 檢查內容——這正是分層設計的高明之處：Payload 是 JSON 還是純二進位，Broker 一律不在乎</p>
+</blockquote>
+
+<p>完整的封包結構定義可對照官方規格 <a href="https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html">MQTT 3.1.1</a> 與 <a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html">MQTT 5.0</a>。</p>
+
+<h3 id="3-key-features">3. Key Features</h3>
+
+<blockquote class="block-tip">
+  <p>如果只能記三個 MQTT 的王牌特色，那就是 <strong>QoS（可靠性）</strong>、<strong>Retained Messages（新訂閱者立刻有資料）</strong>、以及 <strong>LWT（設備掛掉會通知大家）</strong>。這三個機制加起來，才讓 MQTT 在不可靠網路下依然「可靠」</p>
+</blockquote>
+
+<h4 id="31-qos-quality-of-service">3.1 QoS (Quality of Service)</h4>
+
+<p>QoS 決定了一則訊息「到底要被保證送到什麼程度」。MQTT 提供三個等級：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">QoS Level</th>
+      <th style="text-align: left">Definition</th>
+      <th style="text-align: left">Delivery Guarantee</th>
+      <th style="text-align: left">Packet Flow</th>
+      <th style="text-align: left">Use Cases</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>0</strong></td>
+      <td style="text-align: left">At most once</td>
+      <td style="text-align: left">Best-effort delivery; message may be lost</td>
+      <td style="text-align: left">PUBLISH (No ACK)</td>
+      <td style="text-align: left">High-frequency telemetry (e.g., per-second temp), where occasional loss is fine.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>1</strong></td>
+      <td style="text-align: left">At least once</td>
+      <td style="text-align: left">Guaranteed delivery; message may duplicate</td>
+      <td style="text-align: left">PUBLISH ⇄ PUBACK</td>
+      <td style="text-align: left">Standard status updates, where the receiver can handle duplicate messages.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>2</strong></td>
+      <td style="text-align: left">Exactly once</td>
+      <td style="text-align: left">Guaranteed delivery with no duplicates</td>
+      <td style="text-align: left">PUBLISH ⇄ PUBREC ⇄ PUBREL ⇄ PUBCOMP</td>
+      <td style="text-align: left">Critical operations like billing or control commands that cannot afford errors.</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote class="block-warning">
+  <p>QoS 2 最可靠但也最慢（需要四次握手），所以<strong>不是等級越高越好</strong>。實務上絕大多數遙測資料用 QoS 0 或 1 就夠了，只有真正不能出錯的控制指令才會考慮 QoS 2</p>
+</blockquote>
+
+<h4 id="32-retained-messages">3.2 Retained Messages</h4>
+
+<p>一般情況下，如果你在「還沒人訂閱」的時候發布訊息，那則訊息就直接消失。但 <strong>Retained Message</strong> 會讓 Broker 把這則訊息「釘」在該 Topic 上：之後任何新訂閱者一連上來，立刻就能收到最新狀態，不需要乾等下一筆資料。</p>
+
+<p>這在 IoT 裡非常實用，例如 <code class="language-plaintext highlighter-rouge">home/livingroom/light</code> 的開關狀態設為 Retained，新的 App 一連線就知道燈現在是開還是關，不用等感測器主動再報一次。</p>
+
+<h4 id="33-last-will-and-testament-lwt">3.3 Last Will and Testament (LWT)</h4>
+
+<blockquote class="block-tip">
+  <p>LWT 是 MQTT 的「遺書」：裝置在連線時先預先留一句話在 Broker，如果它<strong>不正常斷線</strong>（沒好好說再見），Broker 就會自動把這句話發布出去，通知其他人「這台裝置掛了」</p>
+</blockquote>
+
+<p>正常斷線（發送 <code class="language-plaintext highlighter-rouge">DISCONNECT</code>）不會觸發 LWT。只有當連線意外中斷（網路掉、電力耗盡、程式崩潰）時，Broker 才會替它把遺言發出來。LWT 的 Will Topic 與 Will Payload 是在連線階段（CONNECT 封包內的欄位）就註冊在 Broker 上的，例如一台感測器連線時設定：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Will Topic:   home/livingroom/sensor/status
+Will Payload: offline
+</code></pre></div></div>
+
+<p>那麼當它突然斷線，所有訂閱該主題的系統就會立刻收到 <code class="language-plaintext highlighter-rouge">offline</code>，可以馬上觸發告警或把設備標記為離線——這正是傳統輪詢架構很難優雅做到的事。</p>
+
+<hr />
+
+<h3 id="4-mqtt-vs-http">4. MQTT vs. HTTP</h3>
+
+<blockquote class="block-tip">
+  <p><strong>IoT 不用 HTTP 當主力協定，不是因為 HTTP 不好，而是因為它的設計背景（穩定網路、充足電力、雙方可直連）在 IoT 場景裡並不成立</strong></p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Comparison</th>
+      <th style="text-align: left">MQTT</th>
+      <th style="text-align: left">HTTP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>通訊模式</strong></td>
+      <td style="text-align: left">發布/訂閱（Push，Broker 主動推）</td>
+      <td style="text-align: left">請求/回應（Pull，客戶端輪詢）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>連線機制</strong></td>
+      <td style="text-align: left">長連線（TCP 一直保持）</td>
+      <td style="text-align: left">短連線（每次請求建立/斷開）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Header 開銷</strong></td>
+      <td style="text-align: left">極小，最小 2 bytes</td>
+      <td style="text-align: left">較大，動輒 200+ bytes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>耗電量</strong></td>
+      <td style="text-align: left">低（連線常駐，不用頻繁握手）</td>
+      <td style="text-align: left">高（每次都要 TCP + TLS 握手）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>即時性</strong></td>
+      <td style="text-align: left">高，事件發生即刻推送</td>
+      <td style="text-align: left">低，依賴輪詢間隔</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>雙向傳輸</strong></td>
+      <td style="text-align: left">原生支援（Server → Client 也行）</td>
+      <td style="text-align: left">主要靠客戶端輪詢才能拿到更新</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>適合對象</strong></td>
+      <td style="text-align: left">嵌入式裝置、電池供電設備</td>
+      <td style="text-align: left">瀏覽器、REST API、一般伺服器</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>最關鍵的差異在於<strong>長連線 vs. 短連線</strong>：HTTP 每次請求都要重新握手（尤其加上 TLS 後更耗電），對用電池的感測器是致命傷；而 MQTT 連上後就一直保持 TCP 連線，Broker 有訊息立刻推過來，裝置大部分時間可以休眠，只在收到推送時醒來處理。</p>
+
+<blockquote class="block-warning">
+  <p>當然，這不代表 MQTT 要取代 HTTP。實務上常見的做法是：<strong>裝置端用 MQTT 跟 Broker 溝通，再由 Broker 背後的橋接層把資料轉成 HTTP/REST 給後端系統或 Dashboard 使用</strong>，兩者各司其職</p>
+</blockquote>
+
+<hr />
+
+<h3 id="5-quick-start">5. Quick Start</h3>
+
+<blockquote class="block-tip">
+  <p>學任何協定最快的方式就是動手連一次。下面用 Python + <a href="https://www.eclipse.org/paho/">paho-mqtt</a> 連上公開測試 Broker <code class="language-plaintext highlighter-rouge">broker.hivemq.com</code>，
+同時做到「訂閱」與「發布」，跑完後你就能理解 MQTT 的運作模式</p>
+</blockquote>
+
+<p>Install paho-mqtt：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>paho-mqtt
+</code></pre></div></div>
+
+<p>以下是一個最小運行的範例：它會訂閱 <code class="language-plaintext highlighter-rouge">home/livingroom/temperature</code>，並在連線成功後發布一筆溫度資料，隨後印出收到的訊息。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">paho.mqtt.client</span> <span class="k">as</span> <span class="n">mqtt</span>
+
+<span class="c1"># --- Configuration Constants ---
+</span><span class="n">BROKER</span> <span class="o">=</span> <span class="sh">"</span><span class="s">broker.hivemq.com</span><span class="sh">"</span>          <span class="c1"># Public test broker (no authentication required)
+</span><span class="n">PORT</span> <span class="o">=</span> <span class="mi">1883</span>                            <span class="c1"># Default MQTT port (1883 = Unencrypted, 8883 = TLS)
+</span><span class="n">TOPIC</span> <span class="o">=</span> <span class="sh">"</span><span class="s">home/livingroom/temperature</span><span class="sh">"</span>
+
+
+<span class="c1"># --- Callback Functions ---
+</span>
+<span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Callback triggered when the client successfully connects to the broker.
+    </span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Connected with result code </span><span class="si">{</span><span class="n">rc</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+    
+    <span class="c1"># Subscribe to the topic (defaults to QoS 0)
+</span>    <span class="n">client</span><span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="n">TOPIC</span><span class="p">)</span>              
+    
+    <span class="c1"># Publish an initial message immediately after connecting (Payload as a JSON string)
+</span>    <span class="n">client</span><span class="p">.</span><span class="nf">publish</span><span class="p">(</span><span class="n">TOPIC</span><span class="p">,</span> <span class="sh">'</span><span class="s">{</span><span class="sh">"</span><span class="s">value</span><span class="sh">"</span><span class="s">: 26.5, </span><span class="sh">"</span><span class="s">unit</span><span class="sh">"</span><span class="s">: </span><span class="sh">"</span><span class="s">C</span><span class="sh">"</span><span class="s">}</span><span class="sh">'</span><span class="p">,</span> <span class="n">qos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+    <span class="sh">"""</span><span class="s">
+    Callback triggered when a message is received from a subscribed topic.
+    </span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">[</span><span class="si">{</span><span class="n">msg</span><span class="p">.</span><span class="n">topic</span><span class="si">}</span><span class="s">] </span><span class="si">{</span><span class="n">msg</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="nf">decode</span><span class="p">()</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+
+<span class="c1"># --- Main Client Initialization &amp; Loop ---
+</span>
+<span class="c1"># Initialize the MQTT client using the modern Callback API Version 2
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">mqtt</span><span class="p">.</span><span class="nc">Client</span><span class="p">(</span><span class="n">mqtt</span><span class="p">.</span><span class="n">CallbackAPIVersion</span><span class="p">.</span><span class="n">VERSION2</span><span class="p">)</span>
+
+<span class="c1"># Bind the defined callback functions to the client events
+</span><span class="n">client</span><span class="p">.</span><span class="n">on_connect</span> <span class="o">=</span> <span class="n">on_connect</span>
+<span class="n">client</span><span class="p">.</span><span class="n">on_message</span> <span class="o">=</span> <span class="n">on_message</span>
+
+<span class="c1"># Establish connection to the broker
+</span><span class="n">client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">BROKER</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="n">keepalive</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Start the network loop to continuously block, listen, and handle traffic
+</span><span class="n">client</span><span class="p">.</span><span class="nf">loop_forever</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>跑起來後你會看到：程式先 <code class="language-plaintext highlighter-rouge">Connected</code>，接著因為自己發、自己也訂閱了同一個 Topic，
+所以會馬上從 <code class="language-plaintext highlighter-rouge">on_message</code> 收到自己剛才發的那筆 <code class="language-plaintext highlighter-rouge">{"value": 26.5, "unit": "C"}</code>。</p>
+
+<blockquote class="block-warning">
+  <p>小技巧：開兩個終端機各跑一份，A 發 B 收、B 發 A 收，你就能親眼看到 Broker 是如何把訊息從一個發布者轉發給另一個訂閱者，
+這正是第二章講的 Decouple 在真實運作</p>
+</blockquote>
+
+<hr />
+
+<h3 id="6-conclusion--next-steps">6. Conclusion &amp; Next Steps</h3>
+
+<blockquote class="block-tip">
+  <p>MQTT 之所以能成為 IoT 標準，本質上就是做對了一件事：<strong>用最少的資源，在不可靠的網路上把訊息可靠地送達</strong>。
+發布/訂閱解耦了裝置、QoS 解決了可靠性、Retained 與 LWT 解決了狀態與離線感知</p>
+</blockquote>
+
+<p>這裡我們做一下總結：</p>
+
+<ul>
+  <li><strong>架構上</strong>：
+    <ul>
+      <li>Broker 居中協調，裝置之間完全解耦，只靠 Topic 地址溝通</li>
+    </ul>
+  </li>
+  <li><strong>可靠性上</strong>：
+    <ul>
+      <li>QoS 0/1/2 按需求取捨速度與保證；Retained 與 LWT 補齊了「新訂閱者」與「異常離線」兩個常見痛點</li>
+    </ul>
+  </li>
+  <li><strong>對比上</strong>：
+    <ul>
+      <li>相較 HTTP 的短連線輪詢，MQTT 的長連線 + 主動推送在耗電與即時性上全面勝出</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote class="block-tip">
+  <p>後續可以研究的方向：</p>
+</blockquote>
+
+<ul>
+  <li><strong>安全性（TLS/SSL）</strong>：
+    <ul>
+      <li>本文用的是 <code class="language-plaintext highlighter-rouge">1883</code> 明文連線，PROD 請改用 <code class="language-plaintext highlighter-rouge">8883</code>（MQTT over TLS），並搭配帳號密碼或 Certificate 做驗證</li>
+    </ul>
+  </li>
+  <li><strong>認證與權限</strong>：
+    <ul>
+      <li>研究 Broker 的 ACL（Access Control List），限制每個裝置只能讀寫自己被允許的 Topic</li>
+    </ul>
+  </li>
+  <li><strong>開源 Broker 推薦</strong>：
+    <ul>
+      <li><a href="https://mosquitto.org/">Mosquitto</a>：輕量、易上手，適合單機或嵌入式閘道器</li>
+      <li><a href="https://www.emqx.io/">EMQX</a>：分散式、高併發，適合大規模雲端部署，支援 MQTT 5.0 與多種 Bridge</li>
+    </ul>
+  </li>
+  <li><strong>協定版本</strong>：有空可以研究 <a href="https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html">MQTT 5.0</a> 新增的 Reason Code、User Properties、Shared Subscription 等進階特性</li>
+</ul>
+
+<blockquote class="block-warning">
+  <h5 id="last-edit">Last Edit</h5>
+  <p>07-08-2026 22:15</p>
+</blockquote>
+</section>
+            </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div></div>
+        <div class="normal">
+            <section class="normal">
+                
+                <i class="fa fa-eye"></i>
+                <span id="page-hit-tracker"></span>, 
+                <i class="fa fa-archive"></i>
+                
+                mqtt,
+                
+                embedded,
+                
+                iot
+                
+                
+            </section>
+        </div>
+    </div>
+<script async src="https://www2.cs.ccu.edu.tw/~xbs112m/tracker.php"></script>
+</div>
+
+<!-- introduce mathjax support -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [ ['$', '$'], ['\\(', '\\)'] ]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script
+  type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+
+
+<!-- introduce per-page mermaid support -->
+
+    <script>
+    function render_mermaid() {
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: "default",
+        });
+        window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+    }
+
+    function initialize_mermaid() {
+        if (document.readyState === "loading") {
+            // Loading hasn't finished yet
+            document.addEventListener("DOMContentLoaded", render_mermaid);
+        } else {
+            // `DOMContentLoaded` has already fired
+            render_mermaid();
+        }
+    }
+
+    if (window.mermaid_script && window.mermaid) {
+        initialize_mermaid();
+    } else {
+        window.mermaid_script = document.createElement("script");
+        mermaid_script.onload = initialize_mermaid;
+        document.head.appendChild(mermaid_script);
+        mermaid_script.defer = true;
+        mermaid_script.id = 'mermaid-script';
+        mermaid_script.src = 'https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js';
+    }
+</script>
+
+
+
+<!-- introduce mathjax support -->
+<script>
+    function fixes_chrome_anchors() {
+        let chrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (window.location.hash && chrome) {
+            setTimeout(function () {
+                var hash = window.location.hash;
+                window.location.hash = "";
+                window.location.hash = hash;
+            }, 300);
+        }
+    }
+
+    if (document.readyState === "loading") {
+        // Loading hasn't finished yet
+        document.addEventListener("DOMContentLoaded", fixes_chrome_anchors);
+    } else {
+        // `DOMContentLoaded` has already fired
+        fixes_chrome_anchors();
+    }
+</script>
+
+<!-- customize line 38-50 swap next previous-->
+                    
+                        <a href="/jekyll/2026-09-03-Exception_Practices.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Note | NextAuth & OIDC Practical Example">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                    
+
+                    
+                        <a href="/jekyll/2026-06-11-nextauth.html" class="navigation navigation-next navigation-unique" aria-label="Next page: Note | Exception Handling Best Practices">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    
+                </div>
+            </div>
+
+            <script>
+            var gitbook = gitbook || [];
+            gitbook.push(function() {
+                gitbook.page.hasChanged({
+    "page": {
+        "title": "Introduction",
+        "level": "1.1",
+        "depth": 1,
+        
+        "next": {
+            "title": "Note | Exception Handling Best Practices",
+            "level": "1.2",
+            "depth": 1,
+            "path": "_posts/2026/2026-09-03-Exception_Practices.md",
+            "ref": "_posts/2026/2026-09-03-Exception_Practices.md",
+            "articles": []
+        },
+        
+        "dir": "ltr"
+    },    "config": {
+        "plugins": ["fontsettings", "highlight", "livereload", "lunr", "search", "sharing", "theme-default", "livereload"],
+        "styles": {
+            "ebook": "styles/ebook.css",
+            "epub": "styles/epub.css",
+            "mobi": "styles/mobi.css",
+            "pdf": "styles/pdf.css",
+            "print": "styles/print.css",
+            "website": "styles/website.css"
+        },
+        "pluginsConfig": {
+            "expandable-chapter-small2": {
+                "articlesExpand": true,
+            },
+            "fontsettings": {
+                "family": "sans",
+                "size": 1,
+                "theme": "white"
+            },
+            "highlight": {},
+            "livereload": {},
+            "lunr": {
+                "ignoreSpecialCharacters": false,
+                "maxIndexSize": 1000000
+            },
+            "search": {},            "sharing": {
+                "facebook": false,
+
+                "google": false,
+
+                "github": true,
+              
+                "github_link": "https://github.com",
+              
+
+                "telegram": false,
+                "telegram_link": "https://t.me",
+
+                "instapaper": false,
+
+                "twitter": false,
+              
+
+                "vk": false,
+
+                "weibo": false,
+
+                // "all": ["facebook", "google", "twitter", "weibo", "instapaper", "github", "telegram"]
+            },
+"theme-default": {
+                "showLevel": false,
+                "styles": {
+                    "ebook": "styles/ebook.css",
+                    "epub": "styles/epub.css",
+                    "mobi": "styles/mobi.css",
+                    "pdf": "styles/pdf.css",
+                    "print": "styles/print.css",
+                    "website": "styles/website.css"
+                }
+            },
+        },
+        "theme": "default",
+        "author": "Tao He",
+        "pdf": {
+            "pageNumbers": true,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "paperSize": "a4",
+            "chapterMark": "pagebreak",
+            "pageBreaksBefore": "/",
+            "margin": {
+                "right": 62,
+                "left": 62,
+                "top": 56,
+                "bottom": 56
+            }
+        },
+        "structure": {
+            "langs": "LANGS.md",
+            "readme": "Home.md",
+        },
+        "variables": {},
+        "title": "Home",
+        "language": "en",
+        "gitbook": "*"
+    },
+    "file": {
+        "path": "_posts/2026/2026-07-08-MQTT_introduction.md",
+        "mtime": "2026-07-08 00:00:00 +0000",
+        "type": "markdown"
+    },
+    "gitbook": {
+        "version": "3.2.3",
+        "time": "2026-09-07 15:39:29 +0000"
+    },
+    "basePath": "",
+    "book": {
+        "language": ""
+    }
+});
+            });
+            </script>
+        </div><script src="/assets/gitbook/gitbook.js"></script>
+<script src="/assets/gitbook/theme.js"></script>
+
+<script src="/assets/gitbook/gitbook-plugin-back-to-top-button/plugin.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-copy-code-button/toggle.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-expandable-chapters-small2/expandable-chapters-small.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/jquery.mark.min.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-search-pro/search.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-sharing/buttons.js"></script>
+<script src="/assets/gitbook/gitbook-plugin-splitter/splitter.js"></script>
+
+<!--
+<script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+<script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+<script src="../gitbook/gitbook-plugin-search/search.js"></script>
+-->
+
+</body>
+</html>
